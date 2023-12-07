@@ -22,6 +22,18 @@ variable "FE_region" {
     sensitive   = false
 }
 
+variable "FE_access_key" {
+    description = "flexibleengine access_key for OBS"
+    type        = string
+    sensitive   = false
+}
+
+variable "FE_secret_key" {
+    description = "flexibleengine secret_key for OBS"
+    type        = string
+    sensitive   = true
+}
+
 terraform {
 required_version = ">= 1.6.0"
 
@@ -38,4 +50,6 @@ provider "flexibleengine" {
   password    = var.FE_password
   domain_name = var.FE_domain
   region      = var.FE_region
+  access_key  = var.FE_access_key
+  secret_key  = var.FE_secret_key
 }

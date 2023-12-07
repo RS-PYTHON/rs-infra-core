@@ -46,15 +46,14 @@ variable "infra_amount" {
 
 
 resource "flexibleengine_compute_instance_v2" "master" {
-  name            = "master"
+  name            = "master-${count.index}"
   image_name      = var.image_name
   flavor_id       = var.master_flavor
-  key_pair        = "my_key_pair_name"
   security_groups = ["default"]
   count           = var.master_amount
 
   network {
-    uuid = flexibleengine_vpc_v1.main_vpc.id
+    uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
   }
 
   tags = {
@@ -62,25 +61,16 @@ resource "flexibleengine_compute_instance_v2" "master" {
   }
 }
 
-resource "flexibleengine_compute_instance_v2" "gateway" {
-  name            = "gateway"
-  image_name      = var.image_name
-  flavor_id       = var.gateway_flavor
-  key_pair        = "my_key_pair_name"
-  security_groups = ["default"]
-  count           = var.gateway_amount
-
-  network {
-    uuid = flexibleengine_vpc_v1.main_vpc.id
-  }
-
-  tags = {
-    type  = "gateway"
-  }
+resource "flexibleengine_nat_gateway_v2" "nat_1" {
+  name        = "nat_test"
+  description = "test for terraform"
+  spec        = "1"
+  vpc_id      = flexibleengine_vpc_v1.main_vpc.id
+  subnet_id   = flexibleengine_vpc_subnet_v1.vpc_subnet.id
 }
 
 resource "flexibleengine_compute_instance_v2" "infra" {
-  name            = "infra"
+  name            = "infra-${count.index}"
   image_name      = var.image_name
   flavor_id       = var.infra_flavor
   key_pair        = "my_key_pair_name"
@@ -88,7 +78,7 @@ resource "flexibleengine_compute_instance_v2" "infra" {
   count           = var.infra_amount
 
   network {
-    uuid = flexibleengine_vpc_v1.main_vpc.id
+    uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
   }
 
   tags = {
@@ -101,7 +91,19 @@ variable "vpc_cidr" {
     type        = string
 }
 
+variable "vpc_subnet_cidr" {
+    description = "subnet cidr"
+    type        = string
+}
+
 resource "flexibleengine_vpc_v1" "main_vpc" {
   name = "main_vpc"
   cidr = var.vpc_cidr
+}
+
+resource "flexibleengine_vpc_subnet_v1" "vpc_subnet" {
+  name       = "vpc_subnet"
+  cidr       = var.vpc_subnet_cidr
+  gateway_ip = "192.168.0.1"
+  vpc_id     = flexibleengine_vpc_v1.main_vpc.id
 }
