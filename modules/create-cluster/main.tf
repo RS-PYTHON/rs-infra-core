@@ -9,83 +9,50 @@ required_providers {
  }
 }
 
+#Instances configuration
 variable "image_name" {
     description = "image name"
     type        = string
 }
 
-variable "master_flavor" {
-    description = "master flavor"
-    type        = string
-}
-
-variable "master_amount" {
-    description = "number of gateway to create"
-    type        = number
-}
-
-variable "gateway_flavor" {
-    description = "gateway flavor"
-    type        = string
-}
-
-variable "gateway_amount" {
-    description = "number of gateway to create"
-    type        = number
-}
-
-variable "infra_flavor" {
-    description = "infra flavor"
-    type        = string
-}
-
-variable "infra_amount" {
-    description = "number of infra to create"
-    type        = number
+variable "cluster_configuration" {
+    description = "infrastructure configuration"
+    type        = map(object({
+      flavor    = string
+      amount    = number
+      type      = string
+    }))
 }
 
 
-resource "flexibleengine_compute_instance_v2" "master" {
-  name            = "master-${count.index}"
+
+resource "flexibleengine_compute_instance_v2" "nodes" {
+  for_each = {
+    for item in flatten([
+      for nodes in var.cluster_configuration : [
+        for count in range(nodes.amount) : {
+          name  = nodes.type
+          flavor = nodes.flavor
+          number = count
+        }
+      ]
+    ])
+    : "${item.name}.${item.flavor}.${item.number}" => item
+  }
+  name            = "${each.value.name}-${each.value.number}"
   image_name      = var.image_name
-  flavor_id       = var.master_flavor
-  security_groups = ["default"]
-  count           = var.master_amount
-
+  flavor_id       = each.value.flavor
   network {
     uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
   }
 
   tags = {
-    type  = "master"
+    type  = each.value.name
   }
 }
 
-resource "flexibleengine_nat_gateway_v2" "nat_1" {
-  name        = "nat_test"
-  description = "test for terraform"
-  spec        = "1"
-  vpc_id      = flexibleengine_vpc_v1.main_vpc.id
-  subnet_id   = flexibleengine_vpc_subnet_v1.vpc_subnet.id
-}
 
-resource "flexibleengine_compute_instance_v2" "infra" {
-  name            = "infra-${count.index}"
-  image_name      = var.image_name
-  flavor_id       = var.infra_flavor
-  key_pair        = "my_key_pair_name"
-  security_groups = ["default"]
-  count           = var.infra_amount
-
-  network {
-    uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
-  }
-
-  tags = {
-    type  = "infra"
-  }
-}
-
+#Network configuration
 variable "vpc_cidr" {
     description = "network cidr"
     type        = string
@@ -106,4 +73,12 @@ resource "flexibleengine_vpc_subnet_v1" "vpc_subnet" {
   cidr       = var.vpc_subnet_cidr
   gateway_ip = "192.168.0.1"
   vpc_id     = flexibleengine_vpc_v1.main_vpc.id
+}
+
+resource "flexibleengine_nat_gateway_v2" "nat_gateway" {
+  name        = "nat_test"
+  description = "test for terraform"
+  spec        = "1"
+  vpc_id      = flexibleengine_vpc_v1.main_vpc.id
+  subnet_id   = flexibleengine_vpc_subnet_v1.vpc_subnet.id
 }
