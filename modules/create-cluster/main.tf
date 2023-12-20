@@ -94,3 +94,27 @@ resource "flexibleengine_nat_gateway_v2" "nat_gateway" {
   subnet_id   = flexibleengine_vpc_subnet_v1.vpc_subnet.id
 }
 
+resource "flexibleengine_network_acl_rule" "rule_1" {
+  name             = "my-rule-1"
+  description      = "drop TELNET traffic"
+  action           = "deny"
+  protocol         = "tcp"
+  destination_port = "23"
+  enabled          = "true"
+}
+
+resource "flexibleengine_network_acl_rule" "rule_2" {
+  name             = "my-rule-2"
+  description      = "drop NTP traffic"
+  action           = "deny"
+  protocol         = "udp"
+  destination_port = "123"
+  enabled          = "false"
+}
+
+resource "flexibleengine_network_acl" "fw_acl" {
+  name          = "fw-acl"
+  subnets       = [flexibleengine_vpc_subnet_v1.vpc_subnet.id]
+  outbound_rules = [flexibleengine_network_acl_rule.rule_1.id,
+    flexibleengine_network_acl_rule.rule_2.id]
+}

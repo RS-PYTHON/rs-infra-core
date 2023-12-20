@@ -35,6 +35,11 @@ module "create-cluster" {
 
 #create-buckets module
 
+variable "cluster_name" {
+    description = "cluster name"
+    type        = string
+}
+
 variable "buckets" {
     description = "bucket list"
     type        = list(string)
@@ -43,4 +48,5 @@ variable "buckets" {
 module "create-buckets" {
     source = "./modules/create-buckets"
     buckets = var.buckets
+    cluster_name = var.cluster_name
 }
