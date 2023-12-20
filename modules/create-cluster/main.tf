@@ -21,6 +21,7 @@ variable "cluster_configuration" {
       flavor    = string
       amount    = number
       type      = string
+      additionnal_disk_size = number
     }))
 }
 
@@ -34,6 +35,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
           name  = nodes.type
           flavor = nodes.flavor
           number = count
+          additionnal_disk_size = nodes.additionnal_disk_size
         }
       ]
     ])
@@ -45,7 +47,16 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
   network {
     uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
   }
-
+  dynamic "block_device"{
+    for_each = each.value.additionnal_disk_size > 0 ? ["1"] : []
+    content {
+      source_type           = "blank"
+      destination_type      = "volume"
+      volume_size           = each.value.additionnal_disk_size
+      boot_index            = 1
+      delete_on_termination = true
+    }
+  }
   tags = {
     type  = each.value.name
   }
@@ -82,3 +93,4 @@ resource "flexibleengine_nat_gateway_v2" "nat_gateway" {
   vpc_id      = flexibleengine_vpc_v1.main_vpc.id
   subnet_id   = flexibleengine_vpc_subnet_v1.vpc_subnet.id
 }
+

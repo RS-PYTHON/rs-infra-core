@@ -20,6 +20,7 @@ variable "cluster_configuration" {
       flavor    = string
       amount    = number
       type      = string
+      additionnal_disk_size = number
     }))
 }
 
