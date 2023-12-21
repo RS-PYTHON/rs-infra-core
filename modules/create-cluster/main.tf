@@ -1,6 +1,17 @@
 terraform {
 required_version = ">= 1.6.0"
 
+backend "s3" {
+  bucket   = "terraformbucket"
+  key      = "terraform.tfstate"
+  region   = "eu-west-0"
+  endpoint = "https://oss.eu-west-0.prod-cloud-ocb.orange-business.com"
+  
+  skip_region_validation      = true
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+}
+
 required_providers {
   flexibleengine    = {
     source          = "FlexibleEngineCloud/flexibleengine"
@@ -44,6 +55,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
   name            = "${each.value.name}-${each.value.number}"
   image_name      = var.image_name
   flavor_id       = each.value.flavor
+  security_groups = [var.secgroup.name]
   network {
     uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
   }
@@ -94,27 +106,32 @@ resource "flexibleengine_nat_gateway_v2" "nat_gateway" {
   subnet_id   = flexibleengine_vpc_subnet_v1.vpc_subnet.id
 }
 
-resource "flexibleengine_network_acl_rule" "rule_1" {
-  name             = "my-rule-1"
-  description      = "drop TELNET traffic"
-  action           = "deny"
-  protocol         = "tcp"
-  destination_port = "23"
-  enabled          = "true"
+resource "flexibleengine_networking_secgroup_v2" "secgroup" {
+  name        = "secgroup"
 }
 
-resource "flexibleengine_network_acl_rule" "rule_2" {
-  name             = "my-rule-2"
-  description      = "drop NTP traffic"
-  action           = "deny"
-  protocol         = "udp"
-  destination_port = "123"
-  enabled          = "false"
+resource "flexibleengine_networking_secgroup_rule_v2" "secgroup_rule_1" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
 }
 
-resource "flexibleengine_network_acl" "fw_acl" {
-  name          = "fw-acl"
-  subnets       = [flexibleengine_vpc_subnet_v1.vpc_subnet.id]
-  outbound_rules = [flexibleengine_network_acl_rule.rule_1.id,
-    flexibleengine_network_acl_rule.rule_2.id]
+resource "flexibleengine_lb_loadbalancer_v3" "elb" {
+  name              = "elb"
+  cross_vpc_backend = true
+
+  vpc_id            = flexibleengine_vpc_v1.main_vpc.id
+  ipv4_subnet_id    = flexibleengine_vpc_subnet_v1.vpc_subnet.ipv4_subnet_id
+
+  availability_zone = [
+    "eu-west-0a",
+  ]
+
+  bandwidth_charge_mode = "traffic"
+  sharetype             = "PER"
+  bandwidth_size        = 10
 }

@@ -1,5 +1,15 @@
 terraform {
 required_version = ">= 1.6.0"
+backend "s3" {
+  bucket   = "terraformbucket"
+  key      = "terraform.tfstate"
+  region   = "eu-west-0"
+  endpoint = "https://oss.eu-west-0.prod-cloud-ocb.orange-business.com"
+  
+  skip_region_validation      = true
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+}
 
 required_providers {
   flexibleengine    = {

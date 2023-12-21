@@ -18,7 +18,7 @@ cluster_configuration = {
     processing = {
         flavor = "s6.small.1"
         amount = 0
-        additionnal_disk_size = 40
+        additionnal_disk_size = 0
         type = "processing"
     }
 }
