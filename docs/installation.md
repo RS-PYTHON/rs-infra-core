@@ -43,12 +43,11 @@ cd rs-infrastructure
 
 git submodule update --init
 
-VENVDIR=collections/kubespray-venv
+VENVDIR=kubespray-venv
 KUBESPRAYDIR=collections/kubespray
 python3 -m venv $VENVDIR
 source $VENVDIR/bin/activate
-cd $KUBESPRAYDIR
-pip install -U pyOpenSSL ecdsa -r collections/kubespray/requirements.txt
+pip install -U pyOpenSSL ecdsa -r $KUBESPRAYDIR/requirements.txt
 
 ansible-galaxy collection install \
     kubernetes.core \

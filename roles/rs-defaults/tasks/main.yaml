@@ -1,0 +1,5 @@
+- name: Create PodSecurityPolicy
+  kubernetes.core.k8s:
+    state: present
+    template:
+      path: psp.yaml.j2

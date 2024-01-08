@@ -1,0 +1,29 @@
+- name: Add an Apt signing key, will not download if present , Wazuh
+  apt_key:
+    url: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    state: present
+
+- name: Add specified repository into sources list in wazuh.list
+  apt_repository:
+    repo: deb {{ wazuh.wazuh_repository }} stable main
+    state: present
+    filename: wazuh #.list extension is added after by ansible module
+
+- name: Configure manager
+  import_tasks: role-manager.yaml
+  when: inventory_hostname == wazuh_manager_node
+
+- name: Configure agent
+  import_tasks: role-agent.yaml
+  when: inventory_hostname != wazuh_manager_node
+
+- name: Ignore specific directory
+  lineinfile:
+    path: "{{ wazuh.wazuh_ossec_conf }}"
+    insertafter: 'Files/directories to ignore'
+    line: '    {{ item }}'
+  with_items:
+    - "<ignore>/etc/suricata/rules</ignore>"
+    - "<ignore>/etc/suricata/iprep</ignore>"
+    - "<ignore>/var/lib/kubelet/plugins/kubernetes.io/csi/pv</ignore>"
+    - "<ignore>/var/lib/kubelet/pods</ignore>"

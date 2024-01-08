@@ -1,0 +1,13 @@
+---
+openvpn:
+  # Optional
+  # conf_files:
+  #   - name: ca.crt
+  #     content: |
+  #       Certificate
+  #   - name: client.conf
+  #     content: |
+  #         OpenVpn Client Conf
+  #   - name: plateformcs.crt
+  #     content: |
+  #       plateforme.crt
