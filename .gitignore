@@ -6,6 +6,5 @@ apps/**/resources.txt
 roles/image/files/output/
 __pycache__
 generated_inventory_vars.yaml
-scaler/build
-scaler/ansible_resources
 .vscode
+collections/kubespray-venv
