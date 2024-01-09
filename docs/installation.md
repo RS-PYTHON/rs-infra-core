@@ -1,7 +1,9 @@
 # Infrastructure - Installation
 ## Overview
 
-> **Integrators' machine is called BASTION in the rest of the installation manual**
+![Infrastructure overview](./media/RSPY_infra_smallres.png)
+
+> **Admin's machine is called BASTION in the rest of the installation manual**
 
 ## _Bastion_ requirements
 
@@ -26,7 +28,7 @@ The fully detailed documentation and configuration options are available on its 
 
 ### HashiCorp Vault (optional)
 
-This project can integrate credentials from a custom `HashiCorp Vault` instance, see the specific documentation [here](./docs/how-to/Credentials.md).
+This project can integrate credentials from a custom `HashiCorp Vault` instance, see the specific documentation [here](./how-to/Credentials.md).
 
 ## Quickstart
 
