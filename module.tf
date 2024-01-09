@@ -1,17 +1,42 @@
 # create-cluster module
 variable "image_name" {
-    description = "image name"
-    type        = string
+  type = string
 }
 
 variable "vpc_cidr" {
-    description = "network cidr"
-    type        = string
+  type = string
+}
+
+variable "vpc_gateway_ip" {
+  type = string
 }
 
 variable "vpc_subnet_cidr" {
-    description = "subnet cidr"
-    type        = string
+  type = string
+}
+
+variable "nat_gw_spec" {
+  type = string
+}
+
+variable "eip_nat_gw_type" {
+  type = string
+}
+
+variable "eip_nat_gw_bandwidth" {
+  type = number
+}
+
+variable "eip_elb_type" {
+  type = string
+}
+
+variable "eip_elb_bandwidth" {
+  type = number
+}
+
+variable "public_key" {
+  type = string
 }
 
 variable "cluster_configuration" {
@@ -24,13 +49,28 @@ variable "cluster_configuration" {
     }))
 }
 
+output "hosts" {
+  value       = "${module.create-cluster.hosts}"
+}
+
+output "eip_addr" {
+  value = "${module.create-cluster.eip_addr}"
+}
 
 module "create-cluster" {
     source = "./modules/create-cluster"
     image_name = var.image_name
     vpc_cidr = var.vpc_cidr
+    vpc_gateway_ip = var.vpc_gateway_ip
     vpc_subnet_cidr = var.vpc_subnet_cidr
     cluster_configuration = var.cluster_configuration
+    cluster_name = var.cluster_name
+    public_key = var.public_key
+    nat_gw_spec = var.nat_gw_spec
+    eip_nat_gw_type = var.eip_nat_gw_type
+    eip_nat_gw_bandwidth = var.eip_nat_gw_bandwidth
+    eip_elb_type = var.eip_elb_type
+    eip_elb_bandwidth = var.eip_elb_bandwidth
 }
 
 #create-buckets module
