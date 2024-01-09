@@ -31,7 +31,7 @@ cluster_configuration = {
         type = "processing"
     }
 }
-public_key = "YOUR-SSH-PUBLIC-KEY"
+public_key = "<ssh-publickey>"
 
 #Network vars
 vpc_cidr = "192.168.0.0/16"

@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json
+---
+- name: Create the cluster with terraform
+  hosts: localhost
+  roles:
+    - { role: "terraform/create-cluster" }

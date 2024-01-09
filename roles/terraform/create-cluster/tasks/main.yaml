@@ -1,0 +1,30 @@
+---
+- name: Create ssh key
+  shell: |
+    ssh-keygen -b 2048 -t rsa -m PEM -N "" -f inventory/mycluster/privatekey.pem;\
+    echo "$(grep -v "public_key" inventory/mycluster/cluster.tfvars)\npublic_key = \"$(ssh-keygen -f inventory/mycluster/privatekey.pem -y)\"" > inventory/mycluster/cluster.tfvars &&\
+    ls inventory/mycluster/
+
+- name: Create terraform cluster
+  shell: |
+    set -o allexport; source .env; set +o allexport; terraform apply -auto-approve -var-file="../../../../inventory/mycluster/cluster.tfvars" -target=module.create-cluster
+  args:
+    chdir: roles/terraform/create-cluster/tasks/
+
+- name: Create buckets
+  shell: |
+    set -o allexport; source .env; set +o allexport; terraform apply -auto-approve -var-file="../../../../inventory/mycluster/cluster.tfvars" -target=module.create-buckets  
+  args:
+    chdir: roles/terraform/create-cluster/tasks/
+
+- name: Copy ssh key
+  shell: |
+    sleep 20 && \
+    scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/.ssh/privatekey.pem &&\
+    ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') chmod 400 /home/cloud/.ssh/privatekey.pem
+  args:
+    chdir: roles/terraform/create-cluster/tasks/
+- name: Update hosts
+  shell: |
+    echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > inventory/mycluster/hosts.yaml && \
+    terraform output -json hosts | jq -r '.[] | "\t\(.name):\n\t\tansible_host: \(.access_ip_v4)\n\t\tansible_ssh_private_key_file:\"\/home\/cloud\/.ssh\/privatekey.pem\"\n\t\tprovider_id: \(.id)"' >> inventory/mycluster/hosts.yaml
