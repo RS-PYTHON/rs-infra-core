@@ -8,7 +8,6 @@
 ## _Bastion_ requirements
 
 - ansible
-- terraform
 - python3
 - python3-pip
 - git
@@ -28,17 +27,17 @@ The fully detailed documentation and configuration options are available on its 
 
 ### HashiCorp Vault (optional)
 
-This project can integrate credentials from a custom `HashiCorp Vault` instance, see the specific documentation [here](./how-to/Credentials.md).
+This project can integrate credentials from a custom `HashiCorp Vault` instance, see the specific documentation: [how to/Credentials](./how-to/Credentials.md)
 
 ## Quickstart
 
-### 1. Get the rs-infrastructure repository
+### X. Get the rs-infrastructure repository
 
 ```shellsession
 git clone https://github.com/RS-PYTHON/rs-infrastructure.git
 ```
 
-### 2. Install requirements
+### X. Install requirements
 
 ```shellsession
 cd rs-infrastructure
@@ -56,13 +55,15 @@ ansible-galaxy collection install \
     openstack.cloud
 ```
 
-### 3. Copy the sample inventory
+### X. Copy the sample inventory
 
 ```shellsession
 cp -rfp inventory/sample inventory/mycluster
 ```
 
-### 4. Review and change the default configuration to match your needs
+### X. Retrieve the host.yaml generated from terraform
+
+### X. Review and change the default configuration to match your needs
 
  - Node groups and S3 buckets in `inventory/mycluster/host_vars_setup/safescale.yaml`
  - Credentials, domain name, the stash license, S3 endpoints in `infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
@@ -74,21 +75,21 @@ ansible-playbook generate_inventory.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 6. If needed create an image for the machines with `packer`
+### X. If needed create an image for the machines with `packer`
 
 ```shellsession
 ansible-playbook image.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 7. Create and configure machines
+### X. Create and configure machines
 
 ```shellsession
 ansible-playbook cluster.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 8. Install security services
+### X. Install security services
 
 ```shellsession
 ansible-playbook security.yaml \
@@ -96,7 +97,7 @@ ansible-playbook security.yaml \
     --become
 ```
 
-### 9. Deploy kubernetes with `kubespray`
+### X. Deploy kubernetes with `kubespray`
 
 ```shellsession
 # The option `--become` is required, for example writing SSL keys in /etc/,
@@ -108,7 +109,7 @@ ansible-playbook collections/kubespray/cluster.yml \
     --become
 ```
 
-### 10. Enable pod security policies (PSP) on the cluster
+### X. Enable pod security policies (PSP) on the cluster
 
 ```shellsession
 # /!\ create first the PSP and ClusterRoleBinding resources
@@ -127,20 +128,20 @@ ansible-playbook collections/kubespray/upgrade-cluster.yml \
     --become
 ```
 
-### 11. Setup RS specifics
+### X. Setup RS specifics
 
 ```shellsession
 ansible-playbook rs-setup.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 12. Add the providerID spec to the nodes for the autoscaling
+### X. Add the providerID spec to the nodes for the autoscaling
 
 ```shellsession
 ansible-playbook cluster.yaml -i inventory/mycluster/hosts.yaml -t providerids
 ```
 
-### 13. Deploy the apps
+### X. Deploy the apps
 
 ```shellsession
 ansible-playbook apps.yaml \
