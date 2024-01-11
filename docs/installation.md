@@ -12,6 +12,7 @@
 - python3-pip
 - git
 - jq
+- terraform
 
 ## Dependencies
 
@@ -61,24 +62,18 @@ ansible-galaxy collection install \
 cp -rfp inventory/sample inventory/mycluster
 ```
 
-### X. Retrieve the host.yaml generated from terraform
-
 ### X. Review and change the default configuration to match your needs
 
- - Node groups and S3 buckets in `inventory/mycluster/host_vars_setup/safescale.yaml`
- - Credentials, domain name, the stash license, S3 endpoints in `infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
- - Packages paths containing the apps to be deployed in `inventory/mycluster/host_vars/setup/app_installer.yaml`
+```shellsession
+cp -rfp roles/terraform/create-cluster/tasks/.env.template roles/terraform/create-cluster/tasks/.env
+```
+ - Credentials, domain name, the stash license, S3 endpoints in `rs-infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
+ - Credentials in `roles/terraform/create-cluster/tasks/.env`
+ - Node groups, Network sizing, S3 buckets in `rs-infrastructure/inventory/mycluster/cluster.tfvars`
  - Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
-
+ 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
-    -i inventory/mycluster/hosts.yaml
-```
-
-### X. If needed create an image for the machines with `packer`
-
-```shellsession
-ansible-playbook image.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 

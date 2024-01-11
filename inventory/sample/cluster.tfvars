@@ -5,7 +5,7 @@ cluster_name = "rs-cluster"
 image_name = "OBS Ubuntu 22.04"
 
 #To add another type of instance follow this template : 
-#    instace = {
+#    instance = {
 #        flavor = "<flavor>"
 #        amount = <amount>
 #        additionnal_disk_size = <additionnal_disk_size> # 0 if no additionnal disk wanted
