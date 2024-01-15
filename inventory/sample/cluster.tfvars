@@ -12,6 +12,7 @@ image_name = "OBS Ubuntu 22.04"
 #        type = "<instance-type>"
 #    }
 cluster_configuration = {
+    #At least one master is required for the cluster to work fine
     master = {
         flavor = "s6.small.1"
         amount = 1
@@ -20,7 +21,7 @@ cluster_configuration = {
     }
     infra = {
         flavor = "s6.small.1"
-        amount = 1
+        amount = 0
         additionnal_disk_size = 0
         type = "infra"
     }

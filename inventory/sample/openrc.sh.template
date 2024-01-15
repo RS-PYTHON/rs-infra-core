@@ -1,0 +1,6 @@
+export OS_USERNAME="username"
+export OS_PASSWORD='password'
+export OS_DOMAIN_NAME="domain_name"
+export OS_AUTH_URL=https://iam.eu-west-0.prod-cloud-ocb.orange-business.com/v3
+export OS_PROJECT_ID="projectID"
+export OS_REGION_NAME="region"

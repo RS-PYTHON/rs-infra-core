@@ -1,11 +1,22 @@
 # Start and stop the cluster
 
+## Prerequisites
+Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration
+```shellsession
+cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
+```
+
 ## Stop the cluster
 
- - Go to the cloud provider HMI
- - In the ECS part, select every node you want to stop and then click stop.
+ - After configuring the openrc.sh file, use this command to stop the cluster :
+```shellsession
+ansible-playbook start-stop.yaml     -i inventory/mycluster/hosts.yaml -t stop
+```
 
 ## Start the cluster
 
- - Go to the cloud provider HMI
- - In the ECS part, select every node you want to start and then click start.
+ - After configuring the openrc.sh file, use this command to stop the cluster :
+```shellsession
+ansible-playbook start-stop.yaml     -i inventory/mycluster/hosts.yaml -t start
+```
+
