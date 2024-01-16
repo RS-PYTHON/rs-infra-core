@@ -1,0 +1,55 @@
+- name: Install Clamav
+  apt: 
+    name: clamav-daemon
+    state: present
+
+- name: Stop service clamav-freshclam to update signature
+  systemd:
+    name: clamav-freshclam
+    state: stopped
+
+- name: Update Signature database
+  command:   
+    cmd: freshclam
+
+- name: Start service clamav-freshclam
+  systemd:
+    name: clamav-freshclam
+    state: started
+    enabled: yes
+
+- name: Setup clamd conf
+  copy:
+    dest: "/etc/clamav/clamd.conf"
+    src: "clamd.conf"
+    mode: "0600"
+
+- name: Install clamav-clamonacc service
+  copy:
+    dest: "/lib/systemd/system/clamav-clamonacc.service"
+    src: "clamav-clamonacc.service"
+    mode: "0644"
+
+- name: Create a quarantine directory
+  file:
+    path: /root/quarantine
+    state: directory
+  
+- name: Allow the clamav user to sudo /usr/bin/notify-send
+  copy:
+    dest: "/etc/sudoers.d/clamav"
+    content: "clamav ALL = (ALL) NOPASSWD: SETENV: /usr/bin/notify-send\n"
+    mode: "0644"
+
+- name: Start and enable clamav-daemon service
+  systemd:
+    name: clamav-daemon
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: Start and enable clamav-clamonacc service
+  systemd:
+    name: clamav-clamonacc
+    state: started
+    enabled: yes

@@ -1,0 +1,13 @@
+- name: Disable clamav-clamonacc service
+  systemd:
+    name: clamav-clamonacc
+    state: stopped
+    enabled: no
+
+- name: Uninstall Clamav
+  apt: 
+    name: clamav-daemon
+    state: absent
+    purge: yes
+    autoclean: yes
+    autoremove: yes

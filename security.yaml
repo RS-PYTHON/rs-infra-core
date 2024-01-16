@@ -1,0 +1,14 @@
+---
+- hosts: k8s_cluster
+  roles:
+    - "security/auditd"
+    - "security/wazuh"
+
+- hosts: gateway
+  roles:
+    - "security/clamav"
+
+- hosts: gateway, egress
+  roles:
+    - "security/suricata"
+    - "security/openvpn"

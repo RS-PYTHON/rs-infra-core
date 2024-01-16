@@ -1,0 +1,7 @@
+---
+- name: Stop cluster
+  shell: |
+    set -o allexport; source ../../../../inventory/mycluster/openrc.sh; set +o allexport; openstack server stop $(terraform output -json hosts | jq -r .[].name)
+  args:
+    chdir: roles/terraform/create-cluster/tasks/
+    executable: /bin/bash

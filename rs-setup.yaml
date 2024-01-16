@@ -1,0 +1,38 @@
+- name: Prepare gateways
+  hosts: gateway
+  gather_facts: true
+  vars_files: 
+    - "collections/kubespray/roles/download/defaults/main.yml"
+    - "collections/kubespray/roles/kubespray-defaults/defaults/main.yaml"
+  pre_tasks:
+    - name: install pip modules for ansible kubernetes.core
+      pip: 
+        name: "{{ item }}"
+      loop:
+        - pyyaml==5.3.1
+        - openshift==0.13.1
+        - hvac==0.11.2
+  roles:
+    - { role: "infra-defaults"}
+    - { role: "collections/kubespray/roles/kubernetes-apps/helm", become: yes }
+    - { role: "kustomize", become: yes }
+    - { role: "kubectl", become: yes }
+
+
+- name: Sign master nodes certificates
+  hosts: gateway[0]
+  gather_facts: false
+  tasks:
+    - name: Get master nodes csr names
+      shell: >-
+        kubectl get csr 
+        -ojsonpath='{.items[?(@.spec.username=="system:node:{{ item }}")].metadata.name}'
+        | grep -o '[^ ]\+$'
+      register: csr_names
+      loop: "{{ groups['kube_control_plane'] }}"
+      ignore_errors: yes
+
+    - name: kubelet-rubber-stamp | Approve {{ item.stdout }} csr
+      command: "kubectl certificate approve {{ item.stdout }}"
+      loop: "{{ csr_names.results }}"
+      when: item.stdout | length > 0

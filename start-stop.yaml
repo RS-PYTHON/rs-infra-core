@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json
+---
+- name: Start the cluster
+  hosts: localhost
+  roles:
+    - { role: "terraform/start-cluster" }
+  tags: start
+
+- name: Stop the cluster
+  hosts: localhost
+  roles:
+    - { role: "terraform/stop-cluster" }
+  tags: stop
