@@ -35,7 +35,7 @@
   shell: |
     sleep 20 && \
     scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/.ssh/privatekey.pem &&\
-    ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') chmod 400 /home/cloud/.ssh/privatekey.pem
+    ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') chmod 600 /home/cloud/.ssh/privatekey.pem
   args:
     chdir: roles/terraform/create-cluster/tasks/
 

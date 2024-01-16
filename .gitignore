@@ -11,3 +11,4 @@ __pycache__
 generated_inventory_vars.yaml
 .vscode
 **/kubespray-venv
+inventory/mycluster
