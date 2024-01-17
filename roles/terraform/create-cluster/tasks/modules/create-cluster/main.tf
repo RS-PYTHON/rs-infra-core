@@ -31,6 +31,7 @@ variable "cluster_configuration" {
       flavor                = string
       amount                = number
       type                  = string
+      k8s_role              = string
       additionnal_disk_size = number
     }))
 }
@@ -44,6 +45,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
           flavor                = nodes.flavor
           number                = count
           additionnal_disk_size = nodes.additionnal_disk_size
+          k8s_role              = nodes.k8s_role
         }
       ]
     ])
@@ -68,7 +70,8 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
     }
   }
   tags = {
-    type  = each.value.name
+    type     = each.value.name
+    k8s_role = each.value.k8s_role
   }
   depends_on = [
     flexibleengine_compute_keypair_v2.keypair

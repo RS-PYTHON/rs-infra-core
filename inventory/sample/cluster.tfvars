@@ -18,18 +18,21 @@ cluster_configuration = {
         amount = 1
         additionnal_disk_size = 0
         type = "master"
+        k8s_role = "kube_control_plane"
     }
     infra = {
         flavor = "s6.small.1"
-        amount = 0
+        amount = 0 
         additionnal_disk_size = 0
         type = "infra"
+        k8s_role = "infra"
     }
     processing = {
         flavor = "s6.small.1"
         amount = 0
         additionnal_disk_size = 0
         type = "processing"
+        k8s_role = "processing"
     }
 }
 public_key = "<ssh-publickey>"

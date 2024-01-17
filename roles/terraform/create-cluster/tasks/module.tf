@@ -45,6 +45,7 @@ variable "cluster_configuration" {
       flavor    = string
       amount    = number
       type      = string
+      k8s_role  = string
       additionnal_disk_size = number
     }))
 }
