@@ -1,5 +1,5 @@
 - name: Deploy reference system
-  hosts: gateway[0]
+  hosts: master[0]
   gather_facts: false
   vars_files:
     - "collections/kubespray/roles/kubespray-defaults/defaults/main.yaml"

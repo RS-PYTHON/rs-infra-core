@@ -31,7 +31,7 @@ variable "cluster_configuration" {
       flavor                = string
       amount                = number
       type                  = string
-      k8s_role              = string
+      k8s_roles             = string
       additionnal_disk_size = number
     }))
 }
@@ -45,7 +45,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
           flavor                = nodes.flavor
           number                = count
           additionnal_disk_size = nodes.additionnal_disk_size
-          k8s_role              = nodes.k8s_role
+          k8s_roles             = nodes.k8s_roles
         }
       ]
     ])
@@ -71,7 +71,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
   }
   tags = {
     type     = each.value.name
-    k8s_role = each.value.k8s_role
+    k8s_roles = each.value.k8s_roles
   }
   depends_on = [
     flexibleengine_compute_keypair_v2.keypair
@@ -166,6 +166,15 @@ resource "flexibleengine_networking_secgroup_rule_v2" "allow_ssh_ingress" {
   security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
 }
 
+resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  remote_group_id  = flexibleengine_networking_secgroup_v2.secgroup.id
+  security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
+}
+
+
 resource "flexibleengine_lb_loadbalancer_v3" "elb" {
   name              = "elb"
   cross_vpc_backend = true
@@ -195,8 +204,8 @@ resource "flexibleengine_vpc_eip" "elb_eip" {
   }
 }
 
-resource "flexibleengine_lb_listener_v3" "listener" {
-  name            = "elb-listener"
+resource "flexibleengine_lb_listener_v3" "listener-ssh" {
+  name            = "elb-listener-ssh"
   description     = "listener"
   protocol        = "TCP"
   protocol_port   = 22
@@ -206,7 +215,7 @@ resource "flexibleengine_lb_listener_v3" "listener" {
 resource "flexibleengine_lb_pool_v3" "pool" {
   protocol    = "TCP"
   lb_method   = "SOURCE_IP"
-  listener_id = flexibleengine_lb_listener_v3.listener.id
+  listener_id = flexibleengine_lb_listener_v3.listener-ssh.id
 }
 
 resource "flexibleengine_lb_member_v3" "member" {

@@ -1,0 +1,16 @@
+---
+- name: Deploy kubernets with kubespray
+  hosts: rs-cluster-master-0
+  remote_user: cloud
+  tasks:
+    - name: Deploy kubernetes
+      shell: |
+        source /home/cloud/miniconda3/bin/activate rspy && \
+        sudo mkdir -p /etc/kubernetes && \
+        cd /home/cloud/rs-infrastructure && \
+        source inventory/mycluster/openrc.sh && \
+        ansible-playbook collections/kubespray/cluster.yml -i inventory/mycluster/hosts.yaml --become
+      args:
+        executable: /bin/bash
+      async: 3600
+      poll: 30

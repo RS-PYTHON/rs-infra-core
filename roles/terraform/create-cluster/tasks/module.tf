@@ -45,13 +45,13 @@ variable "cluster_configuration" {
       flavor    = string
       amount    = number
       type      = string
-      k8s_role  = string
+      k8s_roles = string
       additionnal_disk_size = number
     }))
 }
 
 output "hosts" {
-  value       = "${module.create-cluster.hosts}"
+  value = "${module.create-cluster.hosts}"
 }
 
 output "eip_addr" {

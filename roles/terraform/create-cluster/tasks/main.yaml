@@ -33,7 +33,7 @@
 
 - name: Copy ssh key
   shell: |
-    sleep 20 && \
+    sleep 0 && \
     scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/.ssh/privatekey.pem &&\
     ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') chmod 600 /home/cloud/.ssh/privatekey.pem
   args:
@@ -41,30 +41,37 @@
 
 - name: Update hosts
   shell: |
-    echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > ../../../../inventory/mycluster/hosts.yaml && \
+        echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > ../../../../inventory/mycluster/hosts.yaml && \
     terraform output -json hosts | jq -r '.[] | "\t\t\(.name):\n\t\t\tansible_host: \(.access_ip_v4)\n\t\t\tansible_ssh_private_key_file: \"\/home\/cloud\/.ssh\/privatekey.pem\"\n\t\t\tprovider_id: \(.id)"' >> ../../../../inventory/mycluster/hosts.yaml && \
     cat ../../../../inventory/mycluster/hosts.yaml | sed "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(terraform output eip_addr | tr -d '\"')/" > ../../../../inventory/mycluster/hosts.yaml && \
-    for k8s_role in $(terraform output -json hosts | jq -r '.[] | .tags.k8s_role' | sort | uniq); do echo -e "$k8s_role:\n\thosts:" >> ../../../../inventory/mycluster/hosts.yaml; terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_role==$ARGS.named.k8s_role) | "\t\t\(.name):"' >> ../../../../inventory/mycluster/hosts.yaml; done && \
+    echo -e "\tchildren:" >> ../../../../inventory/mycluster/hosts.yaml; for k8s_role in $(terraform output -json hosts | jq -r '.[] | .tags.k8s_roles' | grep -oh "\w*" | sort | uniq); do echo -e "\t\t$k8s_role:\n\t\t\thosts:" >> ../../../../inventory/mycluster/hosts.yaml; \
+    terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | "\t\t\t\t\(.name):"' >> ../../../../inventory/mycluster/hosts.yaml; done && \
+    echo -e "\t\tkube_node:\n\t\t\thosts:\n$(terraform output -json hosts | jq -r '.[] | "\t\t\t\t\(.name):"')" >> ../../../../inventory/mycluster/hosts.yaml && \
+    echo -e "\t\tk8s_cluster:\n\t\t\tchildren:\n$(terraform output -json hosts | jq -r '.[] | "\(.tags.k8s_roles)"' | grep -oh "\w*" | sort | uniq | awk '{print "\t\t\t\t"$1":"}')" >> ../../../../inventory/mycluster/hosts.yaml && \
+    echo -e "\t\tcalico_rr:\n\t\t\thosts: {}" >> ../../../../inventory/mycluster/hosts.yaml && \
     sed -i 's/\t/  /g' ../../../../inventory/mycluster/hosts.yaml
-  args:
+
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
 
 - name: Setup ansible env
   shell: |
-    tar -czf rs-infrastructure.tar.gz ../../../../ansible.cfg ../../../../.gitmodules ../../../../apps.yaml ../../../../rs-setup.yaml ../../../../inventory/mycluster/hosts.yaml ../../../../collections/kubespray 
-    scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem rs-infrastructure.tar.gz cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/
+    tar -czf rs-infrastructure.tar.gz ../../../../ansible.cfg ../../../../.gitmodules ../../../../apps.yaml ../../../../rs-setup.yaml ../../../../inventory/mycluster/hosts.yaml ../../../../inventory/mycluster/openrc.sh ../../../../inventory/mycluster/group_vars/ ../../../../collections/kubespray && \ 
+    sed -i "/master-0/,/provider_id/ s/\/home\/cloud\/.ssh\/privatekey.pem/inventory\/mycluster\/privatekey.pem/" ../../../../inventory/mycluster/hosts.yaml && \
+    scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem rs-infrastructure.tar.gz cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/ && \
     ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') '\
     mkdir -p ~/rs-infrastructure && cd ~/rs-infrastructure && tar -xzf ~/rs-infrastructure.tar.gz && \
-    echo "roles_path = /home/cloud/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:/home/cloud/rs-infrastructure/collections/kubespray/roles" >> ansible.cfg
     mkdir -p ~/miniconda3 && wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh && \
-    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 && rm -rf ~/miniconda3/miniconda.sh && ~/miniconda3/bin/conda init bash' && \
-    ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') '\
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 && rm -rf ~/miniconda3/miniconda.sh && ~/miniconda3/bin/conda init bash && \
+    echo "roles_path = /home/cloud/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:/home/cloud/rs-infrastructure/collections/kubespray/roles" >> ~/rs-infrastructure/ansible.cfg && \
+    sed -i "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(hostname -I)/" ~/rs-infrastructure/inventory/mycluster/hosts.yaml && \
+    sed -i "s/OS_DOMAIN_NAME/OS_USER_DOMAIN_NAME/" ~/rs-infrastructure/inventory/mycluster/openrc.sh && \
+    echo -e "cinder_topology_zones :\n  - eu-west-0" >> ~/rs-infrastructure/collections/kubespray/roles/kubespray-defaults/defaults/main.yaml && \
     cd ~/rs-infrastructure && ~/miniconda3/bin/conda create -y -n rspy python=3.11' && \
     ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') '\
     source ~/miniconda3/bin/activate rspy && \
     pip install -U pyOpenSSL ecdsa -r ~/rs-infrastructure/collections/kubespray/requirements.txt && \
-    ansible-galaxy collection install kubernetes.core openstack.cloud
+    cd ~/rs-infrastructure; ansible-galaxy collection install kubernetes.core openstack.cloud
     '
   args:
     chdir: roles/terraform/create-cluster/tasks/
