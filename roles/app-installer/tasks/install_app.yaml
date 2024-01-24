@@ -71,7 +71,6 @@
         | {{ bin_dir }}/kubectl apply -f - \
         --server-side \
         --force-conflicts \
-        --prune \
         -l app.kubernetes.io/instance={{ app_name }}
       register: result
 

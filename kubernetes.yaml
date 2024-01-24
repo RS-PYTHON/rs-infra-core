@@ -1,6 +1,6 @@
 ---
 - name: Deploy kubernets with kubespray
-  hosts: rs-cluster-master-0
+  hosts: kube_control_plane[0]
   remote_user: cloud
   tasks:
     - name: Deploy kubernetes
