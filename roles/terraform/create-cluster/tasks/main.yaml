@@ -7,7 +7,7 @@
 - name: Create ssh key
   shell: |
     ssh-keygen -b 2048 -t rsa -m PEM -N "" -f inventory/mycluster/privatekey.pem;\
-    echo "$(grep -v "public_key" inventory/mycluster/cluster.tfvars)\npublic_key = \"$(ssh-keygen -f inventory/mycluster/privatekey.pem -y)\"" > inventory/mycluster/cluster.tfvars
+    echo -e "$(grep -v "public_key" inventory/mycluster/cluster.tfvars)\npublic_key = \"$(ssh-keygen -f inventory/mycluster/privatekey.pem -y)\"" > inventory/mycluster/cluster.tfvars
   when: privatekey.stat.exists == False
 
 - name: Terraform init
@@ -41,7 +41,7 @@
 
 - name: Update hosts
   shell: |
-        echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > ../../../../inventory/mycluster/hosts.yaml && \
+    echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > ../../../../inventory/mycluster/hosts.yaml && \
     terraform output -json hosts | jq -r '.[] | "\t\t\(.name):\n\t\t\tansible_host: \(.access_ip_v4)\n\t\t\tansible_ssh_private_key_file: \"\/home\/cloud\/.ssh\/privatekey.pem\"\n\t\t\tprovider_id: \(.id)"' >> ../../../../inventory/mycluster/hosts.yaml && \
     cat ../../../../inventory/mycluster/hosts.yaml | sed "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(terraform output eip_addr | tr -d '\"')/" > ../../../../inventory/mycluster/hosts.yaml && \
     echo -e "\tchildren:" >> ../../../../inventory/mycluster/hosts.yaml; for k8s_role in $(terraform output -json hosts | jq -r '.[] | .tags.k8s_roles' | grep -oh "\w*" | sort | uniq); do echo -e "\t\t$k8s_role:\n\t\t\thosts:" >> ../../../../inventory/mycluster/hosts.yaml; \

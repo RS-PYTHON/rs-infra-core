@@ -88,6 +88,10 @@ variable "vpc_cidr" {
   type = string
 }
 
+variable "vpc_name" {
+  type = string
+}
+
 variable "vpc_gateway_ip" {
   type = string
 }
@@ -125,7 +129,7 @@ variable "eip_elb_bandwidth" {
 }
 
 resource "flexibleengine_vpc_v1" "main_vpc" {
-  name = "main_vpc"
+  name = var.vpc_name
   cidr = var.vpc_cidr
 }
 

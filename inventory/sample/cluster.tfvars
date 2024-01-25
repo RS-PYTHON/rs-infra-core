@@ -40,6 +40,7 @@ public_key = "<ssh-publickey>"
 
 #Network vars
 vpc_cidr = "192.168.0.0/16"
+vpc_name = "vpc_rs-cluster"
 vpc_gateway_ip = "192.168.0.1"
 vpc_subnet_cidr = "192.168.0.0/17"
 vpc_subnet_primary_dns = "100.125.0.41"
