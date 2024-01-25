@@ -68,9 +68,9 @@ cp -rfp inventory/sample inventory/mycluster
 ```shellsession
 cp -rfp roles/terraform/create-cluster/tasks/.env.template roles/terraform/create-cluster/tasks/.env
 ```
- - Credentials, domain name, the stash license, S3 endpoints in `rs-infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
+ - Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
  - Credentials in `roles/terraform/create-cluster/tasks/.env`
- - Node groups, Network sizing, S3 buckets in `rs-infrastructure/inventory/mycluster/cluster.tfvars`
+ - Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
  - Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
  
 ```shellsession
