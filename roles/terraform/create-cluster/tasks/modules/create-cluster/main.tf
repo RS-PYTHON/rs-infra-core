@@ -88,10 +88,6 @@ variable "vpc_cidr" {
   type = string
 }
 
-variable "vpc_name" {
-  type = string
-}
-
 variable "vpc_gateway_ip" {
   type = string
 }
@@ -129,7 +125,7 @@ variable "eip_elb_bandwidth" {
 }
 
 resource "flexibleengine_vpc_v1" "main_vpc" {
-  name = var.vpc_name
+  name = "vpc-${var.cluster_name}"
   cidr = var.vpc_cidr
 }
 
@@ -143,7 +139,7 @@ resource "flexibleengine_vpc_subnet_v1" "vpc_subnet" {
 }
 
 resource "flexibleengine_nat_gateway_v2" "nat_gateway" {
-  name      = "nat_test"
+  name      = "nat-${var.cluster_name}"
   spec      = var.nat_gw_spec
   vpc_id    = flexibleengine_vpc_v1.main_vpc.id
   subnet_id = flexibleengine_vpc_subnet_v1.vpc_subnet.id
@@ -167,7 +163,7 @@ resource "flexibleengine_vpc_eip" "eip_nat_gw" {
 }
 
 resource "flexibleengine_networking_secgroup_v2" "secgroup" {
-  name = "secgroup"
+  name = "sg-${var.cluster_name}"
 }
 
 resource "flexibleengine_networking_secgroup_rule_v2" "allow_ssh_ingress" {
@@ -188,9 +184,8 @@ resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic" {
   security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
 }
 
-
 resource "flexibleengine_lb_loadbalancer_v3" "elb" {
-  name              = "elb"
+  name              = "elb-${var.cluster_name}"
   cross_vpc_backend = true
 
   vpc_id            = flexibleengine_vpc_v1.main_vpc.id

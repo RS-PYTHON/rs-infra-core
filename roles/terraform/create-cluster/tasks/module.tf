@@ -7,10 +7,6 @@ variable "vpc_cidr" {
   type = string
 }
 
-variable "vpc_name" {
-  type = string
-}
-
 variable "vpc_gateway_ip" {
   type = string
 }
@@ -74,7 +70,6 @@ module "create-cluster" {
     source = "./modules/create-cluster"
     image_name = var.image_name
     vpc_cidr = var.vpc_cidr
-    vpc_name = var.vpc_name
     vpc_gateway_ip = var.vpc_gateway_ip
     vpc_subnet_cidr = var.vpc_subnet_cidr
     vpc_subnet_primary_dns = var.vpc_subnet_primary_dns
