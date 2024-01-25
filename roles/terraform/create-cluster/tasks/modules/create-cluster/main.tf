@@ -4,7 +4,7 @@ required_version = ">= 1.6.0"
 required_providers {
   flexibleengine    = {
     source          = "FlexibleEngineCloud/flexibleengine"
-    version         = ">= 1.43.0"
+    version         = ">= 1.45.0"
    }
  }
 }
@@ -96,6 +96,14 @@ variable "vpc_subnet_cidr" {
   type = string
 }
 
+variable "vpc_subnet_primary_dns" {
+  type = string
+}
+
+variable "vpc_subnet_secondary_dns" {
+  type = string
+}
+
 variable "nat_gw_spec" {
   type = string
 }
@@ -122,10 +130,12 @@ resource "flexibleengine_vpc_v1" "main_vpc" {
 }
 
 resource "flexibleengine_vpc_subnet_v1" "vpc_subnet" {
-  name       = "vpc_subnet"
-  cidr       = var.vpc_subnet_cidr
-  gateway_ip = var.vpc_gateway_ip
-  vpc_id     = flexibleengine_vpc_v1.main_vpc.id
+  name          = "vpc_subnet"
+  cidr          = var.vpc_subnet_cidr
+  gateway_ip    = var.vpc_gateway_ip
+  vpc_id        = flexibleengine_vpc_v1.main_vpc.id
+  primary_dns   = var.vpc_subnet_primary_dns
+  secondary_dns = var.vpc_subnet_secondary_dns
 }
 
 resource "flexibleengine_nat_gateway_v2" "nat_gateway" {

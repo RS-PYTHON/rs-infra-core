@@ -4,7 +4,7 @@ required_version = ">= 1.6.0"
 required_providers {
   flexibleengine    = {
     source          = "FlexibleEngineCloud/flexibleengine"
-    version         = ">= 1.43.0"
+    version         = ">= 1.45.0"
    }
  }
 }
