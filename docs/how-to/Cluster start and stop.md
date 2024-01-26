@@ -3,7 +3,7 @@
 ## Prerequisites
 Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration
 ```shellsession
-cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
+cp -rfp inventory/sample/openrc.sh.template inventory/mycluster/openrc.sh
 ```
 
 ## Stop the cluster
