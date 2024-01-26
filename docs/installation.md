@@ -7,12 +7,9 @@
 
 ## _Bastion_ requirements
 
-- ansible
-- python3
-- python3-pip
+- miniconda
 - git
 - jq
-- terraform
 
 ## Dependencies
 
@@ -36,20 +33,33 @@ This project can integrate credentials from a custom `HashiCorp Vault` instance,
 
 ```shellsession
 git clone https://github.com/RS-PYTHON/rs-infrastructure.git
+cd rs-infrastructure
 ```
 
 ### X. Install requirements
 
 ```shellsession
-cd rs-infrastructure
+# Install miniconda
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm -rf ~/miniconda3/miniconda.sh
 
-git submodule update --init
+# Init conda depending on your shell
+~/miniconda3/bin/conda init bash
+~/miniconda3/bin/conda init zsh
 
-VENVDIR=kubespray-venv
-KUBESPRAYDIR=collections/kubespray
-python3 -m venv $VENVDIR
-source $VENVDIR/bin/activate
-pip install -U pyOpenSSL ecdsa -r $KUBESPRAYDIR/requirements.txt
+# Create conda env with python=3.11 and activate it
+conda create -y -n rspy python=3.11
+conda activate rspy
+
+# Install Ansible, Terraform, 
+conda install conda-forge::terraform
+
+# Init Kubespray collection with remote
+git submodule update --init --remote
+
+pip install -U pyOpenSSL ecdsa -r collections/kubespray/requirements.txt
 
 ansible-galaxy collection install \
     kubernetes.core \
@@ -67,15 +77,18 @@ cp -rfp inventory/sample inventory/mycluster
 ```shellsession
 cp -rfp roles/terraform/create-cluster/tasks/.env.template roles/terraform/create-cluster/tasks/.env
 ```
-Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration
+
+Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration :
+
 ```shellsession
 cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 ```
- - Credentials, domain name, the stash license, S3 endpoints in `rs-infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
- - Credentials in `roles/terraform/create-cluster/tasks/.env`
- - Node groups, Network sizing, S3 buckets in `rs-infrastructure/inventory/mycluster/cluster.tfvars`
- - Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
- 
+
+- Credentials, domain name, the stash license, S3 endpoints in `rs-infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
+- Credentials in `roles/terraform/create-cluster/tasks/.env`
+- Node groups, Network sizing, S3 buckets in `rs-infrastructure/inventory/mycluster/cluster.tfvars`
+- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
+
 ```shellsession
 ansible-playbook generate_inventory.yaml \
     -i inventory/mycluster/hosts.yaml

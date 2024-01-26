@@ -50,7 +50,7 @@
     echo -e "\t\tk8s_cluster:\n\t\t\tchildren:\n$(terraform output -json hosts | jq -r '.[] | "\(.tags.k8s_roles)"' | grep -oh "\w*" | sort | uniq | awk '{print "\t\t\t\t"$1":"}')" >> ../../../../inventory/mycluster/hosts.yaml && \
     echo -e "\t\tcalico_rr:\n\t\t\thosts: {}" >> ../../../../inventory/mycluster/hosts.yaml && \
     sed -i 's/\t/  /g' ../../../../inventory/mycluster/hosts.yaml
-
+  args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
 
@@ -73,7 +73,7 @@
     pip install -U pyOpenSSL ecdsa -r ~/rs-infrastructure/collections/kubespray/requirements.txt && \
     cd ~/rs-infrastructure; ansible-galaxy collection install kubernetes.core openstack.cloud && \
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && chmod 700 get_helm.sh && ./get_helm.sh && \
-    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash && sudo cp /home/cloud/kustomize /usr/local/bin/
+    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && sudo mv ./kustomize /usr/local/bin/
     '
   args:
     chdir: roles/terraform/create-cluster/tasks/
