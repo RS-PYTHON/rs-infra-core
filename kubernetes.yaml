@@ -9,6 +9,7 @@
         sudo mkdir -p /etc/kubernetes && \
         cd /home/cloud/rs-infrastructure && \
         source inventory/mycluster/openrc.sh && \
+        sed -i 's#inventory/mycluster/privatekey.pem#/home/cloud/.ssh/privatekey.pem#' inventory/mycluster/hosts.yaml && \
         ansible-playbook collections/kubespray/cluster.yml -i inventory/mycluster/hosts.yaml --become
       args:
         executable: /bin/bash

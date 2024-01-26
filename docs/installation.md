@@ -109,14 +109,14 @@ ansible-playbook security.yaml \
     --become
 ```
 
-### X. Deploy kubernetes with `kubespray`
+### X. Deploy Kubernetes with `kubespray`
 
 ```shellsession
 # The option `--become` is required, for example writing SSL keys in /etc/,
 # installing packages and interacting with various systemd daemons.
 # Without --become the playbook will fail to run!
 
-ansible-playbook collections/kubespray/cluster.yml \
+ansible-playbook kubernetes.yaml \
     -i inventory/mycluster/hosts.yaml \
     --become
 ```
