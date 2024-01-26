@@ -51,6 +51,7 @@ KUBESPRAYDIR=collections/kubespray
 python3 -m venv $VENVDIR
 source $VENVDIR/bin/activate
 pip install -U pyOpenSSL ecdsa -r $KUBESPRAYDIR/requirements.txt
+pip install python-openstackclient
 
 ansible-galaxy collection install \
     kubernetes.core \
