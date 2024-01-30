@@ -54,7 +54,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
   name            = "${var.cluster_name}-${each.value.name}-${each.value.number}"
   image_name      = var.image_name
   flavor_id       = each.value.flavor
-  key_pair        = "${var.cluster_name}-keypair"
+  key_pair        = "keypair-${var.cluster_name}"
   security_groups = [flexibleengine_networking_secgroup_v2.secgroup.name]
   network {
     uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
@@ -79,7 +79,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
 }
 
 resource "flexibleengine_compute_keypair_v2" "keypair" {
-  name       = "${var.cluster_name}-keypair"
+  name       = "keypair-${var.cluster_name}"
   public_key = var.public_key
 }
 
@@ -130,7 +130,7 @@ resource "flexibleengine_vpc_v1" "main_vpc" {
 }
 
 resource "flexibleengine_vpc_subnet_v1" "vpc_subnet" {
-  name          = "vpc_subnet"
+  name          = "vpc_subnet-${var.cluster_name}"
   cidr          = var.vpc_subnet_cidr
   gateway_ip    = var.vpc_gateway_ip
   vpc_id        = flexibleengine_vpc_v1.main_vpc.id
@@ -156,7 +156,7 @@ resource "flexibleengine_vpc_eip" "eip_nat_gw" {
     type = var.eip_nat_gw_type
   }
   bandwidth {
-    name       = "bandwidth_nat_gw"
+    name       = "bandwidth_nat_gw-${var.cluster_name}"
     size       = var.eip_nat_gw_bandwidth
     share_type = "PER"
   }
@@ -176,11 +176,19 @@ resource "flexibleengine_networking_secgroup_rule_v2" "allow_ssh_ingress" {
   security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
 }
 
-resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic" {
+resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic_tcp" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
-  remote_group_id  = flexibleengine_networking_secgroup_v2.secgroup.id
+  remote_group_id   = flexibleengine_networking_secgroup_v2.secgroup.id
+  security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
+}
+
+resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic_udp" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "udp"
+  remote_group_id   = flexibleengine_networking_secgroup_v2.secgroup.id
   security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
 }
 
@@ -207,14 +215,14 @@ resource "flexibleengine_vpc_eip" "elb_eip" {
     type = var.eip_elb_type
   }
   bandwidth {
-    name       = "bandwidth_elb"
+    name       = "bandwidth_elb-${var.cluster_name}"
     size       = var.eip_elb_bandwidth
     share_type = "PER"
   }
 }
 
 resource "flexibleengine_lb_listener_v3" "listener-ssh" {
-  name            = "elb-listener-ssh"
+  name            = "elb-listener-ssh-${var.cluster_name}"
   description     = "listener"
   protocol        = "TCP"
   protocol_port   = 22

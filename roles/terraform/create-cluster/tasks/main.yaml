@@ -9,10 +9,12 @@
     ssh-keygen -b 2048 -t rsa -m PEM -N "" -f inventory/mycluster/privatekey.pem;\
     echo -e "$(grep -v "public_key" inventory/mycluster/cluster.tfvars)\npublic_key = \"$(ssh-keygen -f inventory/mycluster/privatekey.pem -y)\"" > inventory/mycluster/cluster.tfvars
   when: privatekey.stat.exists == False
+  args:
+    executable: /bin/bash
 
 - name: Terraform init
   shell: |
-    terraform init
+    terraform init -upgrade
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
@@ -33,7 +35,7 @@
 
 - name: Copy ssh key
   shell: |
-    sleep 0 && \
+    sleep 20 && \
     scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/.ssh/privatekey.pem &&\
     ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') chmod 600 /home/cloud/.ssh/privatekey.pem
   args:
