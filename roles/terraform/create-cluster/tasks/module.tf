@@ -15,6 +15,14 @@ variable "vpc_subnet_cidr" {
   type = string
 }
 
+variable "vpc_subnet_primary_dns" {
+  type = string
+}
+
+variable "vpc_subnet_secondary_dns" {
+  type = string
+}
+
 variable "nat_gw_spec" {
   type = string
 }
@@ -45,12 +53,13 @@ variable "cluster_configuration" {
       flavor    = string
       amount    = number
       type      = string
+      k8s_roles = string
       additionnal_disk_size = number
     }))
 }
 
 output "hosts" {
-  value       = "${module.create-cluster.hosts}"
+  value = "${module.create-cluster.hosts}"
 }
 
 output "eip_addr" {
@@ -63,6 +72,8 @@ module "create-cluster" {
     vpc_cidr = var.vpc_cidr
     vpc_gateway_ip = var.vpc_gateway_ip
     vpc_subnet_cidr = var.vpc_subnet_cidr
+    vpc_subnet_primary_dns = var.vpc_subnet_primary_dns
+    vpc_subnet_secondary_dns = var.vpc_subnet_secondary_dns
     cluster_configuration = var.cluster_configuration
     cluster_name = var.cluster_name
     public_key = var.public_key

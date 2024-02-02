@@ -1,0 +1,18 @@
+---
+- name: Deploy kubernets with kubespray
+  hosts: kube_control_plane[0]
+  remote_user: cloud
+  tasks:
+    - name: Deploy kubernetes
+      shell: |
+        source /home/cloud/miniconda3/bin/activate rspy && \
+        sudo mkdir -p /etc/kubernetes && \
+        cd /home/cloud/rs-infrastructure && \
+        source inventory/mycluster/openrc.sh && \
+        sed -i 's#inventory/mycluster/privatekey.pem#/home/cloud/.ssh/privatekey.pem#' inventory/mycluster/hosts.yaml && \
+        ansible-playbook collections/kubespray/cluster.yml -i inventory/mycluster/hosts.yaml --become && \
+        mkdir -p ~/.kube && sudo cp /etc/kubernetes/admin.conf ~/.kube/config && sudo chown cloud: ~/.kube/config
+      args:
+        executable: /bin/bash
+      async: 3600
+      poll: 30

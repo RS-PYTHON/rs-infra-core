@@ -12,3 +12,4 @@ generated_inventory_vars.yaml
 .vscode
 **/kubespray-venv
 inventory/mycluster
+roles/terraform/create-cluster/tasks/rs-infrastructure.tar.gz

@@ -10,6 +10,7 @@ image_name = "OBS Ubuntu 22.04"
 #        amount = <amount>
 #        additionnal_disk_size = <additionnal_disk_size> # 0 if no additionnal disk wanted
 #        type = "<instance-type>"
+#        k8s_roles = "list of roles separated by spaces"
 #    }
 cluster_configuration = {
     #At least one master is required for the cluster to work fine
@@ -18,18 +19,21 @@ cluster_configuration = {
         amount = 1
         additionnal_disk_size = 0
         type = "master"
+        k8s_roles = "kube_control_plane etcd"
     }
     infra = {
         flavor = "s6.small.1"
-        amount = 0
+        amount = 0 
         additionnal_disk_size = 0
         type = "infra"
+        k8s_roles = "infra"
     }
     processing = {
         flavor = "s6.small.1"
         amount = 0
         additionnal_disk_size = 0
         type = "processing"
+        k8s_roles = "processing"
     }
 }
 public_key = "<ssh-publickey>"
@@ -38,6 +42,8 @@ public_key = "<ssh-publickey>"
 vpc_cidr = "192.168.0.0/16"
 vpc_gateway_ip = "192.168.0.1"
 vpc_subnet_cidr = "192.168.0.0/17"
+vpc_subnet_primary_dns = "100.125.0.41"
+vpc_subnet_secondary_dns = "100.126.0.41"
 
 nat_gw_spec = "1"
 

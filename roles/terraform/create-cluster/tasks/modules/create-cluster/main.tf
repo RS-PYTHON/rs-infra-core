@@ -4,7 +4,7 @@ required_version = ">= 1.6.0"
 required_providers {
   flexibleengine    = {
     source          = "FlexibleEngineCloud/flexibleengine"
-    version         = ">= 1.43.0"
+    version         = ">= 1.45.0"
    }
  }
 }
@@ -31,6 +31,7 @@ variable "cluster_configuration" {
       flavor                = string
       amount                = number
       type                  = string
+      k8s_roles             = string
       additionnal_disk_size = number
     }))
 }
@@ -44,6 +45,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
           flavor                = nodes.flavor
           number                = count
           additionnal_disk_size = nodes.additionnal_disk_size
+          k8s_roles             = nodes.k8s_roles
         }
       ]
     ])
@@ -52,7 +54,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
   name            = "${var.cluster_name}-${each.value.name}-${each.value.number}"
   image_name      = var.image_name
   flavor_id       = each.value.flavor
-  key_pair        = "${var.cluster_name}-keypair"
+  key_pair        = "keypair-${var.cluster_name}"
   security_groups = [flexibleengine_networking_secgroup_v2.secgroup.name]
   network {
     uuid = flexibleengine_vpc_subnet_v1.vpc_subnet.id
@@ -68,7 +70,8 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
     }
   }
   tags = {
-    type  = each.value.name
+    type     = each.value.name
+    k8s_roles = each.value.k8s_roles
   }
   depends_on = [
     flexibleengine_compute_keypair_v2.keypair
@@ -76,7 +79,7 @@ resource "flexibleengine_compute_instance_v2" "nodes" {
 }
 
 resource "flexibleengine_compute_keypair_v2" "keypair" {
-  name       = "${var.cluster_name}-keypair"
+  name       = "keypair-${var.cluster_name}"
   public_key = var.public_key
 }
 
@@ -90,6 +93,14 @@ variable "vpc_gateway_ip" {
 }
 
 variable "vpc_subnet_cidr" {
+  type = string
+}
+
+variable "vpc_subnet_primary_dns" {
+  type = string
+}
+
+variable "vpc_subnet_secondary_dns" {
   type = string
 }
 
@@ -114,19 +125,21 @@ variable "eip_elb_bandwidth" {
 }
 
 resource "flexibleengine_vpc_v1" "main_vpc" {
-  name = "main_vpc"
+  name = "vpc-${var.cluster_name}"
   cidr = var.vpc_cidr
 }
 
 resource "flexibleengine_vpc_subnet_v1" "vpc_subnet" {
-  name       = "vpc_subnet"
-  cidr       = var.vpc_subnet_cidr
-  gateway_ip = var.vpc_gateway_ip
-  vpc_id     = flexibleengine_vpc_v1.main_vpc.id
+  name          = "vpc_subnet-${var.cluster_name}"
+  cidr          = var.vpc_subnet_cidr
+  gateway_ip    = var.vpc_gateway_ip
+  vpc_id        = flexibleengine_vpc_v1.main_vpc.id
+  primary_dns   = var.vpc_subnet_primary_dns
+  secondary_dns = var.vpc_subnet_secondary_dns
 }
 
 resource "flexibleengine_nat_gateway_v2" "nat_gateway" {
-  name      = "nat_test"
+  name      = "nat-${var.cluster_name}"
   spec      = var.nat_gw_spec
   vpc_id    = flexibleengine_vpc_v1.main_vpc.id
   subnet_id = flexibleengine_vpc_subnet_v1.vpc_subnet.id
@@ -143,14 +156,14 @@ resource "flexibleengine_vpc_eip" "eip_nat_gw" {
     type = var.eip_nat_gw_type
   }
   bandwidth {
-    name       = "bandwidth_nat_gw"
+    name       = "bandwidth_nat_gw-${var.cluster_name}"
     size       = var.eip_nat_gw_bandwidth
     share_type = "PER"
   }
 }
 
 resource "flexibleengine_networking_secgroup_v2" "secgroup" {
-  name = "secgroup"
+  name = "sg-${var.cluster_name}"
 }
 
 resource "flexibleengine_networking_secgroup_rule_v2" "allow_ssh_ingress" {
@@ -163,8 +176,24 @@ resource "flexibleengine_networking_secgroup_rule_v2" "allow_ssh_ingress" {
   security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
 }
 
+resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic_tcp" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  remote_group_id   = flexibleengine_networking_secgroup_v2.secgroup.id
+  security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
+}
+
+resource "flexibleengine_networking_secgroup_rule_v2" "allow_internal_traffic_udp" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "udp"
+  remote_group_id   = flexibleengine_networking_secgroup_v2.secgroup.id
+  security_group_id = flexibleengine_networking_secgroup_v2.secgroup.id
+}
+
 resource "flexibleengine_lb_loadbalancer_v3" "elb" {
-  name              = "elb"
+  name              = "elb-${var.cluster_name}"
   cross_vpc_backend = true
 
   vpc_id            = flexibleengine_vpc_v1.main_vpc.id
@@ -186,14 +215,14 @@ resource "flexibleengine_vpc_eip" "elb_eip" {
     type = var.eip_elb_type
   }
   bandwidth {
-    name       = "bandwidth_elb"
+    name       = "bandwidth_elb-${var.cluster_name}"
     size       = var.eip_elb_bandwidth
     share_type = "PER"
   }
 }
 
-resource "flexibleengine_lb_listener_v3" "listener" {
-  name            = "elb-listener"
+resource "flexibleengine_lb_listener_v3" "listener-ssh" {
+  name            = "elb-listener-ssh-${var.cluster_name}"
   description     = "listener"
   protocol        = "TCP"
   protocol_port   = 22
@@ -203,7 +232,7 @@ resource "flexibleengine_lb_listener_v3" "listener" {
 resource "flexibleengine_lb_pool_v3" "pool" {
   protocol    = "TCP"
   lb_method   = "SOURCE_IP"
-  listener_id = flexibleengine_lb_listener_v3.listener.id
+  listener_id = flexibleengine_lb_listener_v3.listener-ssh.id
 }
 
 resource "flexibleengine_lb_member_v3" "member" {

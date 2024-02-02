@@ -7,12 +7,9 @@
 
 ## _Bastion_ requirements
 
-- ansible
-- python3
-- python3-pip
+- miniconda
 - git
 - jq
-- terraform
 
 ## Dependencies
 
@@ -30,113 +27,93 @@ The fully detailed documentation and configuration options are available on its 
 
 This project can integrate credentials from a custom `HashiCorp Vault` instance, see the specific documentation: [how to/Credentials](./how-to/Credentials.md)
 
+### Openstack CLI
+
+This project exploits Openstack CLI to manage the state of the infrastructure on the Cloud Provider.  
+The fully detailled documentation and configuration options are available on its page: [https://docs.openstack.org/newton/user-guide/cli.html](https://docs.openstack.org/newton/user-guide/cli.html)
+
 ## Quickstart
 
-### X. Get the rs-infrastructure repository
+### 1. Get the rs-infrastructure repository
 
 ```shellsession
 git clone https://github.com/RS-PYTHON/rs-infrastructure.git
+cd rs-infrastructure
 ```
 
-### X. Install requirements
+### 2. Install requirements
 
 ```shellsession
-cd rs-infrastructure
+# Install miniconda
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm -rf ~/miniconda3/miniconda.sh
 
-git submodule update --init
+# Init conda depending on your shell
+~/miniconda3/bin/conda init bash
+~/miniconda3/bin/conda init zsh
 
-VENVDIR=kubespray-venv
-KUBESPRAYDIR=collections/kubespray
-python3 -m venv $VENVDIR
-source $VENVDIR/bin/activate
-pip install -U pyOpenSSL ecdsa -r $KUBESPRAYDIR/requirements.txt
+# Create conda env with python=3.11 and activate it
+conda create -y -n rspy python=3.11
+conda activate rspy
+
+# Install Ansible, Terraform, Openstackclient
+conda install conda-forge::ansible
+conda install conda-forge::terraform
+conda install conda-forge::python-openstackclient
+
+# Init Kubespray collection with remote
+git submodule update --init --remote
+
+
+pip install -U pyOpenSSL ecdsa -r collections/kubespray/requirements.txt
 
 ansible-galaxy collection install \
     kubernetes.core \
     openstack.cloud
 ```
 
-### X. Copy the sample inventory
+### 3. Copy the sample inventory
 
 ```shellsession
 cp -rfp inventory/sample inventory/mycluster
 ```
 
-### X. Review and change the default configuration to match your needs
+### 4. Review and change the default configuration to match your needs
 
 ```shellsession
 cp -rfp roles/terraform/create-cluster/tasks/.env.template roles/terraform/create-cluster/tasks/.env
 ```
- - Credentials, domain name, the stash license, S3 endpoints in `rs-infrastructure/inventory/mycluster/host_vars/setup/main.yaml`
- - Credentials in `roles/terraform/create-cluster/tasks/.env`
- - Node groups, Network sizing, S3 buckets in `rs-infrastructure/inventory/mycluster/cluster.tfvars`
- - Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
- 
+
+Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration :
+
 ```shellsession
-ansible-playbook generate_inventory.yaml \
-    -i inventory/mycluster/hosts.yaml
+cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 ```
 
-### X. Create and configure machines
+- Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
+- Credentials in `roles/terraform/create-cluster/tasks/.env`
+- Credentials, domain name in `inventory/mycluster/openrc.sh`
+- Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
+- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
+
+### 5. Create and configure machines
 
 ```shellsession
 ansible-playbook cluster.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### X. Install security services
+
+### 6. Deploy Kubernetes with `kubespray`
 
 ```shellsession
-ansible-playbook security.yaml \
+ansible-playbook kubernetes.yaml \
     -i inventory/mycluster/hosts.yaml \
-    --become
 ```
 
-### X. Deploy kubernetes with `kubespray`
-
-```shellsession
-# The option `--become` is required, for example writing SSL keys in /etc/,
-# installing packages and interacting with various systemd daemons.
-# Without --become the playbook will fail to run!
-
-ansible-playbook collections/kubespray/cluster.yml \
-    -i inventory/mycluster/hosts.yaml \
-    --become
-```
-
-### X. Enable pod security policies (PSP) on the cluster
-
-```shellsession
-# /!\ create first the PSP and ClusterRoleBinding resources
-# before enabling the admission plugin
-
-ansible-playbook collections/kubespray/upgrade-cluster.yml \
-    -i inventory/mycluster/hosts.yaml \
-    --tags cluster-roles \
-    -e podsecuritypolicy_enabled=true \
-    --become
-
-ansible-playbook collections/kubespray/upgrade-cluster.yml \
-    -i inventory/mycluster/hosts.yaml \
-    --tags master \
-    -e podsecuritypolicy_enabled=true \
-    --become
-```
-
-### X. Setup RS specifics
-
-```shellsession
-ansible-playbook rs-setup.yaml \
-    -i inventory/mycluster/hosts.yaml
-```
-
-### X. Add the providerID spec to the nodes for the autoscaling
-
-```shellsession
-ansible-playbook cluster.yaml -i inventory/mycluster/hosts.yaml -t providerids
-```
-
-### X. Deploy the apps
+### 7. Deploy the apps
 
 ```shellsession
 ansible-playbook apps.yaml \
