@@ -229,6 +229,22 @@ resource "flexibleengine_lb_listener_v3" "listener-ssh" {
   loadbalancer_id = flexibleengine_lb_loadbalancer_v3.elb.id
 }
 
+resource "flexibleengine_lb_listener_v3" "listener-http" {
+  name            = "elb-listener-http-${var.cluster_name}"
+  description     = "listener"
+  protocol        = "TCP"
+  protocol_port   = 80
+  loadbalancer_id = flexibleengine_lb_loadbalancer_v3.elb.id
+}
+
+resource "flexibleengine_lb_listener_v3" "listener-https" {
+  name            = "elb-listener-https-${var.cluster_name}"
+  description     = "listener"
+  protocol        = "TCP"
+  protocol_port   = 443
+  loadbalancer_id = flexibleengine_lb_loadbalancer_v3.elb.id
+}
+
 resource "flexibleengine_lb_pool_v3" "pool" {
   protocol    = "TCP"
   lb_method   = "SOURCE_IP"
