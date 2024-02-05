@@ -1,6 +1,0 @@
-metrics:
-  enabled: true
-
-serviceMonitor:
-  enabled: true
-  interval: 2m # default is 1m from the chart

@@ -1,0 +1,8 @@
+installCRDs: false
+prometheus:
+  enabled: true
+  servicemonitor:
+    # Create a ServiceMonitor to add cert-manager to Prometheus.
+    enabled: true
+startupapicheck:
+  enabled: false

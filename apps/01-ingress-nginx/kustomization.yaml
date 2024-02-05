@@ -1,0 +1,10 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+helmCharts:
+- name: ingress-nginx
+  repo: https://kubernetes.github.io/ingress-nginx
+  releaseName: "{{ app_name }}"
+  version: v4.9.1
+  namespace: kube-system
+  valuesFile: values.yaml
