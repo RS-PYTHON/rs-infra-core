@@ -245,16 +245,44 @@ resource "flexibleengine_lb_listener_v3" "listener-https" {
   loadbalancer_id = flexibleengine_lb_loadbalancer_v3.elb.id
 }
 
-resource "flexibleengine_lb_pool_v3" "pool" {
+resource "flexibleengine_lb_pool_v3" "pool-ssh" {
   protocol    = "TCP"
   lb_method   = "SOURCE_IP"
   listener_id = flexibleengine_lb_listener_v3.listener-ssh.id
 }
 
-resource "flexibleengine_lb_member_v3" "member" {
+resource "flexibleengine_lb_pool_v3" "pool-http" {
+  protocol    = "TCP"
+  lb_method   = "SOURCE_IP"
+  listener_id = flexibleengine_lb_listener_v3.listener-http.id
+}
+
+resource "flexibleengine_lb_pool_v3" "pool-https" {
+  protocol    = "TCP"
+  lb_method   = "SOURCE_IP"
+  listener_id = flexibleengine_lb_listener_v3.listener-https.id
+}
+
+resource "flexibleengine_lb_member_v3" "member-ssh" {
   address       = flexibleengine_compute_instance_v2.nodes["master.0"].access_ip_v4
   protocol_port = 22
-  pool_id       = flexibleengine_lb_pool_v3.pool.id
+  pool_id       = flexibleengine_lb_pool_v3.pool-ssh.id
+  subnet_id     = flexibleengine_vpc_subnet_v1.vpc_subnet.ipv4_subnet_id
+}
+
+resource "flexibleengine_lb_member_v3" "member-http" {
+  for_each      = {for members in flexibleengine_compute_instance_v2.nodes: members.name => members if  members.tags.type == "master"}
+  address       = each.value.access_ip_v4
+  protocol_port = 32080
+  pool_id       = flexibleengine_lb_pool_v3.pool-http.id
+  subnet_id     = flexibleengine_vpc_subnet_v1.vpc_subnet.ipv4_subnet_id
+}
+
+resource "flexibleengine_lb_member_v3" "member-https" {
+  for_each      = {for members in flexibleengine_compute_instance_v2.nodes: members.name => members if  members.tags.type == "master"}
+  address       = each.value.access_ip_v4
+  protocol_port = 32443
+  pool_id       = flexibleengine_lb_pool_v3.pool-https.id
   subnet_id     = flexibleengine_vpc_subnet_v1.vpc_subnet.ipv4_subnet_id
 }
 
