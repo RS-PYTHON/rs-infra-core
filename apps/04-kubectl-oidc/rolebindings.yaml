@@ -126,20 +126,6 @@ roleRef:
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: keycloak-cluster-operator
-  namespace: rook-ceph
-subjects:
-  - kind: Group
-    name: operator
-    apiGroup: rbac.authorization.k8s.io
-roleRef:
-  kind: ClusterRole
-  name: cluster-admin
-  apiGroup: rbac.authorization.k8s.io
----
 # cluster-networking keycloak client role
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

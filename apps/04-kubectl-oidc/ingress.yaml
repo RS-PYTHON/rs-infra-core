@@ -20,4 +20,4 @@ spec:
   tls:
   - hosts:
     - kube.{{ platform_domain_name }}
-    secretName: kube-{{ platform_domain_name | replace("_", "-") }}
+    secretName: kube-{{ platform_domain_name | replace(".", "-") }}

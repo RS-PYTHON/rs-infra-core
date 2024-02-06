@@ -2,6 +2,6 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - apisixroute.yaml
+  - ingress.yaml
   - clusterroles.yaml
   - rolebindings.yaml
