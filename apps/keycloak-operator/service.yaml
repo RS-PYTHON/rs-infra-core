@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: keycloak-operator
+    app.kubernetes.io/version: 19.0.3
+  name: keycloak-operator
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: keycloak-operator
+    app.kubernetes.io/version: 19.0.3
+  type: ClusterIP
