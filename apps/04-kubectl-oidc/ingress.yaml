@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: kube-apiserver
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: kube.{{ platform_domain_name }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: kubernetes
+            port:
+              number: 443
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - kube.{{ platform_domain_name }}
+    secretName: kube-{{ platform_domain_name | replace("_", "-") }}
