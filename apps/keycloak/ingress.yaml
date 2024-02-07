@@ -1,4 +1,3 @@
-{{- if ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,7 +5,6 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     cert-manager.io/cluster-issuer: letsencrypt-prod
-  labels: keycloak
 spec:
   ingressClassName: nginx
   rules:
@@ -20,12 +18,7 @@ spec:
             name: keycloak-service
             port:
               number: 8080
-  {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
   tls:
-  {{- if .Values.ingress.tls }}
   - hosts:
     - iam.{{ platform_domain_name }}
     secretName: iam-{{ platform_domain_name | replace(".", "-") }}
-  {{- end }}
-  {{- end }}
-{{- end }}

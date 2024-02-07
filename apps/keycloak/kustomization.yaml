@@ -1,9 +1,10 @@
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
-namespace: iam
+namespace: default
 
 resources:
   - keycloak.yaml
   - ingress.yaml
   - servicemonitor.yaml
+  - secret.yaml
