@@ -7,10 +7,10 @@ spec:
 
   bootstrap:
     initdb:
-      database: keycloak
-      owner: keycloak
+      database: {{ keycloak.database.name }}
+      owner: {{ keycloak.database.username }}
       secret:
-        name: keycloak-database-password
+        name: {{ keycloak.database.secret }}
 
   storage:
     storageClass: csi-cinder-sc-retain

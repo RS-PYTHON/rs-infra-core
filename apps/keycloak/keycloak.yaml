@@ -1,0 +1,95 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  labels: keycloak
+spec:
+  db:
+    vendor: postgres
+    database: {{ keycloak.database.name }}
+    host: {{ keycloak.database.host }}
+    port: {{ keycloak.database.port }}
+    passwordSecret:
+      name: {{ keycloak.database.secret }}
+      key: password
+    usernameSecret:
+      name: {{ keycloak.database.secret }}
+      key: username
+  hostname:
+    hostname: iam.{{ platform_domain_name }}
+  http:
+    httpEnabled: true
+    httpPort: 8080
+  {{- if {{ keycloak.image }} }}
+  image: {{ keycloak.image }}
+  {{- end }}
+  ingress:
+    enabled: {{ keycloak.ingress.enabled }}
+  instances: {{ keycloak.replicaCount }}
+  additionalOptions:
+  - name: proxy
+    value: {{ keycloak.proxy.mode }}
+  - name: metrics-enabled
+    value: {{ keycloak.metrics.enabled }}
+  - name: log-level
+    value: {{ keycloak.logLevel }}
+  {{- if keycloak.extraParams }}
+  {{- include "common.tplvalues.render" (dict "value" keycloak.extraParams "context" $) | nindent 2 }}
+  {{- end }}
+  {{- if keycloak.extensions }}
+  unsupported:
+    podTemplate:
+      spec:
+        containers:
+        - name: keycloak
+          volumeMounts:
+          - name: extensions
+            mountPath: /opt/keycloak/providers
+        volumes:
+        - name: extensions
+          emptyDir: {}
+        initContainers:
+        - name: extensions
+          image: curlimages/curl
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "20m"
+              memory: "64Mi"
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+          env:
+          {{- if keycloak.extraEnvVars }}
+          {{- include "common.tplvalues.render" (dict "value" keycloak.extraEnvVars "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if keycloak.extensions.extraEnvVars }}
+          {{- include "common.tplvalues.render" (dict "value" keycloak.extensions.extraEnvVars "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if or extraEnvVarsCM extraEnvVarsSecret }}
+          envFrom:
+            {{- if extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          command:
+          - sh
+          args:
+          - -c
+          - >
+            {{- range keycloak.extensions.extensions }}
+            {{- if .url }}
+            curl -L -o /providers/{{ .name }}.jar {{ .url }};
+            {{ else }}
+            {{ .command }}
+            {{- end }}
+            {{- end }}
+          volumeMounts:
+          - name: extensions
+            mountPath: /providers
+  {{- end }}

@@ -1,0 +1,15 @@
+{{- if keycloak.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keycloack
+  labels: keycloak
+spec:
+  endpoints:
+  - interval: {{ keycloak.serviceMonitor.interval}}
+    path: /
+    port: http
+    scrapeTimeout: {{ keycloak.serviceMonitor.scrapeTimeout }}
+  selector: 
+    matchLabels: keycloak
+{{- end }}
