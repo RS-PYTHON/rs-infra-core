@@ -11,7 +11,7 @@ helmCharts:
     releaseName: "{{ app_name }}"
     namespace: database
 secretGenerator:
-  - name: {{ keycloak.database.secret }}
+  - name: "{{ keycloak.database.secret }}"
     literals:
       - username={{ keycloak.database.username }}
       - password={{ keycloak.database.password }}

@@ -4,6 +4,7 @@ metadata:
   name: keycloak
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx

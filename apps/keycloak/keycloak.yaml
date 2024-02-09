@@ -24,7 +24,5 @@ spec:
   additionalOptions:
     - name: proxy
       value: "{{ keycloak.proxy.mode }}"
-    - name: metrics-enabled
-      value: {{ keycloak.metrics.enabled }}
     - name: log-level
       value: "{{ keycloak.logLevel }}"

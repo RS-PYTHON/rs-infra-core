@@ -59,7 +59,7 @@
 - name: Setup ansible env
   shell: |
     tar -czf rs-infrastructure.tar.gz ../../../../ansible.cfg ../../../../.gitmodules ../../../../apps.yaml ../../../../rs-setup.yaml ../../../../inventory/mycluster/hosts.yaml ../../../../inventory/mycluster/openrc.sh ../../../../inventory/mycluster/group_vars/ ../../../../collections/kubespray && \ 
-    sed -i "/master-0/,/provider_id/ s/\/home\/cloud\/.ssh\/privatekey.pem/inventory\/mycluster\/privatekey.pem/" ../../../../inventory/mycluster/hosts.yaml && \
+    sed -i "/master-0/,/provider_id/ s/\/home\/cloud\/.ssh\/l/inventory\/mycluster\/privatekey.pem/" ../../../../inventory/mycluster/hosts.yaml && \
     scp -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem rs-infrastructure.tar.gz cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/ && \
     ssh -o StrictHostKeyChecking=no -i ../../../../inventory/mycluster/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') '\
     mkdir -p ~/rs-infrastructure && cd ~/rs-infrastructure && tar -xzf ~/rs-infrastructure.tar.gz && \
