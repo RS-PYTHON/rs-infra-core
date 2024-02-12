@@ -37,7 +37,7 @@ users:
       args:
         - oidc-login
         - get-token
-        - --oidc-issuer-url=https://iam.{{ platform_domain_name }}/auth/realms/{{ keycloak.realm.name }}
+        - --oidc-issuer-url=https://iam.{{ platform_domain_name }}/realms/{{ keycloak.realm.name }}
         - --oidc-client-id=kubectl
         - --oidc-client-secret={{ kubectl_oidc.oidc_client_secret }}
       command: kubectl
