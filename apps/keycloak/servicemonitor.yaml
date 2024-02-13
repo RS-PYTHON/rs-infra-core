@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: keycloack
+  name: keycloak
 spec:
   endpoints:
   - interval: {{ keycloak.serviceMonitor.interval}}
