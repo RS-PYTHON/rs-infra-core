@@ -1,0 +1,22 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+namespace: database
+
+helmCharts:
+  - name: cloudnative-pg
+    repo: https://cloudnative-pg.io/charts/
+    version: 0.20.1
+    valuesFile: values.yaml
+    releaseName: "{{ app_name }}"
+    namespace: database
+secretGenerator:
+  - name: "{{ keycloak.database.secret }}"
+    literals:
+      - username={{ keycloak.database.username }}
+      - password={{ keycloak.database.password }}
+    options:
+      disableNameSuffixHash: true
+
+resources:
+  - cluster.yaml

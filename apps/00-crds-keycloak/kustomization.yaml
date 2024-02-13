@@ -1,0 +1,6 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+resources:
+  - keycloakrealmimports.k8s.keycloak.org-v1.yaml
+  - keycloaks.k8s.keycloak.org-v1.yaml

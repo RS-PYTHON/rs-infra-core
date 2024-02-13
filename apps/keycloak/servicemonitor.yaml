@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keycloak
+spec:
+  endpoints:
+  - interval: {{ keycloak.serviceMonitor.interval}}
+    path: /
+    port: http
+    scrapeTimeout: {{ keycloak.serviceMonitor.scrapeTimeout }}
+  selector: 
+    matchLabels: 
+      app: keycloak

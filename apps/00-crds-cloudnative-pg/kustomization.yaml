@@ -1,0 +1,8 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+resources:
+  - postgresql.cnpg.io_clusters.yaml
+  - postgresql.cnpg.io_backups.yaml
+  - postgresql.cnpg.io_poolers.yaml
+  - postgresql.cnpg.io_scheduledbackups.yaml

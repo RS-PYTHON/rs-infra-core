@@ -110,7 +110,7 @@ ansible-playbook cluster.yaml \
 
 ```shellsession
 ansible-playbook kubernetes.yaml \
-    -i inventory/mycluster/hosts.yaml \
+    -i inventory/mycluster/hosts.yaml
 ```
 
 ### 7. Deploy the apps
