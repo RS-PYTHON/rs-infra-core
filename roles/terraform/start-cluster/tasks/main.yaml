@@ -1,7 +1,7 @@
 ---
 - name: Start cluster
   shell: |
-    set -o allexport; source ../../../../inventory/mycluster/openrc.sh; set +o allexport; openstack server start $(terraform output -json hosts | jq -r .[].name)
+    set -o allexport; source {{ inventory_dir }}/openrc.sh; set +o allexport; openstack server start $(terraform output -json hosts | jq -r .[].name)
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash

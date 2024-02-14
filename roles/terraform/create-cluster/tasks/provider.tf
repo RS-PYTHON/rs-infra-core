@@ -37,25 +37,25 @@ variable "FE_secret_key" {
 terraform {
 required_version = ">= 1.6.0"
 
-# ISSUE WITH TFSTATE ON S3 : HASH IN FILE MAKING IT UNREADABLE
-# backend "s3" {
-#   bucket   = "ops-terraformbucket"
-#   key      = "terraform.tfstate"
-#   region   = "eu-west-0"
-#   endpoint = "https://oss.eu-west-0.prod-cloud-ocb.orange-business.com"
+backend "s3" {
+  bucket   = "rs-terraform"
+  key      = "test/terraform.tfstate"
+  region   = "eu-west-0"
+  endpoint = "https://oss.eu-west-0.prod-cloud-ocb.orange-business.com"
   
-#   skip_region_validation      = true
-#   skip_credentials_validation = true
-#   skip_metadata_api_check     = true
-#   skip_requesting_account_id  = true
-# }
+  skip_region_validation      = true
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+  skip_s3_checksum            = true
+}
 
 required_providers {
   flexibleengine    = {
     source          = "FlexibleEngineCloud/flexibleengine"
     version         = ">= 1.45.0"
-   }
- }
+  }
+}
 }
 
 provider "flexibleengine" {
