@@ -1,0 +1,7 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+resources:
+  - ingress.yaml
+  - clusterroles.yaml
+  - rolebindings.yaml

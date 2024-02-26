@@ -1,91 +1,141 @@
-kube_version: v1.22.2
-
-etcd_kubeadm_enabled: true
-
-## Networking
-kube_network_plugin: calico
-calico_version: "v3.19.2"
-ipip: false
-calico_vxlan_mode: Always
-# if a node may have several interfaces
-# set the ip autodetection method to the internal nodes network CIDR
-calico_ip_auto_method: "cidr={{ cluster.cidr }}"
-
-kube_proxy_mode: iptables
-
-kube_service_addresses: 10.96.0.0/12
-kube_pods_subnet: 10.244.0.0/16
-
-cluster_name: cluster.local
-kube_log_level: 1
-containerd_debug_level: warn
-
-## Container runtime
-## Kubernetes need to configure containerd cgroup driver.
-## Enabling kubespray container engine deployment ensure  containerd config file is set.
-## deploy_container_engine: false
-container_manager: containerd
-
-## last version on ubuntu 20.04 is 1.4.11-1 and kubespray doesn't support it yet
-## but it is already installed in fe ubuntu 20.04 base image
-## to fix this: downgrade containerd to last version supported by crictl: 1.4.9-1
-# containerd_package_info:
-#   pkgs:
-#     "containerd.io=1.4.11-1"
-
-## Kubeadm config
-## only for single master clusters for multiple master cluster,
-## enabling this feature prevent secondary masters to join the cluster
-## With multiple masters, you need to enable it through the 
-## upgrade-cluster.yml playbook. The related commands are describe
-## in the README.md
-# podsecuritypolicy_enabled: true
-
-kube_apiserver_enable_admission_plugins: [NodeRestriction]
-
-kube_kubeadm_controller_extra_args:
-  use-service-account-credentials: true
-
-kube_kubeadm_apiserver_extra_args:
-  oidc-issuer-url: https://iam.{{ platform_domain_name }}/auth/realms/{{ keycloak.realm.name }}
-  oidc-client-id: kubectl
-  oidc-username-claim: LDAP_ID
-  oidc-username-prefix: "-"
-  oidc-groups-claim: cluster-roles
-  oidc-groups-prefix: ""
-
 kubelet_config_extra_args:
   # cf: https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies
   cpuManagerPolicy: static
 
+kube_kubeadm_controller_extra_args:
+  use-service-account-credentials: true
+
+kube_apiserver_enable_admission_plugins: [NodeRestriction]
+
+# Enable cinder csi driver for volume provisioning
+cinder_csi_enabled: true
+cinder_csi_controller_replicas: 1
+
+# Kubernetes dashboard
+# RBAC required. see docs/getting-started.md for access details.
+dashboard_enabled: true
+
+## Container runtime
+## docker for docker, crio for cri-o and containerd for containerd.
+## Default: containerd
+container_manager: containerd
+
+## Directory where etcd data stored
+etcd_data_dir: /var/lib/etcd
+etcd_deployment_type: host
+
+## It is possible to activate / deactivate selected authentication methods (oidc, static token auth)
+kube_oidc_auth: true
+kube_token_auth: true
+
+## Variables for OpenID Connect Configuration https://kubernetes.io/docs/admin/authentication/
+## To use OpenID you have to deploy additional an OpenID Provider (e.g Dex, Keycloak, ...)
+
+kube_oidc_url: https://iam.{{ platform_domain_name }}/realms/{{ keycloak.realm.name }}
+kube_oidc_client_id: kubectl
+## Optional settings for OIDC
+# kube_oidc_ca_file: "{{ kube_cert_dir }}/ca.pem"
+# kube_oidc_username_claim: sub
+# kube_oidc_username_prefix: 'oidc:'
+kube_oidc_groups_claim: cluster-roles
+kube_oidc_groups_prefix: ''
+
+# Choose network plugin (cilium, calico, kube-ovn, weave or flannel. Use cni for generic cni plugin)
+# Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
+kube_network_plugin: calico
+
+# the default value of name
+calico_cni_name: k8s-pod-network
+
+# IP in IP and VXLAN is mutualy exclusive modes.
+# set IP in IP encapsulation mode: "Always", "CrossSubnet", "Never"
+calico_ipip_mode: 'Never'
+
+# set VXLAN encapsulation mode: "Always", "CrossSubnet", "Never"
+calico_vxlan_mode: 'Always'
+
+# Kubernetes internal network for services, unused block of space.
+kube_service_addresses: 10.233.0.0/18
+
+# internal network. When used, it will assign IP
+# addresses from this range to individual pods.
+# This network must be unused in your network infrastructure!
+kube_pods_subnet: 10.233.64.0/18
+kube_network_node_prefix: 24
+
+# DNS configuration.
+# Kubernetes cluster name, also will be used as DNS domain
+cluster_name: cluster.local
+# Subdomains of DNS domain to be resolved via /etc/resolv.conf for hostnet pods
+ndots: 2
+# dns_timeout: 2
+# dns_attempts: 2
+# Custom search domains to be added in addition to the default cluster search domains
+# searchdomains:
+#   - svc.{{ cluster_name }}
+#   - default.svc.{{ cluster_name }}
+# Remove default cluster search domains (``default.svc.{{ dns_domain }}, svc.{{ dns_domain }}``).
+# remove_default_searchdomains: false
+# Can be coredns, coredns_dual, manual or none
+dns_mode: coredns
+# Set manual server if using a custom cluster DNS server
+# manual_dns_server: 10.x.x.x
+# Enable nodelocal dns cache
+enable_nodelocaldns: true
+enable_nodelocaldns_secondary: false
+nodelocaldns_ip: 169.254.25.10
+nodelocaldns_health_port: 9254
+nodelocaldns_second_health_port: 9256
+nodelocaldns_bind_metrics_host_ip: false
+nodelocaldns_secondary_skew_seconds: 5
+
+# Can be docker_dns, host_resolvconf or none
+resolvconf_mode: host_resolvconf
+dns_domain: "{{ cluster_name }}"
+
+# Set Orange Flexible Engine DNS
+nameservers:
+  - 100.125.0.41
+  - 100.126.0.41
+upstream_dns_servers:
+  - 100.125.0.41
+  - 100.126.0.41
+coredns_external_zones:
+- zones:
+  - prod-cloud-ocb.orange-business.com
+  nameservers:
+  - 100.125.0.41
+  - 100.126.0.41
+nodelocaldns_external_zones:
+- zones:
+  - prod-cloud-ocb.orange-business.com
+  nameservers:
+  - 100.125.0.41
+  - 100.126.0.41
+
+# audit log for kubernetes
 kubernetes_audit: true
 audit_log_path: /var/log/k8s_audit.log
 audit_log_maxage: 30
 audit_log_maxbackups: 10
 audit_log_maxsize: 100
 
-# Kubectl config file generated in YOUR_INVENTORY/artifcats/admin.conf
-# Used by kubectl role to generate kubeconfig in the cluster gateways
-kubeconfig_localhost: true
+# pod security policy (RBAC must be enabled either by having 'RBAC' in authorization_modes or kubeadm enabled)
+podsecuritypolicy_enabled: false
+
+kubelet_cpu_manager_policy: static
+
+## Running on top of openstack vms with cinder enabled may lead to unschedulable pods due to NoVolumeZoneConflict restriction in kube-scheduler.
+## See https://github.com/kubernetes-sigs/kubespray/issues/2141
+## Set this variable to true to get rid of this issue
+volume_cross_zone_attachment: false
+
+## Automatically renew K8S control plane certificates on first Monday of each month
+auto_renew_certificates: true
+# First Monday of each month
+# auto_renew_certificates_systemd_calendar: "Mon *-*-1,2,3,4,5,6,7 03:{{ groups['kube_control_plane'].index(inventory_hostname) }}0:00"
+
+kubelet_rotate_server_certificates: true
 
 # Enable prometheus metrics queries
 kube_proxy_metrics_bind_address: 0.0.0.0:10249
-
-# Auto rotate the kubelet server certificates by requesting new certificates
-# from the kube-apiserver when the certificate expiration approaches.
-# /!\ Note that server certificates are not approved automatically. Approve them manually
-# (`kubectl get csr`, `kubectl certificate approve`) or implement custom approving controller like
-# [kubelet-rubber-stamp](https://github.com/kontena/kubelet-rubber-stamp).
-# Required for metrics-server.
-# By default the certificate expire after 1 year.
-kubelet_rotate_server_certificates: true
-
-# Set up cluster DNS
-dns_mode: coredns
-resolvconf_mode: host_resolvconf
-nameservers:
-  - 1.1.1.1
-  - 1.0.0.1
-upstream_dns_servers:
-  - 1.1.1.1
-  - 1.0.0.1
