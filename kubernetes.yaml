@@ -5,13 +5,16 @@
   tasks:
     - name: Deploy kubernetes
       shell: |
-        source /home/cloud/miniconda3/bin/activate rspy && \
+        source ~/miniconda3/bin/activate rspy && \
         sudo mkdir -p /etc/kubernetes && \
-        cd /home/cloud/rs-infrastructure && \
-        source inventory/mycluster/openrc.sh && \
-        sed -i 's#inventory/mycluster/privatekey.pem#/home/cloud/.ssh/privatekey.pem#' inventory/mycluster/hosts.yaml && \
-        ansible-playbook collections/kubespray/cluster.yml -i inventory/mycluster/hosts.yaml --become && \
-        mkdir -p ~/.kube && sudo cp /etc/kubernetes/admin.conf ~/.kube/config && sudo chown cloud: ~/.kube/config
+        cd ~/rs-infrastructure && \
+        source {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh && \
+        sed -i 's#{{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/privatekey.pem#/home/cloud/.ssh/privatekey.pem#' {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml && \
+        ansible-playbook collections/kubespray/cluster.yml -i {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml --become && \
+        mkdir -p ~/.kube && sudo cp /etc/kubernetes/admin.conf ~/.kube/config && sudo chown cloud: ~/.kube/config && \
+        cd roles/terraform/create-cluster/tasks && source .env && \
+        for type in $(terraform output -json hosts | jq -r '.[] | .tags.type' | grep -oh "\w*" | sort | uniq); \
+        do $(terraform output -json hosts | jq -r --arg type $type '.[] | select(.tags.type | contains ($type)) | "kubectl label nodes \(.name) node-role.kubernetes.io/\(.tags.type)="' | xargs -I % sh -c 'echo %;'); done
       args:
         executable: /bin/bash
       async: 3600
