@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wa-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wa-deployment
+  template:
+    metadata:
+      labels:
+        app: wa-deployment
+    spec:
+      nodeName: rs-cluster-1-infra-1
+      containers:
+      - name: wazu-agent
+        image: alpine:3.19.1
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        env:
+        - name: wazuh-agent-version
+          value: "4.7.2-1"
+        - name: wazuh-manager-ipaddress
+          value: "127.0.0.1"
+        - name: wazuh-registration-password  # set into wazuh-authd-pass-secret.yaml
+          value: "password"
+        command: 
+        - /bin/bash 
+        - "/scripts/wazuh-agent_install.sh" 
+        - "wazuh-agent-version wazuh-manager-ipaddress wazuh-registration-password"
+        volumeMounts:
+        - name: volume-wa-script
+          mountPath: /scripts
+      volumes:
+      - name: volume-wa-script
+        configMap:
+          name: wa-script-configmap
+
