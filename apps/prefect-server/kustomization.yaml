@@ -1,0 +1,10 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+helmCharts:
+- name: prefect-server
+  repo: https://prefecthq.github.io/prefect-helm
+  releaseName: "{{ app_name }}"
+  version: 2024.2.8
+  namespace: processing
+  valuesFile: values.yaml
