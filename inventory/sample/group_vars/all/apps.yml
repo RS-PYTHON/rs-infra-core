@@ -1,2 +1,35 @@
 package_paths:
 - apps
+
+postgresql:
+  postgres_user:
+    password: "tmp_password"
+  replication_password: "tmp_replication_password"
+  replication_user: "tmp_replication_user"
+
+platform_domain_name: dev-rspy.esa-copernicus.eu
+
+keycloak:
+  image: quay.io/keycloak/keycloak:23.0.6
+  operator:
+    image: quay.io/keycloak/keycloak-operator:23.0.6
+  database: 
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: keycloak
+    username: keycloak
+    password: "tmp_db_password_for_keycloak"
+    secret: keycloak-database-password
+  serviceMonitor:
+    interval: 30s
+    scrapeTimeout: 10s
+  replicaCount: 1
+  proxy:
+    mode: passthrough
+  logLevel: info
+
+prefect:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    username: prefect
+    password: "tmp_db_password_for_prefect"
+    name: prefect

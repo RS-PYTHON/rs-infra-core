@@ -11,6 +11,11 @@ spec:
       owner: {{ keycloak.database.username }}
       secret:
         name: {{ keycloak.database.secret }}
+      postInitSQL:
+        - create user {{ prefect.database.username }} with encrypted password '{{ prefect.database.password }}';
+        - create database {{ prefect.database.name }};
+        - grant all privileges on database {{ prefect.database.name }} to {{ prefect.database.username }};
+        - alter database {{ prefect.database.name }} owner to {{ prefect.database.username }};
 
   storage:
     storageClass: csi-cinder-sc-retain
