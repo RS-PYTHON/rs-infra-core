@@ -235,13 +235,12 @@ controller:
     tls: false
     secretName:
   resources:
-    {}
-    # limits:
-    #   cpu: 400m
-    #   memory: 2792Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 2280Mi
+    limits:
+      cpu: 400m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
   configmap:
     enabled: false
     data:
@@ -301,13 +300,12 @@ enforcer:
     - effect: NoSchedule
       key: node-role.kubernetes.io/control-plane
   resources:
-    {}
-    # limits:
-    #   cpu: 400m
-    #   memory: 2792Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 2280Mi
+    limits:
+      cpu: 400m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: neuvector-internal
@@ -330,7 +328,7 @@ manager:
   #      - name: CUSTOM_PAGE_FOOTER_COLOR
   #        value: "#FFFFFF"
   svc:
-    type: NodePort # should be set to - ClusterIP
+    type: ClusterIP # should be set to - ClusterIP
     loadBalancerIP:
     annotations:
       {}
@@ -375,13 +373,12 @@ manager:
     tls: false
     secretName: # my-tls-secret
   resources:
-    {}
-    # limits:
-    #   cpu: 400m
-    #   memory: 2792Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 2280Mi
+    limits:
+      cpu: 400m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
   affinity: {}
   podLabels: {}
   podAnnotations: {}
@@ -401,13 +398,12 @@ cve:
       hash:
     priorityClassName:
     resources:
-      {}
-      # limits:
-      #   cpu: 400m
-      #   memory: 512Mi
-      # requests:
-      #   cpu: 100m
-      #   memory: 1024Mi
+     limits:
+       cpu: 400m
+       memory: 512Mi
+     requests:
+        cpu: 250m
+        memory: 512Mi
     affinity: {}
     podLabels: {}
     podAnnotations: {}
@@ -509,13 +505,12 @@ cve:
       hash:
     priorityClassName:
     resources:
-      {}
-      # limits:
-      #   cpu: 400m
-      #   memory: 2792Mi
-      # requests:
-      #   cpu: 100m
-      #   memory: 2280Mi
+      limits:
+        cpu: 400m
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 512Mi
     affinity: {}
     podLabels: {}
     podAnnotations: {}
@@ -534,13 +529,12 @@ cve:
         caFile: ca.crt # must be the same CA for all internal.
 
 resources:
-  {}
-  # limits:
-  #   cpu: 400m
-  #   memory: 2792Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 2280Mi
+  limits:
+    cpu: 400m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 512Mi
 
 runtimePath:
 
@@ -569,5 +563,5 @@ admissionwebhook:
   type: ClusterIP
 
 crdwebhook:
-  enabled: true
+  enabled: false
   type: ClusterIP

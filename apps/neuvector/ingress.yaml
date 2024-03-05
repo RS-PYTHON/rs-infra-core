@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: neuvector-webui-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+  namespace: neuvector
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: neuvector.dev-rspy.esa-copernicus.eu
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: neuvector-service-webui
+            port:
+              number: 8443
+  tls:
+  - hosts:
+    - neuvector.dev-rspy.esa-copernicus.eu
+    secretName: neuvector-certs
