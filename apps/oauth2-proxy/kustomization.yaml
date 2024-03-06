@@ -1,0 +1,12 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+namespace: iam
+
+helmCharts:
+- name: oauth2-proxy
+  namespace: iam
+  repo: https://oauth2-proxy.github.io/manifests
+  releaseName: "{{ app_name }}"
+  version: 7.1.0
+  valuesFile: values.yaml
