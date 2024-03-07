@@ -39,6 +39,7 @@ spec:
             secretName: wazuh-authd-pass
       securityContext:
         fsGroup: 101
+      hostNetwork: false
       containers:
         - name: wazuh-manager
           image: 'wazuh/wazuh-manager:4.7.2'

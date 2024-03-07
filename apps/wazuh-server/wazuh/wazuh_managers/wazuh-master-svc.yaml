@@ -19,7 +19,7 @@ metadata:
     # domainName: 'changeme'
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: wazuh-manager
     node-type: master
@@ -30,3 +30,6 @@ spec:
     - name: api
       port: 55000
       targetPort: 55000
+    - name: agents-events
+      port: 1514
+      targetPort: 1514

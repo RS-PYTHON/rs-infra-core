@@ -30,9 +30,6 @@ spec:
         - name: dashboard-certs
           secret:
             secretName: dashboard-certs
-        - name: dashboard-root-ca
-          configMap:
-            name: kube-root-ca.crt
       containers:
         - name: wazuh-dashboard
           image: 'wazuh/wazuh-dashboard:4.7.2'
@@ -48,14 +45,14 @@ spec:
             - name: dashboard-certs
               mountPath: /usr/share/wazuh-dashboard/certs/cert.pem
               readOnly: true
-              subPath: tls.crt
+              subPath: cert.pem
             - name: dashboard-certs
               mountPath: /usr/share/wazuh-dashboard/certs/key.pem
               readOnly: true
-              subPath: tls.key
+              subPath: key.pem
             - name: dashboard-certs
               mountPath: /usr/share/wazuh-dashboard/certs/root-ca.pem
-              subPath: dashboard-root-ca
+              subPath: root-ca.pem
               readOnly: true
           ports:
             - containerPort: 5601

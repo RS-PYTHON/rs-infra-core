@@ -14,7 +14,7 @@ exporter:
     tag: latest
   # changes this to a readonly user !
   CTRL_USERNAME: admin
-  CTRL_PASSWORD: admin
+  CTRL_PASSWORD: FwRovaYuvS1Dne68FHhA
   ctrlSercretName: ''
   enforcerStats:
     enabled: false
