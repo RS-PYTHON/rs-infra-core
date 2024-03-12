@@ -1,0 +1,66 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-keycloak-db
+spec:
+  ttlSecondsAfterFinished: 360
+  template:
+    spec:
+      containers:
+      - name: create-keycloak-db
+        image: ghcr.io/cloudnative-pg/postgresql:16.1
+        command: ["/scripts/create-database.sh"]
+        volumeMounts:
+          - name: create-database
+            mountPath: /scripts/
+        env:
+        - name: DATABASE
+          value: {{ keycloak.database.name }}
+        - name: PGNEWUSER
+          valueFrom:
+            secretKeyRef:
+              name: {{ keycloak.database.secret }}
+              key: username
+        - name: PGNEWPASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ keycloak.database.secret }}
+              key: password
+        - name: PGADMIN
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: username
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: password
+        - name: PGHOST
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: host
+        - name: PGPORT
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: port
+      volumes:
+      - name: create-database
+        configMap:
+          name: create-database
+          defaultMode: 0744
+      restartPolicy: Never
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ keycloak.database.secret }}
+  labels: 
+    app: keycloak
+type: Opaque
+stringData:
+  username: {{ keycloak.database.username }}
+  password: {{ keycloak.database.password }}
