@@ -23,6 +23,11 @@ secretGenerator:
       - certs/indexer_cluster/admin-key.pem
       - certs/indexer_cluster/filebeat.pem
       - certs/indexer_cluster/filebeat-key.pem
+  - name: dashboard-certs
+    files:
+      - certs/dashboard_http/cert.pem
+      - certs/dashboard_http/key.pem
+      - certs/indexer_cluster/root-ca.pem
 configMapGenerator:
   - name: indexer-conf
     files:
@@ -47,10 +52,11 @@ resources:
   - secrets/indexer-cred-secret.yaml
 
   - wazuh_managers/wazuh-cluster-svc.yaml
-  - wazuh_managers/wazuh-master-svc.yaml
+  #- wazuh_managers/wazuh-master-svc.yaml
   - wazuh_managers/wazuh-workers-svc.yaml
   - wazuh_managers/wazuh-master-sts.yaml
   - wazuh_managers/wazuh-worker-sts.yaml
+  - wazuh_managers/wazuh-all-svc.yaml
 
   - indexer_stack/wazuh-indexer/indexer-svc.yaml
   - indexer_stack/wazuh-indexer/cluster/indexer-api-svc.yaml
