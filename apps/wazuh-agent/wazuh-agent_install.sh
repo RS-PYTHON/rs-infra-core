@@ -58,7 +58,7 @@ WAZUH_REGISTRATION_PASSWORD=$3
        nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
        
        
-        /usr/bin/sed -i 's/MANAGER_IP/wazuh-new.wazuh.svc.cluster.local/g' /var/ossec/etc/ossec.conf
+        /usr/bin/sed -i 's/MANAGER_IP/wazuh.wazuh.svc.cluster.local/g' /var/ossec/etc/ossec.conf
         
         /usr/bin/grep -i address  /var/ossec/etc/ossec.conf
 
