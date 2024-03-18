@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: wazuh-agent
+  namespace: wazuh
+spec:
+  selector:
+    matchLabels:
+      app: wazuh-agent
+  template:
+    metadata:
+      labels:
+        app: wazuh-agent
+    spec:
+      #restartPolicy: Always
+      hostPID: true
+      hostNetwork: true
+      #hostIPC: true
+      containers:
+      - name: wa-main-container
+        image: alpine:3.19.1
+        securityContext:
+          privileged: true
+          runAsUser: 1230
+          runAsGroup: 3450
+        command: ["/bin/sleep","30s"]
+        #command: ["/bin/sh", "-c"]
+        #args: ["/scripts/wazuh-alpine-apk.sh"]
+        volumeMounts:
+        - name: ubuntu-storage
+          mountPath: /data/ubuntu
+        - name: volume-wa-apk
+          mountPath: /scripts/wazuh-alpine-apk.sh
+          subPath: wazuh-alpine-apk.sh
+        - name: volume-wa-script
+          mountPath: /scripts/wazuh-agent_install.sh
+          subPath: wazuh-agent_install.sh 
+      initContainers:
+      - name: wa-init-container
+        image: alpine:3.19.1
+        #command: ["/bin/sleep", "3650d"]
+        #command: ["/bin/hostname" , "/bin/sleep", "3650d" ]
+        # command works
+        command: ["/bin/sh","-c"]
+        args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh $(var-agent-version) $(var-manager-ipaddress) $(var-registration-password)"]
+        #args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh toto tutu ; /usr/bin/sleep 3d"]
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        env:
+        - name: var-agent-version
+          value: "4.7.2-1"
+        - name: var-manager-ipaddress
+          value: "wazuh-new.wazuh.svc.cluster.local"
+        - name: var-registration-password
+          valueFrom:
+            secretKeyRef:
+              name: wazuh-authd-pass
+              key: authd.pass
+        #- name: var-registration-password  # set into wazuh-authd-pass-secret.yaml
+          #value: "password"   # API_PASSWORD.password or INDEXER_PASSWORD.password
+        volumeMounts:
+        - name: ubuntu-storage
+          mountPath: /data/ubuntu
+        - name: volume-wa-apk
+          mountPath: /scripts/wazuh-alpine-apk.sh
+          subPath: wazuh-alpine-apk.sh
+        - name: volume-wa-script
+          mountPath: /scripts/wazuh-agent_install.sh
+          subPath: wazuh-agent_install.sh 
+      volumes:
+      - name: ubuntu-storage
+        emptyDir: {}
+      - name: volume-wa-script
+        configMap:
+          name: wa-script-configmap
+          defaultMode: 0744
+      - name: volume-wa-apk
+        configMap:
+          name: wa-alpine-configmap
+          defaultMode: 0744

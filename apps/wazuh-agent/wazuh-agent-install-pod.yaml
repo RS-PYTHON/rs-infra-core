@@ -8,7 +8,7 @@ spec:
   restartPolicy: Never
   hostPID: true
   hostNetwork: true
-  #hostIPC: true
+  hostIPC: true
   containers:
   - name: wa-main-container
     image: alpine:3.19.1
@@ -16,9 +16,6 @@ spec:
       privileged: true
       runAsUser: 1230
       runAsGroup: 3450
-    #command: ["/bin/sleep", "3650d"]
-    #command: ["/bin/sh", "-c"]
-    #args: ["/scripts/wazuh-alpine-apk.sh"]
     volumeMounts:
     - name: ubuntu-storage
       mountPath: /data/ubuntu
@@ -31,12 +28,8 @@ spec:
   initContainers:
   - name: wa-init-container
     image: alpine:3.19.1
-    #command: ["/bin/sleep", "3650d"]
-    #command: ["/bin/hostname" , "/bin/sleep", "3650d" ]
-    # command works
     command: ["/bin/sh","-c"]
     args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh $(var-agent-version) $(var-manager-ipaddress) $(var-registration-password)"]
-    #args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh toto tutu ; /usr/bin/sleep 3d"]
     securityContext:
       privileged: true
       runAsUser: 0
@@ -50,8 +43,6 @@ spec:
         secretKeyRef:
           name: wazuh-authd-pass
           key: authd.pass
-    #- name: var-registration-password  # set into wazuh-authd-pass-secret.yaml
-      #value: "password"   # API_PASSWORD.password or INDEXER_PASSWORD.password
     volumeMounts:
     - name: ubuntu-storage
       mountPath: /data/ubuntu

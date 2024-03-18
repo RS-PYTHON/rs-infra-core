@@ -8,7 +8,6 @@ set -x
 
 # Wazuh Agent version that should be download and install
 WAZUH_AGENT_VERSION=$1
-#WAZUH_AGENT_VERSION=4.7.2-1
 
 # IP address or FQDN of Wazuh Registration Server
 #WAZUH_REGISTRATION_SERVER=
@@ -21,11 +20,10 @@ WAZUH_AGENT_VERSION=$1
 
 # IP address or FQDN of Wazuh Manager Server
 WAZUH_MANAGER=$2
-#WAZUH_MANAGER=wazuh-new.wazuh.svc.cluster.local
 
-# Authd password  / ecret "wazuh-authd-pass"
+# Authd password  / secret "wazuh-authd-pass"
 WAZUH_REGISTRATION_PASSWORD=$3
-#WAZUH_REGISTRATION_PASSWORD=password
+
 
     # Content ############################################
 
