@@ -260,7 +260,7 @@ controller:
       # ...
   secret:
     # NOTE: files defined here have preferrence over the ones defined in the configmap section
-    enabled: false
+    enabled: true
     data:
       # passwordprofileinitcfg.yaml:
       #  ...
@@ -279,7 +279,7 @@ controller:
       userinitcfg.yaml:
         users:
         - Fullname: admin
-          Password:
+          Password: Yh;ct[bZdT8.',65`:D<-W
           Role: admin
 
 enforcer:

@@ -3,5 +3,34 @@ commonLabels:
 namespace: neuvector
 
 
+helmCharts:
+- name: neuvector-core
+  repo: https://github.com/neuvector/neuvector-helm/core/
+  releaseName: "{{ app_name }}"
+  version: 5.3
+  namespace: neuvector
+  valuesFile: values.yaml
+
+helmCharts:
+- name: neuvector-monitor
+  repo: https://github.com/neuvector/neuvector-helm/monitor/
+  releaseName: "{{ app_name }}"
+  version: 5.3
+  namespace: neuvector
+  valuesFile: values.yaml
+
+  helmCharts:
+- name: neuvector-crd
+  repo: https://github.com/neuvector/neuvector-helm/crd/
+  releaseName: "{{ app_name }}"
+  version: 5.3
+  namespace: neuvector
+  valuesFile: values.yaml
+
+
+
+
+# https://open-docs.neuvector.com/deploying/production/configmap#protect-sensitive-data-using-a-secret
+
 resources:
   - core/initcfg.yaml
