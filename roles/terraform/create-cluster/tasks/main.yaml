@@ -14,7 +14,7 @@
 
 - name: Terraform init
   shell: |
-    terraform init -upgrade
+    set -o allexport; source .env; set +o allexport; terraform init -upgrade
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
