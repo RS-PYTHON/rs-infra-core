@@ -5,7 +5,7 @@
   tasks:
     - name: Deploy kubernetes
       shell: |
-        source ~/miniconda3/bin/activate rspy && \
+        source ~/miniforge3/bin/activate rspy && \
         sudo mkdir -p /etc/kubernetes && \
         cd ~/rs-infrastructure && \
         source {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh && \
