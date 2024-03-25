@@ -17,7 +17,7 @@ exporter:
   CTRL_PASSWORD: FwRovaYuvS1Dne68FHhA
   ctrlSercretName: ''
   enforcerStats:
-    enabled: false
+    enabled: true
   ctrlSecretName: ''
   apiSvc: neuvector-svc-controller-api:10443
 

@@ -107,7 +107,7 @@ controller:
     # key1: value1
     # key2: value2
   apisvc:
-    type:
+    type: ClusterIP
     annotations: {}
     # OpenShift Route configuration
     # Controller supports HTTPS only, so edge termination not supported
@@ -278,6 +278,12 @@ controller:
       #   ...
       userinitcfg.yaml:
         users:
+        - Fullname: exporter
+          Password: FwRovaYuvS1Dne68FHhA
+          Role: reader
+        - Fullname: rspydevsecopsadm
+          Password: sx%%w[D~5,L,yMKmtwY@
+          Role: admin
         - Fullname: admin
           Password: Yh;ct[bZdT8.',65`:D<-W
           Role: admin

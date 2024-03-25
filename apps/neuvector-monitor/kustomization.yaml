@@ -2,10 +2,11 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 namespace: neuvector
 
+
 helmCharts:
-- name: core
+- name: monitor
   repo: https://neuvector.github.io/neuvector-helm/
   releaseName: "{{ app_name }}"
-  version: 5.3
+  version: 2.7.3
   namespace: neuvector
   valuesFile: values.yaml
