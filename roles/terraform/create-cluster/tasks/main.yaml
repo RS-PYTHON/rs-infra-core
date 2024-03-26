@@ -36,13 +36,16 @@
 - name: Copy ssh key
   shell: |
     sleep 30 && \
-    scp -o StrictHostKeyChecking=no -i {{ inventory_dir }}/privatekey.pem {{ inventory_dir }}/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/.ssh/privatekey.pem &&\
+    set -o allexport; source .env; set +o allexport && \
+    scp -o StrictHostKeyChecking=no -i {{ inventory_dir }}/privatekey.pem {{ inventory_dir }}/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/.ssh/privatekey.pem && \
     ssh -o StrictHostKeyChecking=no -i {{ inventory_dir }}/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') chmod 600 /home/cloud/.ssh/privatekey.pem
   args:
     chdir: roles/terraform/create-cluster/tasks/
+    executable: /bin/bash
 
 - name: Update hosts
   shell: |
+    set -o allexport; source .env; set +o allexport && \
     echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > {{ inventory_dir }}/hosts.yaml && \
     terraform output -json hosts | jq -r '.[] | "\t\t\(.name):\n\t\t\tansible_host: \(.access_ip_v4)\n\t\t\tansible_ssh_private_key_file: \"\/home\/cloud\/.ssh\/privatekey.pem\"\n\t\t\tprovider_id: \(.id)"' >> {{ inventory_dir }}/hosts.yaml && \
     cat {{ inventory_dir }}/hosts.yaml | sed "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(terraform output eip_addr | tr -d '\"')/" > {{ inventory_dir }}/hosts.yaml && \
@@ -70,6 +73,7 @@
 
 - name: Setup ansible env
   shell: |
+    set -o allexport; source .env; set +o allexport && \
     scp -o StrictHostKeyChecking=no -i {{ inventory_dir }}/privatekey.pem {{ playbook_dir }}/rs-infrastructure.tar.gz cloud@$(terraform output eip_addr | sed 's/\"//g'):/home/cloud/ && \
     ssh -o StrictHostKeyChecking=no -i {{ inventory_dir }}/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') '\
     mkdir -p ~/rs-infrastructure && cd ~/rs-infrastructure && tar -xzf ~/rs-infrastructure.tar.gz && \
@@ -92,3 +96,4 @@
     '
   args:
     chdir: roles/terraform/create-cluster/tasks/
+    executable: /bin/bash
