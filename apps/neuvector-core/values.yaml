@@ -278,14 +278,14 @@ controller:
       #   ...
       userinitcfg.yaml:
         users:
-        - Fullname: exporter
-          Password: FwRovaYuvS1Dne68FHhA
+        - Fullname: {{ neuvector.core.user3.Fullname }}
+          Password: {{ neuvector.core.user3.Password }}
           Role: reader
-        - Fullname: rspydevsecopsadm
-          Password: sx%%w[D~5,L,yMKmtwY@
+        - Fullname: {{ neuvector.core.user2.Fullname }}
+          Password: {{ neuvector.core.user2.Password }}
           Role: admin
-        - Fullname: admin
-          Password: Yh;ct[bZdT8.',65`:D<-W
+        - Fullname: {{ neuvector.core.user1.Fullname }}
+          Password: {{ neuvector.core.user1.Password }}
           Role: admin
 
 enforcer:

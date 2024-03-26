@@ -15,7 +15,9 @@ resources:
 
 
 secretGenerator:
-- name: enforcer
+- name: exporter
   literals:
-  - CTRL_USERNAME=ZXhwb3J0ZXI=
-  - CTRL_PASSWORD=RndSb3ZhWXV2UzFEbmU2OEZIaEE=
+  - username= "{{ neuvector.core.user2.Fullname }}"
+  - password= "{{ neuvector.core.user2.Password }}"
+  options:
+    disableNameSuffixHash: true

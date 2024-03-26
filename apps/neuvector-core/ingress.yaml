@@ -6,7 +6,6 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     cert-manager.io/cluster-issuer: letsencrypt-prod
 
-  namespace: neuvector
 spec:
   ingressClassName: nginx
   rules:

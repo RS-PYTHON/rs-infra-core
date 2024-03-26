@@ -13,8 +13,8 @@ exporter:
     repository: neuvector/prometheus-exporter
     tag: latest
   # changes this to a readonly user !
-  CTRL_USERNAME: admin
-  CTRL_PASSWORD: FwRovaYuvS1Dne68FHhA
+  CTRL_USERNAME: {{ neuvector.core.user2.Fullname }}
+  CTRL_PASSWORD: {{ neuvector.core.user2.Password }}
   ctrlSercretName: ''
   enforcerStats:
     enabled: true
