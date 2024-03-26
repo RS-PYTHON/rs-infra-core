@@ -1,9 +1,6 @@
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
-commonAnnotations:
-  linkerd.io/inject: enabled
-
 resources:
   - ns-database.yaml
   - ns-iam.yaml

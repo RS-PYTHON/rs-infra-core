@@ -1,3 +1,0 @@
-postgresql:
-  postgres_user:
-    password: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
