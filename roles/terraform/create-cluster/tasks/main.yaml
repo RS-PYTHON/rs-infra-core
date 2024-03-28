@@ -61,7 +61,7 @@
 
 - name: Create archive
   shell: |
-    tar -czf rs-infrastructure.tar.gz -C {{ playbook_dir }} ansible.cfg .gitmodules apps.yaml rs-setup.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/ collections/kubespray roles/
+    tar -czf rs-infrastructure.tar.gz -C {{ playbook_dir }} ansible.cfg .gitmodules apps.yaml rs-setup.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/  {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/host_vars/setup/kubespray.yaml collections/kubespray roles/
 
 - name: Change ssh key path on localhost
   ansible.builtin.replace:
