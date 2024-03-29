@@ -1,13 +1,41 @@
 package_paths:
 - apps
 
+platform_domain_name: rspy.example.com
+
+# TODO:
+# Clean unused secrets here and in realmimport 
+grafana:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+graylog:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+kibana-processing:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+kibana-security:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+kubectl:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+linkerd:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+prometheus:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+thanos:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+oauth2-proxy:
+  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+  # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
+  cookieSecret: "sexajn29g-NLZ9CAHGw2E-tbY4c7uKOI6mNIE78UTg4="
+
+certmanager:
+  clusterissuer:
+    acme:
+      email: user@example.com
+
 postgresql:
   postgres_user:
     password: "tmp_password"
   replication_password: "tmp_replication_password"
   replication_user: "tmp_replication_user"
-
-platform_domain_name: dev-rspy.esa-copernicus.eu
 
 keycloak:
   image: quay.io/keycloak/keycloak:23.0.6
