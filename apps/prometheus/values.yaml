@@ -401,7 +401,13 @@ server:
 
   ## Pod affinity
   ##
-  affinity: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
   ## Pod anti-affinity can prevent the scheduler from placing Prometheus server replicas on the same node.
   ## The value "soft" means that the scheduler should *prefer* to not schedule two replica pods onto the same node but no guarantee is provided.
