@@ -882,14 +882,14 @@ spec:
     - id: 58f98491-b4dd-45ae-8353-4682119849cb
       clientId: grafana
       name: Grafana
-      rootUrl: https://monitoring.dev-rspy.esa-copernicus.eu
+      rootUrl: https://monitoring.{{ platform_domain_name }}
       adminUrl: ''
       baseUrl: "/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ grafana.oidc_client_secret }}"
       redirectUris:
       - "/"
       - "/login/generic_oauth"
@@ -975,14 +975,14 @@ spec:
     - id: 72a018ef-a96c-4491-8dfe-afda603bd6fa
       clientId: graylog
       name: Graylog
-      baseUrl: https://security.dev-rspy.esa-copernicus.eu/
+      baseUrl: https://security.{{ platform_domain_name }}/
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ graylog.oidc_client_secret }}"
       redirectUris:
-      - https://security.dev-rspy.esa-copernicus.eu/*
+      - https://security.{{ platform_domain_name }}/*
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1049,14 +1049,14 @@ spec:
     - id: 94b3b54f-5fd8-4e49-a401-8917670d1f63
       clientId: kibana-processing
       name: Kibana processing
-      baseUrl: https://processing.dev-rspy.esa-copernicus.eu/kibana/
+      baseUrl: https://processing.{{ platform_domain_name }}/kibana/
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ kibana-processing.oidc_client_secret }}"
       redirectUris:
-      - https://processing.dev-rspy.esa-copernicus.eu/kibana/*
+      - https://processing.{{ platform_domain_name }}/kibana/*
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1123,14 +1123,14 @@ spec:
     - id: 3f0ac3e2-799c-4483-87c8-a9a365161598
       clientId: kibana-security
       name: Kibana security
-      baseUrl: https://security.dev-rspy.esa-copernicus.eu/kibana/
+      baseUrl: https://security.{{ platform_domain_name }}/kibana/
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ kibana-security.oidc_client_secret }}"
       redirectUris:
-      - https://security.dev-rspy.esa-copernicus.eu/kibana/*
+      - https://security.{{ platform_domain_name }}/kibana/*
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1205,7 +1205,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ kubectl.oidc_client_secret }}"
       redirectUris:
       - urn:ietf:wg:oauth:2.0:oob
       - http://localhost:18000/*
@@ -1314,14 +1314,14 @@ spec:
     - id: 881b7096-c573-487b-8c7e-07a5b2b48391
       clientId: linkerd
       name: Linkerd
-      baseUrl: https://linkerd.dev-rspy.esa-copernicus.eu/
+      baseUrl: https://linkerd.{{ platform_domain_name }}/
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ linkerd.oidc_client_secret }}"
       redirectUris:
-      - https://linkerd.dev-rspy.esa-copernicus.eu/*
+      - https://linkerd.{{ platform_domain_name }}/*
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1388,14 +1388,14 @@ spec:
     - id: 6370fb83-5d6f-42f5-85db-9f945acb4596
       clientId: prometheus
       name: Prometheus
-      baseUrl: https://monitoring.dev-rspy.esa-copernicus.eu/prometheus/
+      baseUrl: https://monitoring.{{ platform_domain_name }}/prometheus/
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ prometheus.oidc_client_secret }}"
       redirectUris:
-      - https://monitoring.dev-rspy.esa-copernicus.eu/prometheus/*
+      - https://monitoring.{{ platform_domain_name }}/prometheus/*
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1532,14 +1532,14 @@ spec:
     - id: 2fef0baa-3671-41e4-a996-151c0eed080f
       clientId: thanos
       name: Thanos
-      baseUrl: https://monitoring.dev-rspy.esa-copernicus.eu/thanos/
+      baseUrl: https://monitoring.{{ platform_domain_name }}/thanos/
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "**********"
+      secret: "{{ thanos.oidc_client_secret }}"
       redirectUris:
-      - https://monitoring.dev-rspy.esa-copernicus.eu/thanos/*
+      - https://monitoring.{{ platform_domain_name }}/thanos/*
       webOrigins: []
       notBefore: 0
       bearerOnly: false

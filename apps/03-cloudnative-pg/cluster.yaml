@@ -4,13 +4,8 @@ metadata:
   name: postgresql-cluster
 spec:
   instances: 3
-
-  bootstrap:
-    initdb:
-      database: {{ keycloak.database.name }}
-      owner: {{ keycloak.database.username }}
-      secret:
-        name: {{ keycloak.database.secret }}
+  
+  enableSuperuserAccess: true
 
   storage:
     storageClass: csi-cinder-sc-retain

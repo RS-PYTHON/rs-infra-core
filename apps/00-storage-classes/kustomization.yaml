@@ -1,0 +1,6 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+resources:
+  - sc-delete.yaml
+  - sc-retain.yaml
