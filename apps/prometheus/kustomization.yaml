@@ -1,0 +1,10 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+helmCharts:
+- name: prometheus
+  repo: https://prometheus-community.github.io/helm-charts
+  releaseName: "{{ app_name }}"
+  version: 25.18.0
+  namespace: monitoring
+  valuesFile: values.yaml
