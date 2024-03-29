@@ -86,6 +86,13 @@ spec:
         containerId: rspy
         attributes: {}
       client:
+        oauth2-proxy:
+        - id: 043e39e9-fb97-44db-bf63-6ecf8d2873a6
+          name: uma_protection
+          composite: false
+          clientRole: true
+          containerId: 1db6b858-5e00-489b-a30c-28870b127b9a
+          attributes: {}
         realm-management:
         - id: 38c5b0fd-e80e-4b4d-b615-21b4e68638ad
           name: view-users
@@ -720,6 +727,22 @@ spec:
       notBefore: 0
       groups:
       - "/default"
+    - id: 796aeabe-d942-4aac-ab1f-f5cab9761fc9
+      createdTimestamp: 1709647915497
+      username: service-account-oauth2-proxy
+      enabled: true
+      totp: false
+      emailVerified: false
+      serviceAccountClientId: oauth2-proxy
+      disableableCredentialTypes: []
+      requiredActions: []
+      realmRoles:
+        - default-roles-rspy
+      clientRoles:
+        oauth2-proxy:
+          - uma_protection
+      notBefore: 0
+      groups: []      
     - id: d758c0b8-9d39-4e31-b877-20150e644e14
       createdTimestamp: 1707491949268
       username: service-account-prometheus
@@ -1383,6 +1406,133 @@ spec:
         policyEnforcementMode: ENFORCING
         resources: []
         policies: []
+        scopes: []
+        decisionStrategy: UNANIMOUS
+    - id: 1db6b858-5e00-489b-a30c-28870b127b9a
+      clientId: oauth2-proxy
+      name: oauth2-proxy
+      description: ""
+      rootUrl: ""
+      adminUrl: ""
+      baseUrl: ""
+      surrogateAuthRequired: false
+      enabled: true
+      alwaysDisplayInConsole: false
+      clientAuthenticatorType: client-secret
+      secret: "{{ oauth2-proxy.oidc_client_secret }}"
+      redirectUris:
+        - https://oauth2-proxy.{{ platform_domain_name }}
+        - https://{{ platform_domain_name }}/*
+        - https://oauth2-proxy.{{ platform_domain_name }}/oauth2/callback
+      webOrigins: []
+      notBefore: 0
+      bearerOnly: false
+      consentRequired: false
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      frontchannelLogout: false
+      protocol: openid-connect
+      attributes:
+        client.secret.creation.time: "1709642694"
+        oauth2.device.authorization.grant.enabled: "true"
+        backchannel.logout.revoke.offline.tokens: "false"
+        use.refresh.tokens: "true"
+        oidc.ciba.grant.enabled: "false"
+        backchannel.logout.session.required: "true"
+        client_credentials.use_refresh_token: "false"
+        tls.client.certificate.bound.access.tokens: "false"
+        require.pushed.authorization.requests: "false"
+        acr.loa.map: "{}"
+        display.on.consent.screen: "false"
+        token.response.type.bearer.lower-case: "false"
+      authenticationFlowBindingOverrides: {}
+      fullScopeAllowed: true
+      nodeReRegistrationTimeout: -1
+      protocolMappers:
+        - id: afb27524-9dbc-4b6e-b28a-b3598f6a9ab1
+          name: oauth2-proxy
+          protocol: openid-connect
+          protocolMapper: oidc-group-membership-mapper
+          consentRequired: false
+          config:
+            full.path: "true"
+            introspection.token.claim: "true"
+            userinfo.token.claim: "true"
+            id.token.claim: "true"
+            access.token.claim: "true"
+            claim.name: groups
+        - id: ff31bbea-0c4c-453a-adc7-3ea49a9f7069
+          name: email
+          protocol: openid-connect
+          protocolMapper: oidc-usermodel-attribute-mapper
+          consentRequired: false
+          config:
+            introspection.token.claim: "true"
+            userinfo.token.claim: "true"
+            user.attribute: email
+            id.token.claim: "true"
+            access.token.claim: "true"
+            claim.name: email
+            jsonType.label: String
+        - id: 88ba58e8-799a-42f0-b0f8-1ba13a754cdf
+          name: groups
+          protocol: openid-connect
+          protocolMapper: oidc-group-membership-mapper
+          consentRequired: false
+          config:
+            full.path: "true"
+            introspection.token.claim: "true"
+            userinfo.token.claim: "true"
+            id.token.claim: "true"
+            access.token.claim: "true"
+            claim.name: groups
+      defaultClientScopes:
+        - email
+      optionalClientScopes:
+        - web-origins
+        - acr
+        - address
+        - phone
+        - roles
+        - offline_access
+        - profile
+        - good-service
+        - microprofile-jwt
+      authorizationSettings:
+        allowRemoteResourceManagement: true
+        policyEnforcementMode: ENFORCING
+        resources:
+          - name: Default Resource
+            type: urn:oauth2-proxy:resources:default
+            ownerManagedAccess: false
+            attributes: {}
+            _id: 2b8ae618-4634-4c58-b097-5ce10f12698d
+            uris:
+              - /*
+        policies:
+          - id: fa9a5a2e-c49f-4eb2-86d7-18a386fb0207
+            name: Default Policy
+            description: A policy that grants access only for users within this realm
+            type: js
+            logic: POSITIVE
+            decisionStrategy: AFFIRMATIVE
+            config:
+              code: |
+                // by default, grants any permission associated with this policy
+                $evaluation.grant();
+          - id: 01585b49-0f1d-4747-9e36-f66d1fa7012c
+            name: Default Permission
+            description: A permission that applies to the default resource type
+            type: resource
+            logic: POSITIVE
+            decisionStrategy: UNANIMOUS
+            config:
+              defaultResourceType: urn:oauth2-proxy:resources:default
+              applyPolicies: '["Default Policy"]'
         scopes: []
         decisionStrategy: UNANIMOUS
     - id: 6370fb83-5d6f-42f5-85db-9f945acb4596
