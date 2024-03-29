@@ -2,8 +2,8 @@
 config:
   annotations: {}
   clientID: "oauth2-proxy"
-  clientSecret: "el98FVhatStb3o2BW3CYK0XvIhVJZPmV"
-  cookieSecret: "aTFEellPUWRZMFFnNkovL0NGcHM5cG9PMFJXZWZ6RVI="
+  clientSecret: "{{ oauth2-proxy.oidc_client_secret }}"
+  cookieSecret: "{{ oauth2-proxy.cookieSecret }}"
   configFile: |-
     email_domains=[ "*" ]
     provider="keycloak"
@@ -55,12 +55,12 @@ ingress:
   path: /
   pathType: Prefix
   hosts:
-    - staging1.dev-rspy.esa-copernicus.eu
+    - oauth2-proxy.{{ platform_domain_name }}
   labels: {}
   tls:
-    - secretName: oauth2-proxy-dev-rspy-esa-copernicus-eu
+    - secretName: oauth2-proxy-{{ platform_domain_name | replace(".", "-") }}
       hosts:
-        - staging1.dev-rspy.esa-copernicus.eu
+        - oauth2-proxy.{{ platform_domain_name }}
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
