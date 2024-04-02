@@ -10,7 +10,7 @@ server:
 
   ## External URL which can access prometheus
   ## Maybe same with Ingress host name
-  baseURL: "https://monitoring.{{ platform_domain_name }}/prometheus/"
+  baseURL: "http://prometheus-server.monitoring.svc.cluster.local/prometheus"
 
   ingress:
     ## If true, Prometheus server Ingress will be created
