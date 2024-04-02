@@ -1,8 +1,12 @@
 server:
+  # Enable only the release namespace for monitoring. By default all namespaces are monitored.
+  # If releaseNamespace and namespaces are both set a merged list will be monitored.
+  releaseNamespace: false
+
   ## The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug
   ## so that the various internal URLs are still able to access as they are in the default case.
   ## (Optional)
-  prefixURL: "/prometheus/"
+  prefixURL: "/prometheus"
 
   ## External URL which can access prometheus
   ## Maybe same with Ingress host name
@@ -76,3 +80,11 @@ prometheus-pushgateway:
   ## If false, pushgateway will not be installed
   ##
   enabled: false
+
+# Add new prometheus self scrap config because of bug https://github.com/prometheus-community/helm-charts/issues/3945
+extraScrapeConfigs: |
+  - job_name: 'prometheus-fixed'
+    static_configs:
+      - targets:
+        - localhost:9090
+    metrics_path: /prometheus/metrics
