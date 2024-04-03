@@ -1,28 +1,13 @@
-server:
-  # Enable only the release namespace for monitoring. By default all namespaces are monitored.
-  # If releaseNamespace and namespaces are both set a merged list will be monitored.
-  releaseNamespace: false
+grafana:
+  enabled: false
 
-  ## The URL prefix at which the container can be accessed. Useful in the case the '-web.external-url' includes a slug
-  ## so that the various internal URLs are still able to access as they are in the default case.
-  ## (Optional)
-  prefixURL: "/prometheus"
-
-  ## External URL which can access prometheus
-  ## Maybe same with Ingress host name
-  baseURL: "http://prometheus-server.monitoring.svc.cluster.local/prometheus"
-
+prometheus:
   ingress:
-    ## If true, Prometheus server Ingress will be created
-    ##
     enabled: true
-
     # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
     # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
     ingressClassName: nginx
 
-    ## Prometheus server Ingress annotations
-    ##
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: HTTP
@@ -30,44 +15,60 @@ server:
       nginx.ingress.kubernetes.io/auth-signin: https://oauth2-proxy.{{ platform_domain_name }}/oauth2/start?rd=https://$host/prometheus
       nginx.ingress.kubernetes.io/auth-url: https://oauth2-proxy.{{ platform_domain_name }}/oauth2/auth
       nginx.ingress.kubernetes.io/auth-response-headers: Authorization
-    #   kubernetes.io/ingress.class: nginx
-    #   kubernetes.io/tls-acme: 'true'
 
-    ## Prometheus server Ingress additional labels
-    ##
-    extraLabels: {}
+    labels: {}
 
     ## Redirect ingress to an additional defined port on the service
     # servicePort: 8081
 
-    ## Prometheus server Ingress hostnames with optional path
-    ## Must be provided if Ingress is enabled
+    ## Hostnames.
+    ## Must be provided if Ingress is enabled.
     ##
+    # hosts:
+    #   - prometheus.domain.com
     hosts:
       - monitoring.{{ platform_domain_name }}
 
-    path: /prometheus
+    ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
+    ##
+    paths:
+      - /prometheus
 
-    # pathType is only for k8s >= 1.18
+    ## For Kubernetes >= 1.18 you should specify the pathType (determines how Ingress paths should be matched)
+    ## See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#better-path-matching-with-path-types
     pathType: Prefix
 
-    ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
-    extraPaths: []
-    # - path: /*
-    #   backend:
-    #     serviceName: ssl-redirect
-    #     servicePort: use-annotation
-
-    ## Prometheus server Ingress TLS configuration
-    ## Secrets must be manually created in the namespace
+    ## TLS configuration for Prometheus Ingress
+    ## Secret must be manually created in the namespace
     ##
     tls:
       - secretName: monitoring-{{ platform_domain_name | replace(".", "-") }}
         hosts:
           - monitoring.{{ platform_domain_name }}
 
-  ## Pod affinity
-  ##
+  prometheusSpec:
+    ## External URL at which Prometheus will be reachable.
+    ##
+    externalUrl: "http://prometheus-operated.monitoring.svc.cluster.local/prometheus"
+
+    ## How long to retain metrics
+    ##
+    retention: 90d
+
+    routePrefix: /prometheus
+    
+    ## If true, a nil or {} value for prometheus.prometheusSpec.podMonitorSelector will cause the
+    ## prometheus resource to be created with selectors based on values in the helm deployment,
+    ## which will also match the podmonitors created
+    ##
+    podMonitorSelectorNilUsesHelmValues: false
+
+    ## If true, a nil or {} value for prometheus.prometheusSpec.serviceMonitorSelector will cause the
+    ## prometheus resource to be created with selectors based on values in the helm deployment,
+    ## which will also match the servicemonitors created
+    ##
+    serviceMonitorSelectorNilUsesHelmValues: false
+
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -75,16 +76,3 @@ server:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
-
-prometheus-pushgateway:
-  ## If false, pushgateway will not be installed
-  ##
-  enabled: false
-
-# Add new prometheus self scrap config because of bug https://github.com/prometheus-community/helm-charts/issues/3945
-extraScrapeConfigs: |
-  - job_name: 'prometheus-fixed'
-    static_configs:
-      - targets:
-        - localhost:9090
-    metrics_path: /prometheus/metrics
