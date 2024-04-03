@@ -5,7 +5,7 @@ metadata:
 spec:
   endpoints:
   - interval: {{ keycloak.serviceMonitor.interval}}
-    path: /
+    path: /metrics
     port: http
     scrapeTimeout: {{ keycloak.serviceMonitor.scrapeTimeout }}
   selector: 

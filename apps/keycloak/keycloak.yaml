@@ -26,3 +26,5 @@ spec:
       value: "{{ keycloak.proxy.mode }}"
     - name: log-level
       value: "{{ keycloak.logLevel }}"
+    - name: metrics-enabled
+      value: 'true'
