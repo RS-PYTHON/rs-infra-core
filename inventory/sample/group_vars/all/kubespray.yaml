@@ -124,6 +124,7 @@ audit_log_maxsize: 100
 podsecuritypolicy_enabled: false
 
 kubelet_cpu_manager_policy: static
+kube_cpu_reserved: 500m
 
 ## Running on top of openstack vms with cinder enabled may lead to unschedulable pods due to NoVolumeZoneConflict restriction in kube-scheduler.
 ## See https://github.com/kubernetes-sigs/kubespray/issues/2141
