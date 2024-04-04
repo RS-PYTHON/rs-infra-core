@@ -6,4 +6,5 @@ apk update
 apk add bash \
         wget \
         dpkg \
-        curl
+        curl \
+        jq

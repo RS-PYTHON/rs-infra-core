@@ -15,35 +15,15 @@ spec:
       #restartPolicy: Always
       hostPID: true
       hostNetwork: true
-      #hostIPC: true
+      hostIPC: true
       containers:
-      - name: wa-main-container
-        image: alpine:3.19.1
-        securityContext:
-          privileged: true
-          runAsUser: 1230
-          runAsGroup: 3450
-        command: ["/bin/sleep","30s"]
-        #command: ["/bin/sh", "-c"]
-        #args: ["/scripts/wazuh-alpine-apk.sh"]
-        volumeMounts:
-        - name: ubuntu-storage
-          mountPath: /data/ubuntu
-        - name: volume-wa-apk
-          mountPath: /scripts/wazuh-alpine-apk.sh
-          subPath: wazuh-alpine-apk.sh
-        - name: volume-wa-script
-          mountPath: /scripts/wazuh-agent_install.sh
-          subPath: wazuh-agent_install.sh 
+      - name: pause 
+        image: "gcr.io/google-containers/pause:2.0"
       initContainers:
       - name: wa-init-container
         image: alpine:3.19.1
-        #command: ["/bin/sleep", "3650d"]
-        #command: ["/bin/hostname" , "/bin/sleep", "3650d" ]
-        # command works
         command: ["/bin/sh","-c"]
-        args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh $(var-agent-version) $(var-manager-ipaddress) $(var-registration-password)"]
-        #args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh toto tutu ; /usr/bin/sleep 3d"]
+        args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh $(var-agent-version) $(var-manager-ipaddress) $(var-registration-password) $(var-api-usr) $(var-api-pwd)"]
         securityContext:
           privileged: true
           runAsUser: 0
@@ -57,8 +37,16 @@ spec:
             secretKeyRef:
               name: wazuh-authd-pass
               key: authd.pass
-        #- name: var-registration-password  # set into wazuh-authd-pass-secret.yaml
-          #value: "password"   # API_PASSWORD.password or INDEXER_PASSWORD.password
+        - name: var-api-usr 
+          valueFrom: 
+            secretKeyRef: 
+              name: wazuh-api-cred
+              key: username
+        - name: var-api-pwd
+          valueFrom: 
+            secretKeyRef: 
+              name: wazuh-api-cred
+              key: password
         volumeMounts:
         - name: ubuntu-storage
           mountPath: /data/ubuntu
