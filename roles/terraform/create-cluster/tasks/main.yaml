@@ -12,9 +12,24 @@
   args:
     executable: /bin/bash
 
+- name: Create terraform state bucket
+  shell: |
+    pip install s3cmd==2.4.0 -q -q -q && \
+    set -o allexport; source .env; set +o allexport && \
+    echo "host_base=https://$(grep endpoint {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2 | cut -d '/' -f 3)" > {{ inventory_dir }}/s3cfg && \
+    echo "host_bucket=https://%(bucket).$(grep endpoint {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2 | cut -d '/' -f 3)" >> {{ inventory_dir }}/s3cfg && \
+    echo "access_key=${AWS_ACCESS_KEY_ID}" >> {{ inventory_dir }}/s3cfg && \
+    echo "secret_key=${AWS_SECRET_ACCESS_KEY}" >> {{ inventory_dir }}/s3cfg && \
+    echo "use_https=True" >> {{ inventory_dir }}/s3cfg && \
+    $CONDA_PREFIX/bin/s3cmd -c {{ inventory_dir }}/s3cfg mb s3://$(grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2) && \
+    pip uninstall s3cmd==2.4.0 --yes -q -q -q
+  args:
+    chdir: roles/terraform/create-cluster/tasks/
+    executable: /bin/bash
+
 - name: Terraform init
   shell: |
-    set -o allexport; source .env; set +o allexport; terraform init -upgrade
+    set -o allexport; source .env; set +o allexport; terraform init -upgrade -backend-config="{{ inventory_dir }}/backend.tfvars"
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
@@ -61,7 +76,7 @@
 
 - name: Create archive
   shell: |
-    tar -czf rs-infrastructure.tar.gz -C {{ playbook_dir }} ansible.cfg .gitmodules apps.yaml rs-setup.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/  {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/host_vars/setup/kubespray.yaml collections/kubespray roles/
+    tar -czf rs-infrastructure.tar.gz -C {{ playbook_dir }} ansible.cfg .gitmodules apps.yaml rs-setup.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/  {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/all/kubespray.yaml collections/kubespray roles/
 
 - name: Change ssh key path on localhost
   ansible.builtin.replace:

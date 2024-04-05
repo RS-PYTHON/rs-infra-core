@@ -54,4 +54,3 @@ eip_elb_bandwidth = 10
 
 #Bucket vars
 buckets = ["elasticsearch-processing", "elasticsearch-security", "thanos", "loki"]
-

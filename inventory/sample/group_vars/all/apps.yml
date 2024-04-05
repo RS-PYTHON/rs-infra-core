@@ -5,26 +5,17 @@ platform_domain_name: rspy.example.com
 
 # TODO:
 # Clean unused secrets here and in realmimport 
-grafana:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-graylog:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-kibana-processing:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-kibana-security:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-kubectl:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-linkerd:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-prometheus:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-thanos:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-oauth2-proxy:
-  oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-  # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
-  cookieSecret: "sexajn29g-NLZ9CAHGw2E-tbY4c7uKOI6mNIE78UTg4="
+grafana_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+graylog_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+kibana_processing_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+kibana_security_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+kubectl_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+linkerd_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+prometheus_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+thanos_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+# https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
+oauth2_proxy_cookieSecret: "sexajn29g-NLZ9CAHGw2E-tbY4c7uKOI6mNIE78UTg4="
 
 certmanager:
   clusterissuer:
@@ -61,3 +52,4 @@ prefect:
     username: prefect
     password: "tmp_db_password_for_prefect"
     name: prefect
+    secret: prefect-database-password
