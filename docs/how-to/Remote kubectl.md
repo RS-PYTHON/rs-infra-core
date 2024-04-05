@@ -39,7 +39,7 @@ users:
         - get-token
         - --oidc-issuer-url=https://iam.{{ platform_domain_name }}/realms/{{ keycloak.realm.name }}
         - --oidc-client-id=kubectl
-        - --oidc-client-secret={{ kubectl_oidc.oidc_client_secret }}
+        - --oidc-client-secret={{ kubectl_oidc_oidc_client_secret }}
       command: kubectl
       env: null
       provideClusterInfo: false
