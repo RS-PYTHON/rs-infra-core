@@ -96,7 +96,9 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 - Credentials in `roles/terraform/create-cluster/tasks/.env`
 - Credentials, domain name in `inventory/mycluster/openrc.sh`
 - Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
-- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
+- S3 backend for terraform in `inventory/mycluster/backend.tfvars`
+- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/group_vars/all/kubespray.yaml`
+- Values for custom parameters in `inventory/mycluster/group_vars/all/apps.yml`
 
 ### 5. Create and configure machines
 

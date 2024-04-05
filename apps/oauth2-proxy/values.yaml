@@ -2,8 +2,8 @@
 config:
   annotations: {}
   clientID: "oauth2-proxy"
-  clientSecret: "{{ oauth2-proxy.oidc_client_secret }}"
-  cookieSecret: "{{ oauth2-proxy.cookieSecret }}"
+  clientSecret: "{{ oauth2-proxy_oidc_client_secret }}"
+  cookieSecret: "{{ oauth2-proxy_cookieSecret }}"
   configFile: |-
     email_domains=[ "*" ]
     provider="keycloak"

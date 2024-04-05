@@ -912,7 +912,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ grafana.oidc_client_secret }}"
+      secret: "{{ grafana_oidc_client_secret }}"
       redirectUris:
       - "/"
       - "/login/generic_oauth"
@@ -1003,7 +1003,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ graylog.oidc_client_secret }}"
+      secret: "{{ graylog_oidc_client_secret }}"
       redirectUris:
       - https://security.{{ platform_domain_name }}/*
       webOrigins: []
@@ -1077,7 +1077,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ kibana-processing.oidc_client_secret }}"
+      secret: "{{ kibana-processing_oidc_client_secret }}"
       redirectUris:
       - https://processing.{{ platform_domain_name }}/kibana/*
       webOrigins: []
@@ -1151,7 +1151,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ kibana-security.oidc_client_secret }}"
+      secret: "{{ kibana-security_oidc_client_secret }}"
       redirectUris:
       - https://security.{{ platform_domain_name }}/kibana/*
       webOrigins: []
@@ -1228,7 +1228,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ kubectl.oidc_client_secret }}"
+      secret: "{{ kubectl_oidc_client_secret }}"
       redirectUris:
       - urn:ietf:wg:oauth:2.0:oob
       - http://localhost:18000/*
@@ -1342,7 +1342,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ linkerd.oidc_client_secret }}"
+      secret: "{{ linkerd_oidc_client_secret }}"
       redirectUris:
       - https://linkerd.{{ platform_domain_name }}/*
       webOrigins: []
@@ -1419,7 +1419,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ oauth2-proxy.oidc_client_secret }}"
+      secret: "{{ oauth2-proxy_oidc_client_secret }}"
       redirectUris:
         - https://oauth2-proxy.{{ platform_domain_name }}
         - https://{{ platform_domain_name }}/*
@@ -1543,7 +1543,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ prometheus.oidc_client_secret }}"
+      secret: "{{ prometheus_oidc_client_secret }}"
       redirectUris:
       - https://monitoring.{{ platform_domain_name }}/prometheus/*
       webOrigins: []
@@ -1687,7 +1687,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ thanos.oidc_client_secret }}"
+      secret: "{{ thanos_oidc_client_secret }}"
       redirectUris:
       - https://monitoring.{{ platform_domain_name }}/thanos/*
       webOrigins: []

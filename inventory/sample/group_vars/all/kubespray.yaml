@@ -124,7 +124,34 @@ audit_log_maxsize: 100
 podsecuritypolicy_enabled: false
 
 kubelet_cpu_manager_policy: static
-kube_cpu_reserved: 500m
+# Reserve this space for kube resources
+# Set to true to reserve resources for kube daemons
+kube_reserved: true
+kube_reserved_cgroups_for_service_slice: kube.slice
+kube_reserved_cgroups: "/{{ kube_reserved_cgroups_for_service_slice }}"
+kube_memory_reserved: 256Mi
+kube_cpu_reserved: 100m
+# kube_ephemeral_storage_reserved: 2Gi
+# kube_pid_reserved: "1000"
+# Reservation for master hosts
+kube_master_memory_reserved: 512Mi
+kube_master_cpu_reserved: 200m
+# kube_master_ephemeral_storage_reserved: 2Gi
+# kube_master_pid_reserved: "1000"
+
+# Set to true to reserve resources for system daemons
+system_reserved: true
+system_reserved_cgroups_for_service_slice: system.slice
+system_reserved_cgroups: "/{{ system_reserved_cgroups_for_service_slice }}"
+system_memory_reserved: 512Mi
+system_cpu_reserved: 500m
+# system_ephemeral_storage_reserved: 2Gi
+# system_pid_reserved: "1000"
+# Reservation for master hosts
+system_master_memory_reserved: 256Mi
+system_master_cpu_reserved: 250m
+# system_master_ephemeral_storage_reserved: 2Gi
+# system_master_pid_reserved: "1000"
 
 ## Running on top of openstack vms with cinder enabled may lead to unschedulable pods due to NoVolumeZoneConflict restriction in kube-scheduler.
 ## See https://github.com/kubernetes-sigs/kubespray/issues/2141
@@ -137,6 +164,9 @@ auto_renew_certificates: true
 # auto_renew_certificates_systemd_calendar: "Mon *-*-1,2,3,4,5,6,7 03:{{ groups['kube_control_plane'].index(inventory_hostname) }}0:00"
 
 kubelet_rotate_server_certificates: true
+
+kubelet_csr_approver_values:
+  bypassDnsResolution: true
 
 # Enable prometheus metrics queries
 kube_proxy_metrics_bind_address: 0.0.0.0:10249
