@@ -6,8 +6,10 @@ metadata:
 spec:
   keycloakCRName: keycloak
   realm:
-    id: rspy
+    id: 270ab762-f310-4eae-aeb8-8ceb88735dd1
     realm: rspy
+    displayName: ''
+    displayNameHtml: ''
     notBefore: 0
     defaultSignatureAlgorithm: RS256
     revokeRefreshToken: false
@@ -38,8 +40,8 @@ spec:
     registrationEmailAsUsername: false
     rememberMe: false
     verifyEmail: false
-    loginWithEmailAllowed: true
-    duplicateEmailsAllowed: false
+    loginWithEmailAllowed: false
+    duplicateEmailsAllowed: true
     resetPasswordAllowed: false
     editUsernameAllowed: false
     bruteForceProtected: false
@@ -52,38 +54,32 @@ spec:
     failureFactor: 30
     roles:
       realm:
-      - id: d5e2408d-7b00-4b0b-bdc9-b1854031b712
-        composite: true
-        composites:
-          realm:
-          - offline_access
-          - uma_authorization
-          client:
-            account:
-            - manage-account
-            - view-profile
-        clientRole: false
-        containerId: rspy
-        attributes: {}
-      - id: 0d3e2876-2378-42d4-93ca-98848f155fe2
+      - id: a07c8260-1a21-49d1-a6be-2c066ee36f00
         name: uma_authorization
         description: "${role_uma_authorization}"
         composite: false
         clientRole: false
-        containerId: rspy
+        containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
         attributes: {}
-      - id: b0a69eab-3d52-464e-b399-3780202b41a0
+      - id: f3564ee4-f098-48c4-ae7e-bc36d7def8d5
         name: offline_access
         description: "${role_offline-access}"
         composite: false
         clientRole: false
-        containerId: rspy
+        containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
         attributes: {}
-      - id: 9470e87d-72d0-4723-a737-587528c5baec
+      - id: 956237e4-4e15-4f46-a72b-91d8d3f3235a
+        name: default-roles-rspy
+        description: "${role_default-roles}"
+        composite: false
+        clientRole: false
+        containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
+        attributes: {}
+      - id: e58cc72e-dd3d-4cad-97ac-00ff43200f50
         name: user_manager
         composite: false
         clientRole: false
-        containerId: rspy
+        containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
         attributes: {}
       client:
         oauth2-proxy:
@@ -94,7 +90,49 @@ spec:
           containerId: 1db6b858-5e00-489b-a30c-28870b127b9a
           attributes: {}
         realm-management:
-        - id: 38c5b0fd-e80e-4b4d-b615-21b4e68638ad
+        - id: 22d94d99-58b9-44a9-80c8-7ec26e73d913
+          name: manage-events
+          description: "${role_manage-events}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: d345ec2d-5fed-4438-bbe9-b099cf901250
+          name: impersonation
+          description: "${role_impersonation}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: d8fe3fa3-befa-49e5-9906-0d48ff6a78a2
+          name: view-authorization
+          description: "${role_view-authorization}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: 116db737-10e0-42b6-8659-666963fbbd07
+          name: query-realms
+          description: "${role_query-realms}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: aae82281-6610-473d-adc0-e719ce224e10
+          name: manage-authorization
+          description: "${role_manage-authorization}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: 29f44e59-cb67-428a-86ba-9d08dc108d7f
+          name: manage-users
+          description: "${role_manage-users}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: dbd17f20-7abc-4184-a1cf-12985623cacf
           name: view-users
           description: "${role_view-users}"
           composite: true
@@ -104,16 +142,93 @@ spec:
               - query-users
               - query-groups
           clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
           attributes: {}
-        - id: e24d9845-5f82-4c51-b34f-02a2ec3126d4
-          name: view-events
-          description: "${role_view-events}"
+        - id: 1a9b4e22-e661-4e99-8563-139ab83324bc
+          name: manage-clients
+          description: "${role_manage-clients}"
           composite: false
           clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
           attributes: {}
-        - id: 00a515ad-8aeb-4afd-b752-e30803f14366
+        - id: 46859006-d19c-4307-8a96-00af9d95d317
+          name: view-realm
+          description: "${role_view-realm}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: f1bbe62f-de5e-46ad-b3e0-0db6d8b7e576
+          name: manage-identity-providers
+          description: "${role_manage-identity-providers}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: f119b8c5-217c-4c0b-83d5-891d8f649205
+          name: manage-realm
+          description: "${role_manage-realm}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: 06da9cd9-9175-49e4-ae46-dea3404b0c26
+          name: query-clients
+          description: "${role_query-clients}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: 83811d99-0b7d-48c7-801a-0af750a3395f
+          name: query-users
+          description: "${role_query-users}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: 8daaec0e-e4f9-44ca-89ca-fb9f3103adc0
+          name: create-client
+          description: "${role_create-client}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: 8701dd4c-13da-4706-9029-b7499f0db84d
+          name: realm-admin
+          description: "${role_realm-admin}"
+          composite: true
+          composites:
+            client:
+              realm-management:
+              - manage-events
+              - impersonation
+              - view-authorization
+              - query-realms
+              - view-users
+              - manage-authorization
+              - manage-users
+              - manage-clients
+              - view-realm
+              - manage-identity-providers
+              - manage-realm
+              - query-clients
+              - query-users
+              - create-client
+              - query-groups
+              - view-events
+              - view-clients
+              - view-identity-providers
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: cc2b3d7e-0274-4371-9a1a-b1fe12942493
+          name: query-groups
+          description: "${role_query-groups}"
+          composite: false
+          clientRole: true
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
+          attributes: {}
+        - id: af638fa5-a34f-4cc3-97c9-9d7b75fd54ea
           name: view-clients
           description: "${role_view-clients}"
           composite: true
@@ -122,323 +237,190 @@ spec:
               realm-management:
               - query-clients
           clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
           attributes: {}
-        - id: 55ce94ee-59c0-4774-bda8-d1c0f2115499
-          name: query-realms
-          description: "${role_query-realms}"
+        - id: fe0bd844-1763-4da5-85a5-e957d8552283
+          name: view-events
+          description: "${role_view-events}"
           composite: false
           clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
           attributes: {}
-        - id: a9f7d150-394d-405a-b2f9-002f954bab21
-          name: query-groups
-          description: "${role_query-groups}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 8d11ba1f-3c7e-4d6d-9f10-2a370fb9ef04
-          name: query-users
-          description: "${role_query-users}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: a660ad91-73dd-47a7-a6fc-70906235e33a
-          name: view-authorization
-          description: "${role_view-authorization}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: d8d8f0e7-0aff-494f-ad97-f02a0646316b
-          name: create-client
-          description: "${role_create-client}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 79d17508-5879-4a97-8ede-e0a01279b744
-          name: manage-events
-          description: "${role_manage-events}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 519ecc75-f5cb-49da-a578-c77644783b75
-          name: manage-authorization
-          description: "${role_manage-authorization}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: e325535d-59e0-414f-9aa4-97153f7dcb17
-          name: query-clients
-          description: "${role_query-clients}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 9255af89-df44-4552-96c1-280b8f0bd7ea
-          name: manage-identity-providers
-          description: "${role_manage-identity-providers}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 2648bf8a-97ae-45c0-87bc-52f5f1a04ca4
+        - id: f141a640-2697-4880-b49d-b96130820706
           name: view-identity-providers
           description: "${role_view-identity-providers}"
           composite: false
           clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: f6c3edb4-73a9-4a91-8439-75d6fd4f1917
-          name: manage-users
-          description: "${role_manage-users}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: f7dee18b-a346-4db0-81a5-f2c102b7b3f0
-          name: view-realm
-          description: "${role_view-realm}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: c945b92c-777e-4d0e-84cd-817c7eef0c63
-          name: manage-realm
-          description: "${role_manage-realm}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 57dead2a-1f83-4250-8518-2f8eecc20a34
-          name: manage-clients
-          description: "${role_manage-clients}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: 711fad51-4001-4c64-9860-7587bddde00f
-          name: realm-admin
-          description: "${role_realm-admin}"
-          composite: true
-          composites:
-            client:
-              realm-management:
-              - view-users
-              - view-events
-              - view-clients
-              - query-realms
-              - query-users
-              - query-groups
-              - view-authorization
-              - create-client
-              - manage-events
-              - manage-authorization
-              - query-clients
-              - view-identity-providers
-              - manage-identity-providers
-              - view-realm
-              - manage-users
-              - manage-realm
-              - manage-clients
-              - impersonation
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
-          attributes: {}
-        - id: a400ed54-ac18-4c2e-997a-cab417cf9734
-          name: impersonation
-          description: "${role_impersonation}"
-          composite: false
-          clientRole: true
-          containerId: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
+          containerId: a029aef5-2557-43f9-b12b-cc3ff68afa98
           attributes: {}
         kibana-processing:
-        - id: d8f77f5f-7396-4502-ae42-e581676b0f81
+        - id: 4e49eb65-1b41-4261-89cc-0760aeac4276
+          name: uma_protection
+          composite: false
+          clientRole: true
+          containerId: 6e9a6c53-b79f-484c-8bbb-f812a060fd41
+          attributes: {}
+        - id: 6a768804-66fe-4ee6-a900-5daed0ed8bee
           name: access-authorized
           description: Only users with this role may access the client
           composite: false
           clientRole: true
-          containerId: 94b3b54f-5fd8-4e49-a401-8917670d1f63
-          attributes: {}
-        - id: d369c37c-3c37-4673-a4df-e4f4c13ebc95
-          name: uma_protection
-          composite: false
-          clientRole: true
-          containerId: 94b3b54f-5fd8-4e49-a401-8917670d1f63
+          containerId: 6e9a6c53-b79f-484c-8bbb-f812a060fd41
           attributes: {}
         security-admin-console: []
         kibana-security:
-        - id: 0d2ed2fb-ef16-4287-8eee-531c36881db1
+        - id: 99acacf1-83c0-4cfa-9c29-f00a5d1b84a0
           name: uma_protection
           composite: false
           clientRole: true
-          containerId: 3f0ac3e2-799c-4483-87c8-a9a365161598
+          containerId: 206b3a5b-e9bd-4259-a967-14b0c8eeec72
           attributes: {}
-        - id: 2b3d26f3-8a9c-489b-8acb-9b7ec4e93e6f
+        - id: bb20df04-6d91-4417-9221-8371cc8a80d7
           name: access-authorized
           description: Only users with this role may access the client
           composite: false
           clientRole: true
-          containerId: 3f0ac3e2-799c-4483-87c8-a9a365161598
+          containerId: 206b3a5b-e9bd-4259-a967-14b0c8eeec72
           attributes: {}
         account-console: []
         broker:
-        - id: 30fc4d42-331a-4c3b-819b-2edfd2c03e4c
+        - id: c76337cd-9836-4f66-a505-d145c6352a3e
           name: read-token
           description: "${role_read-token}"
           composite: false
           clientRole: true
-          containerId: f731e9fa-e6cf-4a5c-a9a9-25f7ef855eb6
+          containerId: c70a224f-d77b-4aa6-849a-11a1fc3622fa
           attributes: {}
         linkerd:
-        - id: 3ea5d8f1-e3cb-41b2-97ac-aa37b4204a4d
+        - id: 4edc794c-556c-4a1d-8b40-aa265c72b457
+          name: uma_protection
+          composite: false
+          clientRole: true
+          containerId: debf37fb-c3b5-470b-a1a0-bb4e4116f372
+          attributes: {}
+        - id: 02c724c1-4216-4680-985f-79d41fe9c1bf
           name: access-authorized
           description: Only users with this role may access the client
           composite: false
           clientRole: true
-          containerId: 881b7096-c573-487b-8c7e-07a5b2b48391
-          attributes: {}
-        - id: 8b9352a0-65f3-4133-ad51-0b5490b77879
-          name: uma_protection
-          composite: false
-          clientRole: true
-          containerId: 881b7096-c573-487b-8c7e-07a5b2b48391
+          containerId: debf37fb-c3b5-470b-a1a0-bb4e4116f372
           attributes: {}
         grafana:
-        - id: 595eee7d-2bb2-4d25-9042-22c9050f6262
-          name: admin
-          description: grafana admin
-          composite: false
-          clientRole: true
-          containerId: 58f98491-b4dd-45ae-8353-4682119849cb
-          attributes: {}
-        - id: 1d5ba5a6-85d8-4d0e-9df4-3d283878c8ba
-          name: uma_protection
-          composite: false
-          clientRole: true
-          containerId: 58f98491-b4dd-45ae-8353-4682119849cb
-          attributes: {}
-        - id: 27d28624-deb1-4706-ad81-45f314e52e66
-          name: access-authorized
-          description: Only users with this role may access the client
-          composite: false
-          clientRole: true
-          containerId: 58f98491-b4dd-45ae-8353-4682119849cb
-          attributes: {}
-        - id: df0603cb-b7ff-4df7-b447-e4a4004823be
-          name: viewer
-          description: Viewer role in Grafana
-          composite: false
-          clientRole: true
-          containerId: 58f98491-b4dd-45ae-8353-4682119849cb
-          attributes: {}
-        - id: c693e3ae-b6dc-4e3f-b7c2-db43d6df5195
+        - id: f9a64716-9952-45b4-9ad2-989611ecb500
           name: editor
           description: Editor role in grafana
           composite: false
           clientRole: true
-          containerId: 58f98491-b4dd-45ae-8353-4682119849cb
+          containerId: e25b4d06-afb6-46f1-a222-5e9b06c491fd
           attributes: {}
-        graylog:
-        - id: f70aebc6-1b6a-49a6-81a2-62097a1b49d5
+        - id: 4ae2c39f-cf2f-4d97-8773-03d259841acd
+          name: uma_protection
+          composite: false
+          clientRole: true
+          containerId: e25b4d06-afb6-46f1-a222-5e9b06c491fd
+          attributes: {}
+        - id: a1d5e3aa-2db9-423c-a317-7fe0f7433e13
+          name: viewer
+          description: Viewer role in Grafana
+          composite: false
+          clientRole: true
+          containerId: e25b4d06-afb6-46f1-a222-5e9b06c491fd
+          attributes: {}
+        - id: 4f14f02e-1123-4802-a7a1-b9315a01ef35
+          name: admin
+          description: grafana admin
+          composite: false
+          clientRole: true
+          containerId: e25b4d06-afb6-46f1-a222-5e9b06c491fd
+          attributes: {}
+        - id: 63cc0bfd-a7a8-4d0d-8e8f-e416eb530637
           name: access-authorized
           description: Only users with this role may access the client
           composite: false
           clientRole: true
-          containerId: 72a018ef-a96c-4491-8dfe-afda603bd6fa
+          containerId: e25b4d06-afb6-46f1-a222-5e9b06c491fd
           attributes: {}
-        - id: e3d66bfc-0e0b-4a41-8a8f-fb4e4b3f1801
+        graylog:
+        - id: 9fcadf7f-8514-4ceb-870c-ba419fac298b
+          name: access-authorized
+          description: Only users with this role may access the client
+          composite: false
+          clientRole: true
+          containerId: 07bbcadf-8d8a-4927-9629-dab503f8aa3b
+          attributes: {}
+        - id: ffe5b544-3576-41ca-b18e-8beeb1bdff39
           name: uma_protection
           composite: false
           clientRole: true
-          containerId: 72a018ef-a96c-4491-8dfe-afda603bd6fa
+          containerId: 07bbcadf-8d8a-4927-9629-dab503f8aa3b
           attributes: {}
         kubectl:
-        - id: bdd05497-4249-466e-a9f8-20b79950e0cb
+        - id: c92c6c2f-dcb6-4a63-9337-a0dedec480fb
           name: networking
           description: Manage resources in namespace networking
           composite: false
           clientRole: true
-          containerId: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
+          containerId: 172d5d82-846d-4081-81c9-e735dfdfee02
           attributes: {}
-        - id: c53690e1-b458-4d9f-80d3-dda126a235d1
+        - id: 28f6789e-aade-44d3-a241-f3bbbe649e0a
           name: readonly
           description: List and watch all resources in all namespaces
           composite: false
           clientRole: true
-          containerId: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
+          containerId: 172d5d82-846d-4081-81c9-e735dfdfee02
           attributes: {}
-        - id: 4f68b562-4163-4b39-838c-dfc0a1872f7f
+        - id: 2ffc1db7-50b0-4032-8a69-ba93321ea93f
+          name: uma_protection
+          composite: false
+          clientRole: true
+          containerId: 172d5d82-846d-4081-81c9-e735dfdfee02
+          attributes: {}
+        - id: c3118dc3-b6b0-4d4e-815b-0e9713367200
           name: security
           description: Manage resources in the namespaces security and iam
           composite: false
           clientRole: true
-          containerId: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
+          containerId: 172d5d82-846d-4081-81c9-e735dfdfee02
           attributes: {}
-        - id: 89646e06-5210-4faa-9e4c-f318cce1eb97
-          name: uma_protection
-          composite: false
-          clientRole: true
-          containerId: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
-          attributes: {}
-        - id: be29680a-9ec5-4fe9-b5bb-ce6a91816fbc
+        - id: ab67c01e-6693-4e4b-913e-d2887d212820
           name: operator
           description: Manage resources in namespaces database, infra, logging, monitoring,
             processing and rook-ceph
           composite: false
           clientRole: true
-          containerId: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
+          containerId: 172d5d82-846d-4081-81c9-e735dfdfee02
           attributes: {}
-        - id: f9c7967d-c815-47ec-a16c-be0cec0ff2c6
+        - id: 9d5dbdff-c010-441c-9a7a-63d3ba255466
           name: admin
           description: Manage resources in the namespace kube-system
           composite: false
           clientRole: true
-          containerId: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
+          containerId: 172d5d82-846d-4081-81c9-e735dfdfee02
           attributes: {}
         admin-cli: []
         prometheus:
-        - id: 77b1d301-eef4-40b5-82a8-4d6f891629ca
+        - id: 1e706c44-f037-4944-84f3-b5825eefc27d
           name: access-authorized
           description: Only users with this role may access the client
           composite: false
           clientRole: true
-          containerId: 6370fb83-5d6f-42f5-85db-9f945acb4596
+          containerId: b0116de2-3317-4de0-87e7-b7f8d6119329
           attributes: {}
-        - id: 2f17686a-affc-4a93-b6ad-476d287c0e4a
+        - id: 148c987b-5c14-448b-b55d-f273034f8fed
           name: uma_protection
           composite: false
           clientRole: true
-          containerId: 6370fb83-5d6f-42f5-85db-9f945acb4596
+          containerId: b0116de2-3317-4de0-87e7-b7f8d6119329
           attributes: {}
         thanos:
-        - id: 4b22cb4a-fd8f-4799-b612-66a1fc5daca6
+        - id: b4197f52-9a3f-4538-918e-ddb0bebb22ef
           name: uma_protection
           composite: false
           clientRole: true
-          containerId: 2fef0baa-3671-41e4-a996-151c0eed080f
+          containerId: 6cb27426-0378-4cce-b487-357b53261a93
           attributes: {}
         account:
-        - id: 9fdbdb00-426d-4baf-a3e0-d206d3c7551f
-          name: manage-account-links
-          description: "${role_manage-account-links}"
-          composite: false
-          clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
-          attributes: {}
-        - id: 7ea8414b-c45c-4ec4-b3a2-2d0e8dd2164e
-          name: view-applications
-          description: "${role_view-applications}"
-          composite: false
-          clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
-          attributes: {}
-        - id: 944658d8-312f-42e9-98c9-a770732c7886
+        - id: c88e64c0-d70e-4896-89c2-392799614cc0
           name: manage-account
           description: "${role_manage-account}"
           composite: true
@@ -447,30 +429,9 @@ spec:
               account:
               - manage-account-links
           clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
           attributes: {}
-        - id: efb80c98-0204-4705-85d2-b4fca41b85ef
-          name: view-consent
-          description: "${role_view-consent}"
-          composite: false
-          clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
-          attributes: {}
-        - id: bf72d92d-1632-476b-b120-3162674ef4b1
-          name: view-profile
-          description: "${role_view-profile}"
-          composite: false
-          clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
-          attributes: {}
-        - id: 8589cc84-0ee5-4cad-a1b3-a0951a9eb301
-          name: delete-account
-          description: "${role_delete-account}"
-          composite: false
-          clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
-          attributes: {}
-        - id: aeff2fdb-3ed1-403e-abb8-a06e5c0162f3
+        - id: d06f6b64-8a5e-4aa9-b936-34630df86241
           name: manage-consent
           description: "${role_manage-consent}"
           composite: true
@@ -479,14 +440,49 @@ spec:
               account:
               - view-consent
           clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
           attributes: {}
-        - id: 851c6dd7-f4ac-4a3e-b636-1d5a5f34832b
+        - id: 6c750d34-3145-480e-a975-b6b3379b8979
+          name: view-profile
+          description: "${role_view-profile}"
+          composite: false
+          clientRole: true
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
+          attributes: {}
+        - id: 7c12cf52-104b-45ab-b94c-4eb4eb399d6e
           name: view-groups
           description: "${role_view-groups}"
           composite: false
           clientRole: true
-          containerId: fc638251-cebf-425b-a0c0-e059971b8d65
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
+          attributes: {}
+        - id: b7f61bb9-8e39-4d22-a8b0-9bc2e7a05445
+          name: view-applications
+          description: "${role_view-applications}"
+          composite: false
+          clientRole: true
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
+          attributes: {}
+        - id: efc98b10-a878-4d8f-9d5a-3f2e0256c9b7
+          name: delete-account
+          description: "${role_delete-account}"
+          composite: false
+          clientRole: true
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
+          attributes: {}
+        - id: a03cbd59-be0f-426c-adce-2f4e42688a4e
+          name: manage-account-links
+          description: "${role_manage-account-links}"
+          composite: false
+          clientRole: true
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
+          attributes: {}
+        - id: b78c823f-aa9d-449d-9885-eb543fb77e22
+          name: view-consent
+          description: "${role_view-consent}"
+          composite: false
+          clientRole: true
+          containerId: 81de6552-829b-4fac-96ad-425ea60ec287
           attributes: {}
     groups:
     - id: 3924b7b5-619b-46b0-b01d-ff724d960292
@@ -515,8 +511,8 @@ spec:
       realmRoles: []
       clientRoles:
         grafana:
-        - access-authorized
         - viewer
+        - access-authorized
         kubectl:
         - readonly
         account:
@@ -543,10 +539,10 @@ spec:
         - '2002'
       realmRoles: []
       clientRoles:
-        grafana:
-        - editor
         kibana-processing:
         - access-authorized
+        grafana:
+        - editor
         kubectl:
         - operator
         prometheus:
@@ -583,17 +579,14 @@ spec:
       realmRoles: []
       clientRoles: {}
     defaultRole:
-      id: d5e2408d-7b00-4b0b-bdc9-b1854031b712
-      composite: true
+      id: 956237e4-4e15-4f46-a72b-91d8d3f3235a
+      name: default-roles-rspy
+      description: "${role_default-roles}"
+      composite: false
       clientRole: false
-      containerId: rspy
-    defaultGroups:
-    - "/default"
+      containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
     requiredCredentials:
     - password
-    passwordPolicy: notUsername(undefined) and length(12) and lowerCase(1) and upperCase(1)
-      and digits(1) and specialChars(1) and notEmail(undefined) and forceExpiredPasswordChange(90)
-      and passwordHistory(3)
     otpPolicyType: totp
     otpPolicyAlgorithm: HmacSHA1
     otpPolicyInitialCounter: 0
@@ -640,7 +633,6 @@ spec:
       serviceAccountClientId: grafana
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         grafana:
         - uma_protection
@@ -656,7 +648,6 @@ spec:
       serviceAccountClientId: graylog
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         graylog:
         - uma_protection
@@ -672,7 +663,6 @@ spec:
       serviceAccountClientId: kibana-processing
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         kibana-processing:
         - uma_protection
@@ -688,7 +678,6 @@ spec:
       serviceAccountClientId: kibana-security
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         kibana-security:
         - uma_protection
@@ -704,7 +693,6 @@ spec:
       serviceAccountClientId: kubectl
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         kubectl:
         - uma_protection
@@ -720,7 +708,6 @@ spec:
       serviceAccountClientId: linkerd
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         linkerd:
         - uma_protection
@@ -737,12 +724,12 @@ spec:
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
-        - default-roles-rspy
+      - default-roles-rspy
       clientRoles:
         oauth2-proxy:
-          - uma_protection
+        - uma_protection
       notBefore: 0
-      groups: []      
+      groups: []
     - id: d758c0b8-9d39-4e31-b877-20150e644e14
       createdTimestamp: 1707491949268
       username: service-account-prometheus
@@ -752,7 +739,6 @@ spec:
       serviceAccountClientId: prometheus
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         prometheus:
         - uma_protection
@@ -768,25 +754,14 @@ spec:
       serviceAccountClientId: thanos
       disableableCredentialTypes: []
       requiredActions: []
-      realmRoles: []
       clientRoles:
         thanos:
         - uma_protection
       notBefore: 0
       groups:
       - "/default"
-    scopeMappings:
-    - clientScope: offline_access
-      roles:
-      - offline_access
-    clientScopeMappings:
-      account:
-      - client: account-console
-        roles:
-        - manage-account
-        - view-groups
     clients:
-    - id: fc638251-cebf-425b-a0c0-e059971b8d65
+    - id: 81de6552-829b-4fac-96ad-425ea60ec287
       clientId: account
       name: "${client_account}"
       rootUrl: "${authBaseUrl}"
@@ -813,9 +788,18 @@ spec:
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
-      defaultClientScopes: []
-      optionalClientScopes: []
-    - id: 0b3890db-b0d1-458d-ba53-26e19ac71098
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+    - id: 2156bc95-a6e2-4ef9-b5ab-fe9077963fac
       clientId: account-console
       name: "${client_account-console}"
       rootUrl: "${authBaseUrl}"
@@ -844,7 +828,7 @@ spec:
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
       protocolMappers:
-      - id: 4c6f91cd-082a-4807-a686-8c2c24141301
+      - id: ad29478f-9d58-4b8b-b225-135cdb4f06ca
         name: audience resolve
         protocol: openid-connect
         protocolMapper: oidc-audience-resolve-mapper
@@ -852,7 +836,7 @@ spec:
         config: {}
       defaultClientScopes: []
       optionalClientScopes: []
-    - id: 4b148787-f2db-4615-b70b-fe652ea03336
+    - id: fc043d47-90dc-49bf-b5f0-123e4b45658d
       clientId: admin-cli
       name: "${client_admin-cli}"
       surrogateAuthRequired: false
@@ -875,9 +859,18 @@ spec:
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
-      defaultClientScopes: []
-      optionalClientScopes: []
-    - id: f731e9fa-e6cf-4a5c-a9a9-25f7ef855eb6
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+    - id: c70a224f-d77b-4aa6-849a-11a1fc3622fa
       clientId: broker
       name: "${client_broker}"
       surrogateAuthRequired: false
@@ -900,9 +893,18 @@ spec:
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
-      defaultClientScopes: []
-      optionalClientScopes: []
-    - id: 58f98491-b4dd-45ae-8353-4682119849cb
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+    - id: e25b4d06-afb6-46f1-a222-5e9b06c491fd
       clientId: grafana
       name: Grafana
       rootUrl: https://monitoring.{{ platform_domain_name }}
@@ -934,31 +936,7 @@ spec:
       fullScopeAllowed: false
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 1bbd866f-fbdd-4a3e-9d52-4cf913b5025f
-        name: Client Host
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientHost
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientHost
-          jsonType.label: String
-      - id: 1c343ff1-4731-4fb5-89bb-8af57cd2afd6
-        name: Client IP Address
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientAddress
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientAddress
-          jsonType.label: String
-      - id: '0895f24b-9c26-4d32-816b-707629ea0410'
+      - id: d2b66163-c2c6-467b-bc2b-f01feb17488b
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -966,11 +944,25 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
           jsonType.label: String
-      - id: be553aa6-3611-43d6-9f3a-ec18257bd809
+      - id: 6e7a0420-d229-4d46-a698-01518140b0cf
+        name: Client Host
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientHost
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientHost
+          jsonType.label: String
+      - id: 60942083-a84d-407b-b96e-756d29533bbc
         name: Roles
         protocol: openid-connect
         protocolMapper: oidc-usermodel-client-role-mapper
@@ -983,9 +975,22 @@ spec:
           claim.name: roles
           jsonType.label: String
           usermodel.clientRoleMapping.clientId: grafana
+      - id: 5d298744-4acb-40cb-b314-6f66f872f345
+        name: Client IP Address
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientAddress
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientAddress
+          jsonType.label: String
       defaultClientScopes:
-      - profile
       - roles
+      - profile
       - email
       optionalClientScopes: []
       authorizationSettings:
@@ -995,7 +1000,7 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: 72a018ef-a96c-4491-8dfe-afda603bd6fa
+    - id: 07bbcadf-8d8a-4927-9629-dab503f8aa3b
       clientId: graylog
       name: Graylog
       baseUrl: https://security.{{ platform_domain_name }}/
@@ -1024,7 +1029,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: cc004ffe-fcec-434d-8a3e-5dda8a8785df
+      - id: 997e6a13-ba30-4d92-95bb-a1f4376b57d1
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1032,11 +1037,12 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
           jsonType.label: String
-      - id: b00e56ae-5642-45ad-be71-507ca5f7ba0b
+      - id: 9347bfee-c1d4-4f9c-a11d-8db896ccd764
         name: Client Host
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1044,11 +1050,12 @@ spec:
         config:
           user.session.note: clientHost
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientHost
           jsonType.label: String
-      - id: 793633db-1616-4daa-8ab0-e2ea26c4ab15
+      - id: bc0e797f-52fe-49d4-90bd-1f026ab32b9c
         name: Client IP Address
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1056,6 +1063,7 @@ spec:
         config:
           user.session.note: clientAddress
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientAddress
@@ -1069,7 +1077,7 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: 94b3b54f-5fd8-4e49-a401-8917670d1f63
+    - id: 6e9a6c53-b79f-484c-8bbb-f812a060fd41
       clientId: kibana-processing
       name: Kibana processing
       baseUrl: https://processing.{{ platform_domain_name }}/kibana/
@@ -1077,7 +1085,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ kibana-processing_oidc_client_secret }}"
+      secret: "{{ kibana_processing_oidc_client_secret }}"
       redirectUris:
       - https://processing.{{ platform_domain_name }}/kibana/*
       webOrigins: []
@@ -1098,19 +1106,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 5adfc986-acc9-440b-bd77-16aa2d9a1922
-        name: Client IP Address
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientAddress
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientAddress
-          jsonType.label: String
-      - id: 5546601a-9743-425b-be63-a588f157144c
+      - id: 2e215f7a-110a-41a1-a7f6-e0ea7177e34e
         name: Client Host
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1118,11 +1114,12 @@ spec:
         config:
           user.session.note: clientHost
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientHost
           jsonType.label: String
-      - id: 9d7e8762-9436-419b-b8c3-215a454fb936
+      - id: 1d8bfdec-e6b5-4acd-9328-fdc0c166163a
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1130,9 +1127,23 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
+          jsonType.label: String
+      - id: 3d0e888d-1534-4847-b080-de504a989825
+        name: Client IP Address
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientAddress
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientAddress
           jsonType.label: String
       defaultClientScopes: []
       optionalClientScopes: []
@@ -1143,7 +1154,7 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: 3f0ac3e2-799c-4483-87c8-a9a365161598
+    - id: 206b3a5b-e9bd-4259-a967-14b0c8eeec72
       clientId: kibana-security
       name: Kibana security
       baseUrl: https://security.{{ platform_domain_name }}/kibana/
@@ -1151,7 +1162,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ kibana-security_oidc_client_secret }}"
+      secret: "{{ kibana_security_oidc_client_secret }}"
       redirectUris:
       - https://security.{{ platform_domain_name }}/kibana/*
       webOrigins: []
@@ -1172,7 +1183,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 2ba55e02-bca0-4453-95b6-2a0bd00d20d6
+      - id: f5275ebb-98b2-44c5-90c2-398f350de9e0
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1180,11 +1191,12 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
           jsonType.label: String
-      - id: 04bf2281-315d-458e-a3f9-e571ccc4948b
+      - id: 86b8ff1c-d492-424a-9f80-80ae5b83f223
         name: Client IP Address
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1192,11 +1204,12 @@ spec:
         config:
           user.session.note: clientAddress
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientAddress
           jsonType.label: String
-      - id: 8e824656-cb47-465a-9e98-94d8ce9e5b50
+      - id: 065ba394-7809-443a-ab2e-d56375bf5fe0
         name: Client Host
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1204,6 +1217,7 @@ spec:
         config:
           user.session.note: clientHost
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientHost
@@ -1217,7 +1231,7 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: dd4d5d14-7f14-4e37-b3d1-c98a9031d39a
+    - id: 172d5d82-846d-4081-81c9-e735dfdfee02
       clientId: kubectl
       name: kubectl
       description: ''
@@ -1247,7 +1261,7 @@ spec:
       frontchannelLogout: false
       protocol: openid-connect
       attributes:
-        client.secret.creation.time: '1707492304'
+        client.secret.creation.time: '1709028692'
         post.logout.redirect.uris: "+"
         oauth2.device.authorization.grant.enabled: 'false'
         backchannel.logout.revoke.offline.tokens: 'false'
@@ -1264,31 +1278,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 38542c2a-bfb9-4cdd-b93b-484710ed6714
-        name: Client ID
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: client_id
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: client_id
-          jsonType.label: String
-      - id: d35c4109-a80e-4813-ab7f-c1244ca6aa66
-        name: Client Host
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientHost
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientHost
-          jsonType.label: String
-      - id: 4816cb4e-7e09-4a52-8e37-f58fd07f57af
+      - id: a6599a8d-8fea-4458-ab1b-43ce86ecd735
         name: Client IP Address
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1296,11 +1286,25 @@ spec:
         config:
           user.session.note: clientAddress
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientAddress
           jsonType.label: String
-      - id: 153a2055-3cdf-4a28-9876-dcf02b53215c
+      - id: 81d1ea39-e5ca-40f7-be77-35421ef1c627
+        name: Client ID
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: client_id
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: client_id
+          jsonType.label: String
+      - id: a5123b2f-35f3-4bb1-ab83-f6bf8588996f
         name: username
         protocol: openid-connect
         protocolMapper: oidc-usermodel-attribute-mapper
@@ -1312,7 +1316,7 @@ spec:
           access.token.claim: 'true'
           claim.name: LDAP_ID
           jsonType.label: String
-      - id: f2827e86-d83b-4d30-ba0e-2a110381509e
+      - id: 9ebf03ff-dc43-44bd-ad4c-e81245f91cda
         name: cluster-roles
         protocol: openid-connect
         protocolMapper: oidc-usermodel-client-role-mapper
@@ -1325,6 +1329,19 @@ spec:
           claim.name: cluster-roles
           jsonType.label: String
           usermodel.clientRoleMapping.clientId: kubectl
+      - id: 5e52a083-9ecb-41f4-b2e0-ee5485d9c78d
+        name: Client Host
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientHost
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientHost
+          jsonType.label: String
       defaultClientScopes: []
       optionalClientScopes: []
       authorizationSettings:
@@ -1334,7 +1351,7 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: 881b7096-c573-487b-8c7e-07a5b2b48391
+    - id: debf37fb-c3b5-470b-a1a0-bb4e4116f372
       clientId: linkerd
       name: Linkerd
       baseUrl: https://linkerd.{{ platform_domain_name }}/
@@ -1363,31 +1380,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 3cbba80c-6a40-4196-a0d8-5da65150b547
-        name: Client Host
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientHost
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientHost
-          jsonType.label: String
-      - id: '092337b1-0c0c-4724-a70a-a23c0155707a'
-        name: Client IP Address
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientAddress
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientAddress
-          jsonType.label: String
-      - id: bfdce83b-7c8e-477d-b2d2-169b337c402c
+      - id: 5a3330f7-03e0-42f0-814b-5dcc3c3bf455
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1395,9 +1388,36 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
+          jsonType.label: String
+      - id: 44fef2b8-dcca-4e5d-83e6-f66b2ff2de2b
+        name: Client IP Address
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientAddress
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientAddress
+          jsonType.label: String
+      - id: 07614b6c-2c9d-4d17-818a-fd0b4426811f
+        name: Client Host
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientHost
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientHost
           jsonType.label: String
       defaultClientScopes: []
       optionalClientScopes: []
@@ -1411,19 +1431,19 @@ spec:
     - id: 1db6b858-5e00-489b-a30c-28870b127b9a
       clientId: oauth2-proxy
       name: oauth2-proxy
-      description: ""
-      rootUrl: ""
-      adminUrl: ""
-      baseUrl: ""
+      description: ''
+      rootUrl: ''
+      adminUrl: ''
+      baseUrl: ''
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ oauth2-proxy_oidc_client_secret }}"
+      secret: "{{ oauth2_proxy_oidc_client_secret }}"
       redirectUris:
-        - https://oauth2-proxy.{{ platform_domain_name }}
-        - https://{{ platform_domain_name }}/*
-        - https://oauth2-proxy.{{ platform_domain_name }}/oauth2/callback
+      - https://oauth2-proxy.{{ platform_domain_name }}
+      - https://{{ platform_domain_name }}/*
+      - https://oauth2-proxy.{{ platform_domain_name }}/oauth2/callback
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1437,105 +1457,107 @@ spec:
       frontchannelLogout: false
       protocol: openid-connect
       attributes:
-        client.secret.creation.time: "1709642694"
-        oauth2.device.authorization.grant.enabled: "true"
-        backchannel.logout.revoke.offline.tokens: "false"
-        use.refresh.tokens: "true"
-        oidc.ciba.grant.enabled: "false"
-        backchannel.logout.session.required: "true"
-        client_credentials.use_refresh_token: "false"
-        tls.client.certificate.bound.access.tokens: "false"
-        require.pushed.authorization.requests: "false"
+        client.secret.creation.time: '1709642694'
+        oauth2.device.authorization.grant.enabled: 'true'
+        backchannel.logout.revoke.offline.tokens: 'false'
+        use.refresh.tokens: 'true'
+        oidc.ciba.grant.enabled: 'false'
+        backchannel.logout.session.required: 'true'
+        client_credentials.use_refresh_token: 'false'
+        tls.client.certificate.bound.access.tokens: 'false'
+        require.pushed.authorization.requests: 'false'
         acr.loa.map: "{}"
-        display.on.consent.screen: "false"
-        token.response.type.bearer.lower-case: "false"
+        display.on.consent.screen: 'false'
+        token.response.type.bearer.lower-case: 'false'
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-        - id: afb27524-9dbc-4b6e-b28a-b3598f6a9ab1
-          name: oauth2-proxy
-          protocol: openid-connect
-          protocolMapper: oidc-group-membership-mapper
-          consentRequired: false
-          config:
-            full.path: "true"
-            introspection.token.claim: "true"
-            userinfo.token.claim: "true"
-            id.token.claim: "true"
-            access.token.claim: "true"
-            claim.name: groups
-        - id: ff31bbea-0c4c-453a-adc7-3ea49a9f7069
-          name: email
-          protocol: openid-connect
-          protocolMapper: oidc-usermodel-attribute-mapper
-          consentRequired: false
-          config:
-            introspection.token.claim: "true"
-            userinfo.token.claim: "true"
-            user.attribute: email
-            id.token.claim: "true"
-            access.token.claim: "true"
-            claim.name: email
-            jsonType.label: String
-        - id: 88ba58e8-799a-42f0-b0f8-1ba13a754cdf
-          name: groups
-          protocol: openid-connect
-          protocolMapper: oidc-group-membership-mapper
-          consentRequired: false
-          config:
-            full.path: "true"
-            introspection.token.claim: "true"
-            userinfo.token.claim: "true"
-            id.token.claim: "true"
-            access.token.claim: "true"
-            claim.name: groups
+      - id: afb27524-9dbc-4b6e-b28a-b3598f6a9ab1
+        name: oauth2-proxy
+        protocol: openid-connect
+        protocolMapper: oidc-group-membership-mapper
+        consentRequired: false
+        config:
+          full.path: 'true'
+          introspection.token.claim: 'true'
+          multivalued: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: groups
+      - id: ff31bbea-0c4c-453a-adc7-3ea49a9f7069
+        name: email
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: email
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: email
+          jsonType.label: String
+      - id: 88ba58e8-799a-42f0-b0f8-1ba13a754cdf
+        name: groups
+        protocol: openid-connect
+        protocolMapper: oidc-group-membership-mapper
+        consentRequired: false
+        config:
+          full.path: 'true'
+          introspection.token.claim: 'true'
+          multivalued: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: groups
       defaultClientScopes:
-        - email
+      - email
       optionalClientScopes:
-        - web-origins
-        - acr
-        - address
-        - phone
-        - roles
-        - offline_access
-        - profile
-        - good-service
-        - microprofile-jwt
+      - web-origins
+      - acr
+      - address
+      - phone
+      - roles
+      - offline_access
+      - profile
+      - good-service
+      - microprofile-jwt
       authorizationSettings:
         allowRemoteResourceManagement: true
         policyEnforcementMode: ENFORCING
         resources:
-          - name: Default Resource
-            type: urn:oauth2-proxy:resources:default
-            ownerManagedAccess: false
-            attributes: {}
-            _id: 2b8ae618-4634-4c58-b097-5ce10f12698d
-            uris:
-              - /*
+        - name: Default Resource
+          type: urn:oauth2-proxy:resources:default
+          ownerManagedAccess: false
+          attributes: {}
+          _id: 2b8ae618-4634-4c58-b097-5ce10f12698d
+          uris:
+          - "/*"
         policies:
-          - id: fa9a5a2e-c49f-4eb2-86d7-18a386fb0207
-            name: Default Policy
-            description: A policy that grants access only for users within this realm
-            type: js
-            logic: POSITIVE
-            decisionStrategy: AFFIRMATIVE
-            config:
-              code: |
-                // by default, grants any permission associated with this policy
-                $evaluation.grant();
-          - id: 01585b49-0f1d-4747-9e36-f66d1fa7012c
-            name: Default Permission
-            description: A permission that applies to the default resource type
-            type: resource
-            logic: POSITIVE
-            decisionStrategy: UNANIMOUS
-            config:
-              defaultResourceType: urn:oauth2-proxy:resources:default
-              applyPolicies: '["Default Policy"]'
+        - id: fa9a5a2e-c49f-4eb2-86d7-18a386fb0207
+          name: Default Policy
+          description: A policy that grants access only for users within this realm
+          type: js
+          logic: POSITIVE
+          decisionStrategy: AFFIRMATIVE
+          config:
+            code: |
+              // by default, grants any permission associated with this policy
+              $evaluation.grant();
+        - id: '01585b49-0f1d-4747-9e36-f66d1fa7012c'
+          name: Default Permission
+          description: A permission that applies to the default resource type
+          type: resource
+          logic: POSITIVE
+          decisionStrategy: UNANIMOUS
+          config:
+            defaultResourceType: urn:oauth2-proxy:resources:default
+            applyPolicies: '["Default Policy"]'
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: 6370fb83-5d6f-42f5-85db-9f945acb4596
+    - id: b0116de2-3317-4de0-87e7-b7f8d6119329
       clientId: prometheus
       name: Prometheus
       baseUrl: https://monitoring.{{ platform_domain_name }}/prometheus/
@@ -1564,7 +1586,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 1de92705-8bcc-4331-abe4-bb0af03b36fd
+      - id: cddf8699-0108-4756-b1b8-0871916e0f46
         name: Client Host
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1572,23 +1594,12 @@ spec:
         config:
           user.session.note: clientHost
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientHost
           jsonType.label: String
-      - id: bb79ec49-d513-438b-9f25-06d78a09b15e
-        name: Client IP Address
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientAddress
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientAddress
-          jsonType.label: String
-      - id: e8de99ac-3f1b-4deb-9cfb-59c114594afb
+      - id: a080115b-e576-46a9-aaa7-87b0e92f4dec
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1596,9 +1607,23 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
+          jsonType.label: String
+      - id: ca71e96b-0f7f-415c-b59f-cc5ad0e82e87
+        name: Client IP Address
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientAddress
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientAddress
           jsonType.label: String
       defaultClientScopes: []
       optionalClientScopes: []
@@ -1609,7 +1634,7 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
-    - id: c8b997ac-7bc8-41ac-a63c-4d9abbbef4dd
+    - id: a029aef5-2557-43f9-b12b-cc3ff68afa98
       clientId: realm-management
       name: "${client_realm-management}"
       surrogateAuthRequired: false
@@ -1632,9 +1657,18 @@ spec:
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
-      defaultClientScopes: []
-      optionalClientScopes: []
-    - id: cad37bd5-1169-4358-89ff-c1d3a77b2309
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+    - id: 3e360deb-01c9-4a82-b283-f6904269f5f5
       clientId: security-admin-console
       name: "${client_security-admin-console}"
       rootUrl: "${authAdminUrl}"
@@ -1664,7 +1698,7 @@ spec:
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
       protocolMappers:
-      - id: cfd0a2e7-6260-470d-8bd6-cf3bb0af7419
+      - id: 7c9b3d88-d276-4264-a8bb-8cc60d5e2130
         name: locale
         protocol: openid-connect
         protocolMapper: oidc-usermodel-attribute-mapper
@@ -1677,9 +1711,18 @@ spec:
           access.token.claim: 'true'
           claim.name: locale
           jsonType.label: String
-      defaultClientScopes: []
-      optionalClientScopes: []
-    - id: 2fef0baa-3671-41e4-a996-151c0eed080f
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+    - id: 6cb27426-0378-4cce-b487-357b53261a93
       clientId: thanos
       name: Thanos
       baseUrl: https://monitoring.{{ platform_domain_name }}/thanos/
@@ -1708,7 +1751,7 @@ spec:
       fullScopeAllowed: true
       nodeReRegistrationTimeout: -1
       protocolMappers:
-      - id: 9df6f891-ba08-4d31-9309-3be80358e300
+      - id: 4f673a7a-64f9-4fbc-8b4c-410b89a49f22
         name: Client ID
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1716,23 +1759,12 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
           jsonType.label: String
-      - id: 8176561b-2965-4d44-ab95-578e0c47edbe
-        name: Client Host
-        protocol: openid-connect
-        protocolMapper: oidc-usersessionmodel-note-mapper
-        consentRequired: false
-        config:
-          user.session.note: clientHost
-          introspection.token.claim: 'true'
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: clientHost
-          jsonType.label: String
-      - id: a88cfb71-5f53-4c91-96ac-2d31539ce9e1
+      - id: b8d376a2-9178-4823-b3fc-42df813d7309
         name: Client IP Address
         protocol: openid-connect
         protocolMapper: oidc-usersessionmodel-note-mapper
@@ -1740,9 +1772,23 @@ spec:
         config:
           user.session.note: clientAddress
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientAddress
+          jsonType.label: String
+      - id: c162be4b-ce86-456f-b09c-6858526056df
+        name: Client Host
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientHost
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientHost
           jsonType.label: String
       defaultClientScopes: []
       optionalClientScopes: []
@@ -1754,251 +1800,445 @@ spec:
         scopes: []
         decisionStrategy: UNANIMOUS
     clientScopes:
-    - id: 5829da8b-b456-493f-b6c8-39e8964746ed
-      name: email
-      description: 'OpenID Connect built-in scope: email'
+    - id: bac432a0-c5f9-47d2-9f56-57103e6b7c89
+      name: acr
+      description: OpenID Connect scope for add acr (authentication context class reference)
+        to the token
       protocol: openid-connect
       attributes:
-        consent.screen.text: "${emailScopeConsentText}"
+        include.in.token.scope: 'false'
+        display.on.consent.screen: 'false'
       protocolMappers:
-      - id: 2f820231-8258-4c5f-8490-1f71ed4291fe
-        name: email verified
+      - id: a8dcf451-3f04-42e1-9bd3-6c5def0f1098
+        name: acr loa level
         protocol: openid-connect
-        protocolMapper: oidc-usermodel-property-mapper
+        protocolMapper: oidc-acr-mapper
         consentRequired: false
         config:
-          userinfo.token.claim: 'true'
-          user.attribute: emailVerified
           id.token.claim: 'true'
+          introspection.token.claim: 'true'
           access.token.claim: 'true'
-          claim.name: email_verified
-          jsonType.label: boolean
-      - id: '08844530-45f9-40f4-8294-82646bf11c46'
-        name: email
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-property-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: email
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: email
-          jsonType.label: String
-    - id: 04acf4a2-50dc-46d2-b730-3a0221e8c453
-      name: profile
-      description: 'OpenID Connect built-in scope: profile'
+    - id: 4cefd1e0-35f9-4db2-8480-ee74caa6eaae
+      name: roles
+      description: OpenID Connect scope for add user roles to the access token
       protocol: openid-connect
       attributes:
-        consent.screen.text: "${profileScopeConsentText}"
+        include.in.token.scope: 'false'
+        display.on.consent.screen: 'true'
+        consent.screen.text: "${rolesScopeConsentText}"
       protocolMappers:
-      - id: ef5486b4-edc7-46ef-9bbb-d5fd3b66910f
-        name: middle name
+      - id: 725c9df9-5317-415c-9ed4-8ffba6703f88
+        name: audience resolve
+        protocol: openid-connect
+        protocolMapper: oidc-audience-resolve-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          access.token.claim: 'true'
+      - id: e3838242-85d4-4bcb-8e58-62fe1815f61c
+        name: realm roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          multivalued: 'true'
+          user.attribute: foo
+          access.token.claim: 'true'
+          claim.name: realm_access.roles
+          jsonType.label: String
+      - id: 0d22a328-6211-4eff-9cee-3df21ba8853b
+        name: client roles
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-client-role-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          multivalued: 'true'
+          user.attribute: foo
+          access.token.claim: 'true'
+          claim.name: resource_access.${client_id}.roles
+          jsonType.label: String
+    - id: 518c2db1-9ad1-4c5a-894b-9efb2d9c1183
+      name: good-service
+      description: ''
+      protocol: openid-connect
+      attributes:
+        include.in.token.scope: 'true'
+        display.on.consent.screen: 'true'
+        gui.order: ''
+        consent.screen.text: ''
+    - id: 6ec2b0f0-8fc5-4ccd-b035-9f2f69a00f4a
+      name: address
+      description: 'OpenID Connect built-in scope: address'
+      protocol: openid-connect
+      attributes:
+        include.in.token.scope: 'true'
+        display.on.consent.screen: 'true'
+        consent.screen.text: "${addressScopeConsentText}"
+      protocolMappers:
+      - id: 3fead9f1-e76f-40af-8bb7-3c4d07291c64
+        name: address
+        protocol: openid-connect
+        protocolMapper: oidc-address-mapper
+        consentRequired: false
+        config:
+          user.attribute.formatted: formatted
+          user.attribute.country: country
+          introspection.token.claim: 'true'
+          user.attribute.postal_code: postal_code
+          userinfo.token.claim: 'true'
+          user.attribute.street: street
+          id.token.claim: 'true'
+          user.attribute.region: region
+          access.token.claim: 'true'
+          user.attribute.locality: locality
+    - id: 5401c0a2-a93c-49d8-b578-4d331d672e59
+      name: microprofile-jwt
+      description: Microprofile - JWT built-in scope
+      protocol: openid-connect
+      attributes:
+        include.in.token.scope: 'true'
+        display.on.consent.screen: 'false'
+      protocolMappers:
+      - id: 0e79f11c-9ee9-4fd1-a927-ee06d05da6f0
+        name: groups
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-realm-role-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          multivalued: 'true'
+          user.attribute: foo
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: groups
+          jsonType.label: String
+      - id: ab1fe8a0-2658-4381-8e8f-aac1ed68cd1e
+        name: upn
         protocol: openid-connect
         protocolMapper: oidc-usermodel-attribute-mapper
         consentRequired: false
         config:
-          userinfo.token.claim: 'true'
-          user.attribute: middleName
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: middle_name
-          jsonType.label: String
-      - id: 5bba33af-994a-4c30-ba88-114f7ac6342b
-        name: profile
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: profile
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: profile
-          jsonType.label: String
-      - id: dab9cce1-d9dc-487c-ad6e-eb28115fcf5c
-        name: zoneinfo
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: zoneinfo
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: zoneinfo
-          jsonType.label: String
-      - id: f9cf4be6-baa4-455f-b245-7594dd920d8a
-        name: full name
-        protocol: openid-connect
-        protocolMapper: oidc-full-name-mapper
-        consentRequired: false
-        config: {}
-      - id: 6af8825a-10bb-4bdd-bbb2-ffb6b829c288
-        name: birthdate
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: birthdate
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: birthdate
-          jsonType.label: String
-      - id: 11f2986e-d206-4430-b297-23d51f30dadb
-        name: family name
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-property-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: lastName
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: family_name
-          jsonType.label: String
-      - id: d81869ee-a74a-4e7d-92a0-9ac2ac57e09a
-        name: picture
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: picture
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: picture
-          jsonType.label: String
-      - id: a2a63fcd-983e-4320-8206-ed649472d78b
-        name: gender
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: gender
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: gender
-          jsonType.label: String
-      - id: d088915d-b4ba-4803-bf6a-646be384bb7a
-        name: username
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-property-mapper
-        consentRequired: false
-        config:
+          introspection.token.claim: 'true'
           userinfo.token.claim: 'true'
           user.attribute: username
           id.token.claim: 'true'
           access.token.claim: 'true'
-          claim.name: preferred_username
+          claim.name: upn
           jsonType.label: String
-      - id: 3bf65384-325f-4bf4-9b77-9ef3bfb64186
-        name: given name
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-property-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: firstName
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: given_name
-          jsonType.label: String
-      - id: b1f705e3-947e-46b2-8daf-ab5231046766
-        name: updated at
+    - id: 421b70c8-2b96-4a5e-8229-2fca01514532
+      name: phone
+      description: 'OpenID Connect built-in scope: phone'
+      protocol: openid-connect
+      attributes:
+        include.in.token.scope: 'true'
+        display.on.consent.screen: 'true'
+        consent.screen.text: "${phoneScopeConsentText}"
+      protocolMappers:
+      - id: dc23624f-991b-4546-b565-0ef6f8339f71
+        name: phone number verified
         protocol: openid-connect
         protocolMapper: oidc-usermodel-attribute-mapper
         consentRequired: false
         config:
+          introspection.token.claim: 'true'
           userinfo.token.claim: 'true'
-          user.attribute: updatedAt
+          user.attribute: phoneNumberVerified
           id.token.claim: 'true'
           access.token.claim: 'true'
-          claim.name: updated_at
-          jsonType.label: long
-      - id: 979709de-60c2-43a7-bbed-629a1b36a6ef
-        name: website
+          claim.name: phone_number_verified
+          jsonType.label: boolean
+      - id: b4b20adf-83ef-4b1a-983f-a77eb0cac94d
+        name: phone number
         protocol: openid-connect
         protocolMapper: oidc-usermodel-attribute-mapper
         consentRequired: false
         config:
+          introspection.token.claim: 'true'
           userinfo.token.claim: 'true'
-          user.attribute: website
+          user.attribute: phoneNumber
           id.token.claim: 'true'
           access.token.claim: 'true'
-          claim.name: website
+          claim.name: phone_number
           jsonType.label: String
-      - id: edace23d-0e01-44a5-9bc9-9b726b6946a4
-        name: nickname
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: nickname
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: nickname
-          jsonType.label: String
-      - id: 0b6bc7ff-5d13-4ff2-b508-f32efee67057
-        name: locale
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-attribute-mapper
-        consentRequired: false
-        config:
-          userinfo.token.claim: 'true'
-          user.attribute: locale
-          id.token.claim: 'true'
-          access.token.claim: 'true'
-          claim.name: locale
-          jsonType.label: String
-    - id: c3887318-8c73-45c9-892d-e2c932c335ce
+    - id: 9d43d096-8777-4f0b-87a0-5b132e1de42b
       name: offline_access
       description: 'OpenID Connect built-in scope: offline_access'
       protocol: openid-connect
       attributes:
         consent.screen.text: "${offlineAccessScopeConsentText}"
         display.on.consent.screen: 'true'
-    - id: 50f2a140-a659-4af7-91ca-ad43e3d3989d
-      name: roles
-      description: OpenID Connect scope for add user roles to the access token
+    - id: 13ce0dbc-6eff-40bd-b96e-6b4ab8a2a184
+      name: web-origins
+      description: OpenID Connect scope for add allowed web origins to the access token
       protocol: openid-connect
       attributes:
-        consent.screen.text: "${rolesScopeConsentText}"
+        include.in.token.scope: 'false'
+        display.on.consent.screen: 'false'
+        consent.screen.text: ''
       protocolMappers:
-      - id: 9c03a70b-c914-484a-8c02-1897d238a172
-        name: audience resolve
+      - id: dc186113-993d-4030-846a-1bd46756eb25
+        name: allowed web origins
         protocol: openid-connect
-        protocolMapper: oidc-audience-resolve-mapper
-        consentRequired: false
-        config: {}
-      - id: 0dac0239-4807-4b72-9d40-0f35313a24fd
-        name: realm roles
-        protocol: openid-connect
-        protocolMapper: oidc-usermodel-realm-role-mapper
+        protocolMapper: oidc-allowed-origins-mapper
         consentRequired: false
         config:
-          user.attribute: foo
+          introspection.token.claim: 'true'
           access.token.claim: 'true'
-          claim.name: realm_access.roles
-          jsonType.label: String
-          multivalued: 'true'
-      - id: c30730b2-c806-4a6f-b36b-db33788daf93
-        name: client roles
+    - id: f148a623-764a-4e4b-b997-59ef6adfd04f
+      name: email
+      description: 'OpenID Connect built-in scope: email'
+      protocol: openid-connect
+      attributes:
+        include.in.token.scope: 'true'
+        display.on.consent.screen: 'true'
+        consent.screen.text: "${emailScopeConsentText}"
+      protocolMappers:
+      - id: 4fa4081c-3ef1-41fe-9b2a-9c090d4fa727
+        name: email verified
         protocol: openid-connect
-        protocolMapper: oidc-usermodel-client-role-mapper
+        protocolMapper: oidc-usermodel-property-mapper
         consentRequired: false
         config:
-          user.attribute: foo
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: emailVerified
+          id.token.claim: 'true'
           access.token.claim: 'true'
-          claim.name: resource_access.${client_id}.roles
+          claim.name: email_verified
+          jsonType.label: boolean
+      - id: f799d701-bf4e-4378-8e5d-cc13ae6208e7
+        name: email
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: email
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: email
           jsonType.label: String
-          multivalued: 'true'
-    defaultDefaultClientScopes: []
+    - id: bd9a0b42-8324-4fa5-8d10-8c6f105bca96
+      name: role_list
+      description: SAML role list
+      protocol: saml
+      attributes:
+        consent.screen.text: "${samlRoleListScopeConsentText}"
+        display.on.consent.screen: 'true'
+      protocolMappers:
+      - id: 79c0d78c-9a65-4a13-94fc-36bb1998e5c9
+        name: role list
+        protocol: saml
+        protocolMapper: saml-role-list-mapper
+        consentRequired: false
+        config:
+          single: 'false'
+          attribute.nameformat: Basic
+          attribute.name: Role
+    - id: 6acd7eb6-8a0b-4197-a8dd-a0256f2bac57
+      name: profile
+      description: 'OpenID Connect built-in scope: profile'
+      protocol: openid-connect
+      attributes:
+        include.in.token.scope: 'true'
+        display.on.consent.screen: 'true'
+        consent.screen.text: "${profileScopeConsentText}"
+      protocolMappers:
+      - id: 5a0080a1-06ce-41db-85f0-24c09ab46fda
+        name: gender
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: gender
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: gender
+          jsonType.label: String
+      - id: eeb24d1c-c206-4537-ae03-4e89e4ab8dab
+        name: family name
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: lastName
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: family_name
+          jsonType.label: String
+      - id: e4ba898f-b78b-40d3-92d9-23e72220889e
+        name: middle name
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: middleName
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: middle_name
+          jsonType.label: String
+      - id: d0c07c0a-7c44-4fd6-b3ba-bbbcd5babdac
+        name: picture
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: picture
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: picture
+          jsonType.label: String
+      - id: d3c33f84-2bb1-425b-8189-9b833f40e34b
+        name: full name
+        protocol: openid-connect
+        protocolMapper: oidc-full-name-mapper
+        consentRequired: false
+        config:
+          id.token.claim: 'true'
+          introspection.token.claim: 'true'
+          access.token.claim: 'true'
+          userinfo.token.claim: 'true'
+      - id: 283c9a70-c91e-4ba4-9d02-36cecbd40771
+        name: given name
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: firstName
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: given_name
+          jsonType.label: String
+      - id: cd409102-b5e4-47e8-b5b8-3367ccae0c41
+        name: username
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: username
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: preferred_username
+          jsonType.label: String
+      - id: 849757fa-ab41-4143-9d40-51aa2eefaf9c
+        name: updated at
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: updatedAt
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: updated_at
+          jsonType.label: long
+      - id: ca074087-a604-43e4-befb-812f6ad1e4eb
+        name: birthdate
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: birthdate
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: birthdate
+          jsonType.label: String
+      - id: d4b804aa-9971-47ee-b3ff-13987a66ab18
+        name: profile
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: profile
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: profile
+          jsonType.label: String
+      - id: 58658cc5-759b-4f9e-a934-b490b7a9dc23
+        name: zoneinfo
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: zoneinfo
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: zoneinfo
+          jsonType.label: String
+      - id: f0844fdb-2e27-463b-8d30-279f642b5808
+        name: locale
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: locale
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: locale
+          jsonType.label: String
+      - id: ff053585-6c15-4ea5-a9cb-35cbc3e26f1f
+        name: website
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: website
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: website
+          jsonType.label: String
+      - id: 606056b3-376e-4841-9cae-6547f369dbf7
+        name: nickname
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-attribute-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: nickname
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: nickname
+          jsonType.label: String
+    defaultDefaultClientScopes:
+    - role_list
+    - profile
+    - email
+    - roles
+    - web-origins
+    - acr
+    - good-service
     defaultOptionalClientScopes:
     - offline_access
+    - address
+    - phone
+    - microprofile-jwt
     browserSecurityHeaders:
       contentSecurityPolicyReportOnly: ''
       xContentTypeOptions: nosniff
@@ -2019,57 +2259,28 @@ spec:
     identityProviderMappers: []
     components:
       org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy:
-      - id: 73ee0e33-59ac-42b6-96f6-b6a1a46bf9df
+      - id: 14f5381b-0fc4-43c6-bb93-4ff4cfaa1200
+        name: Allowed Protocol Mapper Types
+        providerId: allowed-protocol-mappers
+        subType: anonymous
+        subComponents: {}
+        config:
+          allowed-protocol-mapper-types:
+          - saml-user-attribute-mapper
+          - oidc-sha256-pairwise-sub-mapper
+          - saml-user-property-mapper
+          - oidc-address-mapper
+          - oidc-usermodel-attribute-mapper
+          - saml-role-list-mapper
+          - oidc-usermodel-property-mapper
+          - oidc-full-name-mapper
+      - id: abf113e1-cf43-4e7e-b29f-8c9be87ff5b2
         name: Consent Required
         providerId: consent-required
         subType: anonymous
         subComponents: {}
         config: {}
-      - id: 43af18c6-9e52-47ba-bf7f-527699474762
-        name: Max Clients Limit
-        providerId: max-clients
-        subType: anonymous
-        subComponents: {}
-        config:
-          max-clients:
-          - '200'
-      - id: c5cf825c-615c-4c6a-ad9d-8de942cb107d
-        name: Allowed Protocol Mapper Types
-        providerId: allowed-protocol-mappers
-        subType: anonymous
-        subComponents: {}
-        config:
-          allowed-protocol-mapper-types:
-          - saml-user-attribute-mapper
-          - oidc-sha256-pairwise-sub-mapper
-          - oidc-usermodel-attribute-mapper
-          - saml-user-property-mapper
-          - oidc-usermodel-property-mapper
-          - oidc-full-name-mapper
-          - saml-role-list-mapper
-          - oidc-address-mapper
-      - id: ebfa03de-4aed-4450-a5ea-17ad4ad80626
-        name: Full Scope Disabled
-        providerId: scope
-        subType: anonymous
-        subComponents: {}
-        config: {}
-      - id: 30de1125-b8a8-45ed-a7ec-082cf0932a65
-        name: Allowed Protocol Mapper Types
-        providerId: allowed-protocol-mappers
-        subType: authenticated
-        subComponents: {}
-        config:
-          allowed-protocol-mapper-types:
-          - saml-role-list-mapper
-          - oidc-usermodel-attribute-mapper
-          - saml-user-attribute-mapper
-          - oidc-address-mapper
-          - oidc-usermodel-property-mapper
-          - saml-user-property-mapper
-          - oidc-full-name-mapper
-          - oidc-sha256-pairwise-sub-mapper
-      - id: 992ada75-76a6-4309-b458-81b2a7b22cff
+      - id: 5ffbca1c-21c4-43b2-9a2a-2c31cbc2964d
         name: Trusted Hosts
         providerId: trusted-hosts
         subType: anonymous
@@ -2079,7 +2290,30 @@ spec:
           - 'true'
           client-uris-must-match:
           - 'true'
-      - id: 4e8042d1-bcc7-4a08-82aa-73adadb324dc
+      - id: bfb66894-24ff-4450-b7a4-705fc4d37ad0
+        name: Allowed Protocol Mapper Types
+        providerId: allowed-protocol-mappers
+        subType: authenticated
+        subComponents: {}
+        config:
+          allowed-protocol-mapper-types:
+          - oidc-usermodel-property-mapper
+          - oidc-address-mapper
+          - saml-user-property-mapper
+          - oidc-usermodel-attribute-mapper
+          - oidc-full-name-mapper
+          - saml-user-attribute-mapper
+          - oidc-sha256-pairwise-sub-mapper
+          - saml-role-list-mapper
+      - id: d20ba7b0-2547-4af8-975f-875a33836103
+        name: Max Clients Limit
+        providerId: max-clients
+        subType: anonymous
+        subComponents: {}
+        config:
+          max-clients:
+          - '200'
+      - id: 333bc987-913c-43a9-8871-7bdd4d2201c9
         name: Allowed Client Scopes
         providerId: allowed-client-templates
         subType: anonymous
@@ -2087,7 +2321,7 @@ spec:
         config:
           allow-default-scopes:
           - 'true'
-      - id: 071bfb56-b971-48d4-9eeb-471f489ff8f4
+      - id: 8700a757-098e-4280-bf46-abf2fb71c508
         name: Allowed Client Scopes
         providerId: allowed-client-templates
         subType: authenticated
@@ -2095,24 +2329,14 @@ spec:
         config:
           allow-default-scopes:
           - 'true'
+      - id: 25f07e68-6de7-44ae-90ca-e406fda9d35f
+        name: Full Scope Disabled
+        providerId: scope
+        subType: anonymous
+        subComponents: {}
+        config: {}
       org.keycloak.keys.KeyProvider:
-      - id: 5a79cffe-5558-433f-bb05-d36aaa9d87e5
-        name: rsa-generated
-        providerId: rsa-generated
-        subComponents: {}
-        config:
-          priority:
-          - '100'
-      - id: b8dd141d-e95c-492d-b7ed-d1fcfa10d058
-        name: hmac-generated
-        providerId: hmac-generated
-        subComponents: {}
-        config:
-          priority:
-          - '100'
-          algorithm:
-          - HS256
-      - id: 55ded5e1-a063-4da5-acd7-1eae0f439478
+      - id: d406eca5-6691-468d-a0db-80e7d3480585
         name: rsa-enc-generated
         providerId: rsa-enc-generated
         subComponents: {}
@@ -2121,9 +2345,25 @@ spec:
           - '100'
           algorithm:
           - RSA-OAEP
-      - id: 80a1614b-c037-4a02-ad2f-a07469191438
+      - id: 30b5167b-4033-42a7-ab25-0e887585f500
         name: aes-generated
         providerId: aes-generated
+        subComponents: {}
+        config:
+          priority:
+          - '100'
+      - id: da2b23dc-9577-4182-85e8-c2a353841c73
+        name: hmac-generated
+        providerId: hmac-generated
+        subComponents: {}
+        config:
+          priority:
+          - '100'
+          algorithm:
+          - HS256
+      - id: 28e91e85-dd81-4bec-889a-1fc50b6beb55
+        name: rsa-generated
+        providerId: rsa-generated
         subComponents: {}
         config:
           priority:
@@ -2131,7 +2371,7 @@ spec:
     internationalizationEnabled: false
     supportedLocales: []
     authenticationFlows:
-    - id: ef3ec09c-4359-42cf-98b8-18a3153a0c7f
+    - id: d2fd0ff9-ca74-4ef4-b7e3-9ae2b246087c
       alias: Account verification options
       description: Method with which to verity the existing account
       providerId: basic-flow
@@ -2150,26 +2390,26 @@ spec:
         autheticatorFlow: true
         flowAlias: Verify Existing Account by Re-authentication
         userSetupAllowed: false
-    - id: 7767b746-e279-4a71-85a4-1e479387e009
-      alias: Browser - conditionnal OTP
-      description: ''
+    - id: a47f79de-a2e2-475d-9b50-c3b3a8f5291e
+      alias: Browser - Conditional OTP
+      description: Flow to determine if the OTP is required for the authentication
       providerId: basic-flow
       topLevel: false
-      builtIn: false
+      builtIn: true
       authenticationExecutions:
       - authenticator: conditional-user-configured
         authenticatorFlow: false
         requirement: REQUIRED
-        priority: 0
+        priority: 10
         autheticatorFlow: false
         userSetupAllowed: false
-      - authenticator: direct-grant-validate-otp
+      - authenticator: auth-otp-form
         authenticatorFlow: false
         requirement: REQUIRED
-        priority: 1
+        priority: 20
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: 1557cbaa-4368-4390-90ab-9317c06f50eb
+    - id: 326137bd-2435-4a56-a989-c2fe4d8d137f
       alias: Direct Grant - Conditional OTP
       description: Flow to determine if the OTP is required for the authentication
       providerId: basic-flow
@@ -2188,7 +2428,7 @@ spec:
         priority: 20
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: d9df42b2-3a7c-4693-8204-7fa0a22eb643
+    - id: e15740a1-da7b-41d9-a952-dca39328aba0
       alias: First broker login - Conditional OTP
       description: Flow to determine if the OTP is required for the authentication
       providerId: basic-flow
@@ -2207,7 +2447,7 @@ spec:
         priority: 20
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: 73cb94d4-597a-4e44-80f8-1624bc82e94f
+    - id: 23c722e2-e542-4dad-82f4-33feb6f87610
       alias: Handle Existing Account
       description: Handle what to do if there is existing account with same email/username
         like authenticated identity provider
@@ -2227,7 +2467,7 @@ spec:
         autheticatorFlow: true
         flowAlias: Account verification options
         userSetupAllowed: false
-    - id: 10d1a9a9-a462-4039-946f-88c20a83ebec
+    - id: 89f3c128-a803-4756-9553-0a058cca7e8e
       alias: Reset - Conditional OTP
       description: Flow to determine if the OTP should be reset or not. Set to REQUIRED
         to force.
@@ -2247,7 +2487,7 @@ spec:
         priority: 20
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: 13e07842-84bc-4935-ba7d-06c6df60c092
+    - id: 0cc1ee96-fe55-4d6d-a779-72c27f288413
       alias: User creation or linking
       description: Flow for the existing/non-existing user alternatives
       providerId: basic-flow
@@ -2267,7 +2507,7 @@ spec:
         autheticatorFlow: true
         flowAlias: Handle Existing Account
         userSetupAllowed: false
-    - id: f9f90001-019c-48d1-9c8f-bcf876c6680a
+    - id: ebff1d44-c0d2-4d47-b084-acd7979370ac
       alias: Verify Existing Account by Re-authentication
       description: Reauthentication of existing account
       providerId: basic-flow
@@ -2286,38 +2526,38 @@ spec:
         autheticatorFlow: true
         flowAlias: First broker login - Conditional OTP
         userSetupAllowed: false
-    - id: f25a1a16-35d6-44cb-86c3-adbbff69db5b
+    - id: 682f69ce-0d09-4c44-9e96-7fefdc500d71
       alias: browser
-      description: ''
+      description: browser based authentication
       providerId: basic-flow
       topLevel: true
-      builtIn: false
+      builtIn: true
       authenticationExecutions:
       - authenticator: auth-cookie
         authenticatorFlow: false
         requirement: ALTERNATIVE
-        priority: 0
+        priority: 10
         autheticatorFlow: false
         userSetupAllowed: false
       - authenticator: auth-spnego
         authenticatorFlow: false
         requirement: DISABLED
-        priority: 1
+        priority: 20
         autheticatorFlow: false
         userSetupAllowed: false
       - authenticator: identity-provider-redirector
         authenticatorFlow: false
         requirement: ALTERNATIVE
-        priority: 2
+        priority: 25
         autheticatorFlow: false
         userSetupAllowed: false
       - authenticatorFlow: true
         requirement: ALTERNATIVE
-        priority: 3
+        priority: 30
         autheticatorFlow: true
-        flowAlias: form
+        flowAlias: forms
         userSetupAllowed: false
-    - id: 98ed139e-3127-4a8c-ba00-b6c777665dfc
+    - id: 7ebb2b2f-5006-4d98-affe-3b6886b7ae8f
       alias: clients
       description: Base authentication for clients
       providerId: client-flow
@@ -2348,7 +2588,7 @@ spec:
         priority: 40
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: 5427f166-4cc8-4d63-abad-4bce8cf6e9e4
+    - id: 7ea7e238-7efd-4197-accf-d689eb6dce7b
       alias: direct grant
       description: OpenID Connect Resource Owner Grant
       providerId: basic-flow
@@ -2373,7 +2613,7 @@ spec:
         autheticatorFlow: true
         flowAlias: Direct Grant - Conditional OTP
         userSetupAllowed: false
-    - id: c7b68460-394d-4094-9bda-ae31675e9062
+    - id: 6cb454c0-3ca7-4c59-bb4b-8dba7b12aa63
       alias: docker auth
       description: Used by Docker clients to authenticate against the IDP
       providerId: basic-flow
@@ -2386,7 +2626,7 @@ spec:
         priority: 10
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: a267630a-0618-40d9-a855-a2f9c6670578
+    - id: 89b0e26b-e95c-49c4-8fe0-a490adeaae40
       alias: first broker login
       description: Actions taken after first broker login with identity provider account,
         which is not yet linked to any Keycloak account
@@ -2407,26 +2647,26 @@ spec:
         autheticatorFlow: true
         flowAlias: User creation or linking
         userSetupAllowed: false
-    - id: 257adc31-f3e7-48c8-817b-886dbfc52aa9
-      alias: form
-      description: ''
+    - id: 98d3259f-d004-4340-a25b-91ae96691a01
+      alias: forms
+      description: Username, password, otp and other auth forms.
       providerId: basic-flow
       topLevel: false
-      builtIn: false
+      builtIn: true
       authenticationExecutions:
       - authenticator: auth-username-password-form
         authenticatorFlow: false
         requirement: REQUIRED
-        priority: 0
+        priority: 10
         autheticatorFlow: false
         userSetupAllowed: false
       - authenticatorFlow: true
         requirement: CONDITIONAL
-        priority: 1
+        priority: 20
         autheticatorFlow: true
-        flowAlias: Browser - conditionnal OTP
+        flowAlias: Browser - Conditional OTP
         userSetupAllowed: false
-    - id: aeffe703-9bd3-4785-b922-8d39b2643ac6
+    - id: 8b526b4b-646e-480b-9d0a-a1f99aefdad8
       alias: registration
       description: registration flow
       providerId: basic-flow
@@ -2440,7 +2680,7 @@ spec:
         autheticatorFlow: true
         flowAlias: registration form
         userSetupAllowed: false
-    - id: 15b951e5-2edc-4d66-be05-0c74c54829c6
+    - id: e5abd9ae-8b5b-470c-a718-c98610990f9b
       alias: registration form
       description: registration form
       providerId: form-flow
@@ -2451,12 +2691,6 @@ spec:
         authenticatorFlow: false
         requirement: REQUIRED
         priority: 20
-        autheticatorFlow: false
-        userSetupAllowed: false
-      - authenticator: registration-profile-action
-        authenticatorFlow: false
-        requirement: REQUIRED
-        priority: 40
         autheticatorFlow: false
         userSetupAllowed: false
       - authenticator: registration-password-action
@@ -2471,7 +2705,7 @@ spec:
         priority: 60
         autheticatorFlow: false
         userSetupAllowed: false
-    - id: 44eea058-94a6-483e-b860-ea358aa8ca61
+    - id: c5ac8093-ae4d-473c-bb97-077252147c84
       alias: reset credentials
       description: Reset credentials for a user if they forgot their password or something
       providerId: basic-flow
@@ -2502,25 +2736,25 @@ spec:
         autheticatorFlow: true
         flowAlias: Reset - Conditional OTP
         userSetupAllowed: false
+    - id: 9f3720d5-1d48-4eca-82c2-2a8a2e7cf6af
+      alias: saml ecp
+      description: SAML ECP Profile Authentication Flow
+      providerId: basic-flow
+      topLevel: true
+      builtIn: true
+      authenticationExecutions:
+      - authenticator: http-basic-authenticator
+        authenticatorFlow: false
+        requirement: REQUIRED
+        priority: 10
+        autheticatorFlow: false
+        userSetupAllowed: false
     authenticatorConfig:
-    - id: 37787bf4-5693-4f56-b4c5-d4b28d1055ae
-      alias: access-authorized
-      config:
-        restrictClientAuthErrorMessage: access-denied
-        accessProviderId: client-role
-    - id: a5c513e7-4989-4ae1-aac5-46a0b2389b86
+    - id: 96c7753c-40cf-4250-b799-9098a4b7852c
       alias: create unique user config
       config:
         require.password.update.after.registration: 'false'
-    - id: 7dc2b4d2-89ee-47ee-9af3-96889bd12ef7
-      alias: create unique user config
-      config:
-        require.password.update.after.registration: 'false'
-    - id: b1b2ab38-b0a9-4b26-a095-f999f3be4afe
-      alias: review profile config
-      config:
-        update.profile.on.first.login: missing
-    - id: 9b368abf-492d-4dad-bc01-1409413681d7
+    - id: 82cbb254-0595-427d-9257-55694acba106
       alias: review profile config
       config:
         update.profile.on.first.login: missing
@@ -2596,20 +2830,23 @@ spec:
     dockerAuthenticationFlow: docker auth
     attributes:
       cibaBackchannelTokenDeliveryMode: poll
-      cibaExpiresIn: '120'
       cibaAuthRequestedUserHint: login_hint
-      oauth2DeviceCodeLifespan: '600'
       oauth2DevicePollingInterval: '5'
       clientOfflineSessionMaxLifespan: '0'
       clientSessionIdleTimeout: '0'
-      parRequestUriLifespan: '60'
-      clientSessionMaxLifespan: '0'
       clientOfflineSessionIdleTimeout: '0'
       cibaInterval: '5'
       realmReusableOtpCode: 'false'
+      cibaExpiresIn: '120'
+      oauth2DeviceCodeLifespan: '600'
+      parRequestUriLifespan: '60'
+      clientSessionMaxLifespan: '0'
+      frontendUrl: ''
+      acr.loa.map: "{}"
     keycloakVersion: 23.0.6
-    userManagedAccessAllowed: false
+    userManagedAccessAllowed: true
     clientProfiles:
       profiles: []
     clientPolicies:
       policies: []
+

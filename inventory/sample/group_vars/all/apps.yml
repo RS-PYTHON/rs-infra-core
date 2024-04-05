@@ -52,3 +52,4 @@ prefect:
     username: prefect
     password: "tmp_db_password_for_prefect"
     name: prefect
+    secret: prefect-database-password
