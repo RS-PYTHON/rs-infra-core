@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: wazuh.dev-rspy.esa-copernicus.eu
+  - host: wazuh.{{ platform_domain_name }}
     http:
       paths:
       - path: /
@@ -22,5 +22,5 @@ spec:
               number: 443
   tls:
   - hosts:
-    - wazuh.dev-rspy.esa-copernicus.eu
-    secretName: dashboard-certs
+    - wazuh.{{ platform_domain_name }}
+    secretName: dashboard-certs-{{ platform_domain_name | replace(".", "-") }}

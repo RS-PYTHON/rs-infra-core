@@ -123,7 +123,7 @@ ansible-playbook apps.yaml \
 
 > Disclaimer : For Wazuh Server installation
 >
->> See **_"1. Enable Bcrypt encryption"_** in the [Wazuh-Server_Install](./how-tow/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
+>> See **_"1. Enable Bcrypt encryption"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 
 # Copyright and license
