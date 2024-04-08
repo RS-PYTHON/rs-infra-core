@@ -146,7 +146,16 @@ WAZUH_API_PASSWORD=$5
      
         }
 
-        
+       FX_ubuntu_wazuh-agent_rssvc2 () {
+      
+                       nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
+                 
+                 /usr/bin/systemctl restart wazuh-agent
+                 
+                 "
+
+       }
+
       FX_ubuntu_wazuh-agent_chkinst () {
 
        printf "\n\t\t\t FX Wazuh agent chkinst\n\n"
@@ -195,7 +204,8 @@ WAZUH_API_PASSWORD=$5
               FX_ubuntu_wazuh-agent_conf
               FX_ubuntu_wazuh-agent_reg
               FX_ubuntu_wazuh-agent_svc
-              FX_ubuntu_wazuh-agent_rssvc
+              #FX_ubuntu_wazuh-agent_rssvc
+              FX_ubuntu_wazuh-agent_rssvc2
               FX_ubuntu_wazuh-agent_chkinst
         
 
