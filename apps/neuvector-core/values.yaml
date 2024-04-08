@@ -280,10 +280,10 @@ controller:
         users:
         - Fullname: {{ neuvector.core.user3.Fullname }}
           Password: {{ neuvector.core.user3.Password }}
-          Role: reader
+          Role: admin
         - Fullname: {{ neuvector.core.user2.Fullname }}
           Password: {{ neuvector.core.user2.Password }}
-          Role: admin
+          Role: reader
         - Fullname: {{ neuvector.core.user1.Fullname }}
           Password: {{ neuvector.core.user1.Password }}
           Role: admin
@@ -385,7 +385,13 @@ manager:
     requests:
       cpu: 250m
       memory: 512Mi
-  affinity: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
   podLabels: {}
   podAnnotations: {}
   tolerations: []
@@ -517,7 +523,13 @@ cve:
       requests:
         cpu: 250m
         memory: 512Mi
-    affinity: {}
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/infra"
+                operator: Exists
     podLabels: {}
     podAnnotations: {}
     env: []
