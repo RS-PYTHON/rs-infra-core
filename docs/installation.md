@@ -62,6 +62,7 @@ conda activate rspy
 conda install conda-forge::ansible
 conda install conda-forge::terraform
 conda install conda-forge::python-openstackclient
+conda install conda-forge::passlib
 
 # Init Kubespray collection with remote
 git submodule update --init --remote
@@ -117,10 +118,19 @@ ansible-playbook kubernetes.yaml \
 
 ### 7. Deploy the apps
 
+
+> [!CAUTION]
+> Disclaimer : For Wazuh Server installation
+> See **_"1. Enable Bcrypt encryption"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
+
+
 ```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
+
+
+
 
 # Copyright and license
 

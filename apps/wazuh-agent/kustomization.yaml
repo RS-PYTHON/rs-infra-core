@@ -1,0 +1,18 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+  
+namespace: wazuh
+
+configMapGenerator:
+  - name: wa-script-configmap
+    files:
+      - wazuh-agent_install.sh
+
+  - name: wa-alpine-configmap
+    files: 
+      - wazuh-alpine-apk.sh
+
+
+
+resources:
+  - wa-install-ds.yaml

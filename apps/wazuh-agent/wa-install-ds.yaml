@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: wazuh-agent
+  namespace: wazuh
+spec:
+  selector:
+    matchLabels:
+      app: wazuh-agent
+  template:
+    metadata:
+      labels:
+        app: wazuh-agent
+    spec:
+      #restartPolicy: Always
+      hostPID: true
+      hostNetwork: true
+      hostIPC: true
+      containers:
+      - name: pause 
+        image: "gcr.io/google-containers/pause:2.0"
+      initContainers:
+      - name: wa-init-container
+        image: alpine:3.19.1
+        command: ["/bin/sh","-c"]
+        args: ["/scripts/wazuh-alpine-apk.sh ; /scripts/wazuh-agent_install.sh $(var-agent-version) $(var-manager-ipaddress) $(var-registration-password) $(var-api-usr) $(var-api-pwd)"]
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        env:
+        - name: var-agent-version
+          value: "4.7.2-1"
+        - name: var-manager-ipaddress
+          value: "wazuh.wazuh.svc.cluster.local"
+        - name: var-registration-password
+          valueFrom:
+            secretKeyRef:
+              name: wazuh-authd-pass
+              key: authd.pass
+        - name: var-api-usr 
+          valueFrom: 
+            secretKeyRef: 
+              name: wazuh-api-cred
+              key: username
+        - name: var-api-pwd
+          valueFrom: 
+            secretKeyRef: 
+              name: wazuh-api-cred
+              key: password
+        volumeMounts:
+        - name: ubuntu-storage
+          mountPath: /data/ubuntu
+        - name: volume-wa-apk
+          mountPath: /scripts/wazuh-alpine-apk.sh
+          subPath: wazuh-alpine-apk.sh
+        - name: volume-wa-script
+          mountPath: /scripts/wazuh-agent_install.sh
+          subPath: wazuh-agent_install.sh 
+      volumes:
+      - name: ubuntu-storage
+        emptyDir: {}
+      - name: volume-wa-script
+        configMap:
+          name: wa-script-configmap
+          defaultMode: 0744
+      - name: volume-wa-apk
+        configMap:
+          name: wa-alpine-configmap
+          defaultMode: 0744

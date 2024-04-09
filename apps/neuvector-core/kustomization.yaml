@@ -1,0 +1,23 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+namespace: neuvector
+
+helmCharts:
+- name: core
+  repo: https://neuvector.github.io/neuvector-helm/
+  releaseName: "{{ app_name }}"
+  version: 2.7.3
+  namespace: neuvector
+  valuesFile: values.yaml
+
+resources:
+  - ingress.yaml
+
+
+secretGenerator:
+- name: exporter
+  literals:
+  - username= "{{ neuvector.core.user2.Fullname }}"
+  - password= "{{ neuvector.core.user2.Password }}"
+  options:
+    disableNameSuffixHash: true
