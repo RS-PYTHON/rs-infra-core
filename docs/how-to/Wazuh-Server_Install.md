@@ -4,35 +4,28 @@
 ##  1. Enable Bcrypt encryption for installation
 
 
->>Backup `~/..../encrypt.py` file before these actions
-
-Download library [Passlib library] (https://raw.githubusercontent.com/ansible/ansible/3f74bc08cefccec791c9dc5315185d2396e5c5ac/lib/ansible/utils/encrypt.py)
-
-
-`encrypt.py`
-
-put and replace into your conda ansible env 
+Backup original file `encrypt.py` to `encrypt.py.ori` 
 
 ```
-~/miniconda3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py
-
+mv ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py.ori
 ```
 
+Download library [Passlib library](https://raw.githubusercontent.com/ansible/ansible/3f74bc08cefccec791c9dc5315185d2396e5c5ac/lib/ansible/utils/encrypt.py)
+
+
+`wget https://raw.githubusercontent.com/ansible/ansible/3f74bc08cefccec791c9dc5315185d2396e5c5ac/lib/ansible/utils/encrypt.py -O ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py`
 
 
 ##  2. Genereate self-signed certificates
 
 
-
-
-Generate SSL certificates [Kubernetes deployments] https://documentation.wazuh.com/current/deployment-options/deploying-with-kubernetes/kubernetes-deployment.html#setup-ssl-certificates
+Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.com/current/deployment-options/deploying-with-kubernetes/kubernetes-deployment.html#setup-ssl-certificates)
 
 
 ### 2.1 Generate certificates for dashboard  
 
 ```
 ./apps/wazuh-server/wazuh/certs/dashboard_http/generate_certs.sh
-
 ```
 
 *Two files should be generated*  : 
@@ -51,7 +44,6 @@ Generate SSL certificates [Kubernetes deployments] https://documentation.wazuh.c
 
 ```
 ./apps/wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
-
 ```
 
 *Several files should be generated* 
@@ -85,10 +77,13 @@ Generate SSL certificates [Kubernetes deployments] https://documentation.wazuh.c
 
 ##  3. Apply credentials
 
+> [!IMPORTANT]  
+> After Wazuh Server application is installed
+
 In order to apply cerdentials set during installation process
 
 Regarding Wazuh editor documentation : 
-Kubernetes deployments [Update accounts credentials] (https://github.com/wazuh/wazuh-documentation/blob/v4.7.2/source/deployment-options/deploying-with-kubernetes/kubernetes-deployment.rst#applying-the-changes)
+Kubernetes deployments [Update accounts credentials](https://github.com/wazuh/wazuh-documentation/blob/v4.7.2/source/deployment-options/deploying-with-kubernetes/kubernetes-deployment.rst#applying-the-changes)
 
 ### 3.1 Open intercative session to indexer pod 0  
 
@@ -119,8 +114,9 @@ bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh
 
 ```
 
->>Note: Wait a little bit that cluster should be ready to execute command. Anyway If status is not ready command is relaunch automatically until that cluster be ready. 
 
+> [!NOTE]  
+> Note: Wait a little bit that cluster should be ready to execute command. Anyway If status is not ready command is relaunch automatically until that cluster be ready. 
 
 `Clusterstate: GREEN`
 
