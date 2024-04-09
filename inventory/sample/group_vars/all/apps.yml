@@ -95,4 +95,4 @@ wazuh:
     key2: 
       authdpass: "TqfrCz8j3Dt8a8" 
       secret: wazuh-authd-pass
-  
+ 
