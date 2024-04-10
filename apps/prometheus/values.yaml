@@ -1,6 +1,15 @@
 grafana:
   enabled: false
 
+prometheusOperator:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
 prometheus:
   ingress:
     enabled: true
@@ -53,7 +62,7 @@ prometheus:
 
     ## How long to retain metrics
     ##
-    retention: 90d
+    retention: 30d
 
     routePrefix: /prometheus
     
@@ -69,10 +78,21 @@ prometheus:
     ##
     serviceMonitorSelectorNilUsesHelmValues: false
 
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-            - key: "node-role.kubernetes.io/infra"
-              operator: Exists
+    storageSpec:
+    ## Using PersistentVolumeClaim
+    ##
+      volumeClaimTemplate:
+        spec:
+          storageClassName: csi-cinder-sc-retain
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/infra"
+                operator: Exists
