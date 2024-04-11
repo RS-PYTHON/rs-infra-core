@@ -351,7 +351,11 @@ singleuser:
   extraLabels:
     hub.jupyter.org/network-access-hub: "true"
   extraFiles: {}
-  extraEnv: {}
+  extraEnv: 
+    S3_ENDPOINT: {{ s3.endpoint }}
+    S3_REGION: {{ s3.region }} 
+    PREFECT_API_URL: http://prefect-server.processing.svc.cluster.local:4200/api
+    RSPY_WEBSITE: https://{{ platform_domain_name }}
   lifecycleHooks: {}
   initContainers: []
   extraContainers: []
@@ -375,8 +379,8 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: quay.io/jupyterhub/k8s-singleuser-sample
-    tag: "3.3.6"
+    name: quay.io/jupyter/minimal-notebook
+    tag: "hub-4.1.4"
     pullPolicy:
     pullSecrets: []
   startTimeout: 300
@@ -389,7 +393,7 @@ singleuser:
   extraResource:
     limits: {}
     guarantees: {}
-  cmd: jupyterhub-singleuser
+  cmd: null
   defaultUrl:
   extraPodConfig: {}
   profileList: []
