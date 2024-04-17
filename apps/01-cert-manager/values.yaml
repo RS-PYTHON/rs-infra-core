@@ -6,3 +6,6 @@ prometheus:
     enabled: true
 startupapicheck:
   enabled: false
+webhook:
+  livenessProbe:
+    initialDelaySeconds: 10
