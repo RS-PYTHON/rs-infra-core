@@ -299,12 +299,6 @@ proxy:
   labels: {}
   https:
     enabled: false
-    type: secret
-    #type: letsencrypt, manual, offload, secret
-    secret:
-      name: jupyterhub-tls
-    hosts: 
-      - staging1.{{ platform_domain_name }}
 
 # singleuser relates to the configuration of KubeSpawner which runs in the hub
 # pod, and its spawning of user pods such as jupyter-myusername.
@@ -360,8 +354,8 @@ singleuser:
   initContainers: []
   extraContainers: []
   allowPrivilegeEscalation: false
-  uid: 1000
-  fsGid: 100
+  uid: 1001
+  fsGid: 1000
   serviceAccountName:
   storage:
     type: dynamic
@@ -372,17 +366,18 @@ singleuser:
       pvcName:
       subPath: "{username}"
     capacity: 10Gi
-    homeMountPath: /home/jovyan
+    homeMountPath: /home/rspy
     dynamic:
       storageClass:
       pvcNameTemplate: claim-{username}{servername}
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: quay.io/jupyter/minimal-notebook
-    tag: "hub-4.1.4"
-    pullPolicy:
-    pullSecrets: []
+    name: ghcr.io/rs-python/rs-jupyter
+    tag: "latest"
+    pullPolicy: Always
+    pullSecrets: 
+      - name: ghcr-k8s
   startTimeout: 300
   cpu:
     limit:
