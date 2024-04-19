@@ -26,7 +26,7 @@ hub:
     GenericOAuthenticator:
       client_id: jupyterhub
       client_secret: {{ jupyterhub_oidc_client_secret }}
-      oauth_callback_url: https://staging1.{{ platform_domain_name }}/hub/oauth_callback
+      oauth_callback_url: https://staging1.{{ platform_domain_name }}/jupyter/hub/oauth_callback
       authorize_url: https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/auth
       token_url: https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/token
       userdata_url: https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/userinfo
@@ -53,7 +53,7 @@ hub:
       nodePort:
     extraPorts: []
     loadBalancerIP:
-  baseUrl: /
+  baseUrl: /jupyter
   cookieSecret: 
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
