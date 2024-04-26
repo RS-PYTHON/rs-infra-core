@@ -1111,8 +1111,8 @@ spec:
       clientId: jupyterhub
       name: jupyterhub
       description: ''
-      rootUrl: https://staging1.{{ platform_domain_name }}
-      adminUrl: https://staging1.{{ platform_domain_name }}
+      rootUrl: https://processing.{{ platform_domain_name }}/jupyter
+      adminUrl: https://processing.{{ platform_domain_name }}/jupyter
       baseUrl: ''
       surrogateAuthRequired: false
       enabled: true
@@ -1121,9 +1121,9 @@ spec:
       secret: "{{ jupyterhub_oidc_client_secret }}"
       redirectUris:
       - ''
-      - https://staging1.{{ platform_domain_name }}/*
+      - https://processing.{{ platform_domain_name }}/jupyter/*
       webOrigins:
-      - https://staging1.{{ platform_domain_name }}
+      - https://processing.{{ platform_domain_name }}/jupyter
       notBefore: 0
       bearerOnly: false
       consentRequired: false
