@@ -14,6 +14,7 @@ linkerd_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=as
 prometheus_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 thanos_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
 oauth2_proxy_cookieSecret: "sexajn29g-NLZ9CAHGw2E-tbY4c7uKOI6mNIE78UTg4="
 
@@ -96,3 +97,50 @@ wazuh:
       authdpass: "TqfrCz8j3Dt8a8" 
       secret: wazuh-authd-pass
  
+
+neuvector:
+  core:
+    host: neuvector-service-webui.svc.cluster.local
+    user1:
+      Fullname: "admin"
+      Password: "Lvvv@~6ghj:MA]Q.'OdJ`<X+"
+    user2:
+      Fullname: "exporter"
+      Password: "X9@@gfjh5JHr2:`3Gp/G&BI>"
+    user3:
+      Fullname: "rspysecopsadm"
+      Password: "9Z[W[T)#F0wAc(6/Vkhg^5:>"
+    secret: neuvector-init
+  exporter:
+    host: neuvector-svc-controller-api.svc.cluster.local
+    CTRL_USERNAME: exporter
+    CTRL_PASSWORD: "X9@@gf5JHr2:`3Gp/63G&BI>"
+    secret: exporter
+
+wazuh:
+  server:
+    host: wazuh.wazuh.svc.cluster.local
+    user1:  
+      username: "kibanaserver"
+      password: "u3rKhIa665GUGxb$fATeMBU"  
+      secret: dashboard-cred
+    user2: 
+      username: "admin"              
+      password: "EhgA4qce5j4caX"  
+      secret: indexer-cred
+    user3: 
+      username: "wazuh-wui"
+      password: "MyStyty3cr37P450r.*-" 
+      secret: wazuh-api-cred
+    key1:
+      key: "Y9Fgi6YbH9q556xb8N7Cj2LzRqTpaMjhny" 
+      secret: wazuh-cluster-key
+  agents:
+    key2: 
+      authdpass: "TqfrCz8j3Dt8a8" 
+      secret: wazuh-authd-pass
+ 
+
+s3:
+  endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
+  region: "eu-west-0"

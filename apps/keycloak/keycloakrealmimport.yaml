@@ -68,6 +68,13 @@ spec:
         clientRole: false
         containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
         attributes: {}
+      - id: 9a5e69e4-f9a4-433c-a1e7-164b795914db
+        name: RS-JUPYTER-USER
+        description: ''
+        composite: false
+        clientRole: false
+        containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
+        attributes: {}  
       - id: 956237e4-4e15-4f46-a72b-91d8d3f3235a
         name: default-roles-rspy
         description: "${role_default-roles}"
@@ -304,6 +311,13 @@ spec:
           composite: false
           clientRole: true
           containerId: debf37fb-c3b5-470b-a1a0-bb4e4116f372
+          attributes: {}
+        jupyterhub:
+        - id: fa699ed5-762f-408d-9805-b69775c3bfef
+          name: uma_protection
+          composite: false
+          clientRole: true
+          containerId: eb1767fa-57dc-462b-aa42-5bcdb543c323
           attributes: {}
         grafana:
         - id: f9a64716-9952-45b4-9ad2-989611ecb500
@@ -654,6 +668,22 @@ spec:
       notBefore: 0
       groups:
       - "/default"
+    - id: 37380250-91dc-4a11-8e02-7e504e032432
+      createdTimestamp: 1712650879252
+      username: service-account-jupyterhub
+      enabled: true
+      totp: false
+      emailVerified: false
+      serviceAccountClientId: jupyterhub
+      disableableCredentialTypes: []
+      requiredActions: []
+      realmRoles:
+      - default-roles-rspy
+      clientRoles:
+        jupyterhub:
+        - uma_protection
+      notBefore: 0
+      groups: []  
     - id: 6f652327-8d94-4dc0-93b1-b6585b435df0
       createdTimestamp: 1707491949211
       username: service-account-kibana-processing
@@ -1077,6 +1107,127 @@ spec:
         policies: []
         scopes: []
         decisionStrategy: UNANIMOUS
+    - id: eb1767fa-57dc-462b-aa42-5bcdb543c323
+      clientId: jupyterhub
+      name: jupyterhub
+      description: ''
+      rootUrl: https://processing.{{ platform_domain_name }}/jupyter
+      adminUrl: https://processing.{{ platform_domain_name }}/jupyter
+      baseUrl: ''
+      surrogateAuthRequired: false
+      enabled: true
+      alwaysDisplayInConsole: false
+      clientAuthenticatorType: client-secret
+      secret: "{{ jupyterhub_oidc_client_secret }}"
+      redirectUris:
+      - ''
+      - https://processing.{{ platform_domain_name }}/jupyter/*
+      webOrigins:
+      - https://processing.{{ platform_domain_name }}/jupyter
+      notBefore: 0
+      bearerOnly: false
+      consentRequired: false
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: true
+      serviceAccountsEnabled: true
+      authorizationServicesEnabled: true
+      publicClient: false
+      frontchannelLogout: true
+      protocol: openid-connect
+      attributes:
+        oidc.ciba.grant.enabled: 'false'
+        client.secret.creation.time: '1712650507'
+        backchannel.logout.session.required: 'true'
+        oauth2.device.authorization.grant.enabled: 'true'
+        display.on.consent.screen: 'false'
+        backchannel.logout.revoke.offline.tokens: 'false'
+      authenticationFlowBindingOverrides: {}
+      fullScopeAllowed: true
+      nodeReRegistrationTimeout: -1
+      protocolMappers:
+      - id: '00087196-d2b7-4df6-82ca-93cef5293274'
+        name: Client Host
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientHost
+          introspection.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientHost
+          jsonType.label: String
+      - id: ec16ab9e-5ecb-4dbe-b74a-882a8b177024
+        name: Client IP Address
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: clientAddress
+          introspection.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: clientAddress
+          jsonType.label: String
+      - id: e6ec9235-40b7-432e-a506-e8a08946868c
+        name: Client ID
+        protocol: openid-connect
+        protocolMapper: oidc-usersessionmodel-note-mapper
+        consentRequired: false
+        config:
+          user.session.note: client_id
+          introspection.token.claim: 'true'
+          id.token.claim: 'true'
+          access.token.claim: 'true'
+          claim.name: client_id
+          jsonType.label: String
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - good-service
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+      authorizationSettings:
+        allowRemoteResourceManagement: true
+        policyEnforcementMode: ENFORCING
+        resources:
+        - name: Default Resource
+          type: urn:jupyterhub:resources:default
+          ownerManagedAccess: false
+          attributes: {}
+          _id: a63d84d9-b513-4aa5-bde8-f37f8d938f96
+          uris:
+          - "/*"
+        policies:
+        - id: d09106b3-4254-4263-9ee0-da2a5bfe5dd1
+          name: Default Policy
+          description: A policy that grants access only for users within this realm
+          type: js
+          logic: POSITIVE
+          decisionStrategy: AFFIRMATIVE
+          config:
+            code: |
+              // by default, grants any permission associated with this policy
+              $evaluation.grant();
+        - id: 335ca04d-b16d-4262-934e-0015016457e7
+          name: Default Permission
+          description: A permission that applies to the default resource type
+          type: resource
+          logic: POSITIVE
+          decisionStrategy: UNANIMOUS
+          config:
+            defaultResourceType: urn:jupyterhub:resources:default
+            applyPolicies: '["Default Policy"]'
+        scopes: []
+        decisionStrategy: UNANIMOUS
+    
     - id: 6e9a6c53-b79f-484c-8bbb-f812a060fd41
       clientId: kibana-processing
       name: Kibana processing
