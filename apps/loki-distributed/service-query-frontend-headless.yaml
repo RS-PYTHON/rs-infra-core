@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-distributed-query-frontend-headless
+  namespace: logging
+  labels:
+    helm.sh/chart: loki-distributed-0.78.5
+    app.kubernetes.io/name: loki-distributed
+    app.kubernetes.io/instance: loki-distributed
+    app.kubernetes.io/version: "2.9.6"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: query-frontend
+    prometheus.io/service-monitor: "false"
+spec:
+  clusterIP: None
+  type: ClusterIP
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: 3100
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+    - name: grpclb
+      port: 9096
+      targetPort: grpc
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: loki-distributed
+    app.kubernetes.io/instance: loki-distributed
+    app.kubernetes.io/component: query-frontend

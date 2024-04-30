@@ -2,17 +2,40 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 namespace: logging
 
-helmCharts:
-- name: loki-distributed
-  repo: https://grafana.github.io/helm-charts
-  releaseName: "{{ app_name }}"
-  version: 0.78.5
-  namespace: logging
-  valuesFile: values.yaml
-
-
 secretGenerator:
   - name: "loki-s3-credentials"
     literals:
       - S3_ACCESS_KEY={{ loki.s3.access_key }}
       - S3_SECRET_KEY={{ loki.s3.secret_key }}
+
+resources:
+  - configmap-gateway.yaml
+  - configmap.yaml
+  - deployment-distributor.yaml
+  - deployment-gateway.yaml
+  - deployment-query-frontend.yaml
+  - grafanadatasource.yaml
+  - poddisruptionbudget-distributor.yaml
+  - poddisruptionbudget-ingester.yaml
+  - poddisruptionbudget-querier.yaml
+  - poddisruptionbudget-query-frontent.yaml
+  - runtime-configmap.yaml
+  - service-compactor.yaml
+  - service-distributor.yaml
+  - service-gateway.yaml
+  - service-ingester-headless.yaml
+  - service-ingester.yaml
+  - service-memberlist.yaml
+  - service-querier-headless.yaml
+  - service-querier.yaml
+  - service-query-frontend-headless.yaml
+  - service-query-frontend.yaml
+  - serviceaccount.yaml
+  - servicemonitor-compactor.yaml
+  - servicemonitor-distributor.yaml
+  - servicemonitor-ingester.yaml
+  - servicemonitor-querier.yaml
+  - servicemonitor-query-frontend.yaml
+  - statefulset-compactor.yaml
+  - statefulset-ingester.yaml
+  - statefulset-querier.yaml

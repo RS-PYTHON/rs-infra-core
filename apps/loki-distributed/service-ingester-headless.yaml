@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-distributed-ingester-headless
+  namespace: logging
+  labels:
+    app.kubernetes.io/name: loki-distributed
+    app.kubernetes.io/instance: loki-distributed
+    app.kubernetes.io/component: ingester
+    prometheus.io/service-monitor: "false"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: 3100
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: loki-distributed
+    app.kubernetes.io/instance: loki-distributed
+    app.kubernetes.io/component: ingester
