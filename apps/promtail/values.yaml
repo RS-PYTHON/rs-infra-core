@@ -21,7 +21,7 @@ tolerations:
 
 config:
   clients:
-    - url: http://loki-distributed-gateway/loki/api/v1/push
+    - url: http://loki-distributed-gateway.logging.svc.cluster.local/loki/api/v1/push
 
 serviceMonitor:
   enabled: true
