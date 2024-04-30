@@ -1,0 +1,30 @@
+fullnameOverride: promtail
+
+resources:
+ limits:
+   cpu: 200m
+   memory: 128Mi
+ requests:
+   cpu: 100m
+   memory: 128Mi
+
+tolerations:
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/processing
+    operator: Exists
+    effect: NoSchedule
+
+config:
+  clients:
+    - url: http://loki-distributed-gateway.logging.svc.cluster.local/loki/api/v1/push
+
+serviceMonitor:
+  enabled: true
+  scheme: http
+  clients:
+    - url: http://loki-distributed-gateway.logging.svc.cluster.local/loki/api/v1/push

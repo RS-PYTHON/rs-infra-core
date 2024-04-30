@@ -1,0 +1,14 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+namespace: logging
+
+helmCharts:
+- name: loki-distributed
+  repo: https://grafana.github.io/helm-charts
+  releaseName: "{{ app_name }}"
+  version: 0.79.0
+  namespace: logging
+  valuesFile: values.yaml
+
+resources:
+  - grafanadatasource.yaml
