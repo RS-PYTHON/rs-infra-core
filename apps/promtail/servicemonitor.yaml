@@ -1,0 +1,20 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: promtail
+  labels:
+    helm.sh/chart: promtail-6.15.5
+    app.kubernetes.io/name: promtail
+    app.kubernetes.io/instance: promtail
+    app.kubernetes.io/version: "2.9.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: promtail
+      app.kubernetes.io/instance: promtail
+  endpoints:
+    - port: http-metrics
+      scheme: http
+

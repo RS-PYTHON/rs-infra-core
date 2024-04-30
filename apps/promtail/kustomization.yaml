@@ -1,12 +1,12 @@
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-namespace: promtail
+namespace: logging
 
-helmCharts:
-- name: promtail
-  repo: https://grafana.github.io/helm-charts
-  releaseName: "{{ app_name }}"
-  version: 6.15.5
-  namespace: logging
-  valuesFile: values.yaml
-
+resources:
+  - clusterrole.yaml
+  - clusterrolebinding.yaml
+  - daemonset.yaml
+  - secret.yaml
+  - service-metrics.yaml
+  - serviceaccount.yaml
+  - servicemonitor.yaml
