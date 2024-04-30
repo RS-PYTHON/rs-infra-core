@@ -1,0 +1,12 @@
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+namespace: promtail
+
+helmCharts:
+- name: promtail
+  repo: https://grafana.github.io/helm-charts
+  releaseName: "{{ app_name }}"
+  version: 6.15.5
+  namespace: logging
+  valuesFile: values.yaml
+
