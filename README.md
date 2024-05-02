@@ -3,3 +3,11 @@ This repository provides kubernetes infrastructure and security layouts to suppo
 
 ## Getting started
 Documentation is available in the [docs' folder](./docs).
+
+
+<br> <br>
+<p align="center">
+ <img src="/docs/media/banner_logo.jpg" width="71%" height="71%" />
+</p>
+<p align="center">This project is funded by the EU and ESA.</p>
+<br> <br>
