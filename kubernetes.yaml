@@ -13,8 +13,7 @@
         ansible-playbook collections/kubespray/cluster.yml -i {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml --become && \
         mkdir -p ~/.kube && sudo cp /etc/kubernetes/admin.conf ~/.kube/config && sudo chown cloud: ~/.kube/config && \
         cd roles/terraform/create-cluster/tasks && source .env && \
-        for type in $(terraform output -json hosts | jq -r '.[] | .tags.type' | grep -oh "\w*" | sort | uniq); \
-        do $(terraform output -json hosts | jq -r --arg type $type '.[] | select(.tags.type | contains ($type)) | "kubectl label nodes \(.name) node-role.kubernetes.io/\(.tags.type)="' | xargs -I % sh -c 'echo %;'); done
+        terraform output -json hosts | jq -r '.[] | "\(.name),\(.tags.type)"' | while read line ; do kubectl label node ${line%,*} node-role.kubernetes.io/${line#*,}= ; done ;
       args:
         executable: /bin/bash
       async: 3600
