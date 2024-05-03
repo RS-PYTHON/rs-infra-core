@@ -129,6 +129,6 @@ loki:
 # You might need to create a docker registry secret
 # to retrieve private container image from the
 # GitHub Container Registry : ghcr.io
-# Refer to the doc 
+# Refer to the doc in /docs/how-to/GitHub Container Registry.md
 github:
   registrySecret: ghcr-k8s
