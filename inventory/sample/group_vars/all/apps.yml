@@ -125,3 +125,10 @@ loki:
     bucket: rs-cluster-loki
     endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
     region: "eu-west-0"
+
+# You might need to create a docker registry secret
+# to retrieve private container image from the
+# GitHub Container Registry : ghcr.io
+# Refer to the doc in /docs/how-to/GitHub Container Registry.md
+github:
+  registrySecret: ghcr-k8s

@@ -391,7 +391,7 @@ singleuser:
     tag: "latest"
     pullPolicy: Always
     pullSecrets: 
-      - name: ghcr-k8s
+      - name: {{ github.registrySecret }}
   startTimeout: 300
   cpu:
     limit:
