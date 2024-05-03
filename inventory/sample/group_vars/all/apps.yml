@@ -60,6 +60,8 @@ keycloak:
   proxy:
     mode: passthrough
   logLevel: info
+  realm:
+    name: rspy
 
 prefect:
   database:
