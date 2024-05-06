@@ -1,0 +1,19 @@
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: grafana-operator
+  namespace: "monitoring"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: grafana-operator
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 8080
+        - port: 3000
