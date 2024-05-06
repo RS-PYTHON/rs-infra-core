@@ -20,6 +20,7 @@ spec:
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
+  allowCrossNamespaceImport: true
   datasource:
     name: Loki
     type: loki
