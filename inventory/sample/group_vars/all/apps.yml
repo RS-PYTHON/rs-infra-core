@@ -37,6 +37,17 @@ certmanager:
     acme:
       email: user@example.com
 
+grafana:
+  plugins: []
+  smtp:
+    enabled: true
+    from_address: test@example.com
+    from_name: Test
+    host: HOST
+  smtp_credentials:
+    password: PASSWORD
+    user: test@example.com
+
 postgresql:
   postgres_user:
     password: "tmp_password"

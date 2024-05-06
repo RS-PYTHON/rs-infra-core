@@ -1,0 +1,21 @@
+namespace: monitoring
+
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+
+helmCharts:
+- name: grafana
+  repo: https://grafana.github.io/helm-charts
+  releaseName: "{{ app_name }}"
+  version: 7.3.9
+  namespace: monitoring
+  valuesFile: values.yaml
+
+secretGenerator:
+- name: grafana-credentials
+  literals:
+  - smtp_user="{{ grafana.smtp_credentials.user }}"
+  - smtp_password="{{ grafana.smtp_credentials.password }}"
+  - GRAFANA_CLIENT_SECRET="{{ grafana_oidc_client_secret }}"
+  options:
+    disableNameSuffixHash: true
