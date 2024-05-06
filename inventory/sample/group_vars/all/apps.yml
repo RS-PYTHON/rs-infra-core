@@ -38,9 +38,9 @@ certmanager:
       email: user@example.com
 
 grafana:
-  plugins: []
+  custom_plugins: []
   smtp:
-    enabled: true
+    enabled: "true"
     from_address: test@example.com
     from_name: Test
     host: HOST

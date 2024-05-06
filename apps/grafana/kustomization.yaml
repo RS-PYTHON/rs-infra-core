@@ -11,8 +11,8 @@ resources:
 secretGenerator:
 - name: grafana-credentials
   literals:
-  - smtp_user="{{ grafana.smtp_credentials.user }}"
-  - smtp_password="{{ grafana.smtp_credentials.password }}"
+  - GF_SMTP_USER="{{ grafana.smtp_credentials.user }}"
+  - GF_SMTP_PASSWORD="{{ grafana.smtp_credentials.password }}"
   - GRAFANA_CLIENT_SECRET="{{ grafana_oidc_client_secret }}"
   options:
     disableNameSuffixHash: true
