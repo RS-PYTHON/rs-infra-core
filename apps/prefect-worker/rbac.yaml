@@ -11,19 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: processing
-
-helmCharts:
-- name: prefect-worker
-  repo: https://prefecthq.github.io/prefect-helm
-  releaseName: "{{ app_name }}"
-  version: 2024.4.18205353
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crb_prefectworker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cr_prefectworker
+subjects:
+- kind: ServiceAccount
+  name: prefect-worker
   namespace: processing
-  valuesFile: values.yaml
-
-resources: 
-- rbac.yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cr_prefectworker
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list

@@ -12,11 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# fullnameOverride: "prefect-worker-1"
-
 worker:
-  ## connection settings
-  # -- one of 'cloud', 'selfHosted', or 'server'
   apiConfig: server
   config:
     workPool:  {{ prefectworker.name }}
@@ -141,11 +137,11 @@ worker:
           "description": "Default variables for the Kubernetes worker.\n\nThe schema for this class is used to populate the `variables` section of the default\nbase job template."
         },
         "job_configuration": {
-          "env": null,
+          "env": "",
           "name": "{{ prefectworker.name }}",
-          "labels": { },
+          "labels": "",
           "command": null,
-          "namespace": "processing",
+          "namespace": "{{ kustomization.namespace }}",
           "job_manifest": {
             "kind": "Job",
             "spec": {
@@ -156,22 +152,22 @@ worker:
                       "env": null,
                       "args": null,
                       "name": "prefect-job",
-                      "image": null,
+                      "image": "docker.io/prefecthq/prefect:2-latest",
                       "imagePullPolicy": "IfNotPresent"
                     }
                   ],
                   "completions": 1,
                   "parallelism": 1,
                   "restartPolicy": "Never",
-                  "serviceAccountName": null
+                  "serviceAccountName": "prefect-worker"
                 }
               },
               "backoffLimit": 0,
               "ttlSecondsAfterFinished": null
             },
             "metadata": {
-              "labels": null,
-              "namespace": "processing",
+              "labels":  {},
+              "namespace": "{{ kustomization.namespace }}",
               "generateName": "{{ prefectworker.name }}-"
             },
             "apiVersion": "batch/v1"
@@ -179,7 +175,7 @@ worker:
           "stream_output": true,
           "cluster_config": null,
           "job_watch_timeout_seconds": null,
-          "pod_watch_timeout_seconds": null
+          "pod_watch_timeout_seconds": "60"
         }
       }
 
