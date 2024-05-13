@@ -38,7 +38,12 @@ certmanager:
       email: user@example.com
 
 grafana:
-  custom_plugins: []
+  # Configure here additional plugins to install in Grafana
+  # The url must point to a ZIP filed, not necessarily signed
+  # The name must be the plugin ID
+  custom_plugins:
+    - name: ""
+      url: ""
   smtp:
     enabled: "true"
     from_address: test@example.com
@@ -47,6 +52,9 @@ grafana:
   smtp_credentials:
     password: PASSWORD
     user: test@example.com
+  serviceMonitor:
+    interval: 30s
+    scrapeTimeout: 10s
 
 postgresql:
   postgres_user:

@@ -5,7 +5,7 @@ commonLabels:
 
 resources:
   - grafana.yaml
-  - podmonitor.yaml
+  - servicemonitor.yaml
   - image-renderer.yaml
 
 secretGenerator:
