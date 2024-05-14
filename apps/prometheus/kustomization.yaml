@@ -22,3 +22,6 @@ helmCharts:
   version: 58.0.0
   namespace: monitoring
   valuesFile: values.yaml
+
+resources:
+  - grafanadatasource.yaml
