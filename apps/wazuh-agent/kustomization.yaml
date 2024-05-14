@@ -27,6 +27,18 @@ configMapGenerator:
       - wazuh-alpine-apk.sh
 
 
+secretGenerator:
+- name: "{{ wazuh.agents.key2.secret }}"
+  literals:
+  - authd.pass="{{ wazuh.agents.key2.authdpass }}"
+  options:
+    disableNameSuffixHash: true
+- name: "{{ wazuh.server.user3.secret }}"
+  literals:
+  - username="{{ wazuh.server.user3.username }}"
+  - password="{{ wazuh.server.user3.password }}"
+  options:
+    disableNameSuffixHash: true
 
 resources:
   - wa-install-ds.yaml
