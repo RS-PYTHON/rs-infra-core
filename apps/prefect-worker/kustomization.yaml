@@ -15,8 +15,10 @@
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
+namespace: processing
+
 helmCharts:
-- name: prefect-server
+- name: prefect-worker
   repo: https://prefecthq.github.io/prefect-helm
   releaseName: "{{ app_name }}"
   version: 2024.5.2224951
