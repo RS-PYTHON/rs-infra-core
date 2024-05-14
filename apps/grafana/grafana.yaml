@@ -1,3 +1,17 @@
+ # Copyright 2024 CS Group 
+ # 
+ # Licensed under the Apache License, Version 2.0 (the "License"); 
+ # you may not use this file except in compliance with the License. 
+ # You may obtain a copy of the License at 
+ # 
+ #     http://www.apache.org/licenses/LICENSE-2.0 
+ # 
+ # Unless required by applicable law or agreed to in writing, software 
+ # distributed under the License is distributed on an "AS IS" BASIS, 
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ # See the License for the specific language governing permissions and 
+ # limitations under the License. 
+
 apiVersion: grafana.integreatly.org/v1beta1
 kind: Grafana
 metadata:
@@ -90,6 +104,15 @@ spec:
                   value: "true"
                 - name: GF_INSTALL_PLUGINS
                   value: "{%- for item in grafana.custom_plugins -%}{{ item.url }};{{ item.name }},{%- endfor -%}"
+              volumeMounts:
+              - name: grafana-data
+                mountPath: /var/lib/grafana
+          securityContext:
+            fsGroup: 104
+          volumes:
+          - name: grafana-data
+            persistentVolumeClaim:
+              claimName: grafana-pvc
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -105,3 +128,4 @@ spec:
       resources:
         requests:
           storage: 10Gi
+      
