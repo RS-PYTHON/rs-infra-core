@@ -5,6 +5,6 @@ helmCharts:
 - name: prefect-server
   repo: https://prefecthq.github.io/prefect-helm
   releaseName: "{{ app_name }}"
-  version: 2024.2.8
+  version: 2024.5.2224951
   namespace: processing
   valuesFile: values.yaml
