@@ -128,8 +128,9 @@ ansible-playbook kubernetes.yaml \
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
-
-
+> [!CAUTION]
+> Disclaimer : For Prefect-Worker post-configuration
+> See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
 
 
 # Copyright and license
