@@ -12,21 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#commonLabels:
+#  app.kubernetes.io/instance: "{{ app_name }}"
+
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
-  name: loki
+  name: prometheus
 spec:
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
   allowCrossNamespaceImport: true
   datasource:
-    name: Loki
-    type: loki
+    name: Prometheus
+    type: prometheus
     access: proxy
-    url: http://loki-distributed-query-frontend.logging.svc.cluster.local:3100
-    isDefault: false
+    # Access mode - proxy (server in the UI) or direct (browser in the UI).
+    url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090/prometheus
     jsonData:
-      "tlsSkipVerify": true
-      "timeInterval": "5s"
+      httpMethod: POST
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: 2.51.0
+      cacheLevel: 'High'
+      disableRecordingRules: false
+      incrementalQueryOverlapWindow: 10m

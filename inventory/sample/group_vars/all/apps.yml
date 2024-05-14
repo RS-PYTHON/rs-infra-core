@@ -37,6 +37,25 @@ certmanager:
     acme:
       email: user@example.com
 
+grafana:
+  # Configure here additional plugins to install in Grafana
+  # The url must point to a ZIP filed, not necessarily signed
+  # The name must be the plugin ID
+  custom_plugins:
+    - name: ""
+      url: ""
+  smtp:
+    enabled: "true"
+    from_address: test@example.com
+    from_name: Test
+    host: HOST
+  smtp_credentials:
+    password: PASSWORD
+    user: test@example.com
+  serviceMonitor:
+    interval: 30s
+    scrapeTimeout: 10s
+
 postgresql:
   postgres_user:
     password: "tmp_password"

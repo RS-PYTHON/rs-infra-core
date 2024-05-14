@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#commonLabels:
-#  app.kubernetes.io/instance: "{{ app_name }}"
-
-helmCharts:
-- name: kube-prometheus-stack
-  repo: https://prometheus-community.github.io/helm-charts
-  releaseName: "{{ app_name }}"
-  version: 58.0.0
-  namespace: monitoring
-  valuesFile: values.yaml
-
-resources:
-  - grafanadatasource.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: grafana
+spec:
+  endpoints:
+  - interval: {{ grafana.serviceMonitor.interval}}
+    path: /metrics
+    port: grafana-http
+    scrapeTimeout: {{ grafana.serviceMonitor.scrapeTimeout }}
+  selector: 
+    matchLabels: 
+      app: grafana
