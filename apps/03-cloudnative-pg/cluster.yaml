@@ -32,3 +32,5 @@ spec:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
+  monitoring:
+    enablePodMonitor: true
