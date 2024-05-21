@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: wazuh-agent
-  namespace: wazuh
+  namespace: security
 spec:
   selector:
     matchLabels:

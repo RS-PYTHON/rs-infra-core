@@ -20,7 +20,7 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     cert-manager.io/cluster-issuer: letsencrypt-prod
 
-  namespace: wazuh
+  namespace: security
 spec:
   ingressClassName: nginx
   rules:
