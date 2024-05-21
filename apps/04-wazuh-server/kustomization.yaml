@@ -1,0 +1,65 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
+namespace: wazuh
+
+secretGenerator:
+- name: indexer-certs
+  files:
+    - wazuh/certs/indexer_cluster/root-ca.pem
+    - wazuh/certs/indexer_cluster/node.pem
+    - wazuh/certs/indexer_cluster/node-key.pem
+    - wazuh/certs/indexer_cluster/dashboard.pem
+    - wazuh/certs/indexer_cluster/dashboard-key.pem
+    - wazuh/certs/indexer_cluster/admin.pem
+    - wazuh/certs/indexer_cluster/admin-key.pem
+    - wazuh/certs/indexer_cluster/filebeat.pem
+    - wazuh/certs/indexer_cluster/filebeat-key.pem
+- name: dashboard-certs
+  files:
+    - wazuh/certs/dashboard_http/cert.pem
+    - wazuh/certs/dashboard_http/key.pem
+    - wazuh/certs/indexer_cluster/root-ca.pem
+
+configMapGenerator:
+- name: indexer-conf
+  files:
+    - wazuh/indexer_stack/wazuh-indexer/indexer_conf/opensearch.yml
+    - internal_users.yml
+- name: wazuh-conf
+  files:
+    - wazuh/wazuh_managers/wazuh_conf/master.conf
+    - wazuh/wazuh_managers/wazuh_conf/worker.conf
+- name: dashboard-conf
+  files:
+    - wazuh/indexer_stack/wazuh-dashboard/dashboard_conf/opensearch_dashboards.yml
+
+resources:
+- wazuh/wazuh_managers/wazuh-cluster-svc.yaml
+- wazuh/wazuh_managers/wazuh-master-svc.yaml
+- wazuh/wazuh_managers/wazuh-workers-svc.yaml
+- wazuh/wazuh_managers/wazuh-master-sts.yaml
+- wazuh/wazuh_managers/wazuh-worker-sts.yaml
+
+- wazuh/indexer_stack/wazuh-indexer/indexer-svc.yaml
+- wazuh/indexer_stack/wazuh-indexer/cluster/indexer-api-svc.yaml
+- wazuh/indexer_stack/wazuh-indexer/cluster/indexer-sts.yaml
+
+- wazuh/indexer_stack/wazuh-dashboard/dashboard-svc.yaml
+- wazuh/indexer_stack/wazuh-dashboard/dashboard-deploy.yaml
+
+- ingress.yaml
+- secrets.yaml
