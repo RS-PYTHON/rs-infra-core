@@ -109,6 +109,7 @@ jobs:
         uses: ./.github/actions/publish-docker
         with:
           dockerfile: ./.github/Dockerfile
+          build_context_path: ./.github/
           image_suffix: -jupyter
           version_name: ${{ needs.set-env.outputs.docker_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}

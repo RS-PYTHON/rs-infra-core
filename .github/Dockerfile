@@ -21,23 +21,20 @@ USER root
 RUN adduser rspy
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
+COPY ./resources/requirements.txt /opt/
+
 RUN pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install
 
 RUN \
-    apt update && \
+    DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
     vim \
     git \
-    curl
+    curl \
+    tzdata
 
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
-
-RUN \
-    pip install -U \
-    nbgitpuller \
-    python-dotenv \
-    boto3
+    pip install -U -r /opt/requirements.txt
 
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
