@@ -20,14 +20,14 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     cert-manager.io/cluster-issuer: letsencrypt-prod
 
-  namespace: security
+ 
 spec:
   ingressClassName: nginx
   rules:
   - host: wazuh.{{ platform_domain_name }}
     http:
       paths:
-      - path: /
+      - path: /clystard
         pathType: Prefix
         backend:
           service:

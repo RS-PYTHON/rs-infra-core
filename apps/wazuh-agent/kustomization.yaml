@@ -15,7 +15,7 @@
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
   
-namespace: security
+namespace: debug-clystard
 
 configMapGenerator:
   - name: wa-script-configmap
