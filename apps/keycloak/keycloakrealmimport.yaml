@@ -1942,6 +1942,7 @@ spec:
           introspection.token.claim: 'true'
           multivalued: 'true'
           user.attribute: foo
+          userinfo.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: realm_access.roles
           jsonType.label: String
