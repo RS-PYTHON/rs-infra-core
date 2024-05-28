@@ -77,7 +77,7 @@ spec:
       tls:
         - hosts:
             - monitoring.{{ platform_domain_name }}
-          secretName: monitoring.{{ platform_domain_name | replace(".", "-") }}
+          secretName: monitoring-{{ platform_domain_name | replace(".", "-") }}
   deployment:
     spec:
       template:
