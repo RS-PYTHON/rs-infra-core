@@ -20,6 +20,10 @@ USER root
 
 RUN adduser rspy
 
+ENV SHELL /bin/bash
+ENV HOME /home/rspy
+ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
 
@@ -33,12 +37,14 @@ RUN \
     curl \
     tzdata
 
-RUN \
-    pip install -U -r /opt/requirements.txt
+RUN pip install -U -r /opt/requirements.txt
 
-ENV SHELL /bin/bash
-ENV HOME /home/rspy
-ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+COPY --chown=rspy:rspy ./resources/00-read-env.py /tmp/00-read-env.py
+
+COPY resources/start-notebook.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/start-notebook.sh
+
+ENTRYPOINT ["start-notebook.sh"]
 
 EXPOSE 8888
 

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2024 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +13,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# Shim to emit warning and call start-notebook.py
 
-nbgitpuller
-python-dotenv
-boto3
+echo "WARNING: Use start-notebook.py instead"
+#Copy read-env to HOME
+mkdir -p $HOME/.ipython/profile_default/startup/
+chmod 2775 $HOME/.ipython/profile_default/startup/
+cp /tmp/00-read-env.py $HOME/.ipython/profile_default/startup/
+exec /usr/local/bin/start-notebook.py "$@"

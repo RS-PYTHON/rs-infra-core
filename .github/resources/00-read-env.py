@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-nbgitpuller
-python-dotenv
-boto3
+#Script to automatically import environment variables from $HOME/.env file
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+env_path = Path(os.getenv("HOME")) / '.env'
+load_dotenv(dotenv_path=env_path)

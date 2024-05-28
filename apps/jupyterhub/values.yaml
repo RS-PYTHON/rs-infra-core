@@ -390,7 +390,7 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: ghcr.io/rs-python/rs-jupyter
+    name: ghcr.io/rs-python/rs-infrastructure-jupyter
     tag: "latest"
     pullPolicy: Always
     pullSecrets: 
