@@ -141,7 +141,7 @@ The Reference System Software as a whole is distributed under the Apache License
 <p align="center">This project is funded by the EU and ESA.</p>
 <br> <br>
 <p align="center">
- <img src="media/banner_logo.jpg" width="71%" height="71%" />
+    ![](media/banner_logo.jpg)
 </p>
 <p align="center">This project is funded by the EU and ESA.</p>
 <br> <br>
