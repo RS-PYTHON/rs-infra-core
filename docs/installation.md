@@ -138,7 +138,7 @@ ansible-playbook apps.yaml \
 The Reference System Software as a whole is distributed under the Apache License, version 2.0. A copy of this license is available in the [LICENSE](../LICENSE) file. Reference System Software depends on third-party components and code snippets released under their own license (obviously, all compatible with the one of the Reference System Software). These dependencies are listed in the [NOTICE](NOTICE.md) file.
 
 ![](media/banner_logo.jpg)
-<p style="text-align:center">This project is funded by the EU and ESA.</p>
+<p align="center">This project is funded by the EU and ESA.</p>
 <br> <br>
 <p align="center">
  <img src="../media/banner_logo.jpg" width="71%" height="71%" />
