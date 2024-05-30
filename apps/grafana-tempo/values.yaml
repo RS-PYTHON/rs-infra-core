@@ -19,7 +19,6 @@ global:
   dnsService: 'coredns'
   dnsNamespace: 'kube-system'
 
-
 useExternalConfig: false
 
 tempo:
@@ -57,10 +56,6 @@ distributor:
   replicas: 1
   autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 60
-    targetMemoryUtilizationPercentage:
   service:
     type: ClusterIP
   terminationGracePeriodSeconds: 30
@@ -72,20 +67,6 @@ distributor:
 
 compactor:
   replicas: 1
-  terminationGracePeriodSeconds: 30
-  config:
-    compaction:
-      block_retention: 48h
-      compacted_block_retention: 1h
-      compaction_window: 1h
-      v2_in_buffer_bytes: 5242880
-      v2_out_buffer_bytes: 20971520
-      max_compaction_objects: 6000000
-      max_block_bytes: 107374182400
-      retention_concurrency: 10
-      v2_prefetch_traces_count: 1000
-      max_time_per_tenant: 5m
-      compaction_cycle: 30s
   dnsConfigOverides:
     enabled: false
     dnsConfig:
@@ -96,20 +77,6 @@ querier:
   replicas: 1
   autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 60
-    targetMemoryUtilizationPercentage:
-  config:
-    trace_by_id:
-      query_timeout: 10s
-    search:
-      query_timeout: 30s
-      prefer_self: 10
-      external_hedge_requests_at: 8s
-      external_hedge_requests_up_to: 2
-      external_backend: ""
-    max_concurrent_queries: 20
   
 queryFrontend:
   query:
@@ -119,35 +86,13 @@ queryFrontend:
     config: |
       backend: 127.0.0.1:3100
   replicas: 1
-  config:
-    max_outstanding_per_tenant: 2000
-    max_retries: 2
-    search:
-      concurrent_jobs: 1000
-      target_bytes_per_job: 104857600
-    trace_by_id:
-      query_shards: 50
-      hedge_requests_at: 2s
-      hedge_requests_up_to: 2
   autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 60
-    targetMemoryUtilizationPercentage:
   service:
     port: 16686
     type: ClusterIP
   ingress:
     enabled: false
-    hosts:
-      - host: query.tempo.example.com
-        paths:
-          - path: /
-    tls:
-      - secretName: tempo-query-tls
-        hosts:
-          - query.tempo.example.com
 
 traces:
   jaeger:
@@ -170,24 +115,8 @@ traces:
     enabled: false
 
 memberlist:
-  node_name: ""
   randomize_node_name: true
-  stream_timeout: "10s"
-  retransmit_factor: 2
-  pull_push_interval: "30s"
-  gossip_interval: "1s"
-  gossip_nodes: 2
-  gossip_to_dead_nodes_time: "30s"
-  min_join_backoff: "1s"
-  max_join_backoff: "1m"
-  max_join_retries: 10
   abort_if_cluster_join_fails: false
-  rejoin_interval: "0s"
-  left_ingesters_timeout: "5m"
-  leave_timeout: "5s"
-  bind_port: 7946
-  packet_dial_timeout: "5s"
-  packet_write_timeout: "5s"
 
 server:
   httpListenPort: 3100
@@ -217,7 +146,7 @@ global_overrides:
   per_tenant_override_config: /runtime-config/overrides.yaml
 
 overrides: |
-  overrides: {}#
+  overrides: {}
 
 memcached:
   enabled: true
@@ -240,46 +169,6 @@ minio:
 
 gateway:
   enabled: false
-  replicas: 1
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 60
-    targetMemoryUtilizationPercentage:
-  verboseLogging: true
-  image:
-    repository: nginxinc/nginx-unprivileged
-    tag: 1.19-alpine
-    pullPolicy: IfNotPresent
-  service:
-    port: 80
-    type: ClusterIP
-  ingress:
-    enabled: false
-    hosts:
-      - host: gateway.tempo.example.com
-        paths:
-          - path: /
-    tls:
-      - secretName: tempo-gateway-tls
-        hosts:
-          - gateway.tempo.example.com
-  basicAuth:
-    enabled: false
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http-metrics
-    initialDelaySeconds: 15
-    timeoutSeconds: 1
-  nginxConfig:
-    logFormat: |-
-      main '$remote_addr - $remote_user [$time_local]  $status '
-              '"$request" $body_bytes_sent "$http_referer" '
-              '"$http_user_agent" "$http_x_forwarded_for"';
-    
-    serverSnippet: ''
 
 enterprise:
   enabled: false
@@ -330,14 +219,7 @@ enterpriseGateway:
   terminationGracePeriodSeconds: 60
   ingress:
     enabled: false
-    hosts:
-      - host: gateway.gem.example.com
-        paths:
-          - path: /
-    tls:
-      - secretName: gem-gateway-tls
-        hosts:
-          - gateway.gem.example.com
+
 
 
 
