@@ -81,7 +81,7 @@ defaultValidityPeriod: 365
 
 internal: # enable when cert-manager is installed for the internal certificates
   certmanager:
-    enabled: false
+    enabled: true
     secretname: neuvector-internal
 
 controller:
