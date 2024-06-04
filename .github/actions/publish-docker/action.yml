@@ -34,6 +34,9 @@ inputs:
   docker_tag:
     description: Tag the docker images
     required: false
+  ssh_key:
+    description: SSH key to clone rs-demo repository
+    required: true
 
 outputs:
   docker_image:
@@ -74,6 +77,8 @@ runs:
     - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
+        build-args: |
+          ssh_key=${{ inputs.ssh_key }}
         context: ${{ inputs.build_context_path }}
         file: ${{ inputs.dockerfile }}
         load: true

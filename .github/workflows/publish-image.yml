@@ -113,4 +113,5 @@ jobs:
           image_suffix: -jupyter
           version_name: ${{ needs.set-env.outputs.docker_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          ssh_key: ${{ secrets.RS_DEMO_PRIVATE_SSH_KEY }}
           docker_tag: ${{ needs.set-env.outputs.docker_tag }}

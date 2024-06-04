@@ -16,6 +16,8 @@ FROM ghcr.io/rs-python/rs-client-libraries_store:0.1a9 as rs-client
 
 FROM quay.io/jupyter/base-notebook:hub-4.1.5
 
+ARG ssh_key
+
 USER root
 
 RUN adduser rspy
@@ -27,8 +29,6 @@ ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/ch
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
 
-RUN pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install
-
 RUN \
     DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
@@ -37,7 +37,18 @@ RUN \
     curl \
     tzdata
 
+RUN \
+    cd /opt && \
+    mkdir -p /root/.ssh && \
+    chmod 0700 /root/.ssh && \
+    ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts && \
+    eval "$(ssh-agent -s)" && \
+    echo -e $ssh_key | ssh-add - > /dev/null && \
+    git clone git@github.com:RS-PYTHON/rs-demo.git
+
 RUN pip install -U -r /opt/requirements.txt
+
+RUN pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install
 
 COPY --chown=rspy:rspy ./resources/00-read-env.py /tmp/00-read-env.py
 
