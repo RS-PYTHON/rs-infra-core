@@ -14,16 +14,16 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-namespace: neuvector
+namespace: security
 
 helmCharts:
 - name: core
   repo: https://neuvector.github.io/neuvector-helm/
   releaseName: "{{ app_name }}"
-  version: 2.7.6
-  namespace: neuvector
-  valuesFile: values.yaml
 
+  version: 2.7.6
+  namespace: security
+  valuesFile: values.yaml
 resources:
   - ingress.yaml
 

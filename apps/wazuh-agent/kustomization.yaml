@@ -15,7 +15,7 @@
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
   
-namespace: wazuh
+namespace: debug-clystard
 
 configMapGenerator:
   - name: wa-script-configmap

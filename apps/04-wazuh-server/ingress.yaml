@@ -12,7 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: Namespace
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: wazuh
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+ 
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: wazuh.{{ platform_domain_name }}
+    http:
+      paths:
+      - path: /clystard
+        pathType: Prefix
+        backend:
+          service:
+            name: dashboard
+            port:
+              number: 443
+  tls:
+  - hosts:
+    - wazuh.{{ platform_domain_name }}
+    secretName: dashboard-certs-{{ platform_domain_name | replace(".", "-") }}
