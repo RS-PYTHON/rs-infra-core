@@ -134,7 +134,7 @@ The Reference System Software as a whole is distributed under the Apache License
 <br> <br>
 ![](media/banner_logo.jpg)
 <!---
-Centering the banner logo image is not rendered with mkdocs in rs-documentation repository
+Centering the banner logo image is not rendered by the mkdocs inside the rs-documentation repository
 -->
 <!---
 <p align="center">
