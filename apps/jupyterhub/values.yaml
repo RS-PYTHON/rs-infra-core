@@ -183,7 +183,7 @@ proxy:
     rollingUpdate:
   # service relates to the proxy-public service
   service:
-    type: LoadBalancer
+    type: ClusterIP
     labels: {}
     annotations: {}
     nodePorts:
@@ -363,7 +363,10 @@ singleuser:
     S3_ENDPOINT: {{ s3.endpoint }}
     S3_REGION: {{ s3.region }} 
     PREFECT_API_URL: http://prefect-server.processing.svc.cluster.local:4200/api
+    RSPY_DPR_SIMU_URL: http://mockup-processor-dpr-svc.processing.svc.cluster.local:8080
     RSPY_WEBSITE: https://{{ platform_domain_name }}
+    RSPY_PREFECT_URL: https://processing.{{ platform_domain_name }}
+    RSPY_GRAFANA_URL: https://monitoring.{{ platform_domain_name }}
   lifecycleHooks: {}
   initContainers: []
   extraContainers: []
@@ -387,7 +390,7 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: ghcr.io/rs-python/rs-jupyter
+    name: ghcr.io/rs-python/rs-infrastructure-jupyter
     tag: "latest"
     pullPolicy: Always
     pullSecrets: 
@@ -649,6 +652,8 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     nginx.ingress.kubernetes.io/proxy-buffer-size: 32k
+# This line allow files under 64MB to be uploaded in jupyterlab
+    nginx.ingress.kubernetes.io/proxy-body-size: 64m
 
 # cull relates to the jupyterhub-idle-culler service, responsible for evicting
 # inactive singleuser pods.
