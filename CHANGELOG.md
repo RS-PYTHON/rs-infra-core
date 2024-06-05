@@ -13,6 +13,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.1a10] - 2024-06-05
+
+### Added
+
+- RSPY-253 : Deploy RS-Client libraries into JupiterLab instances
+
+### Fixed
+
+- RSPY-241 : [Deployment] JupiterHub UI not reachable after deployment
+- RSPY-267 : [Security] No severity score on huge amount of CVE
+- RSPY-252 : [Deployment] Namespace issue during installation of Neuvector crds
+- RSPY-261 : [Monitoring] No prometheus value retrieved for neuvector
+- RSPY-245 : [Deployment] Missing namespaces in kustomization.yaml
+- RSPY-258 : [Deployment] Grafana in CrashLoop when no plugin
+- RSPY-260 : [monitoring] Monitoring certificate secret name not match with deployment for grafana and prometheus
+- RSPY-259 : [Deployment] Missing secret for Loki
+- RSPY-263 : [Monitoring] Prometheus GrafanaDatasource not created during prometheus deployment
+
+## [0.1a9] - 2024-05-15
+
+### Added
+
+- RSPY-130 : Deploy Grafana on K8S cluster
+- RSPY-133 : Deploy Prefect Workers on K8S cluster
+
+### Fixed
+
+- RSPY-181 : Deployment: label not well set by deployment script
+- RSPY-196 : Platform deployment: error keycloak realm import
+- RSPY-220 : Kubectl commands with kubectl OIDC not working
+- RSPY-239 : [Deployment] No JupiterHub image reachable from Validation platform
+- RSPY-240 : [Deployment] No Secret Create during Wazuh Agent deployment
+
 ## [0.1a8] - 2024-04-30
 
 ### Added
@@ -24,7 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - RSPY-170 : Platform deployment and start-stop playbook failed due to missing credential
 - RSPY-176 : Platform deployment: first application deployment execution failed for the step cluster-issuer
-- RSPY-177 : Platform Deployment: Failed to deployed application due to missing parameter in group_vars 
+- RSPY-177 : Platform Deployment: Failed to deployed application due to missing parameter in group_vars
 - RSPY-179 : Platform deployment: no cinder controller for PVC
 - RSPY-180 : Platform deployment: kubelet errors with cpu manager
 - RSPY-182 : Wazuh agent is being reinstalled when cluster is restarted
