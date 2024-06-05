@@ -44,14 +44,14 @@ exporter:
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
 
   grafanaDashboard:
-    enabled: false
+    enabled: true
     namespace: "" # Release namespace, if empty
     labels: {}
     # annotations: {}
       # k8s-sidecar-target-directory: /tmp/dashboards/neuvector
 
   serviceMonitor:
-    enabled: false
+    enabled: true
     # labels for the ServiceMonitor.
     labels: {}
     # annotations for the ServiceMonitor.

@@ -19,13 +19,13 @@
 openshift: false
 
 registry: docker.io
-tag: 5.3.0
+tag: 5.3.2
 oem:
 imagePullSecrets:
 psp: false
 rbac: true # required for rancher authentication
 serviceAccount: default
-leastPrivilege: false
+leastPrivilege: true
 global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
     url:
@@ -81,7 +81,7 @@ defaultValidityPeriod: 365
 
 internal: # enable when cert-manager is installed for the internal certificates
   certmanager:
-    enabled: false
+    enabled: true
     secretname: neuvector-internal
 
 controller:
@@ -533,10 +533,10 @@ cve:
     resources:
       limits:
         cpu: 400m
-        memory: 1024Mi
+        memory: 2Gi
       requests:
         cpu: 250m
-        memory: 512Mi
+        memory: 1Gi
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:

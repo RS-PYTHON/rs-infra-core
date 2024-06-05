@@ -20,10 +20,10 @@ helmCharts:
 - name: core
   repo: https://neuvector.github.io/neuvector-helm/
   releaseName: "{{ app_name }}"
-  version: 2.7.3
+
+  version: 2.7.6
   namespace: security
   valuesFile: values.yaml
-
 resources:
   - ingress.yaml
 
