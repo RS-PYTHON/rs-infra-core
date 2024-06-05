@@ -28,6 +28,8 @@ ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/ch
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
+COPY resources/layer-cleanup.sh /usr/local/bin
+RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 RUN \
     DEBIAN_FRONTEND=noninteractive apt update && \
@@ -35,7 +37,10 @@ RUN \
     vim \
     git \
     curl \
-    tzdata
+    tzdata && \
+    pip install -U -r /opt/requirements.txt && \
+    pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
+    layer-cleanup.sh
 
 RUN \
     cd /opt && \
@@ -45,10 +50,6 @@ RUN \
     eval "$(ssh-agent -s)" && \
     echo -e $ssh_key | ssh-add - > /dev/null && \
     git clone git@github.com:RS-PYTHON/rs-demo.git
-
-RUN pip install -U -r /opt/requirements.txt
-
-RUN pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install
 
 COPY --chown=rspy:rspy ./resources/00-read-env.py /tmp/00-read-env.py
 
