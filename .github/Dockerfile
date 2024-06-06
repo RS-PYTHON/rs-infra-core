@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/rs-python/rs-client-libraries_store:0.1a9 as rs-client
+FROM ghcr.io/rs-python/rs-client-libraries_store:latest as rs-client
 
 FROM quay.io/jupyter/base-notebook:hub-4.1.5
 
