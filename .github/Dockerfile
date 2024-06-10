@@ -28,6 +28,8 @@ ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/ch
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
+COPY ./resources/jupyter_server_config.py /etc/jupyter/
+RUN chmod 644 /etc/jupyter/jupyter_server_config.py
 COPY resources/layer-cleanup.sh /usr/local/bin
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
