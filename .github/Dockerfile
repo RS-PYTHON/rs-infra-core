@@ -39,7 +39,8 @@ RUN \
     vim \
     git \
     curl \
-    tzdata && \
+    tzdata \
+    xclip && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
