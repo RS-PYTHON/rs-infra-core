@@ -44,7 +44,7 @@ spec:
         - name: var-agent-version
           value: "4.7.2-1"
         - name: var-manager-ipaddress
-          value: "wazuh.wazuh.svc.cluster.local"
+          value: "wazuh.security.svc.cluster.local"
         - name: var-registration-password
           valueFrom:
             secretKeyRef:

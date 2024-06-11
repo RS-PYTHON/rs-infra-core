@@ -79,7 +79,7 @@ WAZUH_API_PASSWORD=$5
        nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
        
        
-        /usr/bin/sed -i 's/MANAGER_IP/wazuh.wazuh.svc.cluster.local/g' /var/ossec/etc/ossec.conf
+        /usr/bin/sed -i 's/MANAGER_IP/wazuh.security.svc.cluster.local/g' /var/ossec/etc/ossec.conf
         
         /usr/bin/grep -i address  /var/ossec/etc/ossec.conf
 
@@ -108,13 +108,13 @@ WAZUH_API_PASSWORD=$5
 
         printf "\n\t\t\t FX Wazuh agent unreg\n\n" 
 
-         TOKEN=$(curl -u '${WAZUH_API_USER}:${WAZUH_API_PASSWORD}' -sk -X GET "https://wazuh.wazuh.svc.cluster.local:55000/security/user/authenticate?raw=true")
+         TOKEN=$(curl -u '${WAZUH_API_USER}:${WAZUH_API_PASSWORD}' -sk -X GET "https://wazuh.security.svc.cluster.local:55000/security/user/authenticate?raw=true")
          
-         getid="curl -sk -X GET \"https://wazuh.wazuh.svc.cluster.local:55000/agents?pretty=true&sort=-ip,name\" -H \"Authorization: Bearer $TOKEN\" | jq -r '.data.affected_items[] | select(.name == \"$(hostname)\").id'"
+         getid="curl -sk -X GET \"https://wazuh.security.svc.cluster.local:55000/agents?pretty=true&sort=-ip,name\" -H \"Authorization: Bearer $TOKEN\" | jq -r '.data.affected_items[] | select(.name == \"$(hostname)\").id'"
          eval ${getid}
 
 
-        removeid="curl -k -X DELETE \"https://wazuh.wazuh.svc.cluster.local:55000/agents?pretty=true&older_than=0s&agents_list=${id}&status=all\" -H  \"Authorization: Bearer $TOKEN\""
+        removeid="curl -k -X DELETE \"https://wazuh.security.svc.cluster.local:55000/agents?pretty=true&older_than=0s&agents_list=${id}&status=all\" -H  \"Authorization: Bearer $TOKEN\""
         eval ${removeid}
         
 
