@@ -139,6 +139,7 @@ s3:
 
 rspy:
   tmp_bucket: rs-cluster-temp
+  catalog_bucket: rs-cluster-catalog
 
 loki:
   retention: 1460h
