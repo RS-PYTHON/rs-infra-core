@@ -30,7 +30,7 @@ resources:
 secretGenerator:
 - name: loki-s3-credentials
   literals:
-  - S3_ACCESS_KEY="{{ loki.s3.access_key }}"
-  - S3_SECRET_KEY="{{ loki.s3.secret_key }}"
+  - S3_ACCESS_KEY="{{ s3.access_key }}"
+  - S3_SECRET_KEY="{{ s3.secret_key }}"
   options:
     disableNameSuffixHash: true

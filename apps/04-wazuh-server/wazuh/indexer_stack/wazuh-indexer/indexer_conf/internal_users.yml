@@ -25,14 +25,14 @@ _meta:
 ## Demo users
 
 admin:
-  hash: "{{ wazuh.server.user2.password | password_hash('bcrypt') }}"
+  hash: "{{ wazuh.server.admin.password | password_hash('bcrypt') }}"
   reserved: true
   backend_roles:
   - "admin"
   description: "Demo admin user"
 
 kibanaserver:
-  hash: "{{ wazuh.server.user1.password | password_hash('bcrypt') }}"
+  hash: "{{ wazuh.server.kibanaserver.password | password_hash('bcrypt') }}"
   reserved: true
   description: "Demo kibanaserver user"
 

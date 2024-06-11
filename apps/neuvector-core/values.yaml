@@ -292,14 +292,14 @@ controller:
       #   ...
       userinitcfg.yaml:
         users:
-        - Fullname: {{ neuvector.core.user3.Fullname }}
-          Password: {{ neuvector.core.user3.Password }}
+        - Fullname: {{ neuvector.core.secops.Fullname }}
+          Password: {{ neuvector.core.secops.Password }}
           Role: admin
-        - Fullname: {{ neuvector.core.user2.Fullname }}
-          Password: {{ neuvector.core.user2.Password }}
+        - Fullname: {{ neuvector.core.exporter.Fullname }}
+          Password: {{ neuvector.core.exporter.Password }}
           Role: reader
-        - Fullname: {{ neuvector.core.user1.Fullname }}
-          Password: {{ neuvector.core.user1.Password }}
+        - Fullname: {{ neuvector.core.admin.Fullname }}
+          Password: {{ neuvector.core.admin.Password }}
           Role: admin
 
 enforcer:
