@@ -132,7 +132,7 @@ storage:
     s3:
       access_key: {{ grafanatempo.s3.access_key }}
       secret_key: {{ grafanatempo.s3.secret_key }}
-      bucket: {{ loki.s3.bucket }}
+      bucket: {{ grafanatempo.s3.bucket }}
       endpoint: {{ s3.endpoint }}
       region: {{ s3.region }}
       insecure: false   
