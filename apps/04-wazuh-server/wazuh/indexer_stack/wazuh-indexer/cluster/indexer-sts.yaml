@@ -24,6 +24,14 @@ spec:
         app: wazuh-indexer
       name: wazuh-indexer
     spec:
+      # -- affinity for server pods assignment
+      affinity:         
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: "node-role.kubernetes.io/infra"
+                  operator: Exists
       # Set the wazuh-indexer volume permissions so the wazuh-indexer user can use it
       volumes:
         - name: indexer-certs

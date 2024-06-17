@@ -27,6 +27,14 @@ spec:
         node-type: master
       name: wazuh-manager-master
     spec:
+      # -- affinity for server pods assignment
+      affinity:         
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: "node-role.kubernetes.io/infra"
+                  operator: Exists
       volumes:
         - name: config
           configMap:
