@@ -32,7 +32,7 @@ admin:
   description: "Demo admin user"
 
 kibanaserver:
-  hash: "{{ wazuh.server.kibana.password | password_hash('bcrypt') }}"
+  hash: "{{ wazuh.server.kibanaserver.password | password_hash('bcrypt') }}"
   reserved: true
   description: "Demo kibanaserver user"
 

@@ -113,29 +113,23 @@ wazuh:
   server:
     kibanaserver:  
       username: "kibanaserver"
-      password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"  
+      password: "{{ lookup('password', '/dev/null', length=30, chars=['ascii_letters', 'digits', '.*+?-']) }}"  
       secret: dashboard-cred
     admin: 
       username: "admin"              
-      password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"  
+      password: "{{ lookup('password', '/dev/null', length=30, chars=['ascii_letters', 'digits', '.*+?-']) }}"  
       secret: indexer-cred
     api: 
       username: "wazuh-wui"
-      password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}" 
+      password: "{{ lookup('password', '/dev/null', length=30, chars=['ascii_letters', 'digits', '.*+?-']) }}" 
       secret: wazuh-api-cred
     clusterkey:
-      key: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}" 
+      key: "{{ lookup('password', '/dev/null', length=32, chars=['ascii_letters']) }}" 
       secret: wazuh-cluster-key
   agents:
     authd: 
-      authdpass: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}" 
+      authdpass: "{{ lookup('password', '/dev/null', length=14, chars=['ascii_letters']) }}" 
       secret: wazuh-authd-pass
-
-s3:
-  endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
-  region: eu-west-0
-  access_key: AK
-  secret_key: SK
 
 loki:
   retention: 1460h
@@ -147,3 +141,11 @@ loki:
 # Refer to the doc in /docs/how-to/GitHub Container Registry.md
 github:
   registrySecret: ghcr-k8s
+
+vault:
+  download_inventory_vars: false
+  path: null
+  token: null
+  upload_backup: false
+  upload_existing: false
+  url: https://vault.coprs.esa-copernicus.eu
