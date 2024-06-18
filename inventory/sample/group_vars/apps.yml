@@ -142,6 +142,10 @@ loki:
 github:
   registrySecret: ghcr-k8s
 
+# To use the vault the first time you have
+# to manually create an empty secret named 
+# generated_inventory_vars in the vault UI
+# and set the upload_existing to false and upload_backup to true
 vault:
   download_inventory_vars: false
   path: null

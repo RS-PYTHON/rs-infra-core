@@ -92,13 +92,18 @@ Copy the openrc.sh.template into openrc.sh and change the values inside to match
 cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 ```
 
-- Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
+- Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/group_vars/main.yaml`
 - Credentials in `roles/terraform/create-cluster/tasks/.env`
 - Credentials, domain name in `inventory/mycluster/openrc.sh`
 - Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
 - S3 backend for terraform in `inventory/mycluster/backend.tfvars`
-- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/group_vars/all/kubespray.yaml`
-- Values for custom parameters in `inventory/mycluster/group_vars/all/apps.yml`
+- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
+- Values for custom parameters in `inventory/mycluster/group_vars/apps.yml`
+
+```shellsession
+ansible-playbook generate_inventory.yaml \
+    -i inventory/mycluster/hosts.yaml
+```
 
 ### 5. Create and configure machines
 
