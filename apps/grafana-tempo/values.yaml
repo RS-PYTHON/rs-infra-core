@@ -52,6 +52,17 @@ rbac:
   create: false
   pspEnabled: false
 
+
+ingester:
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+
 distributor:
   replicas: 1
   autoscaling:
@@ -64,6 +75,13 @@ distributor:
       enabled: false
       include_all_attributes: false
       filter_by_status_error: false
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 compactor:
   replicas: 1
@@ -72,11 +90,25 @@ compactor:
     dnsConfig:
       options:
         - name: ndots
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 querier:
   replicas: 1
   autoscaling:
     enabled: false
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
   
 queryFrontend:
   query:
@@ -93,6 +125,13 @@ queryFrontend:
     type: ClusterIP
   ingress:
     enabled: false
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 traces:
   jaeger:
@@ -156,6 +195,13 @@ memcached:
     pullPolicy: IfNotPresent
   host: memcached
   replicas: 1
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 metaMonitoring:
   serviceMonitor:
