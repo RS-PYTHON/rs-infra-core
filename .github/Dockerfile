@@ -24,7 +24,6 @@ RUN adduser rspy
 
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
-ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
