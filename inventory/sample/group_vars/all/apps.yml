@@ -126,7 +126,7 @@ wazuh:
       password: "MyStyty3cr37P450r.*-" 
       secret: wazuh-api-cred
     key1:
-      key: "Y9Fgi6YbH9q556xb8N7Cj2LzRqTpaMjhny" 
+      key: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') }}"
       secret: wazuh-cluster-key
   agents:
     key2: 

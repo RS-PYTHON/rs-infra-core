@@ -27,7 +27,7 @@ spec:
   - host: wazuh.{{ platform_domain_name }}
     http:
       paths:
-      - path: /clystard
+      - path: /
         pathType: Prefix
         backend:
           service:
