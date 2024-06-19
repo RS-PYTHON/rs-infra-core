@@ -30,7 +30,7 @@ thanos_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=asc
 oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
-oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') | b64encode }}"
 
 certmanager:
   clusterissuer:
@@ -147,9 +147,15 @@ github:
 # generated_inventory_vars in the vault UI
 # and set the upload_existing to false and upload_backup to true
 vault:
+  # Download the inventory from the vault 
   download_inventory_vars: false
+  # Path to the inventory in the vault ending with "/"
   path: null
+  # Token to access the vault
   token: null
+  # Upload newly generated inventory to the vault
   upload_backup: false
+  # Upload existing inventory to the vault
   upload_existing: false
+  # URL of the vault
   url: https://vault.coprs.esa-copernicus.eu
