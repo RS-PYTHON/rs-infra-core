@@ -127,6 +127,13 @@ ansible-playbook apps.yaml \
 !!! warning "Disclaimer : For Prefect-Worker post-configuration"
     See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
 
+### 8. Deploy the rs-server
+
+```shellsession
+ansible-playbook rs-server.yaml \
+    -i inventory/mycluster/hosts.yaml
+```
+
 # Copyright and license
 
 The Reference System Software as a whole is distributed under the Apache License, version 2.0. A copy of this license is available in the [LICENSE](../LICENSE) file. Reference System Software depends on third-party components and code snippets released under their own license (obviously, all compatible with the one of the Reference System Software). These dependencies are listed in the [NOTICE](../NOTICE.md) file.

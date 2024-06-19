@@ -91,6 +91,21 @@ prefect:
     name: prefect
     secret: prefect-database-password
 
+
+rs_server_catalog:
+  database:
+    host: rs-server-catalog-db-svc.database.svc.cluster.local
+    name: catalog
+    password: password
+    username: postgres
+
+rs_server:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: rspydemo
+    password: test
+    username: test
+
 neuvector:
   core:
     host: neuvector-service-webui.svc.cluster.local
