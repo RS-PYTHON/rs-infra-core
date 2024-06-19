@@ -1,0 +1,271 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+global:
+  image:
+    registry: docker.io
+  clusterDomain: 'cluster.local'
+  dnsService: 'coredns'
+  dnsNamespace: 'kube-system'
+
+useExternalConfig: false
+
+tempo:
+  image:
+    registry: docker.io
+    repository: grafana/tempo
+    pullPolicy: IfNotPresent
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 30
+    timeoutSeconds: 1
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: false
+  podSecurityContext:
+    fsGroup: 1000
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: false
+
+rbac:
+  create: false
+  pspEnabled: false
+
+
+ingester:
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+
+distributor:
+  replicas: 1
+  autoscaling:
+    enabled: false
+  service:
+    type: ClusterIP
+  terminationGracePeriodSeconds: 30
+  config:
+    log_received_spans:
+      enabled: false
+      include_all_attributes: false
+      filter_by_status_error: false
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+compactor:
+  replicas: 1
+  dnsConfigOverides:
+    enabled: false
+    dnsConfig:
+      options:
+        - name: ndots
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+querier:
+  replicas: 1
+  autoscaling:
+    enabled: false
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+  
+queryFrontend:
+  query:
+    enabled: true
+    image:
+      repository: grafana/tempo-query
+    config: |
+      backend: 127.0.0.1:3100
+  replicas: 1
+  autoscaling:
+    enabled: false
+  service:
+    port: 16686
+    type: ClusterIP
+  ingress:
+    enabled: false
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+traces:
+  jaeger:
+    grpc:
+      enabled: false
+    thriftBinary:
+      enabled: false
+    thriftCompact:
+      enabled: false
+    thriftHttp:
+      enabled: false
+  zipkin:
+    enabled: true
+  otlp:
+    http:
+      enabled: true
+    grpc:
+      enabled: true
+  opencensus:
+    enabled: false
+
+memberlist:
+  randomize_node_name: true
+  abort_if_cluster_join_fails: false
+
+server:
+  httpListenPort: 3100
+  logLevel: info
+  logFormat: logfmt
+  grpc_server_max_recv_msg_size: 4194304
+  grpc_server_max_send_msg_size: 4194304
+  http_server_read_timeout: 30s
+  http_server_write_timeout: 30s
+
+storage:
+  trace:
+    s3:
+      access_key: {{ grafanatempo.s3.access_key }}
+      secret_key: {{ grafanatempo.s3.secret_key }}
+      bucket: {{ grafanatempo.s3.bucket }}
+      endpoint: {{ s3.endpoint }}
+      region: {{ s3.region }}
+      insecure: false   
+    pool:
+      max_workers: 400
+      queue_depth: 20000
+  admin:
+    backend: filesystem
+
+global_overrides:
+  per_tenant_override_config: /runtime-config/overrides.yaml
+
+overrides: |
+  overrides: {}
+
+memcached:
+  enabled: true
+  image:
+    repository: memcached
+    tag: 1.6.23-alpine
+    pullPolicy: IfNotPresent
+  host: memcached
+  replicas: 1
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+metaMonitoring:
+  serviceMonitor:
+    enabled: true
+    interval: {{ grafanatempo.metaMonitoring.serviceMonitor.interval}} 
+    scrapeTimeout: {{ grafanatempo.metaMonitoring.serviceMonitor.scrapeTimeout }}
+    scheme: http
+
+minio:
+  enabled: false
+
+gateway:
+  enabled: false
+
+enterprise:
+  enabled: false
+
+adminApi:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+  persistence:
+    subPath:
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 45
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+  terminationGracePeriodSeconds: 60
+
+enterpriseGateway:
+  useDefaultProxyURLs: true
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+  persistence:
+    subPath:
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 45
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+  terminationGracePeriodSeconds: 60
+  ingress:
+    enabled: false
+
+
+
+

@@ -53,4 +53,4 @@ eip_elb_type = "5_bgp"
 eip_elb_bandwidth = 10
 
 #Bucket vars
-buckets = ["elasticsearch-processing", "elasticsearch-security", "thanos", "loki"]
+buckets = ["elasticsearch-processing", "elasticsearch-security", "thanos", "loki", "tempo"]

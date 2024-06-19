@@ -146,6 +146,17 @@ loki:
     endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
     region: "eu-west-0"
 
+grafanatempo:
+  metaMonitoring:
+    serviceMonitor: 
+      interval: 30s  
+      scrapeTimeout: 10s
+  s3:
+    access_key: AK
+    secret_key: SK
+    bucket: rs-cluster-tempo
+
+
 # You might need to create a docker registry secret
 # to retrieve private container image from the
 # GitHub Container Registry : ghcr.io
