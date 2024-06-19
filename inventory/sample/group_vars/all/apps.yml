@@ -137,6 +137,10 @@ s3:
   endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
   region: eu-west-0
 
+rspy:
+  tmp_bucket: rs-cluster-temp
+  catalog_bucket: rs-cluster-catalog
+
 loki:
   retention: 1460h
   s3:

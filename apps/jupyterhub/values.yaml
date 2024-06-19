@@ -368,6 +368,8 @@ singleuser:
     RSPY_PREFECT_URL: https://processing.{{ platform_domain_name }}
     RSPY_GRAFANA_URL: https://monitoring.{{ platform_domain_name }}
     TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
+    RSPY_TEMP_BUCKET: {{ rspy.tmp_bucket }}
+    RSPY_CATALOG_BUCKET: {{ rspy.catalog_bucket }}
   lifecycleHooks: {}
   initContainers: []
   extraContainers: []
