@@ -6,6 +6,7 @@ artifacts
 tenants.*
 ssh-main-gateway.conf
 apps/**/resources.txt
+rs-server/**/resources.txt
 roles/image/files/output/
 __pycache__
 generated_inventory_vars.yaml
