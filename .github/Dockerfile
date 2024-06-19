@@ -27,8 +27,6 @@ ENV HOME /home/rspy
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
-COPY ./resources/jupyter_server_config.py /home/rspy/.jupyter/
-RUN chmod 644 /home/rspy/.jupyter/jupyter_server_config.py
 COPY resources/layer-cleanup.sh /usr/local/bin
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
@@ -54,6 +52,7 @@ RUN \
     git clone git@github.com:RS-PYTHON/rs-demo.git
 
 COPY --chown=rspy:rspy ./resources/00-read-env.py /tmp/00-read-env.py
+COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_config.py
 
 COPY resources/start-notebook.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/start-notebook.sh

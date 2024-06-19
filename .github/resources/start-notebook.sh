@@ -21,6 +21,9 @@ mkdir -p $HOME/.ipython/profile_default/startup/
 chmod 2775 $HOME/.ipython/profile_default/startup/
 cp /tmp/00-read-env.py $HOME/.ipython/profile_default/startup/
 
+cp /tmp/upyter_server_config.py /home/rspy/.jupyter/jupyter_server_config.py
+chmod 644 /home/rspy/.jupyter/jupyter_server_config.py
+
 cp -r /opt/rs-demo/notebooks $HOME
 
 exec /usr/local/bin/start-notebook.py "$@"
