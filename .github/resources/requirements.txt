@@ -15,3 +15,5 @@
 nbgitpuller
 python-dotenv
 boto3
+dask-labextension
+
