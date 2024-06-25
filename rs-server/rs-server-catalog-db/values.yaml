@@ -1,0 +1,86 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# -- Namespace for the deployment
+namespace: database
+
+service:
+  # -- Port for the service
+  port: 5432
+
+postgres:
+  # -- PostgreSQL port
+  port: "5432"
+  # -- PostgreSQL database name
+  db: {{ rs_server_catalog.database.name }}
+  secret:
+    # -- Username to authenticate with the PostgreSQL service
+    user: {{ rs_server_catalog.database.username }}
+    # -- Password to authenticate with the PostgreSQL service
+    pass: {{ rs_server_catalog.database.password }}
+
+image:
+  # -- Image registry
+  registry: ghcr.io
+  # -- Image repository
+  repository: stac-utils
+  # -- Image name
+  name: pgstac
+  # -- Image version, can be a tag or a digest
+  version: v0.7.10
+  # -- Image pull policy
+  PullPolicy: IfNotPresent
+  
+resources:
+  request:
+    # -- Pod memory request
+    ram: "256Mi"
+    # -- Pod CPU request
+    cpu: "100m"
+  limit:
+    # -- Pod memory limit
+    ram: "1000Mi"
+    # -- Pod CPU limit
+    cpu: "500m"
+
+probe:
+  liveness:
+    # -- Command for the liveness probe
+    command: ["pg_isready", "-d", "catalog"]
+    # -- InitialDelaySeconds for the liveness probe
+    initialDelaySeconds: 30
+    # -- periodSeconds for the liveness probe
+    periodSeconds: 30
+    # -- timeoutSeconds for the liveness probe
+    timeoutSeconds: 5
+  readiness:
+    # -- Command for the liveness probe
+    command: ["pg_isready", "-d", "catalog"]
+    # -- InitialDelaySeconds for the readiness probe
+    initialDelaySeconds: 30
+    # -- periodSeconds for the readiness probe
+    periodSeconds: 30
+    # -- timeoutSeconds for the readiness probe
+    timeoutSeconds: 5
+
+volume:
+  # -- Size of the database volume
+  size: "20Gi"
+  # -- AccessMode of the database volume
+  accessModes: ReadWriteOnce
+  # -- StorageClass of the database volume
+  storageClassName: csi-cinder-sc-retain
+
+# -- Keep the ressources for PVC and ConfigMap. Default is to keep.
+helmResourcePolicy: keep

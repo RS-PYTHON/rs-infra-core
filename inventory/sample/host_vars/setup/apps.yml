@@ -91,6 +91,21 @@ prefect:
     name: prefect
     secret: prefect-database-password
 
+
+rs_server_catalog:
+  database:
+    host: rs-server-catalog-db-svc.database.svc.cluster.local
+    name: catalog
+    password: password
+    username: postgres
+
+rs_server:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: rspydemo
+    password: test
+    username: test
+
 neuvector:
   core:
     admin:
@@ -131,9 +146,28 @@ wazuh:
       authdpass: "{{ lookup('password', '/dev/null', length=14, chars=['ascii_letters']) }}" 
       secret: wazuh-authd-pass
 
+s3:
+  endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
+  region: eu-west-0
+
+rspy:
+  tmp_bucket: rs-cluster-temp
+  catalog_bucket: rs-cluster-catalog
+
 loki:
   retention: 1460h
   bucket: rs-cluster-loki
+
+grafanatempo:
+  metaMonitoring:
+    serviceMonitor: 
+      interval: 30s  
+      scrapeTimeout: 10s
+  s3:
+    access_key: AK
+    secret_key: SK
+    bucket: rs-cluster-tempo
+
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the

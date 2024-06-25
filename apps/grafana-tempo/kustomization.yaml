@@ -14,31 +14,16 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-  
-namespace: security
 
-configMapGenerator:
-  - name: wa-script-configmap
-    files:
-      - wazuh-agent_install.sh
+namespace: logging
 
-  - name: wa-alpine-configmap
-    files: 
-      - wazuh-alpine-apk.sh
-
-
-secretGenerator:
-- name: "{{ wazuh.agents.authd.secret }}"
-  literals:
-  - authd.pass="{{ wazuh.agents.authd.authdpass }}"
-  options:
-    disableNameSuffixHash: true
-- name: "{{ wazuh.server.api.secret }}"
-  literals:
-  - username="{{ wazuh.server.api.username }}"
-  - password="{{ wazuh.server.api.password }}"
-  options:
-    disableNameSuffixHash: true
+helmCharts:
+- name: tempo-distributed
+  namespace: logging
+  repo: https://grafana.github.io/helm-charts/
+  releaseName: "{{ app_name }}"
+  version: 1.9.9
+  valuesFile: values.yaml
 
 resources:
-  - wa-install-ds.yaml
+  - grafanadatasource.yaml

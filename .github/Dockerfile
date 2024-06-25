@@ -24,7 +24,6 @@ RUN adduser rspy
 
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
-ENV RSPY_UAC_CHECK_URL http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/requirements.txt /opt/
@@ -37,7 +36,8 @@ RUN \
     vim \
     git \
     curl \
-    tzdata && \
+    tzdata \
+    xclip && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
@@ -52,6 +52,7 @@ RUN \
     git clone git@github.com:RS-PYTHON/rs-demo.git
 
 COPY --chown=rspy:rspy ./resources/00-read-env.py /tmp/00-read-env.py
+COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_config.py
 
 COPY resources/start-notebook.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/start-notebook.sh

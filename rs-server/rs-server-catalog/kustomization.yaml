@@ -14,31 +14,11 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-  
-namespace: security
+namespace: processing
 
-configMapGenerator:
-  - name: wa-script-configmap
-    files:
-      - wazuh-agent_install.sh
-
-  - name: wa-alpine-configmap
-    files: 
-      - wazuh-alpine-apk.sh
-
-
-secretGenerator:
-- name: "{{ wazuh.agents.authd.secret }}"
-  literals:
-  - authd.pass="{{ wazuh.agents.authd.authdpass }}"
-  options:
-    disableNameSuffixHash: true
-- name: "{{ wazuh.server.api.secret }}"
-  literals:
-  - username="{{ wazuh.server.api.username }}"
-  - password="{{ wazuh.server.api.password }}"
-  options:
-    disableNameSuffixHash: true
-
-resources:
-  - wa-install-ds.yaml
+helmCharts:
+- name: rs-server-catalog
+  repo: https://rs-python.github.io/rs-helm
+  releaseName: "{{ app_name }}"
+  version: 0.0.1-a10
+  valuesFile: values.yaml
