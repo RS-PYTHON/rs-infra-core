@@ -169,9 +169,9 @@ server:
 storage:
   trace:
     s3:
-      access_key: {{ grafanatempo.s3.access_key }}
-      secret_key: {{ grafanatempo.s3.secret_key }}
-      bucket: {{ grafanatempo.s3.bucket }}
+      access_key: {{ s3.access_key }}
+      secret_key: {{ s3.secret_key }}
+      bucket: {{ grafanatempo.metaMonitoring.bucket }}
       endpoint: {{ s3.endpoint }}
       region: {{ s3.region }}
       insecure: false   

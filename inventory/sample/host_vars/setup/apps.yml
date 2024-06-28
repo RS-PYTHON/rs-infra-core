@@ -91,7 +91,6 @@ prefect:
     name: prefect
     secret: prefect-database-password
 
-
 rs_server_catalog:
   database:
     host: rs-server-catalog-db-svc.database.svc.cluster.local
@@ -183,7 +182,7 @@ github:
 vault:
   # Download the inventory from the vault 
   download_inventory_vars: false
-  # Path to the inventory in the vault ending with "/"
+  # Path to the inventory in the vault ending without "/"
   path: null
   # Token to access the vault
   token: null
