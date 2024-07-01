@@ -91,6 +91,10 @@ prefect:
     name: prefect
     secret: prefect-database-password
 
+prefectworker:
+  name: on-demand-k8s-pool
+  number: 2
+
 rs_server_catalog:
   database:
     host: rs-server-catalog-db-svc.database.svc.cluster.local
