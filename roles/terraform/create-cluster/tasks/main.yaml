@@ -36,6 +36,7 @@
     echo "secret_key=${AWS_SECRET_ACCESS_KEY}" >> {{ inventory_dir }}/s3cfg && \
     echo "use_https=True" >> {{ inventory_dir }}/s3cfg && \
     $CONDA_PREFIX/bin/s3cmd -c {{ inventory_dir }}/s3cfg mb s3://$(grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2) && \
+    rm {{ inventory_dir }}/s3cfg && \
     pip uninstall s3cmd==2.4.0 --yes -q -q -q
   args:
     chdir: roles/terraform/create-cluster/tasks/
@@ -90,7 +91,7 @@
 
 - name: Create archive
   shell: |
-    tar -czf rs-infrastructure.tar.gz -C {{ playbook_dir }} ansible.cfg .gitmodules apps.yaml rs-setup.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/  {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/all/kubespray.yaml collections/kubespray roles/
+    tar -czf rs-infrastructure.tar.gz -C {{ playbook_dir }} ansible.cfg .gitmodules apps.yaml rs-setup.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/host_vars/setup/ {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/group_vars/all/generated_inventory_vars.yaml collections/kubespray roles/
 
 - name: Change ssh key path on localhost
   ansible.builtin.replace:
@@ -111,7 +112,7 @@
     echo "roles_path = /home/cloud/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:/home/cloud/rs-infrastructure/collections/kubespray/roles" >> ~/rs-infrastructure/ansible.cfg && \
     sed -i "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(hostname -I)/" ~/rs-infrastructure/{{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml && \
     sed -i "s/OS_DOMAIN_NAME/OS_USER_DOMAIN_NAME/" ~/rs-infrastructure/{{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh && \
-    echo -e "cinder_topology_zones :\n  - eu-west-0" >> ~/rs-infrastructure/collections/kubespray/roles/kubespray-defaults/defaults/main.yaml && \
+    echo -e "cinder_topology_zones :\n  - eu-west-0" >> ~/rs-infrastructure/collections/kubespray/roles/kubespray-defaults/defaults/main/main.yml && \
     cd ~/rs-infrastructure && ~/miniforge3/bin/conda create -y -n rspy python=3.11' && \
     ssh -o StrictHostKeyChecking=no -i {{ inventory_dir }}/privatekey.pem cloud@$(terraform output eip_addr | sed 's/\"//g') '\
     source ~/miniforge3/bin/activate rspy && \

@@ -21,7 +21,7 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 ### 2.1 Generate certificates for dashboard  
 
 ```bash
-./apps/wazuh-server/wazuh/certs/dashboard_http/generate_certs.sh
+./apps/04-wazuh-server/wazuh/certs/dashboard_http/generate_certs.sh
 ```
 
 *Two files should be generated:*
@@ -31,12 +31,12 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 
 *In the following folder:*
 
-`./apps/wazuh-server/wazuh/certs/dashboard_http`
+`./apps/04-wazuh-server/wazuh/certs/dashboard_http`
 
 ### 2.2 Generate certificates for all other nodes
 
 ```bash
-./apps/wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
+./apps/04-wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
 ```
 
 *Several files should be generated:*
@@ -63,7 +63,7 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 
 *into folder :*
 
-`./apps/wazuh-server/wazuh/certs/indexer_cluster`
+`./apps/04-wazuh-server/wazuh/certs/indexer_cluster`
 
 ## 3. Apply credentials
 
@@ -78,7 +78,7 @@ Kubernetes deployments [Update accounts credentials](https://github.com/wazuh/wa
 ### 3.1 Open interactive session to indexer pod 0  
 
 ```bash
-kubectl exec -it wazuh-indexer-0 -n wazuh -- /bin/bash
+kubectl exec -it wazuh-indexer-0 -n security -- /bin/bash
 ```
 
 ### 3.2 Set variables

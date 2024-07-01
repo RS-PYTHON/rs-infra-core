@@ -28,15 +28,15 @@ configMapGenerator:
 
 
 secretGenerator:
-- name: "{{ wazuh.agents.key2.secret }}"
+- name: "{{ wazuh.agents.authd.secret }}"
   literals:
-  - authd.pass="{{ wazuh.agents.key2.authdpass }}"
+  - authd.pass="{{ wazuh.agents.authd.authdpass }}"
   options:
     disableNameSuffixHash: true
-- name: "{{ wazuh.server.user3.secret }}"
+- name: "{{ wazuh.server.api.secret }}"
   literals:
-  - username="{{ wazuh.server.user3.username }}"
-  - password="{{ wazuh.server.user3.password }}"
+  - username="{{ wazuh.server.api.username }}"
+  - password="{{ wazuh.server.api.password }}"
   options:
     disableNameSuffixHash: true
 

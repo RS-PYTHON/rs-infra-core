@@ -23,10 +23,10 @@ stash_license: |
 
 # S3 credential to be reused accross apps
 s3:
-  endpoint: S3_ENDPOINT
-  region: S3_REGION
-  secret_key: S3_SECRET_KEY
-  access_key: S3_ACCESS_KEY
+  endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
+  region: eu-west-0
+  access_key: AK
+  secret_key: SK
 
 # /!\ Define the issuer related to your certificate provider.
 # The issuer represents your certificate authority.

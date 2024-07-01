@@ -25,10 +25,6 @@
         path: "{{ generated_inventory_vars_path | dirname }}"
         state: directory
 
-    - name: Read infra default vars
-      include_vars:
-        file: "{{ playbook_dir }}/roles/infra-defaults/defaults/main.yaml"
-
     - name: Get inventory_vars content
       set_fact:
         inventory_vars_content: |
@@ -53,7 +49,7 @@
 
     - name: Send generated app_vars to vault
       uri:
-        url: "{{ vault.url }}/v1/{{ vault.path }}generated_inventory_vars"
+        url: "{{ vault.url }}/v1/{{ vault.path }}/data/generated_inventory_vars"
         method: POST
         headers:
           X-Vault-Token: "{{ vault.token }}"

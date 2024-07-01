@@ -43,11 +43,11 @@ loki:
       cache_location: /var/loki/cache
       cache_ttl: 168h
     aws:
-      bucketnames: {{ loki.s3.bucket }}
-      endpoint: {{ loki.s3.endpoint }}
-      region: {{ loki.s3.region }}
-      access_key_id: {{ loki.s3.access_key }}
-      secret_access_key: {{ loki.s3.secret_key }}
+      bucketnames: {{ loki.bucket }}
+      endpoint: {{ s3.endpoint }}
+      region: {{ s3.region }}
+      access_key_id: {{ s3.access_key }}
+      secret_access_key: {{ s3.secret_key }}
       insecure: false
       sse_encryption: false
       http_config:

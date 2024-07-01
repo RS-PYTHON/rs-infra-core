@@ -31,7 +31,7 @@ resources:
 secretGenerator:
 - name: exporter
   literals:
-  - username= "{{ neuvector.core.user2.Fullname }}"
-  - password= "{{ neuvector.core.user2.Password }}"
+  - username= "{{ neuvector.core.exporter.Fullname }}"
+  - password= "{{ neuvector.core.exporter.Password }}"
   options:
     disableNameSuffixHash: true

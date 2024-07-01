@@ -15,7 +15,7 @@
 ---
 kustomize_enabled: false
 
-kustomize_version: "v4.5.7"
+#kustomize_version: "v4.5.7"
 
 kustomize_download_url: "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F{{ kustomize_version }}/kustomize_{{ kustomize_version }}_linux_{{ image_arch }}.tar.gz"
 
