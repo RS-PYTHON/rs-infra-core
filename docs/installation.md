@@ -112,6 +112,9 @@ ansible-playbook cluster.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
+!!! warning "Note: DNS configuration"
+    At this point, you should configure your domain name to point to the master's IP from the `inventory/mycluster/hosts.yaml` file.
+
 ### 6. Deploy Kubernetes with `kubespray`
 
 ```shellsession
@@ -121,7 +124,7 @@ ansible-playbook kubernetes.yaml \
 
 ### 7. Deploy the apps
 
-!!! warning "Disclaimer : For Wazuh Server installation"
+!!! warning "Disclaimer: For Wazuh Server installation"
     See **_"1. Enable Bcrypt encryption"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 ```shellsession
@@ -129,7 +132,7 @@ ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-!!! warning "Disclaimer : For Prefect-Worker post-configuration"
+!!! warning "Disclaimer: For Prefect-Worker post-configuration"
     See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
 
 ### 8. Deploy the rs-server
