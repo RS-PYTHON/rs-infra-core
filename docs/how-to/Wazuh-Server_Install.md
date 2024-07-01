@@ -78,7 +78,7 @@ Kubernetes deployments [Update accounts credentials](https://github.com/wazuh/wa
 ### 3.1 Open interactive session to indexer pod 0  
 
 ```bash
-kubectl exec -it wazuh-indexer-0 -n wazuh -- /bin/bash
+kubectl exec -it wazuh-indexer-0 -n security -- /bin/bash
 ```
 
 ### 3.2 Set variables
