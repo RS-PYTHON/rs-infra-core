@@ -81,7 +81,7 @@
     cat {{ inventory_dir }}/hosts.yaml | sed "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(terraform output eip_addr | tr -d '\"')/" > {{ inventory_dir }}/hosts.yaml && \
     echo -e "\tchildren:" >> {{ inventory_dir }}/hosts.yaml; for k8s_role in $(terraform output -json hosts | jq -r '.[] | .tags.k8s_roles' | grep -oh "\w*" | sort | uniq); do echo -e "\t\t$k8s_role:\n\t\t\thosts:" >> {{ inventory_dir }}/hosts.yaml; \
     terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | "\t\t\t\t\(.name):"' >> {{ inventory_dir }}/hosts.yaml; done && \
-    echo -e "\t\tkube_node:\n\t\t\thosts:\n$(terraform output -json hosts | jq -r '.[] | "\t\t\t\t\(.name):"')" >> {{ inventory_dir }}/hosts.yaml && \
+    echo -e "\t\tkube_node:\n\t\t\thosts:\n$(terraform output -json hosts | jq -r '.[] | jq -r '.[] | (select( .name | contains("master") | not )) | "\t\t\t\t\(.name):"')" >> {{ inventory_dir }}/hosts.yaml && \
     echo -e "\t\tk8s_cluster:\n\t\t\tchildren:\n$(terraform output -json hosts | jq -r '.[] | "\(.tags.k8s_roles)"' | grep -oh "\w*" | sort | uniq | awk '{print "\t\t\t\t"$1":"}')" >> {{ inventory_dir }}/hosts.yaml && \
     echo -e "\t\tcalico_rr:\n\t\t\thosts: {}" >> {{ inventory_dir }}/hosts.yaml && \
     sed -i 's/\t/  /g' {{ inventory_dir }}/hosts.yaml
