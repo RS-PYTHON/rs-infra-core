@@ -23,7 +23,7 @@ app:
   # -- URL of the API Key Manager service (internal)
   uacCheckUrl: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
   # -- URL of the API Key Manager home page (public)
-  uacHomeUrl: https://apikeymanager.subdomain.example.com/docs
+  uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
 
 ingress:
   # -- Enabled/Disable ingress

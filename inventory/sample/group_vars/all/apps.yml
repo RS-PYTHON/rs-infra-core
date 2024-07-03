@@ -151,6 +151,8 @@ wazuh:
 s3:
   endpoint: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
   region: eu-west-0
+  access_key: grhk98ui11huk1rr6zg1e8
+  secret_key: u1kyu11z91g1koloi16t
 
 rspy:
   tmp_bucket: rs-cluster-temp
