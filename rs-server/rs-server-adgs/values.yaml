@@ -15,24 +15,7 @@
 # -- Namespace for the deployment
 namespace: processing
 
-# -- Number of replicas for the deployment
-replicaCount: 1
-
-service:
-  # -- Port for the service
-  port: 8080
-
 app:
-  # -- Port for the application
-  port: 8000
-  # -- Working directory for the application
-  workDir: /app
-  # -- Config directory for the application
-  confDir: /app/conf
-  # -- Station configuration file for the application
-  stationConfigFile: stations_cfg.json
-  # -- EODAG configuration file for the application
-  eodagConfigFile: adgs_ws_config.yaml
   station:
     endpoint:
       # -- ADGS URL
@@ -44,30 +27,6 @@ app:
         password: test
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
-
-probe:
-  liveness:
-    # -- Path for the liveness probe
-    path: /health
-    # -- Port for the liveness probe
-    port: 8000
-    # -- InitialDelaySeconds for the liveness probe
-    initialDelaySeconds: 30
-    # -- periodSeconds for the liveness probe
-    periodSeconds: 30
-    # -- timeoutSeconds for the liveness probe
-    timeoutSeconds: 5
-  readiness:
-    # -- Path for the readiness probe
-    path: /health
-    # -- Port for the readiness probe
-    port: 8000
-    # -- InitialDelaySeconds for the readiness probe
-    initialDelaySeconds: 30
-    # -- periodSeconds for the readiness probe
-    periodSeconds: 30
-    # -- timeoutSeconds for the readiness probe
-    timeoutSeconds: 5
 
 postgres:
   # -- PostgreSQL port
@@ -93,20 +52,6 @@ obs:
     # -- Secret Key to authenticate with the object storage service
     sk: {{ s3.secret_key }}
 
-image:
-  #imagePullSecrets: regcred
-  # -- Image registry
-  registry: ghcr.io
-  # -- Image repository
-  repository: rs-python
-  # -- Image name
-  name: rs-server-adgs
-  # -- Image version, can be a tag or a digest
-  version: 0.1a10
-  # -- Image pull policy
-  PullPolicy: IfNotPresent
-  #imagePullSecrets: regcred
-
 ingress:
   # -- Enabled/Disable ingress
   enabled: true
@@ -118,20 +63,4 @@ ingress:
   # -- Ingress host name
   host: {{ platform_domain_name }}
   # -- Ingress path
-  path: /adgs-emarie
-
-resources:
-  request:
-    # -- Pod memory request
-    ram: "256Mi"
-    # -- Pod CPU request
-    cpu: "100m"
-  limit:
-    # -- Pod memory limit
-    ram: "1000Mi"
-    # -- Pod CPU limit
-    cpu: "500m"
-
-tempo:
-  # -- Grafana tempo endpoint.
-  endpoint: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
+  path: /adgs
