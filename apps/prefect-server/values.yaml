@@ -39,6 +39,17 @@ server:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
 
+  # requests MUST be specified if using an HPA, otherwise the HPA will not know when to trigger a scale event
+  resources:
+    # -- the requested resources for the server container
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    # -- the requested limits for the server container
+    limits:
+      cpu: "1"
+      memory: 2Gi
+
 ## Service configuration
 service:
   type: ClusterIP
