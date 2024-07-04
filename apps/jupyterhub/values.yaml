@@ -146,6 +146,14 @@ hub:
     name:
     annotations: {}
   extraPodSpec: {}
+  resources:
+    limits:
+      cpu: 0.3
+      memory: 300Mi
+    requests:
+      cpu: 0.1
+      memory: 150Mi
+
 
 rbac:
   create: true
@@ -402,11 +410,11 @@ singleuser:
       - name: {{ github.registrySecret }}
   startTimeout: 300
   cpu:
-    limit:
-    guarantee:
+    limit: 0.75
+    guarantee: 0.1
   memory:
-    limit:
-    guarantee: 1G
+    limit: 3.5G
+    guarantee: 400M
   extraResource:
     limits: {}
     guarantees: {}
