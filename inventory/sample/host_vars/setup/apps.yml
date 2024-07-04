@@ -108,6 +108,7 @@ rs_server:
     name: rspydemo
     password: test
     username: test
+    secret: status-database-password
 
 neuvector:
   core:

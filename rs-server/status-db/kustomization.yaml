@@ -14,11 +14,8 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
+
 namespace: database
 
-helmCharts:
-- name: rs-server-catalog-db
-  repo: https://rs-python.github.io/rs-helm
-  releaseName: "{{ app_name }}"
-  version: 0.2.0-a1
-  valuesFile: values.yaml
+resources:
+  - database.yaml

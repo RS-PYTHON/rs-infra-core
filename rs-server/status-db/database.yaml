@@ -1,0 +1,80 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-status-db
+spec:
+  ttlSecondsAfterFinished: 360
+  template:
+    spec:
+      containers:
+      - name: create-status-db
+        image: ghcr.io/cloudnative-pg/postgresql:16.1
+        command: ["/scripts/create-database.sh"]
+        volumeMounts:
+          - name: create-database
+            mountPath: /scripts/
+        env:
+        - name: DATABASE
+          value: {{ rs_server.database.name }}
+        - name: PGNEWUSER
+          valueFrom:
+            secretKeyRef:
+              name: {{ rs_server.database.secret }}
+              key: username
+        - name: PGNEWPASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ rs_server.database.secret }}
+              key: password
+        - name: PGADMIN
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: username
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: password
+        - name: PGHOST
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: host
+        - name: PGPORT
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-cluster-superuser
+              key: port
+      volumes:
+      - name: create-database
+        configMap:
+          name: create-database
+          defaultMode: 0744
+      restartPolicy: Never
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ rs_server.database.secret }}
+  labels: 
+    app: keycloak
+type: Opaque
+stringData:
+  username: {{ rs_server.database.username }}
+  password: {{ rs_server.database.password }}
