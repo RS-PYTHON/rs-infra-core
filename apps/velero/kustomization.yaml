@@ -14,12 +14,12 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-namespace: velero
+namespace: infra
 
 helmCharts:
 - name: velero
   repo: https://vmware-tanzu.github.io/helm-charts/
   releaseName: "{{ app_name }}"
   version: 7.1.0
-  namespace: velero
-  valuesFile: velero.yaml
+  namespace: infra
+  valuesFile: values.yaml

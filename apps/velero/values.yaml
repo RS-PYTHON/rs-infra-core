@@ -1,0 +1,131 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+image:
+  repository: velero/velero
+  tag: v1.14.0
+  pullPolicy: IfNotPresent
+
+dnsPolicy: ClusterFirst
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.10.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+terminationGracePeriodSeconds: 3600
+
+livenessProbe:
+  httpGet:
+    path: /metrics
+    port: http-monitoring
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+readinessProbe:
+  httpGet:
+    path: /metrics
+    port: http-monitoring
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+metrics:
+  enabled: true
+  scrapeInterval: 30s
+  scrapeTimeout: 10s
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8085"
+    prometheus.io/path: "/metrics"
+  serviceMonitor:
+    autodetect: true
+    enabled: true
+  nodeAgentPodMonitor:
+    autodetect: true
+    enabled: false
+  prometheusRule:
+    autodetect: true
+    enabled: false
+
+kubectl:
+  image:
+    repository: docker.io/bitnami/kubectl
+
+upgradeCRDs: true
+
+cleanUpCRDs: false
+
+configuration:
+  backupStorageLocation:
+  - name: {{ velero.bckStorageLoc.name }}
+    provider: aws
+    bucket: {{ velero.bucket }}
+    accessMode: ReadWrite
+    config:
+      region: {{ s3.region }}
+      s3ForcePathStyle: true
+      s3Url: {{ s3.endpoint }}
+  volumeSnapshotLocation:
+  - name: {{ velero.volSnapLoc.name }}
+    provider: aws
+    config:
+      region: {{ s3.region }}
+  disableInformerCache: false
+
+rbac:
+  create: true
+  clusterAdministrator: true
+  clusterAdministratorName: cluster-admin
+
+serviceAccount:
+  server:
+    create: true
+    annotations:
+
+credentials:
+  useSecret: true
+  secretContents:
+   cloud: |
+     [default]
+     aws_access_key_id= "{{ s3.access_key }}"
+     aws_secret_access_key= "{{ s3.secret_key }}"
+
+backupsEnabled: true
+snapshotsEnabled: true
+deployNodeAgent: false
+
+nodeAgent:
+  podVolumePath: /var/lib/kubelet/pods
+  useScratchEmptyDir: true
+  dnsPolicy: ClusterFirst
+  podSecurityContext:
+    runAsUser: 0
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
