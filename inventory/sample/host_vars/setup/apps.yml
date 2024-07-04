@@ -15,8 +15,6 @@
 package_paths:
 - apps
 
-platform_domain_name: rspy.example.com
-
 # TODO:
 # Clean unused secrets here and in realmimport 
 grafana_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
