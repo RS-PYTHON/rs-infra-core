@@ -1,0 +1,16 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: backup-pvc-grafana
+  namespace: infra
+spec:
+  includedNamespaces:
+    - monitoring
+  includedResources:
+    - persistentvolumeclaims
+    - persistentvolumes
+  labelSelector:
+    matchLabels:
+      app: grafana
+  storageLocation: rs-debug-velero
+  ttl: 72h

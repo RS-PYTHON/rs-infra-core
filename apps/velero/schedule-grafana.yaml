@@ -1,0 +1,19 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: schedule-backup-grafana
+  namespace: infra
+spec:  
+  schedule: "0 11 * * *"
+  template:
+    ttl: 168h
+    includedNamespaces:
+      - monitoring
+    labelSelector:
+      matchLabels:
+        app: grafana
+        backup: opt-in
+    snapshotVolumes: true
+    storageLocation: rs-debug-velero
+    volumeSnapshotLocations:
+      - aws-default

@@ -23,3 +23,12 @@ helmCharts:
   version: 7.1.0
   namespace: infra
   valuesFile: values.yaml
+
+resources: 
+  - backup-wazuh.yaml
+  - backup-grafana.yaml
+  - restore-wazuh.yaml
+  - restore-grafana.yaml
+  - schedule-wazuh.yaml
+  - schedule-grafana.yaml
+  

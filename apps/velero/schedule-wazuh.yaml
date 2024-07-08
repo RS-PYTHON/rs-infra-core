@@ -1,0 +1,39 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: schedule-backup-wazuh-manager
+  namespace: infra
+spec:  
+  schedule: "0 11 * * *"
+  template:
+    ttl: 168h
+    includedNamespaces:
+      - security
+    labelSelector:
+      matchLabels:
+        app: wazuh-manager
+        backup: opt-in
+    snapshotVolumes: true
+    storageLocation: rs-debug-velero
+    volumeSnapshotLocations:
+      - aws-default
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: schedule-backup-wazuh-indexer
+  namespace: infra
+spec:  
+  schedule: "0 11 * * *"
+  template:
+    ttl: 168h
+    includedNamespaces:
+      - security
+    labelSelector:
+      matchLabels:
+        app: wazuh-indexer
+        backup: opt-in
+    snapshotVolumes: true
+    storageLocation: rs-debug-velero
+    volumeSnapshotLocations:
+      - aws-default

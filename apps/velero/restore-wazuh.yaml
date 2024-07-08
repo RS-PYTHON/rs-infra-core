@@ -1,0 +1,25 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-pvc-wazuh-manager
+  namespace: infra
+spec:
+  backupName: backup-pvc-wazuh-manager
+  includedNamespaces:
+    - security
+  includedResources:
+    - persistentvolumeclaims
+    - persistentvolumes
+---
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-pvc-wazuh-indexer
+  namespace: infra
+spec:
+  backupName: backup-wazuh-indexer
+  includedNamespaces:
+    - security
+  includedResources:
+    - persistentvolumeclaims
+    - persistentvolumes
