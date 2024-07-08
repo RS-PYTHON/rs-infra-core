@@ -21,6 +21,18 @@ spec:
   
   enableSuperuserAccess: true
 
+  postgresql:
+    parameters:
+      shared_buffers: "256MB"
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: 0.1
+    limits:
+      memory: "1024Mi"
+      cpu: 0.3
+
   storage:
     storageClass: csi-cinder-sc-retain
     size: 30Gi
