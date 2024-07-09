@@ -12,7 +12,7 @@ spec:
   labelSelector:
     matchLabels:
       app: wazuh-manager
-  storageLocation: rs-debug-velero
+  storageLocation: {{ velero.bckStorageLoc.name }}
   ttl: 72h
 ---
 apiVersion: velero.io/v1
@@ -29,5 +29,5 @@ spec:
   labelSelector:
     matchLabels:
       app: wazuh-indexer
-  storageLocation: rs-debug-velero
+  storageLocation: {{ velero.bckStorageLoc.name }}
   ttl: 72h

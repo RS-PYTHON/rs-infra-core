@@ -17,8 +17,6 @@ image:
   tag: v1.14.0
   pullPolicy: IfNotPresent
 
-dnsPolicy: ClusterFirst
-
 initContainers:
   - name: velero-plugin-for-aws
     image: velero/velero-plugin-for-aws:v1.10.0
@@ -29,49 +27,11 @@ initContainers:
 
 terminationGracePeriodSeconds: 3600
 
-livenessProbe:
-  httpGet:
-    path: /metrics
-    port: http-monitoring
-    scheme: HTTP
-  initialDelaySeconds: 10
-  periodSeconds: 30
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 5
-
-readinessProbe:
-  httpGet:
-    path: /metrics
-    port: http-monitoring
-    scheme: HTTP
-  initialDelaySeconds: 10
-  periodSeconds: 30
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 5
-
 metrics:
   enabled: true
-  scrapeInterval: 30s
-  scrapeTimeout: 10s
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "8085"
-    prometheus.io/path: "/metrics"
   serviceMonitor:
-    autodetect: true
+    autodetect: false
     enabled: true
-  nodeAgentPodMonitor:
-    autodetect: true
-    enabled: false
-  prometheusRule:
-    autodetect: true
-    enabled: false
-
-kubectl:
-  image:
-    repository: docker.io/bitnami/kubectl
 
 upgradeCRDs: true
 
@@ -82,6 +42,7 @@ configuration:
   - name: {{ velero.bckStorageLoc.name }}
     provider: aws
     bucket: {{ velero.bucket }}
+    default: true
     accessMode: ReadWrite
     config:
       region: {{ s3.region }}
@@ -92,6 +53,7 @@ configuration:
     provider: aws
     config:
       region: {{ s3.region }}
+    defaultBackupStorageLocation: {{ velero.bckStorageLoc.name }}
   disableInformerCache: false
 
 rbac:
@@ -102,7 +64,6 @@ rbac:
 serviceAccount:
   server:
     create: true
-    annotations:
 
 credentials:
   useSecret: true
@@ -114,18 +75,3 @@ credentials:
 
 backupsEnabled: true
 snapshotsEnabled: true
-deployNodeAgent: false
-
-nodeAgent:
-  podVolumePath: /var/lib/kubelet/pods
-  useScratchEmptyDir: true
-  dnsPolicy: ClusterFirst
-  podSecurityContext:
-    runAsUser: 0
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-            - key: "node-role.kubernetes.io/infra"
-              operator: Exists

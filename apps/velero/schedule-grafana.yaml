@@ -4,7 +4,7 @@ metadata:
   name: schedule-backup-grafana
   namespace: infra
 spec:  
-  schedule: "0 11 * * *"
+  schedule: "0 12 * * *"
   template:
     ttl: 168h
     includedNamespaces:
@@ -14,6 +14,6 @@ spec:
         app: grafana
         backup: opt-in
     snapshotVolumes: true
-    storageLocation: rs-debug-velero
+    storageLocation: {{ velero.bckStorageLoc.name }}
     volumeSnapshotLocations:
       - aws-default

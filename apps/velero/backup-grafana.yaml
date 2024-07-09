@@ -12,5 +12,5 @@ spec:
   labelSelector:
     matchLabels:
       app: grafana
-  storageLocation: rs-debug-velero
+  storageLocation: {{ velero.bckStorageLoc.name }}
   ttl: 72h
