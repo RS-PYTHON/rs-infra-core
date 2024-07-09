@@ -6,7 +6,7 @@ metadata:
 spec:  
   schedule: "0 12 * * *"
   template:
-    ttl: 168h
+    ttl: 240h
     includedNamespaces:
       - security
     labelSelector:
@@ -26,7 +26,7 @@ metadata:
 spec:  
   schedule: "0 12 * * *"
   template:
-    ttl: 168h
+    ttl: 240h
     includedNamespaces:
       - security
     labelSelector:
