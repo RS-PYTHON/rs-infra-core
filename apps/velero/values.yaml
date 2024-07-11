@@ -48,6 +48,7 @@ configuration:
       region: {{ s3.region }}
       s3ForcePathStyle: true
       s3Url: {{ s3.endpoint }}
+      checksumAlgorithm: ""
   volumeSnapshotLocation:
   - name: {{ velero.volSnapLoc.name }}
     provider: aws
