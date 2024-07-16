@@ -56,7 +56,7 @@ configuration:
       region: {{ s3.region }}
     defaultBackupStorageLocation: {{ velero.bckStorageLoc.name }}
   disableInformerCache: false
-
+  features: EnableCSI
 rbac:
   create: true
   clusterAdministrator: true
