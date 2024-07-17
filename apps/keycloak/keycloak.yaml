@@ -42,3 +42,14 @@ spec:
       value: "{{ keycloak.logLevel }}"
     - name: metrics-enabled
       value: 'true'
+  unsupported:
+    podTemplate:
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: node-role.kubernetes.io/infra
+                  operator: Exists
+                  

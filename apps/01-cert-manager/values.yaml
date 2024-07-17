@@ -23,3 +23,29 @@ startupapicheck:
 webhook:
   livenessProbe:
     initialDelaySeconds: 10
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+cainjector:
+  enabled: true
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: "node-role.kubernetes.io/infra"
+            operator: Exists

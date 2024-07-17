@@ -90,6 +90,13 @@ ingester:
     enableStatefulSetAutoDeletePVC: false
     whenDeleted: Retain
     whenScaled: Retain
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 distributor:
   replicas: 3
@@ -110,6 +117,13 @@ distributor:
       cpu: 100m
       memory: 128Mi
   maxUnavailable: 3
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 query_scheduler:
   max_outstanding_requests_per_tenant: 32768
@@ -138,6 +152,14 @@ querier:
     size: 20Gi
     storageClass: csi-cinder-sc-retain
   max_concurrent: 16
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
 queryFrontend:
   image:
     registry: docker.io
@@ -151,6 +173,13 @@ queryFrontend:
       cpu: 40m
       memory: 64Mi
   maxUnavailable: 3
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 compactor:
   kind: StatefulSet
@@ -172,6 +201,13 @@ compactor:
     requests:
       cpu: 20m
       memory: 64Mi
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 memcachedExporter:
   enabled: true
@@ -187,3 +223,13 @@ memcachedExporter:
     requests:
       cpu: 40m
       memory: 64Mi
+
+gateway:
+  enabled: true
+  affinity: |         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists

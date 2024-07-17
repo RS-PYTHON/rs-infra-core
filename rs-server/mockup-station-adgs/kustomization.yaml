@@ -20,5 +20,5 @@ helmCharts:
 - name: mockup-station-adgs
   repo: https://rs-python.github.io/rs-helm
   releaseName: "{{ app_name }}"
-  version: 0.0.1-a10
+  version: 0.2.0-a1
   valuesFile: values.yaml

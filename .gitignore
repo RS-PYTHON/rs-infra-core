@@ -18,3 +18,4 @@ apps/**/*.pem
 apps/**/*.csr
 apps/**/*.srl
 rs-infrastructure.tar.gz
+collections/kubespray**

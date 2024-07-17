@@ -111,6 +111,15 @@ prometheus:
               - key: "node-role.kubernetes.io/infra"
                 operator: Exists
 
+    ## Resource limits & requests
+    ##
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 500m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
 
     additionalScrapeConfigs:
       - job_name: prometheus

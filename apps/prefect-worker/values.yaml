@@ -150,6 +150,22 @@ worker:
           "job_manifest": {
             "kind": "Job",
             "spec": {
+              "affinity": {
+                "nodeAffinity": {
+                  "requiredDuringSchedulingIgnoredDuringExecution": {
+                    "nodeSelectorTerms": [
+                      {
+                        "matchExpressions": [
+                          {
+                            "key": "node-role.kubernetes.io/infra",
+                            "operator": "Exists"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
               "template": {
                 "spec": {
                   "containers": [
@@ -184,6 +200,13 @@ worker:
         }
       }
 
+  affinity:         
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
   serverApiConfig:
     apiUrl: http://prefect-server.processing.svc.cluster.local:4200/api
