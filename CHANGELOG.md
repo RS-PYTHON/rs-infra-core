@@ -13,6 +13,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a12] - 2024-07-17
+
+### Added
+
+- RSPY-317 : Deploy VELERO component on the cluster
+
 ## [0.1a10] - 2024-06-05
 
 ### Added
