@@ -189,3 +189,10 @@ vault:
   upload_existing: false
   # URL of the vault
   url: https://vault.coprs.esa-copernicus.eu
+
+velero:
+  bucket: rs-cluster-velero
+  bckStorageLoc:
+    name: rs-cluster-velero
+  volSnapLoc:
+    name: aws-default
