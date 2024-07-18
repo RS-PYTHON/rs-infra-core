@@ -24,7 +24,7 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
-      endpointURL: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
+      endpointURL: {{ s3.endpoint }}
       s3Credentials:
         accessKeyId:
           key: AK
