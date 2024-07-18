@@ -21,6 +21,19 @@ spec:
   
   enableSuperuserAccess: true
 
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
+      endpointURL: https://oss.eu-west-0.prod-cloud-ocb.orange-business.com
+      s3Credentials:
+        accessKeyId:
+          key: AK
+          name: psql-backup-obs
+        secretAccessKey:
+          key: SK
+          name: psql-backup-obs
+    retentionPolicy: "10d"
+
   postgresql:
     parameters:
       shared_buffers: "256MB"
