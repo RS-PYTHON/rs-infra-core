@@ -14,16 +14,14 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-namespace: processing 
+namespace: dask-gateway 
 
 helmCharts:
 - name: dask-gateway
   repo: https://helm.dask.org/
   releaseName: "{{ app_name }}"
   version: 2024.1.0
-  namespace: processing
+  namespace: dask-gateway
   valuesFile: values.yaml
   includeCRDs: true
-
-# resources:
-# - servicemonitor.yaml
+  

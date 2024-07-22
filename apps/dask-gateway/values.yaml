@@ -27,20 +27,17 @@ gateway:
 
   auth:
     type: jupyterhub
+    jupyterhub:
+      apiToken: {{ jupyterhub.apitoken }}
+      apiUrl: {{ jupyterhub.apiurl }}
+      apiTokenFromSecretName: hub
+      apiTokenFromSecretKey: hub.services.dask-gateway.apiToken
 
     simple:
       password:
 
     kerberos:
       keytab:
-
-    jupyterhub:
-      apiToken:
-
-      apiTokenFromSecretName: hub
-      apiTokenFromSecretKey: hub.services.dask-gateway.apiToken
-
-      apiUrl:
 
     custom:
       class:
@@ -62,17 +59,47 @@ gateway:
 
   nodeSelector: {}
 
-  # affinity:
-  #   nodeAffinity:
-  #     requiredDuringSchedulingIgnoredDuringExecution:
-  #       nodeSelectorTerms:
-  #         - matchExpressions:
-  #           - key: "node-role.kubernetes.io/infra"
-  #             operator: Exists
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
   tolerations: []
 
-  extraConfig: {}
+  extraConfig:
+    clusteroptions: |
+        from dask_gateway_server.options import Options, Integer, Float, String
+
+        def option_handler(options):
+            return {
+                "worker_cores": options.worker_cores,
+                "worker_memory": "%fG" % options.worker_memory,
+                "image": options.image,
+                "namespace": options.namespace,
+                "cluster_max_cores": options.cluster_max_cores,
+                "cluster_max_memory": options.cluster_max_memory,
+                "cluster_max_workers": options.cluster_max_workers,
+                "scheduler_extra_pod_annotations": options.scheduler_extra_pod_annotations,
+                "scheduler_extra_pod_labels": options.scheduler_extra_pod_labels,
+                "worker_extra_pod_config": options.worker_extra_pod_config,
+            }
+
+        c.Backend.cluster_options = Options(
+            Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
+            Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
+            String("image", default="daskgateway/dask-gateway:latest", label="Image"),
+            String("namespace", default="dask-gateway", label="Namespace"),
+            Integer("cluster_max_cores", 2, min=1, max=4, label="Cluster_max_cores"),
+            Integer("cluster_max_memory", 2, min=1, max=4, label="Cluster_max_memory"),
+            Integer("cluster_max_workers", 2, min=1, max=4, label="Cluster_max_workers"),
+            String("scheduler_extra_pod_annotations", default="podannotation", label="Scheduler_extra_pod_annotations"),
+            String("scheduler_extra_pod_labels", default="podlabels", label="Scheduler_extra_pod_labels"),
+            String("worker_extra_pod_config", default="extrapodconfig", label="Worker_extra_pod_config"),
+            handler=option_handler,
+        )
 
   backend:
     image:
@@ -144,7 +171,16 @@ controller:
     pullPolicy:
 
   nodeSelector: {}
-  affinity: {}
+
+  affinity: 
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+  
   tolerations: []
 
 
@@ -181,7 +217,17 @@ traefik:
         nodePort:
 
   nodeSelector: {}
-  affinity: {}
+
+  affinity: 
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
+
+
+
   tolerations: []
 
 
@@ -201,11 +247,3 @@ rbac:
 
 
 global: {}
-
-# serviceMonitor:
-#   enabled: true
-#   namespace: monitoring
-#   interval: 30s
-#   selector:
-#     matchLabels:
-#       app: dask-gateway
