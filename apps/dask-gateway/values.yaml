@@ -1,30 +1,25 @@
-nameOverride: ""
-
-fullnameOverride: ""
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 gateway:
   replicas: 1
-
-  annotations: {}
-
-  resources: {}
-
   prefix: /
-
   loglevel: INFO
-
   image:
     name: ghcr.io/dask/dask-gateway-server
     tag: "2024.1.0"
     pullPolicy:
-
-  env: []
-
-  imagePullSecrets: []
-
-  service:
-    annotations: {}
-
   auth:
     type: jupyterhub
     jupyterhub:
@@ -32,33 +27,6 @@ gateway:
       apiUrl: {{ jupyterhub.apiurl }}
       apiTokenFromSecretName: hub
       apiTokenFromSecretKey: hub.services.dask-gateway.apiToken
-
-    simple:
-      password:
-
-    kerberos:
-      keytab:
-
-    custom:
-      class:
-
-      config: {}
-
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    timeoutSeconds: 2
-    periodSeconds: 10
-    failureThreshold: 6
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    timeoutSeconds: 2
-    periodSeconds: 10
-    failureThreshold: 3
-
-  nodeSelector: {}
-
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -66,9 +34,6 @@ gateway:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
-
-  tolerations: []
-
   extraConfig:
     clusteroptions: |
         from dask_gateway_server.options import Options, Integer, Float, String
@@ -106,72 +71,34 @@ gateway:
       name: ghcr.io/dask/dask-gateway
       tag: "2024.1.0"
       pullPolicy:
-
-    imagePullSecrets: []
-
     namespace: dask-gateway
-
     environment: {}
-
     scheduler:
       extraPodConfig: {}
-
       extraContainerConfig: {}
-
       cores:
         request:
         limit:
-
       memory:
         request:
         limit:
-
     worker:
       extraPodConfig: {}
-
       extraContainerConfig: {}
-
       cores:
         request:
         limit:
-
       memory:
         request:
         limit:
-
       threads:
-
 
 controller:
   enabled: true
-
-  annotations: {}
-
-  resources: {}
-
-  imagePullSecrets: []
-
-  loglevel: INFO
-
-  completedClusterMaxAge: 86400
-
-  completedClusterCleanupPeriod: 600
-
-  backoffBaseDelay: 0.1
-
-  backoffMaxDelay: 300
-
-  k8sApiRateLimit: 50
-
-  k8sApiRateLimitBurst: 100
-
   image:
     name: ghcr.io/dask/dask-gateway-server
     tag: "2024.1.0"
     pullPolicy:
-
-  nodeSelector: {}
-
   affinity: 
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -180,44 +107,14 @@ controller:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
 
-  
-  tolerations: []
-
-
-
 traefik:
   replicas: 1
-
-  annotations: {}
-
-  resources: {}
-
   image:
     name: traefik
     tag: "2.10.6"
     pullPolicy:
-  imagePullSecrets: []
-
-  additionalArguments: []
-
   loglevel: WARN
-
   dashboard: false
-
-  service:
-    type: LoadBalancer
-    annotations: {}
-    spec: {}
-    ports:
-      web:
-        port: 80
-        nodePort:
-      tcp:
-        port: web
-        nodePort:
-
-  nodeSelector: {}
-
   affinity: 
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -225,25 +122,3 @@ traefik:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
-
-
-
-  tolerations: []
-
-
-
-rbac:
-  enabled: true
-
-  controller:
-    serviceAccountName:
-
-  gateway:
-    serviceAccountName:
-
-  traefik:
-    serviceAccountName:
-
-
-
-global: {}
