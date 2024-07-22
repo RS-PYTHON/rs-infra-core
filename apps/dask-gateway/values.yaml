@@ -114,6 +114,8 @@ traefik:
     tag: "2.10.6"
     pullPolicy:
   loglevel: WARN
+  service:
+    type: ClusterIP
   dashboard: false
   affinity: 
     nodeAffinity:

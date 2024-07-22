@@ -164,6 +164,16 @@ grafanatempo:
   s3:
     bucket: rs-cluster-tempo
 
+velero:
+  bucket: rs-cluster-velero
+  bckStorageLoc:
+    name: rs-cluster-velero
+  volSnapLoc:
+    name: aws-default
+
+jupyterhub:
+  apitoken: token
+  apiurl: http://hub.processing:8081/hub/api
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the
@@ -189,10 +199,3 @@ vault:
   upload_existing: false
   # URL of the vault
   url: https://vault.coprs.esa-copernicus.eu
-
-velero:
-  bucket: rs-cluster-velero
-  bckStorageLoc:
-    name: rs-cluster-velero
-  volSnapLoc:
-    name: aws-default
