@@ -12,21 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: database
-
-helmCharts:
-  - name: cloudnative-pg
-    repo: https://cloudnative-pg.io/charts/
-    version: 0.20.1
-    valuesFile: values.yaml
-    releaseName: "{{ app_name }}"
-    namespace: database
-
-resources:
-  - cluster.yaml
-  - configmap-create-database.yaml
-  - secrets.yaml
-  - scheduled-backup.yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: backup-postgresql-cluster
+spec:
+  schedule: "0 0 11 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: postgresql-cluster
