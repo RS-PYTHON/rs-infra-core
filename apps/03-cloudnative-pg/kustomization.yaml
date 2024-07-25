@@ -28,3 +28,6 @@ helmCharts:
 resources:
   - cluster.yaml
   - configmap-create-database.yaml
+  - podmonitor.yaml
+  - default-monitoring.yaml
+  # - prometheusrules.yaml

@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: database
-
-resources:
-  - database.yaml
-  - grafanadatasource.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: postgresql-cluster
+  namespace: database
+spec:
+  selector:
+    matchLabels:
+      postgresql: postgresql-cluster
+  podMetricsEndpoints:
+  - port: metrics
