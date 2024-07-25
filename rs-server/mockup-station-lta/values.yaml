@@ -12,13 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
+# -- Namespace for the deployment
 namespace: processing
-
-helmCharts:
-- name: rs-server-cadip
-  repo: https://rs-python.github.io/rs-helm
-  releaseName: "{{ app_name }}"
-  version: 0.2.0-a2
-  valuesFile: values.yaml
