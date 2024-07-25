@@ -14,19 +14,15 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: database
+namespace: infra
 
 helmCharts:
-  - name: cloudnative-pg
-    repo: https://cloudnative-pg.io/charts/
-    version: 0.20.1
-    valuesFile: values.yaml
-    releaseName: "{{ app_name }}"
-    namespace: database
+- name: velero
+  repo: https://vmware-tanzu.github.io/helm-charts/
+  releaseName: "{{ app_name }}"
+  version: 7.1.0
+  namespace: infra
+  valuesFile: values.yaml
+  includeCRDs: true
 
-resources:
-  - cluster.yaml
-  - configmap-create-database.yaml
-  - secrets.yaml
-  - scheduled-backup.yaml
+  

@@ -1,0 +1,78 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+image:
+  repository: velero/velero
+  tag: v1.14.0
+  pullPolicy: IfNotPresent
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.10.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+terminationGracePeriodSeconds: 3600
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    autodetect: false
+    enabled: true
+
+upgradeCRDs: true
+
+cleanUpCRDs: false
+
+configuration:
+  backupStorageLocation:
+  - name: {{ velero.bckStorageLoc.name }}
+    provider: aws
+    bucket: {{ velero.bucket }}
+    default: true
+    accessMode: ReadWrite
+    config:
+      region: {{ s3.region }}
+      s3ForcePathStyle: true
+      s3Url: {{ s3.endpoint }}
+      checksumAlgorithm: ""
+  volumeSnapshotLocation:
+  - name: {{ velero.volSnapLoc.name }}
+    provider: aws
+    config:
+      region: {{ s3.region }}
+    defaultBackupStorageLocation: {{ velero.bckStorageLoc.name }}
+  disableInformerCache: false
+  features: EnableCSI
+rbac:
+  create: true
+  clusterAdministrator: true
+  clusterAdministratorName: cluster-admin
+
+serviceAccount:
+  server:
+    create: true
+
+credentials:
+  useSecret: true
+  secretContents:
+   cloud: |
+     [default]
+     aws_access_key_id= "{{ s3.access_key }}"
+     aws_secret_access_key= "{{ s3.secret_key }}"
+
+backupsEnabled: true
+snapshotsEnabled: true

@@ -60,6 +60,7 @@ postgresql:
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_user: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
+  bucket: rs-cluster-psql
 
 keycloak:
   image: quay.io/keycloak/keycloak:23.0.6
@@ -189,3 +190,10 @@ vault:
   upload_existing: false
   # URL of the vault
   url: https://vault.coprs.esa-copernicus.eu
+
+velero:
+  bucket: rs-cluster-velero
+  bckStorageLoc:
+    name: rs-cluster-velero
+  volSnapLoc:
+    name: aws-default
