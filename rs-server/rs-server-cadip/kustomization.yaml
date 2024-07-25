@@ -20,5 +20,5 @@ helmCharts:
 - name: rs-server-cadip
   repo: https://rs-python.github.io/rs-helm
   releaseName: "{{ app_name }}"
-  version: 0.2.0-a1
+  version: 0.2.0-a2
   valuesFile: values.yaml
