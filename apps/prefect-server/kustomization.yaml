@@ -22,6 +22,3 @@ helmCharts:
   version: 2024.5.2224951
   namespace: processing
   valuesFile: values.yaml
-
-resources: 
-  - grafanadatasource.yaml
