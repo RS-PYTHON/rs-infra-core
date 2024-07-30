@@ -173,7 +173,7 @@ velero:
 
 jupyterhub:
   apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
-  apiurl: http://hub.processing.svc.cluster.local:8081/hub/api
+  apiurl: http://hub.processing.svc.cluster.local:8081/api
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the
