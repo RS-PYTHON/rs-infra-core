@@ -14,7 +14,7 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-namespace: dask-gateway 
+namespace: dask-gateway
 
 helmCharts:
 - name: dask-gateway
