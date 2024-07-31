@@ -62,7 +62,7 @@ gateway:
             Integer("cluster_max_workers", 5, min=1, max=20, label="Cluster max workers"),
             Mapping("scheduler_extra_pod_annotations", default={"usage":"unknown","access":"internal"}, label="Scheduler_extra_pod_annotations"),
             Mapping("scheduler_extra_pod_labels", default={"user":"unknown","team":"unknown"}, label="Scheduler_extra_pod_labels"),
-            Mapping("worker_extra_pod_config", default={}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/infra","operator":"Exists"}]}]}}}}, label="Worker_extra_pod_config"),
             handler=option_handler,
         )
 
@@ -73,15 +73,6 @@ gateway:
       pullPolicy:
     namespace: dask-gateway
     scheduler:
-      extraPodConfig:
-       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: "node-role.kubernetes.io/infra"
-                  operator: Exists
-    worker:
       extraPodConfig:
         affinity:
           nodeAffinity:
