@@ -26,9 +26,9 @@ spec:
     type: postgres
     access: proxy
     url: {{ keycloak.database.host }}
-    user: {{ grafana.postgresqluser.username }}
+    user: {{ keycloak.database.username }}
     secureJsonData:
-      password: '{{ grafana.postgresqluser.password }}'
+      password: '{{ keycloak.database.password }}'
     isDefault: false
     jsonData:
       database: {{ keycloak.database.name }}
