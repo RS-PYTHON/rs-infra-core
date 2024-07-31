@@ -59,6 +59,3 @@ spec:
               operator: Exists
   monitoring:
     enablePodMonitor: true
-    customQueriesConfigMap:
-    - name: rspy-monitoring
-      key: custom-queries

@@ -25,13 +25,13 @@ spec:
     name: Postgres-RScatalog
     type: postgres
     access: proxy
-    url: rs-server-catalog-db-svc.database.svc.cluster.local
-    user: {{ grafana.postgresqluser.username }}
+    url: {{ rs_server_catalog.database.host }}
+    user: {{ rs_server_catalog.database.username }}
     secureJsonData:
-      password: '{{ grafana.postgresqluser.password }}'
+      password: '{{ rs_server_catalog.database.password }}'
     isDefault: false
     jsonData:
-      database: catalog
+      database:  {{ rs_server_catalog.database.name }}
       sslmode: disable
       "tlsSkipVerify": true
       "timeInterval": "5s"

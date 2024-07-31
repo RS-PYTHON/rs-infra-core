@@ -15,23 +15,23 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
-  name: prefectserver
+  name: rsserver
 spec:
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
   allowCrossNamespaceImport: true
   datasource:
-    name: Postgres-Prefect
+    name: Postgres-RSserver
     type: postgres
     access: proxy
-    url: {{ prefect.database.host }}
-    user: {{ prefect.database.username }}
+    url: {{ rs_server_catalog.database.host }}
+    user:  {{ rs_server_catalog.database.username }}
     secureJsonData:
-      password: '{{ prefect.database.password }}'
+      password: '{{ rs_server_catalog.database.password }}'
     isDefault: false
     jsonData:
-      database: {{ prefect.database.name }}
-      sslmode: require
+      database:  {{ rs_server_catalog.database.name }}
+      sslmode: disable
       "tlsSkipVerify": true
       "timeInterval": "5s"

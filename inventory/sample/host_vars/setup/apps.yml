@@ -54,9 +54,6 @@ grafana:
   serviceMonitor:
     interval: 30s
     scrapeTimeout: 10s
-  postgresqluser:
-    password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters') }}"
-    username: rspymonitor
 
 postgresql:
   postgres_user:
