@@ -14,19 +14,11 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: database
+namespace: processing
 
 helmCharts:
-  - name: cloudnative-pg
-    repo: https://cloudnative-pg.io/charts/
-    version: 0.20.1
-    valuesFile: values.yaml
-    releaseName: "{{ app_name }}"
-    namespace: database
-
-resources:
-  - cluster.yaml
-  - configmap-create-database.yaml
-  - secrets.yaml
-  - scheduled-backup.yaml
+- name: mockup-station-lta
+  repo: https://rs-python.github.io/rs-helm
+  releaseName: "{{ app_name }}"
+  version: 0.2.0-a2
+  valuesFile: values.yaml

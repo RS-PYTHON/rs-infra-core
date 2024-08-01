@@ -13,12 +13,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
-
 ## [0.2a2] - 2024-07-17
 
 ### Added
 
 - RSPY-317 : Deploy VELERO component on the cluster
+- rs-server
+  - mockup-station-lta : helm chart added
+  - rs-server-catalog : parameter `app.uacHomeUrl` added
+- CloudNativePG : restore procedure added
 
 ## [0.2a1] - 2024-06-26
 

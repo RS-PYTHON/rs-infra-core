@@ -1,3 +1,13 @@
+# Restore database with CloudNativePG
+
+From the YAML below, edit the fields:
+
+- `{{ postgresql.bucket }}`
+- `{{ s3.endpoint }}`
+
+And apply it with `kubectl -n database apply -f <input_file.yaml>`.
+
+```YAML
 # Copyright 2024 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +25,13 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: postgresql-cluster
+  name: psql-restore
 spec:
-  instances: 3
-  
-  enableSuperuserAccess: true
-
   backup:
     barmanObjectStore:
-      destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
+      destinationPath: s3://{{ postgresql.bucket }}/recovered-postgresql-cluster/
       endpointURL: {{ s3.endpoint }}
+      serverName: "recoveredCluster"
       s3Credentials:
         accessKeyId:
           key: AK
@@ -33,6 +40,27 @@ spec:
           key: SK
           name: psql-backup-obs
     retentionPolicy: "10d"
+
+  bootstrap:
+    recovery:
+      source: clusterBackup
+
+  externalClusters:
+    - name: clusterBackup
+      barmanObjectStore:
+        destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
+        endpointURL: {{ s3.endpoint }}
+        s3Credentials:
+          accessKeyId:
+            key: AK
+            name: psql-backup-obs
+          secretAccessKey:
+            key: SK
+            name: psql-backup-obs
+
+  instances: 3
+  
+  enableSuperuserAccess: true
 
   postgresql:
     parameters:
@@ -59,3 +87,8 @@ spec:
               operator: Exists
   monitoring:
     enablePodMonitor: true
+```
+
+It will create a new CloudNativePG cluster **from** the backup defined from the field `spec.externalClusters.barmanObjectStore.destinationPath`.
+
+And backup the **new** cluster in the path defined from the field `spec.backup.barmanObjectStore.destinationPath`.

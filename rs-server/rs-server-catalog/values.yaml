@@ -22,6 +22,7 @@ app:
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
+  uacHomeUrl : https://apikeymanager.{{ platform_domain_name }}/docs
 
 postgres:
   # -- PostgreSQL port
