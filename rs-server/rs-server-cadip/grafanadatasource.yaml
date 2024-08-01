@@ -25,13 +25,13 @@ spec:
     name: Postgres-RSserver
     type: postgres
     access: proxy
-    url: {{ rs_server_catalog.database.host }}
-    user:  {{ rs_server_catalog.database.username }}
+    url: {{ rs_server.database.host}}
+    user:  {{ rs_server.database.username }}
     secureJsonData:
-      password: '{{ rs_server_catalog.database.password }}'
+      password: '{{ rs_server.database.password }}'
     isDefault: false
     jsonData:
-      database:  {{ rs_server_catalog.database.name }}
+      database:  {{ rs_server.database.name }}
       sslmode: disable
       "tlsSkipVerify": true
       "timeInterval": "5s"
