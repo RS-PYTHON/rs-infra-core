@@ -12,19 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: processing
-
-helmCharts:
-- name: jupyterhub
-  namespace: processing
-  repo: https://hub.jupyter.org/helm-chart/
-  releaseName: "{{ app_name }}"
-  version: 3.3.6
-  valuesFile: values.yaml
-
-resources:
-  - servicemonitor.yaml
-  - secret.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: jupyterhub
+spec:
+  endpoints:
+  - interval: 5s 
+    port: http
+    path: /metrics
+    bearerTokenSecret:
+      name: jupytermetrics
+      key: token
+  selector:
+    matchLabels:
+      app: jupyterhub

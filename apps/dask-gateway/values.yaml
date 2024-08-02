@@ -23,8 +23,8 @@ gateway:
   auth:
     type: jupyterhub
     jupyterhub:
-      apiToken: {{ jupyterhub.apitoken }}
-      apiUrl: {{ jupyterhub.apiurl }}
+      apiToken: {{ jupyterhub.services.daskgateway.apitoken }}
+      apiUrl: {{ jupyterhub.services.daskgateway.apiurl }} 
 
 
   affinity:

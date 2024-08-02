@@ -173,8 +173,12 @@ velero:
     name: aws-default
 
 jupyterhub:
-  apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
-  apiurl: http://hub.processing.svc.cluster.local:8081/api
+  services:
+    daskgateway:
+      apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      apiurl: http://hub.processing.svc.cluster.local:8081/api
+    metrics:
+      apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the

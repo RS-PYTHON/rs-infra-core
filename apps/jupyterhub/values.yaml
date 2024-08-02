@@ -156,7 +156,15 @@ hub:
   services:
     dask-gateway:
       display: false
-      apiToken: {{ jupyterhub.apitoken }}
+      apiToken: {{ jupyterhub.services.daskgateway.apitoken }}
+    metrics:
+      display: false
+      apiToken: {{ jupyterhub.services.metrics.apitoken }}
+  loadRoles:
+    metrics:
+      description: Access to prometheus metrics
+      scopes: [read:metrics]
+      services: [metrics]
 
 rbac:
   create: true
