@@ -21,7 +21,7 @@ resources:
   - grafana.yaml
   - servicemonitor.yaml
   - image-renderer.yaml
-
+ 
 secretGenerator:
 - name: grafana-credentials
   literals:
