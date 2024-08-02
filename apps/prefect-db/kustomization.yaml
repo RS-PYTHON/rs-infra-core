@@ -19,3 +19,4 @@ namespace: database
 
 resources:
   - database.yaml
+  - grafanadatasource.yaml

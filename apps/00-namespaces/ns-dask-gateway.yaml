@@ -12,11 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-
-namespace: database
-
-resources:
-  - database.yaml
-  - grafanadatasource.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dask-gateway
