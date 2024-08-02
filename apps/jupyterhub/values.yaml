@@ -153,7 +153,18 @@ hub:
     requests:
       cpu: 0.1
       memory: 150Mi
-
+  services:
+    dask-gateway:
+      display: false
+      apiToken: {{ jupyterhub.services.daskgateway.apitoken }}
+    metrics:
+      display: false
+      apiToken: {{ jupyterhub.services.metrics.apitoken }}
+  loadRoles:
+    metrics:
+      description: Access to prometheus metrics
+      scopes: [read:metrics]
+      services: [metrics]
 
 rbac:
   create: true

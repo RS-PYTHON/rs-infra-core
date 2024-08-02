@@ -20,7 +20,10 @@ spec:
   endpoints:
   - interval: 5s 
     port: http
-    path: /hub/metrics
+    path: /metrics
+    bearerTokenSecret:
+      name: jupytermetrics
+      key: token
   selector:
     matchLabels:
       app: jupyterhub
