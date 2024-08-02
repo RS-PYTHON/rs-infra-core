@@ -14,9 +14,14 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
+namespace: dask-gateway
 
-namespace: database
-
-resources:
-  - database.yaml
-  - grafanadatasource.yaml
+helmCharts:
+- name: dask-gateway
+  repo: https://helm.dask.org/
+  releaseName: "{{ app_name }}"
+  version: 2024.1.0
+  namespace: dask-gateway
+  valuesFile: values.yaml
+  includeCRDs: true
+  

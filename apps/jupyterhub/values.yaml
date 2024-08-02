@@ -154,7 +154,10 @@ hub:
     requests:
       cpu: 0.1
       memory: 150Mi
-
+  services:
+    dask-gateway:
+      display: false
+      apiToken: {{ jupyterhub.apitoken }}
 
 rbac:
   create: true
