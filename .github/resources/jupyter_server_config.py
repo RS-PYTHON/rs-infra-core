@@ -20,6 +20,3 @@ from pathlib import Path
 from jupyter_core.paths import jupyter_data_dir
 
 c.ContentsManager.allow_hidden = True
-
-from datetime import UTC, datetime
-os.environ["JULIEN_TEST"] = str(datetime.now(UTC))
