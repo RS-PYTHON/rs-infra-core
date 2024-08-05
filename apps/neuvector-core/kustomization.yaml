@@ -29,7 +29,7 @@ resources:
 
 
 secretGenerator:
-- name: exporter
+- name: neuvector-exporter
   literals:
   - username= "{{ neuvector.core.exporter.Fullname }}"
   - password= "{{ neuvector.core.exporter.Password }}"
