@@ -1,6 +1,8 @@
 # Wazuh Server Installation
 
-## 1. Enable Bcrypt encryption for installation
+## A. Pre-Install
+
+### 1. Enable Bcrypt encryption for installation
 
 Backup original file `encrypt.py` to `encrypt.py.ori`
 
@@ -14,11 +16,11 @@ Download library [Passlib library](https://raw.githubusercontent.com/ansible/ans
 wget https://raw.githubusercontent.com/ansible/ansible/3f74bc08cefccec791c9dc5315185d2396e5c5ac/lib/ansible/utils/encrypt.py -O ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py
 ```
 
-## 2. Generate self-signed certificates
+### 2. Generate self-signed certificates
 
 Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.com/current/deployment-options/deploying-with-kubernetes/kubernetes-deployment.html#setup-ssl-certificates)
 
-### 2.1 Generate certificates for dashboard  
+#### 2.1 Generate certificates for dashboard  
 
 ```bash
 ./apps/04-wazuh-server/wazuh/certs/dashboard_http/generate_certs.sh
@@ -33,7 +35,7 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 
 `./apps/04-wazuh-server/wazuh/certs/dashboard_http`
 
-### 2.2 Generate certificates for all other nodes
+#### 2.2 Generate certificates for all other nodes
 
 ```bash
 ./apps/04-wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
@@ -65,41 +67,150 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 
 `./apps/04-wazuh-server/wazuh/certs/indexer_cluster`
 
-## 3. Apply credentials
+### 3. Setup SSO (Keycloak SAML)
+
+#### 3.1 Download files
+
+Regarding Wazuh editor documentation : [Keycloak](https://documentation.wazuh.com/current/user-manual/user-administration/single-sign-on/administrator/keycloak.html)
+
+See Section `8. Note the necessary parameters from the SAML settings of Keycloak.`
+
+Dowload file from Keycloak in one single file after click on the `Action` button on the top right of the wazuh client panel.
+This archive file contains the two  files `idp-metadata.xml`and `sp-metadata.xml` with configuration settings.
+
+#### 3.2 Add to install files
+
+From previous downloaded archive, unzip following files:
+`idp-metadata.xml`
+`sp-metadata.xml`
+
+and copy them to:
+
+```bash
+./apps/04-wazuh-server/
+```
 
 > [!IMPORTANT]  
-> After Wazuh Server application is installed
+> `idp-metadata.xml` and `sp-metadata.xml` should be rightly formated into XML format. Original xml files are 1 line and it may cause issues.
 
-In order to apply credentials set during installation process
 
-Regarding Wazuh editor documentation :
-Kubernetes deployments [Update accounts credentials](https://github.com/wazuh/wazuh-documentation/blob/v4.7.2/source/deployment-options/deploying-with-kubernetes/kubernetes-deployment.rst#applying-the-changes)
+## B. Post-Install: Apply modifications set during installation process (new credentials and SSO)
 
-### 3.1 Open interactive session to indexer pod 0  
+> [!IMPORTANT]  
+> After Wazuh Server application is installed (PODs are 'running' and UI is reachable).
+
+Only for information, regarding Wazuh editor documentation (commands to run are describe at next section).
+
+In order to apply modifications set during installation process
+for Kubernetes deployments:
+
+* [Update accounts credentials](https://github.com/wazuh/wazuh-documentation/blob/v4.7.2/source/deployment-options/deploying-with-kubernetes/kubernetes-deployment.rst#applying-the-changes) from step : `2. Start a bash shell in wazuh-indexer-0 once more`
+
+ * [Eaable SSO configuration](https://documentation.wazuh.com/current/user-manual/user-administration/single-sign-on/administrator/keycloak.html#wazuh-indexer-configuration)
+
+
+
+### 1. Open interactive session to indexer pod 0  
 
 ```bash
 kubectl exec -it wazuh-indexer-0 -n security -- /bin/bash
 ```
 
-### 3.2 Set variables
+### 3.2 Check and set variables
+
+Check buitlin variables
+
+```bash
+echo $NODE_NAME
+wazuh-indexer-0
+
+echo $CLUSTER_NAME
+wazuh
+
+echo $NETWORK_HOST
+0.0.0.0
+```
+
+Set required variables
 
 ```bash
 export INSTALLATION_DIR=/usr/share/wazuh-indexer
+```
+
+```bash
 CACERT=$INSTALLATION_DIR/certs/root-ca.pem
 KEY=$INSTALLATION_DIR/certs/admin-key.pem
 CERT=$INSTALLATION_DIR/certs/admin.pem
+```
+
+```bash
 export JAVA_HOME=/usr/share/wazuh-indexer/jdk
 ```
 
-### 3.3 Run command  
+#### 3.3 Execute commands
+
+Verify OpenSearch status.
+
+```bash
+bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -nhnv -cacert  $CACERT -cert $CERT -key $KEY -p 9200 -icl -h $NODE_NAME --
+show-info
+Security Admin v7
+Will connect to wazuh-indexer-0:9200 ... done
+Connected as "CN=admin,O=Company,L=California,C=US"
+OpenSearch Version: 2.8.0
+
+```
+
+Apply new credentials.
 
 ```bash
 bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -cd /usr/share/wazuh-indexer/opensearch-security/ -nhnv -cacert  $CACERT -cert $CERT -key $KEY -p 9200 -icl -h $NODE_NAME
 ```
+
+Apply SSO settings.
+
+```bash
+bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -f /usr/share/wazuh-indexer/opensearch-security/config.yml -icl -key $KEY -cert $CERT -cacert $CACERT -h 127.0.0.1 -nhnv
+```
+
+```bash
+bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -f /usr/share/wazuh-indexer/opensearch-security/roles_mapping.yml -icl -key $KEY -cert $CERT -cacert $CACERT -h 127.0.0.1 -nhnv
+```
+
+```bash
+bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -f /usr/share/wazuh-indexer/opensearch-security/roles.yml -icl -key $KEY -cert $CERT -cacert $CACERT-h 127.0.0.1 -nhnv
+```
+
 
 > [!NOTE]  
 > Note: Wait a little bit that cluster should be ready to execute command. Anyway If status is not ready command is relaunch automatically until that cluster be ready.
 
 `Clusterstate: GREEN`
 
-Test to login to Web UI with new credentials to validate operation.
+> [!NOTE]  
+> Note: All commands should be finished with ending line :
+
+`Done with success`
+
+#### 3.4 Restart Indexer et Dashboard pods
+
+Restart Indexer pod
+
+```bash
+kubectl -n security delete pod wazuh-indexer-0
+```
+
+Restart Dashboard pod
+
+```bash
+kubectl -n security delete pod wazuh-dashboard-XYZ
+```
+
+#### 3.5 Testing result
+
+Test to login throuh Web UI with new credentials of technical accounts to validate operation.
+Test to login throuh Web UI with SSO credentials.
+
+## B. Install Agent App
+
+Once Wazuh is completly restrated up and running, Wazuh agent installation can be launched.
