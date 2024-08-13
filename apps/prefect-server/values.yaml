@@ -28,7 +28,24 @@ server:
     prefectUiUrl: ""
     prefectUiStaticDirectory: "/ui_build"
 
-  env: []
+  loggingLevel: WARNING
+  env:
+    - name: PREFECT_LOGGING_EXTRA_LOGGERS
+      value: dask,scipy
+    - name: PREFECT_LOGGING_LOGGERS_PREFECT_EXTRA_LEVEL
+      value: INFO
+    - name: PREFECT_LOGGING_LOGGERS_PREFECT_EXTRA_HANDLERS
+      value: "[api console]"
+    - name: PREFECT_LOGGING_LOGGERS_PREFECT_FLOW_RUNS_LEVEL
+      value: INFO
+    - name: PREFECT_LOGGING_LOGGERS_PREFECT_FLOW_RUNS_HANDLERS
+      value: "[api console]"
+    - name: PREFECT_LOGGING_LOGGERS_PREFECT_TASK_RUNS_HANDLERS
+      value: "[api console]"
+    - name: PREFECT_LOGGING_LOGGERS_PREFECT_TASK_RUNS_LEVEL
+      value: INFO
+    - name: PREFECT_LOGGING_ROOT_LEVEL
+      value: INFO
 
   # -- affinity for server pods assignment
   affinity:         
