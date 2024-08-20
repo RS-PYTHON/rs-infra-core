@@ -66,7 +66,7 @@ hub:
     pass_auth_state: |
 
       import json
-      # import itsdangerous
+      import itsdangerous
       from base64 import b64encode
       from oauthenticator.generic import GenericOAuthenticator
 
@@ -84,8 +84,8 @@ hub:
             # and apikey-manager do, see the SessionMiddleware source code.
             session = auth_state["oauth_user"]
             session_b64 = b64encode(json.dumps(session).encode("utf-8"))
-            # signer = itsdangerous.TimestampSigner(cookie_secret)
-            # session_cookie = signer.sign(session_b64)
+            signer = itsdangerous.TimestampSigner(cookie_secret)
+            session_cookie = signer.sign(session_b64)
             session_cookie = session_b64
 
             # Save this cookie in an environment variable for this user only
