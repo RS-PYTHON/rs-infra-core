@@ -419,7 +419,7 @@ singleuser:
     TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
     RSPY_TEMP_BUCKET: {{ rspy.tmp_bucket }}
     RSPY_CATALOG_BUCKET: {{ rspy.catalog_bucket }}
-    RSPY_UAC_CHECK_URL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+    RSPY_UAC_CHECK_URL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
     RSPY_UAC_HOMEPAGE : https://apikeymanager.{{ platform_domain_name }}/docs
   lifecycleHooks: {}
   initContainers: []
