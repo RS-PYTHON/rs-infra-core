@@ -35,6 +35,20 @@ imagePullSecrets: []
 # ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
 # the proxy pod.
 hub:
+  # Add initContainer to install itsdangerous without having to modify the image
+  initContainers:
+    - name: install-python-packages
+      image: python:3.9-slim 
+      command: ["sh", "-c", "pip install --target /srv/jupyterhub/ itsdangerous"]
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /srv/jupyterhub
+  extraVolumes:
+    - name: shared-volume
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: shared-volume
+      mountPath: /srv/jupyterhub/python-packages
   revisionHistoryLimit:
   config:
     GenericOAuthenticator:
@@ -57,6 +71,7 @@ hub:
       scope:
         - openid
       enable_auth_state: true
+
     JupyterHub:
       admin: true
       authenticator_class: generic-oauth
@@ -64,6 +79,8 @@ hub:
     # After the user has logged in to JupyterHub, pass the authentication information
     # to the user container so it can be used from the notebooks and terminal.
     pass_auth_state: |
+      import sys
+      sys.path.append('/srv/jupyterhub/python-packages')
 
       import json
       import itsdangerous
@@ -84,20 +101,19 @@ hub:
             # and apikey-manager do, see the SessionMiddleware source code.
             session = auth_state["oauth_user"]
             session_b64 = b64encode(json.dumps(session).encode("utf-8"))
-            signer = itsdangerous.TimestampSigner(cookie_secret)
+            signer = itsdangerous.TimestampSigner("{{ jupyterhub.rspy.cookie_secret }}")
             session_cookie = signer.sign(session_b64)
             session_cookie = session_b64
 
             # Save this cookie in an environment variable for this user only
             # for future use when requesting rs-server and the apikey-manager
             # from the user jupyterhub environment = from a notebook or terminal
-            spawner.environment["OAUTH2_SESSION_COOKIE"] = session_cookie.decode("utf-8")
+            spawner.environment["RSPY_OAUTH2_COOKIE"] = session_cookie.decode("utf-8")
 
           except Exception as e:
             print(f"\n[ERROR]: Could not authenticate user: {e!r}\n")
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
-
   service:
     type: ClusterIP
     annotations: {}
@@ -194,7 +210,15 @@ hub:
   services:
     dask-gateway:
       display: false
-      apiToken: {{ jupyterhub.apitoken }}
+      apiToken: {{ jupyterhub.services.daskgateway.apitoken }}
+    metrics:
+      display: false
+      apiToken: {{ jupyterhub.services.metrics.apitoken }}
+  loadRoles:
+    metrics:
+      description: Access to prometheus metrics
+      scopes: [read:metrics]
+      services: [metrics]
 
 rbac:
   create: true
@@ -419,7 +443,7 @@ singleuser:
     TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
     RSPY_TEMP_BUCKET: {{ rspy.tmp_bucket }}
     RSPY_CATALOG_BUCKET: {{ rspy.catalog_bucket }}
-    RSPY_UAC_CHECK_URL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
+    RSPY_UAC_CHECK_URL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
     RSPY_UAC_HOMEPAGE : https://apikeymanager.{{ platform_domain_name }}/docs
   lifecycleHooks: {}
   initContainers: []
