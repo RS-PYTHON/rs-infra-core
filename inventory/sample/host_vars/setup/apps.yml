@@ -149,6 +149,11 @@ wazuh:
       authdpass: "{{ lookup('password', '/dev/null', length=14, chars=['ascii_letters']) }}" 
       secret: wazuh-authd-pass
 
+wazuh_url: https://wazuh.dev-rspy.esa-copernicus.eu/  
+wazuh_saml_client_id: wazuh-saml
+wazuh_saml_client_key: KEY
+
+
 rspy:
   tmp_bucket: rs-cluster-temp
   catalog_bucket: rs-cluster-catalog

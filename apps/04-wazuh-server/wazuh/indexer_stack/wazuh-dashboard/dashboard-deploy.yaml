@@ -29,7 +29,7 @@ spec:
             name: dashboard-conf
         - name: dashboard-certs
           secret:
-            secretName: dashboard-certs
+            secretName: dashboard-tls
       affinity:         
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -49,17 +49,21 @@ spec:
               mountPath: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
               subPath: opensearch_dashboards.yml
               readOnly: false
+            - name: config
+              mountPath: /usr/share/wazuh-dashboard/wazuh/config/wazuh.yml
+              subPath: wazuh.yml
+              readOnly: false
             - name: dashboard-certs
-              mountPath: /usr/share/wazuh-dashboard/certs/cert.pem
+              mountPath: /usr/share/wazuh-dashboard/certs/tls.crt
               readOnly: true
-              subPath: cert.pem
+              subPath: tls.crt
             - name: dashboard-certs
-              mountPath: /usr/share/wazuh-dashboard/certs/key.pem
+              mountPath: /usr/share/wazuh-dashboard/certs/tls.key
               readOnly: true
-              subPath: key.pem
+              subPath: tls.key
             - name: dashboard-certs
-              mountPath: /usr/share/wazuh-dashboard/certs/root-ca.pem
-              subPath: root-ca.pem
+              mountPath: /usr/share/wazuh-dashboard/certs/ca.crt
+              subPath: ca.crt
               readOnly: true
           ports:
             - containerPort: 5601
@@ -90,9 +94,9 @@ spec:
             - name: SERVER_SSL_ENABLED
               value: "true"
             - name: SERVER_SSL_CERTIFICATE
-              value: /usr/share/wazuh-dashboard/certs/cert.pem
+              value: /usr/share/wazuh-dashboard/certs/tls.crt
             - name: SERVER_SSL_KEY
-              value: /usr/share/wazuh-dashboard/certs/key.pem
+              value: /usr/share/wazuh-dashboard/certs/tls.key
             - name: WAZUH_API_URL
               value: https://wazuh-manager-master-0.wazuh-cluster
             - name: API_USERNAME

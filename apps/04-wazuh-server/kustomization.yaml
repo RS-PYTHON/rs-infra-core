@@ -16,29 +16,16 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 namespace: security
 
-secretGenerator:
-- name: indexer-certs
-  files:
-    - wazuh/certs/indexer_cluster/root-ca.pem
-    - wazuh/certs/indexer_cluster/node.pem
-    - wazuh/certs/indexer_cluster/node-key.pem
-    - wazuh/certs/indexer_cluster/dashboard.pem
-    - wazuh/certs/indexer_cluster/dashboard-key.pem
-    - wazuh/certs/indexer_cluster/admin.pem
-    - wazuh/certs/indexer_cluster/admin-key.pem
-    - wazuh/certs/indexer_cluster/filebeat.pem
-    - wazuh/certs/indexer_cluster/filebeat-key.pem
-- name: dashboard-certs
-  files:
-    - wazuh/certs/dashboard_http/cert.pem
-    - wazuh/certs/dashboard_http/key.pem
-    - wazuh/certs/indexer_cluster/root-ca.pem
-
 configMapGenerator:
 - name: indexer-conf
   files:
     - wazuh/indexer_stack/wazuh-indexer/indexer_conf/opensearch.yml
     - internal_users.yml
+    - idp-metadata.xml
+    - sp-metadata.xml
+    - roles_mapping.yml
+    - config.yml
+    - roles.yml
 - name: wazuh-conf
   files:
     - wazuh/wazuh_managers/wazuh_conf/master.conf
@@ -63,3 +50,9 @@ resources:
 
 - ingress.yaml
 - secrets.yaml
+
+- certs/wazuh-ca.yaml
+- certs/admin.yaml
+- certs/dashboard.yaml
+- certs/filebeat.yaml
+- certs/node.yaml
