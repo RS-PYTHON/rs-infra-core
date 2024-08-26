@@ -166,9 +166,9 @@ grafanatempo:
     bucket: "{{ cluster_name }}-tempo"
 
 velero:
-  bucket: rs-cluster-velero
+  bucket:  "{{ cluster_name }}-velero"
   bckStorageLoc:
-    name: rs-cluster-velero
+    name:  "{{ cluster_name }}-velero"
   volSnapLoc:
     name: aws-default
 
