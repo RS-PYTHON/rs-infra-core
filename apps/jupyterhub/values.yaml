@@ -103,7 +103,6 @@ hub:
             session_b64 = b64encode(json.dumps(session).encode("utf-8"))
             signer = itsdangerous.TimestampSigner("{{ jupyterhub.rspy.cookie_secret }}")
             session_cookie = signer.sign(session_b64)
-            session_cookie = session_b64
 
             # Save this cookie in an environment variable for this user only
             # for future use when requesting rs-server and the apikey-manager
