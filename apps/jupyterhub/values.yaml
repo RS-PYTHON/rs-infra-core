@@ -97,9 +97,9 @@ hub:
             # Get the authentication state that was calculated by the authenticator
             auth_state = await user.get_auth_state()
 
-            # Encrypt it as a session cookie, exactly in the same way than rs-server 
-            # and apikey-manager do, see the SessionMiddleware source code.
-            session = auth_state["oauth_user"]
+            # Encrypt it as a session cookie called "user", exactly in the same way than 
+            # rs-server and apikey-manager do, see the SessionMiddleware source code.
+            session = {"user": auth_state["oauth_user"]}
             session_b64 = b64encode(json.dumps(session).encode("utf-8"))
             signer = itsdangerous.TimestampSigner("{{ jupyterhub.rspy.cookie_secret }}")
             session_cookie = signer.sign(session_b64)
