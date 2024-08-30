@@ -16,9 +16,19 @@
   hosts: setup
   gather_facts: false
   tasks:
+    - name: Read terraform config
+      slurp:
+        src: "{{ inventory_dir }}/cluster.tfvars"
+      register: tfconfig
+
     - name: Set some facts
       set_fact:
         generated_inventory_vars_path: "{{ inventory_dir }}/group_vars/all/generated_inventory_vars.yaml"
+        cluster_name_tmp: "{{ config['content'] | b64decode | regex_findall('cluster_name = (.+)') | first | split('\"') }}"
+
+    - name: Set cluster name
+      set_fact:
+        cluster_name: "{{ cluster_name_tmp[1] }}"
 
     - name: Create group_vars/all directory 
       file:

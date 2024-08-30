@@ -60,7 +60,7 @@ postgresql:
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_user: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
-  bucket: rs-cluster-psql
+  bucket: "{{ cluster_name }}-psql"
 
 keycloak:
   image: quay.io/keycloak/keycloak:23.0.6
@@ -150,12 +150,12 @@ wazuh:
       secret: wazuh-authd-pass
 
 rspy:
-  tmp_bucket: rs-cluster-temp
-  catalog_bucket: rs-cluster-catalog
+  tmp_bucket: "{{ cluster_name }}-temp"
+  catalog_bucket: "{{ cluster_name }}-catalog"
 
 loki:
   retention: 1460h
-  bucket: rs-cluster-loki
+  bucket: "{{ cluster_name }}-loki"
 
 grafanatempo:
   metaMonitoring:
@@ -163,20 +163,24 @@ grafanatempo:
       interval: 30s  
       scrapeTimeout: 10s
   s3:
-    bucket: rs-cluster-tempo
+    bucket: "{{ cluster_name }}-tempo"
 
 velero:
-  bucket: rs-cluster-velero
+  bucket:  "{{ cluster_name }}-velero"
   bckStorageLoc:
-    name: rs-cluster-velero
+    name:  "{{ cluster_name }}-velero"
   volSnapLoc:
     name: aws-default
 
 jupyterhub:
-  apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
-  apiurl: http://hub.processing.svc.cluster.local:8081/api
-  rspy: 
-    cookie_secret: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+  services:
+    daskgateway:
+      apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      apiurl: http://hub.processing.svc.cluster.local:8081/api
+      rspy: 
+        cookie_secret: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+    metrics:
+      apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the
