@@ -28,4 +28,6 @@ rm -rf /usr/local/share/.cache/*
 
 rm -rf /tmp/* /var/tmp/*
 
+rm -rf /var/lib/snapd/cache/*
+
 exit 0

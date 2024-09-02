@@ -36,9 +36,16 @@ RUN \
     vim \
     git \
     curl \
+    snapd \
     tzdata \
     firefox \
+    daemonize squashfuse fuse \
     xclip && \
+    ln -s /usr/lib/snapd/snapd /usr/sbin/snapd && \
+    daemonize /usr/lib/snapd/snapd && \
+    snap wait system seed.loaded && \
+    snap install firefox && \
+    apt remove --purge -y daemonize snapd squashfuse fuse && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
