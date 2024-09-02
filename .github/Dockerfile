@@ -37,6 +37,7 @@ RUN \
     git \
     curl \
     tzdata \
+    firefox \
     xclip && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
