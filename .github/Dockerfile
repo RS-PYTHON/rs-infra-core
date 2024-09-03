@@ -36,11 +36,14 @@ RUN \
     vim \
     git \
     curl \
+    unzip \
     tzdata \
-    firefox \
+    libgtk-3-0 libasound2 libx11-xcb1 \
     xclip && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
+    curl -L -o /tmp/firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
+    tar -xjf /tmp/firefox.tar.bz2 -C /opt/ && ln -s /opt/firefox/firefox /usr/bin/firefox && rm /tmp/firefox.tar.bz2 && \
     layer-cleanup.sh
 
 RUN \
