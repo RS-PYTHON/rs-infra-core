@@ -24,14 +24,4 @@ helmCharts:
   version: 2.7.6
   namespace: security
   valuesFile: values.yaml
-resources:
-  - ingress.yaml
-
-
-secretGenerator:
-- name: exporter
-  literals:
-  - username= "{{ neuvector.core.exporter.Fullname }}"
-  - password= "{{ neuvector.core.exporter.Password }}"
-  options:
-    disableNameSuffixHash: true
+  
