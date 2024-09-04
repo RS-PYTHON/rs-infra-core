@@ -125,7 +125,7 @@ ansible-playbook kubernetes.yaml \
 ### 7. Deploy the apps
 
 !!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"1. Enable Bcrypt encryption"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
+    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 ```shellsession
 ansible-playbook apps.yaml \
@@ -134,6 +134,9 @@ ansible-playbook apps.yaml \
 
 !!! warning "Disclaimer: For Prefect-Worker post-configuration"
     See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
+
+!!! warning "Disclaimer: For Wazuh Server installation"
+    See **_"B. Post-Install: Apply modifications set during installation process (new credentials and SSO)"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts after deploy the app.
 
 !!! warning "Disclaimer: For Neuvector post-configuration"
     See **_"Enable SSO"_** in the [Neuvector](./how-to/Neuvector.md) after deploy the app.

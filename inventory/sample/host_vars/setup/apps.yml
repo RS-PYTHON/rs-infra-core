@@ -24,7 +24,7 @@ kibana_security_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 
 kubectl_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 linkerd_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 prometheus_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-thanos_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+thanos_oidc_client_key: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
@@ -151,6 +151,9 @@ wazuh:
     authd: 
       authdpass: "{{ lookup('password', '/dev/null', length=14, chars=['ascii_letters']) }}" 
       secret: wazuh-authd-pass
+wazuh_url: WAZUH_URL
+wazuh_saml_client_id: WAZUH_SAML_CLIENT_ID
+wazuh_saml_client_key: WAZUH_SAML_CLIENT_KEY
 
 rspy:
   tmp_bucket: "{{ cluster_name }}-temp"

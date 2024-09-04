@@ -39,6 +39,11 @@ configMapGenerator:
   files:
     - wazuh/indexer_stack/wazuh-indexer/indexer_conf/opensearch.yml
     - internal_users.yml
+    - idp-metadata.xml
+    - sp-metadata.xml
+    - roles_mapping.yml
+    - config.yml
+    - roles.yml
 - name: wazuh-conf
   files:
     - wazuh/wazuh_managers/wazuh_conf/master.conf
@@ -46,7 +51,7 @@ configMapGenerator:
 - name: dashboard-conf
   files:
     - wazuh/indexer_stack/wazuh-dashboard/dashboard_conf/opensearch_dashboards.yml
-
+    - wazuh.yml
 resources:
 - wazuh/wazuh_managers/wazuh-cluster-svc.yaml
 - wazuh/wazuh_managers/wazuh-master-svc.yaml
@@ -63,3 +68,4 @@ resources:
 
 - ingress.yaml
 - secrets.yaml
+
