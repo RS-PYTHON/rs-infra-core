@@ -29,6 +29,9 @@ oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 cha
 jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
 oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') | b64encode }}"
+neuvector_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+
+
 
 certmanager:
   clusterissuer:

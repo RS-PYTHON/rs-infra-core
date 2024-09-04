@@ -135,6 +135,9 @@ ansible-playbook apps.yaml \
 !!! warning "Disclaimer: For Prefect-Worker post-configuration"
     See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
 
+!!! warning "Disclaimer: For Neuvector post-configuration"
+    See **_"Enable SSO"_** in the [Neuvector](./how-to/Neuvector.md) after deploy the app.
+
 ### 8. Deploy the rs-server
 
 ```shellsession
