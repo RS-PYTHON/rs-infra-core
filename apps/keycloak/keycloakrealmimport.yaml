@@ -15,13 +15,13 @@
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
 metadata:
-  name: rspytest
+  name: rspy
   namespace: iam
 spec:
   keycloakCRName: keycloak
   realm:
-    id: 270ab762-f310-4vae-aeb8-8ceb88735dd1
-    realm: rspytest
+    id: 270ab762-f310-4eae-aeb8-8ceb88735dd1
+    realm: rspy
     displayName: ''
     displayNameHtml: ''
     notBefore: 0
@@ -92,7 +92,7 @@ spec:
         clientRole: false
         containerId: 270ab762-f310-4eae-aeb8-8ceb88735dd1
         attributes: {}
-      - name: default-roles-rspytest
+      - name: default-roles-rspy
         description: "${role_default-roles}"
         composite: false
         clientRole: false
@@ -623,7 +623,7 @@ spec:
       realmRoles: []
       clientRoles: {}
     defaultRole:
-      name: default-roles-rspytest
+      name: default-roles-rspy
       description: "${role_default-roles}"
       composite: false
       clientRole: false
@@ -676,7 +676,7 @@ spec:
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
-        - default-roles-rspytest
+        - default-roles-rspy
       clientRoles:
         realm-management:
           - view-users
@@ -721,7 +721,7 @@ spec:
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
-      - default-roles-rspytest
+      - default-roles-rspy
       clientRoles:
         jupyterhub:
         - uma_protection
@@ -805,7 +805,7 @@ spec:
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
-      - default-roles-rspytest
+      - default-roles-rspy
       clientRoles:
         oauth2-proxy:
         - uma_protection
@@ -843,13 +843,13 @@ spec:
     - clientId: account
       name: "${client_account}"
       rootUrl: "${authBaseUrl}"
-      baseUrl: "/realms/rspytest/account/"
+      baseUrl: "/realms/rspy/account/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
       redirectUris:
-      - "/realms/rspytest/account/*"
+      - "/realms/rspy/account/*"
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -880,13 +880,13 @@ spec:
     - clientId: account-console
       name: "${client_account-console}"
       rootUrl: "${authBaseUrl}"
-      baseUrl: "/realms/rspytest/account/"
+      baseUrl: "/realms/rspy/account/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
       redirectUris:
-      - "/realms/rspytest/account/*"
+      - "/realms/rspy/account/*"
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -1971,13 +1971,13 @@ spec:
     - clientId: security-admin-console
       name: "${client_security-admin-console}"
       rootUrl: "${authAdminUrl}"
-      baseUrl: "/admin/rspytest/console/"
+      baseUrl: "/admin/rspy/console/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
       redirectUris:
-      - "/admin/rspytest/console/*"
+      - "/admin/rspy/console/*"
       webOrigins:
       - "+"
       notBefore: 0
