@@ -19,7 +19,7 @@ app:
   # -- Port for the application
   port: 8000
   # -- URL of the API Key Manager service
-  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   uacHomeUrl : https://apikeymanager.{{ platform_domain_name }}/docs

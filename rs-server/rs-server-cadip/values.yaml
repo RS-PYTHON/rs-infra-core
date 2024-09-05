@@ -61,7 +61,7 @@ app:
           username: test
           password: test
   # -- URL of the API Key Manager service
-  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 
 postgres:
   # -- PostgreSQL port
