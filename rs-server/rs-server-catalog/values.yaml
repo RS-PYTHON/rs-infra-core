@@ -19,10 +19,23 @@ app:
   # -- Port for the application
   port: 8000
   # -- URL of the API Key Manager service
-  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   uacHomeUrl : https://apikeymanager.{{ platform_domain_name }}/docs
+
+auth:
+  secret:
+    # -- OIDC End Point
+    oidc_endpoint: "https://iam.{{ platform_domain_name }}"
+    # -- OIDC Realm
+    oidc_realm: "rspy"
+    # -- OIDC CLient ID
+    oidc_client_id: "apikeymanager"
+    # -- OIDC Secret used to sync user info from Keycloak
+    oidc_client_secret: "{{ apikeymanager_oidc_client_secret }}"
+    # -- Random string used to encode cookie-based HTTP sessions in SessionMiddleware
+    cookie_secret: "{{ rsserver_cookieSecret }}"
 
 postgres:
   # -- PostgreSQL port
