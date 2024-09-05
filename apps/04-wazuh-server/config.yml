@@ -135,7 +135,7 @@ config:
             sp:
               entity_id: {{ wazuh_saml_client_id }}
               metadata_file: /usr/share/wazuh-indexer/opensearch-security/sp-metadata.xml
-            kibana_url: https://wazuh.dev-rspy.esa-copernicus.eu/
+            kibana_url: https://wazuh.{{ platform_domain_name }}/
             roles_key: realm_access.roles
             exchange_key: {{ wazuh_saml_client_key }}
         authentication_backend:
