@@ -21,7 +21,7 @@ app:
   # -- URL suffix for the application. Must be the same value as ingress.path
   docsUrl: /docs
   # -- URL of the API Key Manager service (internal)
-  uacCheckUrl: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
+  uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/check/api_key
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
 
