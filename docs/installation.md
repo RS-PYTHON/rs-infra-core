@@ -92,13 +92,13 @@ Copy the openrc.sh.template into openrc.sh and change the values inside to match
 cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 ```
 
-- Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/group_vars/main.yaml`
+- Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
 - Credentials in `roles/terraform/create-cluster/tasks/.env`
 - Credentials, domain name in `inventory/mycluster/openrc.sh`
 - Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
 - S3 backend for terraform in `inventory/mycluster/backend.tfvars`
 - Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
-- Values for custom parameters in `inventory/mycluster/group_vars/apps.yml`
+- Values for custom parameters in `inventory/mycluster/host_vars/setup/apps.yml`
 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
@@ -125,7 +125,7 @@ ansible-playbook kubernetes.yaml \
 ### 7. Deploy the apps
 
 !!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"1. Enable Bcrypt encryption"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
+    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 ```shellsession
 ansible-playbook apps.yaml \
@@ -134,6 +134,12 @@ ansible-playbook apps.yaml \
 
 !!! warning "Disclaimer: For Prefect-Worker post-configuration"
     See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
+
+!!! warning "Disclaimer: For Wazuh Server installation"
+    See **_"B. Post-Install: Apply modifications set during installation process (new credentials and SSO)"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts after deploy the app.
+
+!!! warning "Disclaimer: For Neuvector post-configuration"
+    See **_"Enable SSO"_** in the [Neuvector](./how-to/Neuvector.md) after deploy the app.
 
 ### 8. Deploy the rs-server
 

@@ -33,7 +33,7 @@ configMapGenerator:
 - name: dashboard-conf
   files:
     - wazuh/indexer_stack/wazuh-dashboard/dashboard_conf/opensearch_dashboards.yml
-
+    - wazuh.yml
 resources:
 - wazuh/wazuh_managers/wazuh-cluster-svc.yaml
 - wazuh/wazuh_managers/wazuh-master-svc.yaml
@@ -56,3 +56,4 @@ resources:
 - certs/dashboard.yaml
 - certs/filebeat.yaml
 - certs/node.yaml
+
