@@ -26,6 +26,8 @@ app:
   stationConfigFile: stations_cfg.json
   # -- EODAG configuration file for the application
   eodagConfigFile: cadip_ws_config.yaml
+  # -- Cadip search configuration file for the application
+  cadipSearchConfigFile: cadip_search_config.yaml
   station:
     # -- CADIP station name
     cadip:
