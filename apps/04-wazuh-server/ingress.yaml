@@ -19,8 +19,6 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     cert-manager.io/cluster-issuer: letsencrypt-prod
-
- 
 spec:
   ingressClassName: nginx
   rules:

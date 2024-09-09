@@ -20,10 +20,16 @@ app:
   port: 8000
   # -- URL suffix for the application. Must be the same value as ingress.path
   docsUrl: /docs
+  # -- Config directory for the application
+  confDir: /app/conf
   # -- URL of the API Key Manager service (internal)
   uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
+  # -- Config file name for the application
+  pygeoapiConfig: config.yml
+  # -- Config file name for the application
+  openapiConfig: openapi.json
 
 ingress:
   # -- Enabled/Disable ingress
@@ -35,5 +41,8 @@ ingress:
     name: letsencrypt-prod
   # -- Ingress host name
   host: {{ platform_domain_name }}
-  # -- Ingress path for the application. Must be the same value as app.docsUrl.
-  path: /docs
+  # -- Ingress path for the application
+  path:
+    - /docs
+    - /processes
+    - /jobs

@@ -25,3 +25,6 @@ server.ssl.key: "/usr/share/wazuh-dashboard/certs/key.pem"
 server.ssl.certificate: "/usr/share/wazuh-dashboard/certs/cert.pem"
 opensearch.ssl.certificateAuthorities: ["/usr/share/wazuh-dashboard/certs/root-ca.pem"]
 uiSettings.overrides.defaultRoute: /app/wazuh
+opensearch_security.auth.type: "saml"
+server.xsrf.allowlist: ["/_opendistro/_security/saml/acs", "/_opendistro/_security/saml/logout", "/_opendistro/_security/saml/acs/idpinitiated"]
+opensearch_security.session.keepalive: false

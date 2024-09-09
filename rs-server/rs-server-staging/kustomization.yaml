@@ -17,7 +17,7 @@ commonLabels:
 namespace: processing
 
 helmCharts:
-- name: rs-server-catalog
+- name: rs-server-staging
   repo: https://rs-python.github.io/rs-helm
   releaseName: "{{ app_name }}"
   version: 0.2.0-a3

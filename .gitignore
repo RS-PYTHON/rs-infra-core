@@ -19,3 +19,5 @@ apps/**/*.csr
 apps/**/*.srl
 rs-infrastructure.tar.gz
 collections/kubespray**
+apps/04-wazuh-server/idp-metadata.xml
+apps/04-wazuh-server/sp-metadata.xml

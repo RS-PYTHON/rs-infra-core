@@ -13,6 +13,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a3] - 2024-09-05
+
+### Added
+
+- RSPY-166 : Use Keycloak to login into Wazuh
+- RSPY-264 : [Monitoring] Create Grafana datasources for PostgreSQL databases
+- RSPY-266 : [Monitoring] Create JupyterHub ServiceMonitor
+- RSPY-293 : Use Keycloak to login into Neuvector
+- RSPY-312 : Configure Prefect Server logging
+- RSPY-318 : Backup and restore Keycloak data
+- RSPY-335 : Deploy dask gateway server
+
+### Fixed
+
+- RSPY-351 : Variabilize the bucket name
+
 ## [0.2a2] - 2024-07-17
 
 ### Added
