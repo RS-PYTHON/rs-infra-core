@@ -186,8 +186,6 @@ jupyterhub:
     daskgateway:
       apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
       apiurl: http://hub.processing.svc.cluster.local:8081/api
-      rspy: 
-        cookie_secret: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     metrics:
       apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
 
