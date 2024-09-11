@@ -171,7 +171,7 @@ storage:
     s3:
       access_key: {{ s3.access_key }}
       secret_key: {{ s3.secret_key }}
-      bucket: {{ grafanatempo.metaMonitoring.bucket }}
+      bucket: {{ grafanatempo.s3.bucket }}
       endpoint: {{ s3.endpoint }}
       region: {{ s3.region }}
       insecure: false   
