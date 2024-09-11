@@ -125,6 +125,7 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
+      storageClassName: csi-cinder-sc-retain
       resources:
         requests:
           storage: 10Gi

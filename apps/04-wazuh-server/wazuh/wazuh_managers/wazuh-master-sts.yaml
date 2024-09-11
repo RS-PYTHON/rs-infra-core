@@ -158,7 +158,6 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: wazuh-manager-master
-        
       spec:
         accessModes:
           - ReadWriteOnce
