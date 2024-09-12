@@ -1,34 +1,40 @@
-# Prerequisite
+# Dask Gateway
 
-Install following libraries on the Terminal before applying the commands below:
+## Prerequisite
 
-```
+Install following libraries on the terminal before applying the commands below:
+
+``` bash
 pip install dask-gateway==2024.1.0 dask==2024.1.0 distributed==2024.1.0 msgpack==1.0.7 numpy==1.26.3 pandas==2.1.4 toolz==0.12.0
 ```
 
-
-# Connect to the Gateway
+## Connect to the Gateway
 
 ``` Python
 from dask_gateway import Gateway
 gateway = Gateway(
-     "http://traefik-dask-gateway.dask-gateway.svc.cluster.local",
-     auth="jupyterhub",
+     address="http://traefik-dask-gateway.dask-gateway.svc.cluster.local",
+     auth="jupyterhub"
 )
 ```
-# Get the list of clusters
+
+## Get the list of clusters
+
 ``` Python
 gateway.list_clusters()
 ```
 
-# Start cluster
-## Create single cluster (without option)
+## Start cluster
+
+### Create single cluster (without option)
+
 ``` Python
 cluster = gateway.new_cluster()
 print (cluster.name)
 ```
 
-## Create cluster with options
+### Create cluster with options
+
 ``` Python
 # List of options available
 options = gateway.cluster_options()
@@ -42,7 +48,8 @@ print (cluster.name)
 gateway.scale_cluster(cluster.name, 2)
 ```
 
-## Shutdown all the dask clusters
+### Shutdown all the dask clusters
+
 ``` Python
 clusters = gateway.list_clusters()
 
@@ -54,4 +61,4 @@ for cluster_info in clusters:
         print(f"Cluster {cluster_info.name} successfully stopped.")
     except Exception as e:
         print(f"Error stopping cluster {cluster_info.name}: {e}")
-``` 
+```
