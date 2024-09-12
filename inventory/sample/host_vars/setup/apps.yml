@@ -194,7 +194,11 @@ jupyterhub:
 # GitHub Container Registry : ghcr.io
 # Refer to the doc in /docs/how-to/GitHub Container Registry.md
 github:
-  registrySecret: ghcr-k8s
+  registrySecret:
+    name: ghcr-k8s
+    registry: ghcr.io
+    username: YOUR_GITHUB_USERNAME
+    password: YOUR_GITHUB_TOKEN
 
 # To use the vault the first time you have
 # to manually create an empty secret named 
