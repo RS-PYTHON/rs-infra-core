@@ -17,7 +17,7 @@ kind: StorageClass
 metadata:
   name: csi-cinder-sc-retain
   annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
+    storageclass.kubernetes.io/is-default-class: "false"
 provisioner: cinder.csi.openstack.org
 reclaimPolicy: Retain
 allowVolumeExpansion: true
