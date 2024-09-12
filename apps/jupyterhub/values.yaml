@@ -35,6 +35,20 @@ imagePullSecrets: []
 # ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
 # the proxy pod.
 hub:
+  # Add initContainer to install itsdangerous without having to modify the image
+  initContainers:
+    - name: install-python-packages
+      image: python:3.9-slim 
+      command: ["sh", "-c", "pip install --target /srv/jupyterhub/ itsdangerous"]
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /srv/jupyterhub
+  extraVolumes:
+    - name: shared-volume
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: shared-volume
+      mountPath: /srv/jupyterhub/python-packages
   revisionHistoryLimit:
   config:
     GenericOAuthenticator:
@@ -56,10 +70,49 @@ hub:
         - RS-ADMIN
       scope:
         - openid
+      enable_auth_state: true
+
     JupyterHub:
       admin: true
       authenticator_class: generic-oauth
+  extraConfig:
+    # After the user has logged in to JupyterHub, pass the authentication information
+    # to the user container so it can be used from the notebooks and terminal.
+    pass_auth_state: |
+      import sys
+      sys.path.append('/srv/jupyterhub/python-packages')
 
+      import json
+      import itsdangerous
+      from base64 import b64encode
+      from oauthenticator.generic import GenericOAuthenticator
+
+      class CustomGenericOAuthenticator(GenericOAuthenticator):
+        """Customize the GenericOAuthenticator that we use above, in the config field."""
+        
+        async def pre_spawn_start(self, user, spawner):
+          """Called when spawning the user pod."""
+
+          try:
+            # Get the authentication state that was calculated by the authenticator
+            auth_state = await user.get_auth_state()
+
+            # Encrypt it as a session cookie called "user", exactly in the same way than 
+            # rs-server and apikey-manager do, see the SessionMiddleware source code.
+            session = {"user": auth_state["oauth_user"]}
+            session_b64 = b64encode(json.dumps(session).encode("utf-8"))
+            signer = itsdangerous.TimestampSigner("{{ rsserver_cookieSecret }}")
+            session_cookie = signer.sign(session_b64)
+
+            # Save this cookie in an environment variable for this user only
+            # for future use when requesting rs-server and the apikey-manager
+            # from the user jupyterhub environment = from a notebook or terminal
+            spawner.environment["RSPY_OAUTH2_COOKIE"] = session_cookie.decode("utf-8")
+
+          except Exception as e:
+            print(f"\n[ERROR]: Could not authenticate user: {e!r}\n")
+
+      c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
   service:
     type: ClusterIP
     annotations: {}
