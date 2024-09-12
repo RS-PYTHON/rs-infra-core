@@ -8,12 +8,21 @@ Check the official GitHub documentation : <https://docs.github.com/en/packages/w
 
 And create a PAT with at least `read:packages` scope.
 
-## Create a docker registry secret in Kubernetes
+## Replace values in your inventory file
 
-Check the official Kubernetes documentation : <https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_secret_docker-registry/>
+Replace the value in your inventory file : [inventory/mycluster/host_vars/setup/apps.yml](/inventory/sample/host_vars/setup/apps.yml)
 
-And create a Kubernetes secret with the GitHub token obtained in the previous step :
+Into the following block :
 
-```bash
-kubectl -n processing create secret docker-registry ghcr-k8s --docker-server=ghcr.io --docker-username=<USERNAME> --docker-password=<TOKEN_FROM_PREVIOUS_STEP>
+```YAML
+# You might need to create a docker registry secret
+# to retrieve private container image from the
+# GitHub Container Registry : ghcr.io
+# Refer to the doc in /docs/how-to/GitHub Container Registry.md
+github:
+  registrySecret:
+    name: ghcr-k8s
+    registry: ghcr.io
+    username: YOUR_GITHUB_USERNAME
+    password: YOUR_GITHUB_TOKEN
 ```
