@@ -28,12 +28,19 @@ thanos_oidc_client_key: "{{ lookup('password', '/dev/null length=60 chars=ascii_
 oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 apikeymanager_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+apikeymanager_cookieSecret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
 # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
 oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') | b64encode }}"
 neuvector_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 rsserver_cookieSecret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
 
-
+apikeymanager:
+  database:
+    name: apikeymanagerdb
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    username: apikeymanager
+    password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
+    secret: apikeymanager-database-password
 
 certmanager:
   clusterissuer:
