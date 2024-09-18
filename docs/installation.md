@@ -102,7 +102,7 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 
 !!! warning "Private container registry"
     As the [RS-PYTHON/rs-infrastructure](https://github.com/RS-PYTHON/rs-infrastructure) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
-    ) for the private `ghcr.io` registry. Follow the how-to [GitHub Container Registry](/docs/how-to/GitHub%20Container%20Registry.md).
+    ) for the private `ghcr.io` registry. Follow the how-to [GitHub Container Registry](./how-to/GitHub%20Container%20Registry.md).
 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
