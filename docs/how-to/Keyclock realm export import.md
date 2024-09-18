@@ -8,12 +8,12 @@
   2. Click on Realm settings
   3. Click on Action
   4. Click on Partial export  
-  ![Keycloak export part 1](/docs/media/keycloak_export_1.png)
+  ![Keycloak export part 1](../media/keycloak_export_1.png)
 - On the new pop-up
   1. Turn "On" for the two options "Include groups and roles" and "Include clients"  
-  ![Keycloak export part 2](/docs/media/keycloak_export_2.png)
+  ![Keycloak export part 2](../media/keycloak_export_2.png)
 - Convert the downloaded file from `JSON` to `YAML`
-- Create the `KeycloakRealmImport` file (you can find an e.g. in [the keycloak app folder](/apps/keycloak/keycloakrealmimport.yaml)):
+- Create the `KeycloakRealmImport` file (you can find an e.g. in [the keycloak app folder](../../apps/keycloak/keycloakrealmimport.yaml)):
 
   ```yaml
    apiVersion: k8s.keycloak.org/v2alpha1

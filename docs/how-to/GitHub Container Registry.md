@@ -10,7 +10,7 @@ And create a PAT with at least `read:packages` scope.
 
 ## Replace values in your inventory file
 
-Replace the value in your inventory file : [inventory/mycluster/host_vars/setup/apps.yml](/inventory/sample/host_vars/setup/apps.yml)
+Replace the value in your inventory file : [inventory/mycluster/host_vars/setup/apps.yml](../../inventory/sample/host_vars/setup/apps.yml)
 
 Into the following block :
 
