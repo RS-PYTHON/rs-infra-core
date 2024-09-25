@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - RSPY-346 : OAuth2 with PKCE authorisation within JupyterHub
 
+### Changed
+
+- Bump helm chart version for rs-server
+
 ### Fixed
 
 - RSPY-381 : [Deployment] Error during cluster creation
