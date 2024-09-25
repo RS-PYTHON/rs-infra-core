@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Changed
 
 - Bump helm chart version for rs-server
+- Ingress path for rs-server-catalog and rs-server-staging
 
 ### Fixed
 
