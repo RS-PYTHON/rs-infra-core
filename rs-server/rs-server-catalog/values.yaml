@@ -75,4 +75,6 @@ ingress:
   # -- Ingress host name
   host: {{ platform_domain_name }}
   # -- Ingress path
-  path: /catalog
+  path:
+    - /catalog
+    - /auth

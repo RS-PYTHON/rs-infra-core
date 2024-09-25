@@ -43,6 +43,5 @@ ingress:
   host: {{ platform_domain_name }}
   # -- Ingress path for the application
   path:
-    - /docs
     - /processes
     - /jobs
