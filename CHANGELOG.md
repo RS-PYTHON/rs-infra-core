@@ -13,6 +13,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a3] - 2024-09-25
+
+### Added
+
+- RSPY-346 : OAuth2 with PKCE authorisation within JupyterHub
+
+### Fixed
+
+- RSPY-381 : [Deployment] Error during cluster creation
+- RSPY-382 : [Deployment] Prometheus datasource not created
+- RSPY-385 : CloudNative PG Deployment failed due to syntax issue on limit/request
+- RSPY-386 : Grafana-Tempo deployment values don't match with apps.yaml
+- RSPY-387 : Missing credential secret creation for Github Repository
+- RSPY-388 : [Velero] First Deployment failed due to missing CRD
+- RSPY-399 : [Infra] Impossible to create PV (quota reached)
+
 ## [0.2a3] - 2024-09-05
 
 ### Added
