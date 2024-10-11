@@ -27,7 +27,7 @@ app:
   # -- OIDC Realm
   oidc_realm: "rspy"
   # -- OIDC Public Client ID
-  oidc_client_id: ""
+  oidc_client_id: "fastapi_public"
   # -- Allows or disallows loading and browsing external STAC data
   SB_allowExternalAccess: "false"
   # -- Detect locale from user
