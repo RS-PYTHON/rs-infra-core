@@ -121,6 +121,58 @@ rs_server:
     username: test
     secret: status-database-password
 
+rs_server_station_credentials:
+  adgs:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  cadip:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  ins:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  mps:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  mti:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  nsg:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  sgs:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  lta:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  s1a:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  s2a:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+
 neuvector:
   core:
     admin:
