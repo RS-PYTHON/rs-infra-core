@@ -31,17 +31,18 @@ app:
   confDir: /app/conf
   # -- Station configuration file for the application
   stationConfigFile: stations_cfg.json
-  # -- EODAG configuration file for the application
+  # -- EODAG configuration file for the application. If useTokenModule is true the adgs_ws_config_token_module.yaml
+  # -- shall be used. When useTokenModule is false, the adgs_ws_config.yaml shall be used. 
+  # -- Set properly the EODAG_ADGS_CONFIG env var.
   eodagConfigFile: adgs_ws_config.yaml
+  eodagConfigFileTokenModule: adgs_ws_config_token_module.yaml
+  # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
+  useTokenModule: true
   station:
-    endpoint:
-      # -- ADGS URL
-      url: http://mockup-station-adgs-svc.processing.svc.cluster.local:8080/Products
-      secret:
-        # -- Username to authenticate with the ADGS endpoint
-        username: test
-        # -- Password to authenticate with the ADGS endpoint
-        password: test
+    adgs:
+      endpoint:
+        # -- ADGS URL
+        url: http://mockup-station-adgs-svc.processing.svc.cluster.local:8080/Products
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 
@@ -94,6 +95,16 @@ ingress:
   host: {{ platform_domain_name }}
   # -- Ingress path
   path: /adgs
+
+# -- Pod affinity
+affinity: {}
+
+# -- Pod toleration
+tolerations:
+- key: role
+  operator: Equal
+  value: access_csc
+  effect: NoSchedule
 
 stac_browser:
   urls: "https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
