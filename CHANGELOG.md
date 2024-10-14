@@ -13,6 +13,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a5] - 2024-10-14
+
+### Added
+
+- RSPY-230 : Deploy STAC browser
+- rs-server : added application rs-server-station-credentials
+
+### Changed
+
+- Bump helm chart version for rs-server
+- rs-server : updated several charts
+
+### Fixed
+
+- JupyterHub : Value of `RSPY_UAC_CHECK_URL`
+
 ## [0.2a4] - 2024-09-25
 
 ### Added
