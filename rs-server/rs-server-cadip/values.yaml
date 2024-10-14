@@ -24,44 +24,38 @@ app:
   confDir: /app/conf
   # -- Station configuration file for the application
   stationConfigFile: stations_cfg.json
-  # -- EODAG configuration file for the application
-  eodagConfigFile: cadip_ws_config.yaml
   # -- Cadip search configuration file for the application
   cadipSearchConfigFile: cadip_search_config.yaml
+  # -- EODAG configuration file for the application. If useTokenModule is true the adgs_ws_config_token_module.yaml
+  # -- shall be used. When useTokenModule is false, the adgs_ws_config.yaml shall be used. 
+  # -- Set properly the EODAG_ADGS_CONFIG env var.
+  eodagConfigFile: cadip_ws_config.yaml
+  eodagConfigFileTokenModule: cadip_ws_config_token_module.yaml
+  # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
+  useTokenModule: true
   station:
     # -- CADIP station name
     cadip:
       endpoint:
         # -- CADIP station URL
         url:
+          root: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080
           file: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080/Files
           session: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080/Sessions
-
-        secret:
-          # -- Username to authenticate with the CADIP station
-          username: test
-          # -- Password to authenticate with the CADIP station
-          password: test
     # @ignored
     sgs:
       endpoint:
         url: 
+          root: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080
           file: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080/Files
           session: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080/Sessions
-
-        secret:
-          username: test
-          password: test
     # @ignored
     mti:
       endpoint:
         url: 
+          root: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080
           file: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080/Files
           session: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080/Sessions
-
-        secret:
-          username: test
-          password: test
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 
@@ -114,3 +108,16 @@ ingress:
   host: {{ platform_domain_name }}
   # -- Ingress path
   path: /cadip
+
+# -- Pod affinity
+affinity: {}
+
+# -- Pod toleration
+tolerations:
+- key: role
+  operator: Equal
+  value: access_csc
+  effect: NoSchedule
+
+stac_browser:
+  urls: "https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"

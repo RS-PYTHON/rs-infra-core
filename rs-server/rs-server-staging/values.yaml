@@ -30,6 +30,15 @@ app:
   pygeoapiConfig: config.yml
   # -- Config file name for the application
   openapiConfig: openapi.json
+  station:
+    adgs:
+      type: auxip
+    cadip:
+      type: cadip
+    sgs:
+      type: cadip
+    mti:
+      type: cadip
 
 ingress:
   # -- Enabled/Disable ingress
@@ -45,3 +54,13 @@ ingress:
   path:
     - /processes
     - /jobs
+
+# -- Pod affinity
+affinity: {}
+
+# -- Pod toleration
+tolerations:
+- key: role
+  operator: Equal
+  value: access_csc
+  effect: NoSchedule
