@@ -471,7 +471,7 @@ singleuser:
     tag: "latest"
     pullPolicy: Always
     pullSecrets: 
-      - name: {{ github.registrySecret }}
+      - name: {{ github.registrySecret.name }}
   startTimeout: 300
   cpu:
     limit: 0.75
