@@ -13,6 +13,7 @@
 # limitations under the License.
 
 ---
+
 - name: Check if ssh_key exists
   stat: 
     path: "{{ inventory_dir }}/privatekey.pem"
@@ -30,11 +31,13 @@
   shell: |
     pip install s3cmd==2.4.0 -q -q -q && \
     set -o allexport; source .env; set +o allexport && \
-    echo "host_base=https://$(grep endpoint {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2 | cut -d '/' -f 3)" > {{ inventory_dir }}/s3cfg && \
-    echo "host_bucket=https://%(bucket).$(grep endpoint {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2 | cut -d '/' -f 3)" >> {{ inventory_dir }}/s3cfg && \
-    echo "access_key=${AWS_ACCESS_KEY_ID}" >> {{ inventory_dir }}/s3cfg && \
-    echo "secret_key=${AWS_SECRET_ACCESS_KEY}" >> {{ inventory_dir }}/s3cfg && \
-    echo "use_https=True" >> {{ inventory_dir }}/s3cfg && \
+    cat <<EOF > {{ inventory_dir }}/s3cfg
+    host_base=https://$(grep endpoint {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2 | cut -d '/' -f 3)
+    host_bucket=https://%(bucket).$(grep endpoint {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2 | cut -d '/' -f 3)
+    access_key=${AWS_ACCESS_KEY_ID}
+    secret_key=${AWS_SECRET_ACCESS_KEY}
+    use_https=True
+    EOF
     $CONDA_PREFIX/bin/s3cmd -c {{ inventory_dir }}/s3cfg mb s3://$(grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2) && \
     rm {{ inventory_dir }}/s3cfg && \
     pip uninstall s3cmd==2.4.0 --yes -q -q -q
@@ -44,21 +47,24 @@
 
 - name: Terraform init
   shell: |
-    set -o allexport; source .env; set +o allexport; terraform init -upgrade -backend-config="{{ inventory_dir }}/backend.tfvars"
+    set -o allexport; source .env; set +o allexport; \
+    terraform init -upgrade -backend-config="{{ inventory_dir }}/backend.tfvars"
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
 
 - name: Create terraform cluster
   shell: |
-    set -o allexport; source .env; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars" -target=module.create-cluster
+    set -o allexport; source .env; set +o allexport; \
+    terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars" -target=module.create-cluster
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
 
 - name: Create buckets
   shell: |
-    set -o allexport; source .env; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars" -target=module.create-buckets  
+    set -o allexport; source .env; set +o allexport; \
+    terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars" -target=module.create-buckets  
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
@@ -76,15 +82,68 @@
 - name: Update hosts
   shell: |
     set -o allexport; source .env; set +o allexport && \
-    echo -e "all:\n\thosts:\n\t\tsetup:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1\n\t\tlocalhost:\n\t\t\tansible_connection: local\n\t\t\tansible_host: 127.0.0.1" > {{ inventory_dir }}/hosts.yaml && \
-    terraform output -json hosts | jq -r '.[] | "\t\t\(.name):\n\t\t\tansible_host: \(.access_ip_v4)\n\t\t\tansible_ssh_private_key_file: \"\/home\/cloud\/.ssh\/privatekey.pem\"\n\t\t\tprovider_id: \(.id)"' >> {{ inventory_dir }}/hosts.yaml && \
-    cat {{ inventory_dir }}/hosts.yaml | sed "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(terraform output eip_addr | tr -d '\"')/" > {{ inventory_dir }}/hosts.yaml && \
-    echo -e "\tchildren:" >> {{ inventory_dir }}/hosts.yaml; for k8s_role in $(terraform output -json hosts | jq -r '.[] | .tags.k8s_roles' | grep -oh "\w*" | sort | uniq); do echo -e "\t\t$k8s_role:\n\t\t\thosts:" >> {{ inventory_dir }}/hosts.yaml; \
-    terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | "\t\t\t\t\(.name):"' >> {{ inventory_dir }}/hosts.yaml; done && \
-    echo -e "\t\tkube_node:\n\t\t\thosts:\n$(terraform output -json hosts | jq -r '.[] | (select( .name | contains("master") | not )) | "\t\t\t\t\(.name):"')" >> {{ inventory_dir }}/hosts.yaml && \
-    echo -e "\t\tk8s_cluster:\n\t\t\tchildren:\n$(terraform output -json hosts | jq -r '.[] | "\(.tags.k8s_roles)"' | grep -oh "\w*" | sort | uniq | awk '{print "\t\t\t\t"$1":"}')" >> {{ inventory_dir }}/hosts.yaml && \
-    echo -e "\t\tcalico_rr:\n\t\t\thosts: {}" >> {{ inventory_dir }}/hosts.yaml && \
-    sed -i 's/\t/  /g' {{ inventory_dir }}/hosts.yaml
+    cat <<EOF > {{ inventory_dir }}/hosts.yaml
+    all:
+      hosts:
+        setup:
+          ansible_connection: local
+          ansible_host: 127.0.0.1
+        localhost:
+          ansible_connection: local
+          ansible_host: 127.0.0.1
+    EOF
+    cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+    $(terraform output -json hosts | jq -r '
+      .[] | 
+      "    \(.name):\n" +
+      "      ansible_host: \(.access_ip_v4)\n" +
+      "      ansible_ssh_private_key_file: \"/home/cloud/.ssh/privatekey.pem\"\n" +
+      "      provider_id: \(.id)"')
+    EOF
+    sed -i "/master-0/,/ansible_ssh_private_key_file/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$(terraform output eip_addr | tr -d '\"')/" {{ inventory_dir }}/hosts.yaml && \
+    echo "  children:" >> {{ inventory_dir }}/hosts.yaml
+    for k8s_role in $(terraform output -json hosts | jq -r '.[] | .tags.k8s_roles' | grep -oh "\w*" | sort | uniq); do
+      cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+        $k8s_role:
+          hosts:
+    EOF
+      terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | "        \(.name):"' >> {{ inventory_dir }}/hosts.yaml
+      cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+          vars:
+            nodegroup: $k8s_role
+    EOF
+      if [[ $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_labels') ]]; then
+        cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+            node_labels:
+    $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_labels' | tr ';' '\n' | sed 's/^/          /')
+    EOF
+      fi
+      if [[ $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_taints') ]]; then
+        cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+            node_taints:
+    $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_taints' | tr ';' '\n' | sed 's/^/          - /')
+    EOF
+      fi
+    done
+    cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+        kube_node:
+          hosts:
+    $(terraform output -json hosts | jq -r '.[] | select(.name | contains("master") | not) | "        \(.name):"')
+    EOF
+    cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+        k8s_cluster:
+          children:
+    EOF
+
+    terraform output -json hosts | jq -r '.[] | .tags.k8s_roles' | grep -oh "\w*" | sort | uniq | while read -r role; do
+      cat <<EOL >> {{ inventory_dir }}/hosts.yaml
+            $role:
+    EOL
+    done
+    cat <<EOF >> {{ inventory_dir }}/hosts.yaml
+        calico_rr:
+          hosts: {}
+    EOF
   args:
     chdir: roles/terraform/create-cluster/tasks/
     executable: /bin/bash
