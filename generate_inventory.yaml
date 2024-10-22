@@ -24,7 +24,7 @@
     - name: Set some facts
       set_fact:
         generated_inventory_vars_path: "{{ inventory_dir }}/group_vars/all/generated_inventory_vars.yaml"
-        cluster_name_tmp: "{{ config['content'] | b64decode | regex_findall('cluster_name = (.+)') | first | split('\"') }}"
+        cluster_name_tmp: "{{ tfconfig['content'] | b64decode | regex_findall('cluster_name = (.+)') | first | split('\"') }}"
 
     - name: Set cluster name
       set_fact:
