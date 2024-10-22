@@ -67,7 +67,7 @@ gateway:
             Mapping("scheduler_extra_pod_annotations", default={"usage":"unknown","access":"internal"}, label="Scheduler_extra_pod_annotations"),
             Mapping("scheduler_extra_pod_labels", default={"user":"unknown","team":"unknown"}, label="Scheduler_extra_pod_labels"),
             Mapping("environment", default={"S3_ENDPOINT":"{{ s3.endpoint }}","S3_REGION":"{{ s3.region }}"}, label="Environment variables"),
-            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/infra","operator":"Exists"}]}]}}}}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/infra","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Worker_extra_pod_config"),
             Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name": "obs"}}]}, label="Worker_extra_container_config"),
             handler=option_handler,
         )
