@@ -115,13 +115,13 @@
       if [[ $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_labels') ]]; then
         cat <<EOF >> {{ inventory_dir }}/hosts.yaml
             node_labels:
-    $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_labels' | tr ';' '\n' | sed 's/^/          /')
+    $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_labels' | tr ';' '\n' | sed 's/^/          /' | sort | uniq )
     EOF
       fi
       if [[ $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_taints') ]]; then
         cat <<EOF >> {{ inventory_dir }}/hosts.yaml
             node_taints:
-    $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_taints' | tr ';' '\n' | sed 's/^/          - /')
+    $(terraform output -json hosts | jq -r --arg k8s_role $k8s_role '.[] | select(.tags.k8s_roles | contains ($k8s_role)) | .metadata.node_taints' | tr ';' '\n' | sed 's/^/          - /' | sort | uniq )
     EOF
       fi
     done

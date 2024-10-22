@@ -22,7 +22,7 @@ cluster_configuration = {
         additionnal_disk_size = 0
         type = "master"
         k8s_roles = "kube_control_plane etcd"
-        node_labels = "node-role.kubernetes.io/master="
+        node_labels = "node-role.kubernetes.io/master: ''"
         node_taints = "role=basic:NoSchedule"
     }
     infra = {
@@ -31,7 +31,7 @@ cluster_configuration = {
         additionnal_disk_size = 0
         type = "infra"
         k8s_roles = "infra"
-        node_labels = "node-role.kubernetes.io/infra="
+        node_labels = "node-role.kubernetes.io/infra: ''"
         node_taints = ""
     }
     processing = {
