@@ -25,9 +25,7 @@
         source {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh && \
         sed -i 's#{{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/privatekey.pem#/home/cloud/.ssh/privatekey.pem#' {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml && \
         ansible-playbook collections/kubespray/cluster.yml -i {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml --become && \
-        mkdir -p ~/.kube && sudo cp /etc/kubernetes/admin.conf ~/.kube/config && sudo chown cloud: ~/.kube/config && \
-        cd roles/terraform/create-cluster/tasks && source .env && \
-        terraform output -json hosts | jq -r '.[] | "\(.name),\(.tags.type)"' | while read line ; do kubectl label node ${line%,*} node-role.kubernetes.io/${line#*,}= ; done ;
+        mkdir -p ~/.kube && sudo cp /etc/kubernetes/admin.conf ~/.kube/config && sudo chown cloud: ~/.kube/config
       args:
         executable: /bin/bash
       async: 3600
