@@ -43,6 +43,15 @@ cluster_configuration = {
         node_labels = ""
         node_taints = ""
     }
+    daskcluster = {
+        flavor = "s6.small.1"
+        amount = 0
+        additionnal_disk_size = 0
+        type = "daskcluster"
+        k8s_roles = "daskcluster"
+        node_labels = "node-role.kubernetes.io/daskcluster: ''"
+        node_taints = "role=access_csc:NoSchedule"
+    }
 }
 public_key = "<ssh-publickey>"
 
@@ -61,5 +70,4 @@ eip_elb_type = "5_bgp"
 eip_elb_bandwidth = 10
 
 #Bucket vars
-#buckets = ["elasticsearch-processing", "elasticsearch-security", "thanos", "loki", "tempo", "psql"]
-buckets = ["test-ansible-collection"]
+buckets = ["elasticsearch-processing", "elasticsearch-security", "thanos", "loki", "tempo", "psql"]
