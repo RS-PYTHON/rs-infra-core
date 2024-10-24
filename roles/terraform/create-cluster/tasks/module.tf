@@ -68,6 +68,8 @@ variable "cluster_configuration" {
       amount    = number
       type      = string
       k8s_roles = string
+      node_labels = string
+      node_taints = string
       additionnal_disk_size = number
     }))
 }

@@ -11,6 +11,8 @@ image_name = "OBS Ubuntu 22.04"
 #        additionnal_disk_size = <additionnal_disk_size> # 0 if no additionnal disk wanted
 #        type = "<instance-type>"
 #        k8s_roles = "list of roles separated by spaces"
+#        node_labels = "list of kubernetes labels separated by semicolons"
+#        node_taints = "list of kubernetes taints separated by semicolons"
 #    }
 cluster_configuration = {
     #At least one master is required for the cluster to work fine
@@ -20,13 +22,17 @@ cluster_configuration = {
         additionnal_disk_size = 0
         type = "master"
         k8s_roles = "kube_control_plane etcd"
+        node_labels = "node-role.kubernetes.io/master: ''"
+        node_taints = "role=basic:NoSchedule"
     }
     infra = {
         flavor = "s6.small.1"
-        amount = 0 
+        amount = 1 
         additionnal_disk_size = 0
         type = "infra"
         k8s_roles = "infra"
+        node_labels = "node-role.kubernetes.io/infra: ''"
+        node_taints = ""
     }
     processing = {
         flavor = "s6.small.1"
@@ -34,6 +40,17 @@ cluster_configuration = {
         additionnal_disk_size = 0
         type = "processing"
         k8s_roles = "processing"
+        node_labels = ""
+        node_taints = ""
+    }
+    daskcluster = {
+        flavor = "s6.small.1"
+        amount = 0
+        additionnal_disk_size = 0
+        type = "daskcluster"
+        k8s_roles = "daskcluster"
+        node_labels = "node-role.kubernetes.io/daskcluster: ''"
+        node_taints = "role=access_csc:NoSchedule"
     }
 }
 public_key = "<ssh-publickey>"
