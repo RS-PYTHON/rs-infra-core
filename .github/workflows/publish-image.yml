@@ -108,10 +108,34 @@ jobs:
       - id: publish-docker
         uses: ./.github/actions/publish-docker
         with:
-          dockerfile: ./.github/Dockerfile
-          build_context_path: ./.github/
+          dockerfile: ./.github/jupyter/Dockerfile
+          build_context_path: ./.github/jupyter
           image_suffix: -jupyter
           version_name: ${{ needs.set-env.outputs.docker_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ssh_key: ${{ secrets.RS_DEMO_PRIVATE_SSH_KEY }}
           docker_tag: ${{ needs.set-env.outputs.docker_tag }}
+
+
+  publish-docker-dask-gateway:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    name: "Docker image for dask-gateway"
+    needs: [set-env]
+    permissions: write-all
+    outputs:
+      docker_image: ${{ steps.publish-docker.outputs.docker_image}}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: publish-docker
+        uses: ./.github/actions/publish-docker
+        with:
+          dockerfile: ./.github/dask-gateway/Dockerfile
+          build_context_path: ./.github/dask-gateway
+          image_suffix: -dask-gateway
+          version_name: ${{ needs.set-env.outputs.docker_tag }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ssh_key: ${{ secrets.RS_DEMO_PRIVATE_SSH_KEY }}
+          docker_tag: ${{ needs.set-env.outputs.docker_tag }}
+        

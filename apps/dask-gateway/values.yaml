@@ -13,6 +13,8 @@
 # limitations under the License.
 
 gateway:
+  imagePullSecrets:
+    - name: ghcr-k8s
   replicas: 1
   prefix: /
   loglevel: INFO
@@ -49,20 +51,24 @@ gateway:
                 "cluster_max_workers": options.cluster_max_workers,
                 "scheduler_extra_pod_annotations": options.scheduler_extra_pod_annotations,
                 "scheduler_extra_pod_labels": options.scheduler_extra_pod_labels,
+                "environment": options.environment,
                 "worker_extra_pod_config": options.worker_extra_pod_config,
+                "worker_extra_container_config": options.worker_extra_container_config,
             }
 
         c.Backend.cluster_options = Options(
             Float("worker_cores", 1, min=1, max=8, label="Worker Cores"),
             Float("worker_memory", 4, min=1, max=32, label="Worker Memory (GiB)"),
-            String("image", default="ghcr.io/dask/dask-gateway:2024.1.0", label="Image"),
+            String("image", default="ghcr.io/rs-python/rs-infrastructure-dask-gateway:latest", label="Image"),
             String("namespace", default="dask-gateway", label="Namespace"),
             Float("cluster_max_cores", 4, min=1, max=80, label="Cluster max cores"),
             Float("cluster_max_memory", default=17179869184, min=1073741824, max=343597383680, label="Cluster max memory"),
             Integer("cluster_max_workers", 5, min=1, max=20, label="Cluster max workers"),
             Mapping("scheduler_extra_pod_annotations", default={"usage":"unknown","access":"internal"}, label="Scheduler_extra_pod_annotations"),
             Mapping("scheduler_extra_pod_labels", default={"user":"unknown","team":"unknown"}, label="Scheduler_extra_pod_labels"),
-            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/infra","operator":"Exists"}]}]}}}}, label="Worker_extra_pod_config"),
+            Mapping("environment", default={"S3_ENDPOINT":"{{ s3.endpoint }}","S3_REGION":"{{ s3.region }}"}, label="Environment variables"),
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/infra","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name": "obs"}}]}, label="Worker_extra_container_config"),
             handler=option_handler,
         )
 
