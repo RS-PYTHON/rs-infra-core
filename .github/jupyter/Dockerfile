@@ -26,9 +26,9 @@ ENV SHELL /bin/bash
 ENV HOME /home/rspy
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
-COPY ../common/resources/requirements.txt /opt/
-COPY ../common/resources/requirements-force.txt /opt/
-COPY ../common/resources/layer-cleanup.sh /usr/local/bin/
+COPY ./resources/requirements.txt /opt/
+COPY ./resources/requirements-force.txt /opt/
+COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 RUN \

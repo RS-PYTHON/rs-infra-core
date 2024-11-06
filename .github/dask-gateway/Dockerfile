@@ -16,8 +16,8 @@ FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 USER root
 
-COPY ../common/resources/requirements-force.txt /opt/
-COPY ../common/resources/layer-cleanup.sh /usr/local/bin/
+COPY ./resources/requirements-force.txt /opt/
+COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 # Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
