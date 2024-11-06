@@ -16,4 +16,6 @@ nbgitpuller
 python-dotenv
 boto3
 dask-labextension
-
+dask-gateway==2024.1.0
+dask==2024.1.0
+distributed==2024.1.0

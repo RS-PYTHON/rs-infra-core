@@ -26,8 +26,9 @@ ENV SHELL /bin/bash
 ENV HOME /home/rspy
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
-COPY ./resources/requirements.txt /opt/
-COPY resources/layer-cleanup.sh /usr/local/bin
+COPY ../common/resources/requirements.txt /opt/
+COPY ../common/resources/requirements-force.txt /opt/
+COPY ../common/resources/layer-cleanup.sh /usr/local/bin
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 RUN \
@@ -42,6 +43,7 @@ RUN \
     xclip && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
+    pip install --force-reinstall -r /opt/requirements-force.txt && \
     curl -L -o /tmp/firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
     tar -xjf /tmp/firefox.tar.bz2 -C /opt/ && ln -s /opt/firefox/firefox /usr/bin/firefox && rm /tmp/firefox.tar.bz2 && \
     layer-cleanup.sh
