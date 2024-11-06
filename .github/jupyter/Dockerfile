@@ -41,6 +41,7 @@ RUN \
     tzdata \
     libgtk-3-0 libasound2 libx11-xcb1 \
     xclip && \
+    conda install --yes conda-forge::python=3.11.7 && \
     pip install -U -r /opt/requirements.txt && \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
     pip install --force-reinstall -r /opt/requirements-force.txt && \
