@@ -105,6 +105,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Copy common requirements
+        id: copy_common_req
+        shell: bash
+        run: |
+          mkdir -p ./.github/jupyter/resources/
+          cp ./.github/common/resources/* ./.github/jupyter/resources/
+
       - id: publish-docker
         uses: ./.github/actions/publish-docker
         with:
@@ -127,6 +134,13 @@ jobs:
       docker_image: ${{ steps.publish-docker.outputs.docker_image}}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Copy common requirements
+        id: copy_common_req
+        shell: bash
+        run: |
+          mkdir -p ./.github/dask-gateway/resources/
+          cp ./.github/common/resources/* ./.github/dask-gateway/resources/
 
       - id: publish-docker
         uses: ./.github/actions/publish-docker
