@@ -20,5 +20,5 @@ helmCharts:
 - name: rs-server-frontend
   repo: https://rs-python.github.io/rs-helm
   releaseName: "{{ app_name }}"
-  version: 0.2.0-a5
+  version: 0.2.0-a6
   valuesFile: values.yaml
