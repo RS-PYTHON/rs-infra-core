@@ -31,7 +31,8 @@ app:
   # -- Set properly the EODAG_ADGS_CONFIG env var.
   eodagConfigFile: cadip_ws_config.yaml
   eodagConfigFileTokenModule: cadip_ws_config_token_module.yaml
-  # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
+  # -- The method for loading the token for external stations: use the custom module or 
+  # -- allow EODAG to handle it (set it to false for EODAG).
   useTokenModule: true
   station:
     # -- CADIP station name
