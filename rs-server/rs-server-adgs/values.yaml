@@ -31,6 +31,7 @@ app:
   confDir: /app/conf
   # -- Station configuration file for the application
   stationConfigFile: stations_cfg.json
+  adgsSearchConfigFile: adgs_search_config.yaml
   # -- EODAG configuration file for the application. If useTokenModule is true the adgs_ws_config_token_module.yaml
   # -- shall be used. When useTokenModule is false, the adgs_ws_config.yaml shall be used. 
   # -- Set properly the EODAG_ADGS_CONFIG env var.
@@ -43,6 +44,10 @@ app:
       endpoint:
         # -- ADGS URL
         url: http://mockup-station-adgs-svc.processing.svc.cluster.local:8080/Products
+    adgs2:
+      endpoint:
+        # -- ADGS URL
+        url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080/Products
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 
@@ -94,7 +99,9 @@ ingress:
   # -- Ingress host name
   host: {{ platform_domain_name }}
   # -- Ingress path
-  path: /adgs
+  path:
+    - /adgs
+    - /auxip
 
 # -- Pod affinity
 affinity: {}
