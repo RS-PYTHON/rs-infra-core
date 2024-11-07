@@ -16,6 +16,7 @@ FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 USER root
 
+COPY ./resources/requirements.txt /opt/
 COPY ./resources/requirements-force.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
@@ -30,11 +31,14 @@ RUN \
 ENV PYGEOAPI_CONFIG=/opt/config/config.yml
 ENV PYGEOAPI_OPENAPI=/opt/config/openapi.json
 
-# COPY ./resources/config /opt/config
+# Install requirements
+RUN pip install -U -r /opt/requirements.txt && \
+    layer-cleanup.sh
 
 # Install rs-server-common and rs-server-staging
-RUN pip install --upgrade rs-server-common==0.2a5
-RUN pip install --upgrade rs-server-staging==0.2a5
+RUN pip install --upgrade rs-server-common==0.2a5 \
+    rs-server-staging==0.2a5 && \
+    layer-cleanup.sh
 
 # Fix versions 
 RUN pip install --force-reinstall -r /opt/requirements-force.txt && \
