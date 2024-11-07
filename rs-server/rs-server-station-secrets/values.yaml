@@ -32,6 +32,21 @@ app:
         client_id: {{ rs_server_station_credentials.adgs.client_id }}
         client_secret: {{ rs_server_station_credentials.adgs.client_secret }}
         authorization: Basic test
+    adgs2:
+      service: 
+        name: auxip
+        url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080                    
+      domain: mockup-station-adgs2-svc.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
     cadip:
       service: 
         name: cadip
