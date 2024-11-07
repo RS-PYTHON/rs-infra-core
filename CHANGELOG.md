@@ -13,6 +13,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a6] - 2024-11-07
+
+### Added
+
+- (Partial) RSPY-425 : CI/CD chain to build a Dask base image that embeds rs-client library
+- RSPY-361 : Add egress to a set of nodes
+
+### Changed
+
+- Refactor terraform node labeling
+
+### Fixed
+
+- jupyterhub secret name
+
 ## [0.2a5] - 2024-10-14
 
 ### Added
