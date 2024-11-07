@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-nbgitpuller
-python-dotenv
-boto3
-dask-labextension
-
+numpy==2.1.2
+pandas==2.2.3
+msgpack==1.0.7
+toolz==0.12.0
