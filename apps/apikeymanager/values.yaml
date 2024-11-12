@@ -45,6 +45,8 @@ config:
   keycloak_sync_freq: 300
   # -- The URL where the OpenAPI schema will be served from
   openapi_url: "/docs/openapi.json"
+  # -- If False (default): use the OpenIdConnect authentication. If True: use the authlib OAuth authentication instead.
+  use_authlib_oauth: true
 
 image:
   # -- Image pull policy
