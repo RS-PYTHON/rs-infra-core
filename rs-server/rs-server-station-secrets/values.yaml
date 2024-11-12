@@ -12,15 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# -- Namespace for the deployment
-namespace: processing
+# THIS FILE WAS AUTOMATICALLY CREATED FROM:
+#  - rs-server/services/common/config/rs-server.template.yaml
+#  - rs-server/resources/sync_config_files.py
+# DON'T MODIFY IT DIRECTLY !
 
+namespace: processing
 app:
   stations:
     adgs:
-      service: 
+      service:
         name: auxip
-        url: http://mockup-station-adgs-svc.processing.svc.cluster.local:8080                    
+        url: http://mockup-station-adgs-svc.processing.svc.cluster.local:8080
       domain: mockup-station-adgs-svc.processing.svc.cluster.local
       authentication:
         auth_type: oauth2
@@ -33,9 +36,9 @@ app:
         client_secret: {{ rs_server_station_credentials.adgs.client_secret }}
         authorization: Basic test
     adgs2:
-      service: 
+      service:
         name: auxip
-        url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080                    
+        url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080
       domain: mockup-station-adgs2-svc.processing.svc.cluster.local
       authentication:
         auth_type: oauth2
@@ -48,9 +51,9 @@ app:
         client_secret: client_secret
         authorization: Basic test
     cadip:
-      service: 
+      service:
         name: cadip
-        url: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080                    
+        url: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080
       domain: mockup-station-cadip-cadip-svc.processing.svc.cluster.local
       authentication:
         auth_type: oauth2
@@ -63,9 +66,9 @@ app:
         client_secret: {{ rs_server_station_credentials.cadip.client_secret }}
         authorization: null
     ins:
-      service: 
+      service:
         name: cadip
-        url: http://mockup-station-cadip-ins-svc.processing.svc.cluster.local:8080                    
+        url: http://mockup-station-cadip-ins-svc.processing.svc.cluster.local:8080
       domain: mockup-station-cadip-ins-svc.processing.svc.cluster.local
       authentication:
         auth_type: oauth2
@@ -78,7 +81,7 @@ app:
         client_secret: {{ rs_server_station_credentials.ins.client_secret }}
         authorization: null
     mps:
-      service: 
+      service:
         name: cadip
         url: http://mockup-station-cadip-mps-svc.processing.svc.cluster.local:8080
       domain: mockup-station-cadip-mps-svc.processing.svc.cluster.local
@@ -93,7 +96,7 @@ app:
         client_secret: {{ rs_server_station_credentials.ins.client_secret }}
         authorization: Basic test
     mti:
-      service: 
+      service:
         name: cadip
         url: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080
       domain: mockup-station-cadip-mti-svc.processing.svc.cluster.local
@@ -108,7 +111,7 @@ app:
         client_secret: {{ rs_server_station_credentials.mti.client_secret }}
         authorization: null
     nsg:
-      service: 
+      service:
         name: cadip
         url: http://mockup-station-cadip-nsg-svc.processing.svc.cluster.local:8080
       domain: mockup-station-cadip-nsg-svc.processing.svc.cluster.local
@@ -123,7 +126,7 @@ app:
         client_secret: {{ rs_server_station_credentials.nsg.client_secret }}
         authorization: null
     sgs:
-      service: 
+      service:
         name: cadip
         url: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080
       domain: mockup-station-cadip-sgs-svc.processing.svc.cluster.local
@@ -138,7 +141,7 @@ app:
         client_secret: {{ rs_server_station_credentials.sgs.client_secret }}
         authorization: null
     lta:
-      service: 
+      service:
         name: lta
         url: http://mockup-lta-lta-svc.processing.svc.cluster.local:8080
       domain: mockup-lta-lta-svc.processing.svc.cluster.local
@@ -153,7 +156,7 @@ app:
         client_secret: {{ rs_server_station_credentials.lta.client_secret }}
         authorization: Basic test
     s1a:
-      service: 
+      service:
         name: prip
         url: http://mockup-prip-s1a-svc.processing.svc.cluster.local:8080
       domain: mockup-prip-s1a-svc.processing.svc.cluster.local
@@ -168,7 +171,7 @@ app:
         client_secret: {{ rs_server_station_credentials.s1a.client_secret }}
         authorization: Basic test
     s2a:
-      service: 
+      service:
         name: prip
         url: http://mockup-prip-s2a-svc.processing.svc.cluster.local:8080
       domain: mockup-prip-s2a-svc.processing.svc.cluster.local
@@ -182,3 +185,93 @@ app:
         client_id: {{ rs_server_station_credentials.s1a.client_id }}
         client_secret: {{ rs_server_station_credentials.s1a.client_secret }}
         authorization: Basic test
+    cadip_session:
+      domain: mockup-station-cadip-ins-svc.processing.svc.cluster.local
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-cadip_session-svc.processing.svc.cluster.local:8080
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-cadip_session-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: sss
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    ins_session:
+      domain: mockup-station-cadip-ins-svc.processing.svc.cluster.local
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-ins_session-svc.processing.svc.cluster.local:8080
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-ins_session-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: sss
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    mps_session:
+      domain: mockup-station-cadip-mps-svc.processing.svc.cluster.local
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-mps_session-svc.processing.svc.cluster.local:8080
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-mps_session-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    mti_session:
+      domain: mockup-station-cadip-mti-svc.processing.svc.cluster.local
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-mti_session-svc.processing.svc.cluster.local:8080
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-mti_session-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: openid
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    nsg_session:
+      domain: mockup-station-cadip-nsg-svc.processing.svc.cluster.local
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-nsg_session-svc.processing.svc.cluster.local:8080
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-nsg_session-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    sgs_session:
+      domain: mockup-station-cadip-sgs-svc.processing.svc.cluster.local
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-sgs_session-svc.processing.svc.cluster.local:8080
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-sgs_session-svc.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
