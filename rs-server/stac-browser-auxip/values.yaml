@@ -15,15 +15,28 @@
 # -- Namespace for the deployment
 namespace: processing
 
+service:
+  # -- Port for the service
+  port: 8080
+
 app:
   # -- Port for the application
-  port: 8000
-  # -- URL suffix for the application. Must be the same value as ingress.path
-  docsUrl: /docs
-  # -- URL of the API Key Manager service (internal)
-  uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
-  # -- URL of the API Key Manager home page (public)
-  uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
+  port: 8080
+  # -- OIDC End Point
+  oidc_endpoint: "https://iam.{{ platform_domain_name }}"
+  # -- OIDC Realm
+  oidc_realm: "rspy"
+  # -- OIDC Public Client ID
+  oidc_client_id: "fastapi_public"
+  # -- Allows or disallows loading and browsing external STAC data
+  SB_allowExternalAccess: "false"
+  # -- Detect locale from user
+  SB_detectLocaleFromBrowser: "true"
+  # -- Allows search engines to better crawl STAC Browser
+  SB_historyMode: history
+  # -- URL of the STAC catalog
+  SB_catalogUrl: https://{{ platform_domain_name }}/auxip/
+
 
 ingress:
   # -- Enabled/Disable ingress
@@ -33,10 +46,8 @@ ingress:
     type: cluster-issuer
     # -- Ingress Issuer name
     name: letsencrypt-prod
-  # -- Ingress host name
-  host: {{ platform_domain_name }}
-  # -- Ingress path for the application. Must be the same value as app.docsUrl.
-  path: /docs
-
-stac_browser:
-  urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
+  # -- Ingress host name.
+  host: stac-browser-auxip.{{ platform_domain_name }}
+  # -- Ingress path for the application
+  # Note that because of bug https://github.com/radiantearth/stac-browser/issues/479 the path is forced to /
+  path: /
