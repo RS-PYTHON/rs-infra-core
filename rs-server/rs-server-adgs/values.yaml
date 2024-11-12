@@ -114,4 +114,4 @@ tolerations:
   effect: NoSchedule
 
 stac_browser:
-  urls: "https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
+  urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
