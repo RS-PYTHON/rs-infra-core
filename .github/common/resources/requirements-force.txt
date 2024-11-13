@@ -17,3 +17,4 @@ msgpack==1.0.7
 toolz==0.12.0
 griffe==0.47.0 #Fix dependencies to launch prefect-flow with a Dask cluster
 pydantic==2.9.2
+pydantic-core==2.27.0
