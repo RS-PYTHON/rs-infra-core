@@ -21,7 +21,15 @@ dask==2024.1.0
 dask-gateway==2024.1.0
 dask_labextension==7.0.0
 distributed==2024.1.0
-prefect==2.20.0
-prefect-dask==0.2.9
+#prefect==2.20.0
+#prefect-dask==0.2.9
+prefect==3.1.2
+prefect-dask==0.3.1
 pydantic==1.10.19
 pydantic_core==2.23.4
+
+
+dask==2024.1.0
+dask-gateway==2024.1.0
+dask_labextension==7.0.0
+distributed==2024.1.0
