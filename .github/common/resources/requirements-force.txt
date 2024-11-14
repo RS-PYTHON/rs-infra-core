@@ -16,3 +16,12 @@ pandas==2.2.3
 msgpack==1.0.7
 toolz==0.12.0
 griffe==0.47.0 #Fix dependencies to launch prefect-flow with a Dask cluster
+
+dask==2024.1.0 
+dask-gateway==2024.1.0 
+dask_labextension==7.0.0 
+distributed==2024.1.0 
+prefect-dask==0.2.9 
+prefect==2.19.9 
+pydantic==1.10.19 
+pydantic_core==2.23.4
