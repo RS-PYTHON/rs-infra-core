@@ -30,9 +30,8 @@ dask-gateway==2024.1.0
 dask_labextension==7.0.0
 distributed==2024.1.0
 
-griffe==1.5.0
+griffe==1.5.1
 pandas==2.2.3
-
 
 msgpack==1.1.0
 numpy==2.1.3

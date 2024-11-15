@@ -35,15 +35,15 @@ ENV PYGEOAPI_OPENAPI=/opt/config/openapi.json
 RUN pip install -U -r /opt/requirements.txt && \
     layer-cleanup.sh
 
-# # Install rs-server-common and rs-server-staging
-# RUN pip install --upgrade rs-server-common==0.2a5 && \
-#     layer-cleanup.sh
-# RUN pip install --upgrade rs-server-staging==0.2a5 && \
-#     layer-cleanup.sh
+# Install rs-server-common and rs-server-staging
+RUN pip install --upgrade rs-server-common==0.2a5 && \
+    layer-cleanup.sh
+RUN pip install --upgrade rs-server-staging==0.2a5 && \
+    layer-cleanup.sh
 
-# # Install prefect and prefect dask
-# RUN pip install prefect==2.18.3 prefect-dask==0.2.9 && \
-#     layer-cleanup.sh
+# Install prefect and prefect dask
+RUN pip install prefect==2.18.3 prefect-dask==0.2.9 && \
+    layer-cleanup.sh
 
 # Fix versions 
 RUN pip install --force-reinstall -r /opt/requirements-force.txt && \
