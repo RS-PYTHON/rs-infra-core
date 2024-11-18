@@ -67,7 +67,7 @@ cluster_configuration = {
         additionnal_disk_size = 0
         type = "systematicdpr"
         k8s_roles = "systematicdpr"
-        node_labels = "node-role.kubernetes.io/systematicdpr: ''"
+        node_labels = "node-role.kubernetes.io/systematic_dpr: ''"
         node_taints = "role=systematic_dpr:NoSchedule"
     }
     prefectflow = {
