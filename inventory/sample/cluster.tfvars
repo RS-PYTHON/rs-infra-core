@@ -52,6 +52,33 @@ cluster_configuration = {
         node_labels = "node-role.kubernetes.io/daskcluster: ''"
         node_taints = "role=access_csc:NoSchedule"
     }
+    ondemanddpr = {
+        flavor = "s6.small.1"
+        amount = 0
+        additionnal_disk_size = 0
+        type = "ondemanddpr"
+        k8s_roles = "ondemanddpr"
+        node_labels = "node-role.kubernetes.io/ondemand_dpr: ''"
+        node_taints = "role=ondemand_dpr:NoSchedule"
+    }
+    systematicdpr = {
+        flavor = "s6.small.1"
+        amount = 0
+        additionnal_disk_size = 0
+        type = "systematicdpr"
+        k8s_roles = "systematicdpr"
+        node_labels = "node-role.kubernetes.io/systematicdpr: ''"
+        node_taints = "role=systematic_dpr:NoSchedule"
+    }
+    prefectflow = {
+        flavor = "s6.small.1"
+        amount = 0
+        additionnal_disk_size = 0
+        type = "prefectflow"
+        k8s_roles = "prefectflow"
+        node_labels = "node-role.kubernetes.io/prefect_flow: ''"
+        node_taints = "role=prefect_flow:NoSchedule"
+    }
 }
 public_key = "<ssh-publickey>"
 
