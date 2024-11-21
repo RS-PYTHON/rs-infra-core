@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - RSPY-503 : STAC Browser AUXIP deployment missing
 - apikeymanager: set use_authlib_oauth to `true`
 - RSPY-509 : Unable to retrieve traces older than 24 hours
+- Tempo : missing backend configuration for S3
 
 ## [0.2a6] - 2024-11-07
 
