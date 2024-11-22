@@ -36,9 +36,9 @@ RUN pip install -U -r /opt/requirements.txt && \
     layer-cleanup.sh
 
 # Install rs-server-common and rs-server-staging
-RUN pip install --upgrade rs-server-common==0.2a6.post1.dev0 && \
+RUN pip install --upgrade rs-server-common==0.2a7 && \
     layer-cleanup.sh
-RUN pip install --upgrade rs-server-staging==0.2a6.post1.dev0 && \
+RUN pip install --upgrade rs-server-staging==0.2a7 && \
     layer-cleanup.sh
 
 # Fix versions 
