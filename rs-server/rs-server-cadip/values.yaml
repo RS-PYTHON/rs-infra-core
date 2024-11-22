@@ -40,23 +40,20 @@ app:
       endpoint:
         # -- CADIP station URL
         url:
-          root: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080
-          file: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080/Files
-          session: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080/Sessions
+          token: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080/oauth2/token
+          odata: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080
     # @ignored
     sgs:
       endpoint:
         url: 
-          root: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080
-          file: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080/Files
-          session: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080/Sessions
+          token: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080/oauth2/token
+          odata: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080
     # @ignored
     mti:
       endpoint:
         url: 
-          root: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080
-          file: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080/Files
-          session: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080/Sessions
+          token: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080/oauth2/token
+          odata: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 

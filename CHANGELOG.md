@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
-## [0.2a7] - 2024-11-21
+## [0.2a7] - 2024-11-22
 
 ### Added
 
@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - apikeymanager: set use_authlib_oauth to `true`
 - RSPY-509 : Unable to retrieve traces older than 24 hours
 - Tempo : missing backend configuration for S3
+- RSPY-531 : [RS-STAGING] Bucket name not modifiable on current configuration
 
 ## [0.2a6] - 2024-11-07
 
