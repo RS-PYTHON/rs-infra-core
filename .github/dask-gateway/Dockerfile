@@ -27,10 +27,6 @@ RUN \
     apt install -y libpq-dev gcc && \
     layer-cleanup.sh
 
-# Set environment variables for pygeoapi
-ENV PYGEOAPI_CONFIG=/opt/config/config.yml
-ENV PYGEOAPI_OPENAPI=/opt/config/openapi.json
-
 # Install requirements
 RUN pip install -U -r /opt/requirements.txt && \
     layer-cleanup.sh
