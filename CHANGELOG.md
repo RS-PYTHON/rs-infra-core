@@ -22,6 +22,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - RSPY-479 : OVH : start a single isolated node
 - RSPY-480 : OVH : deploy IAM for publication service
 
+### Changed
+
+- rs-server-staging : pre-requirement about the JupyterHub token updated (docs and conf)
+
 ### Fixed
 
 - RSPY-503 : STAC Browser AUXIP deployment missing
