@@ -26,10 +26,6 @@ app:
   uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
-  # -- Config file name for the application
-  pygeoapiConfig: config.yml
-  # -- Config file name for the application
-  openapiConfig: openapi.json
   # -- Catalog pod address
   endpointCatalog: http://rs-server-catalog-svc.processing.svc.cluster.local:8080
   # -- Object Storage bucket for the catalog
@@ -53,6 +49,19 @@ dask:
   # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
   # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
   jupyterhub_api_token: {{ rs_server_staging.jupyterhub_token }}
+
+postgres:
+  # -- PostgreSQL port
+  port: "5432"
+  # -- PostgreSQL database name
+  db: {{ rs_server.database.name }}
+  # -- PostgreSQL service URL
+  host: {{ rs_server.database.host }}
+  secret:
+    # -- Username to authenticate with the PostgreSQL service
+    user: {{ rs_server.database.username }}
+    # -- Password to authenticate with the PostgreSQL service
+    pass: {{ rs_server.database.password }}
 
 obs:
   # -- URL of the object storage service endpoint
