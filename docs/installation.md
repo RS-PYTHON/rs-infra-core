@@ -102,7 +102,7 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 
 !!! warning "Private container registry"
     As the [RS-PYTHON/rs-infrastructure](https://github.com/RS-PYTHON/rs-infrastructure) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
-    ) for the private `ghcr.io` registry. Follow the how-to [GitHub Container Registry](./how-to/GitHub%20Container%20Registry.md).
+    ) for the private `ghcr.io` registry. Follow the [how-to/GitHub Container Registry](./how-to/GitHub%20Container%20Registry.md).
 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
@@ -129,7 +129,7 @@ ansible-playbook kubernetes.yaml \
 ### 7. Deploy the apps
 
 !!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
+    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 ```shellsession
 ansible-playbook apps.yaml \
@@ -137,15 +137,19 @@ ansible-playbook apps.yaml \
 ```
 
 !!! warning "Disclaimer: For Prefect-Worker post-configuration"
-    See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
+    See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
 
 !!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"B. Post-Install: Apply modifications set during installation process (new credentials and SSO)"_** in the [Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts after deploy the app.
+    See **_"B. Post-Install: Apply modifications set during installation process (new credentials and SSO)"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts after deploy the app.
 
 !!! warning "Disclaimer: For Neuvector post-configuration"
-    See **_"Enable SSO"_** in the [Neuvector](./how-to/Neuvector.md) after deploy the app.
+    See **_"Enable SSO"_** in the [how-to/Neuvector](./how-to/Neuvector.md) after deploy the app.
 
 ### 8. Deploy the rs-server
+
+!!! warning "Pre-requirement: JupyterHub token"
+    Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
+    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
 
 ```shellsession
 ansible-playbook rs-server.yaml \

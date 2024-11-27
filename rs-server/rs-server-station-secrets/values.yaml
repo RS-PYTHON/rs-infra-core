@@ -45,10 +45,10 @@ app:
         token_url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080/oauth2/token
         grant_type: password
         scope: null
-        username: test
-        password: test
-        client_id: client_id
-        client_secret: client_secret
+        username: {{ rs_server_station_credentials.adgs2.username }}
+        password: {{ rs_server_station_credentials.adgs2.password }}
+        client_id: {{ rs_server_station_credentials.adgs2.client_id }}
+        client_secret: {{ rs_server_station_credentials.adgs2.client_secret }}
         authorization: Basic test
     cadip:
       service:
