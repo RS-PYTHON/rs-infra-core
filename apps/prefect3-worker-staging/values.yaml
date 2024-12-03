@@ -220,6 +220,6 @@ worker:
 
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
-    enabled: false
+    enabled: true
 
   replicaCount: {{ prefect3worker.staging.number | default(2) }}
