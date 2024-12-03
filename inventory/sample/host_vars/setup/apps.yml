@@ -117,7 +117,7 @@ prefect3:
 prefect3worker:
   staging:
     name: staging-pool
-    number: 1
+    number: 2
 
 rs_server_catalog:
   database:
