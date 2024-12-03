@@ -164,7 +164,7 @@ worker:
                         {
                           "matchExpressions": [
                             {
-                              "key": "node-role.kubernetes.io/infra",
+                              "key": "node-role.kubernetes.io/staging",
                               "operator": "Exists"
                             }
                           ]
@@ -212,7 +212,7 @@ worker:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
           - matchExpressions:
-            - key: "node-role.kubernetes.io/infra"
+            - key: "node-role.kubernetes.io/staging"
               operator: Exists
 
   serverApiConfig:
