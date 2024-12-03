@@ -106,6 +106,19 @@ prefectworker:
   name: on-demand-k8s-pool
   number: 2
 
+prefect3:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    username: prefect3
+    password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
+    name: prefect3
+    secret: prefect3-database-password
+
+prefect3worker:
+  staging:
+    name: staging-pool
+    number: 2
+
 rs_server_catalog:
   database:
     host: rs-server-catalog-db-svc.database.svc.cluster.local
