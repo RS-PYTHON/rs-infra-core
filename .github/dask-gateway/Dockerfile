@@ -24,16 +24,14 @@ RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 # Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
 RUN \
     apt update && \
-    apt install -y libpq-dev gcc && \
+    apt install -y libpq-dev gcc git && \
     layer-cleanup.sh
 
 # Install requirements
 RUN pip install -U -r /opt/requirements.txt && \
     layer-cleanup.sh
 
-# Install rs-server-common and rs-server-staging
-RUN pip install --upgrade rs-server-common==0.2a7 && \
-    layer-cleanup.sh
+# Install rs-server-staging
 RUN pip install --upgrade rs-server-staging==0.2a7 && \
     layer-cleanup.sh
 
