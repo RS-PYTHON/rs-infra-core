@@ -27,18 +27,14 @@ RUN \
     apt install -y libpq-dev gcc && \
     layer-cleanup.sh
 
-# Set environment variables for pygeoapi
-ENV PYGEOAPI_CONFIG=/opt/config/config.yml
-ENV PYGEOAPI_OPENAPI=/opt/config/openapi.json
-
 # Install requirements
 RUN pip install -U -r /opt/requirements.txt && \
     layer-cleanup.sh
 
 # Install rs-server-common and rs-server-staging
-RUN pip install --upgrade rs-server-common==0.2a6.post1.dev0 && \
+RUN pip install --upgrade rs-server-common==0.2a7 && \
     layer-cleanup.sh
-RUN pip install --upgrade rs-server-staging==0.2a6.post1.dev0 && \
+RUN pip install --upgrade rs-server-staging==0.2a7 && \
     layer-cleanup.sh
 
 # Fix versions 

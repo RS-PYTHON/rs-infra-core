@@ -26,12 +26,10 @@ app:
   uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
-  # -- Config file name for the application
-  pygeoapiConfig: config.yml
-  # -- Config file name for the application
-  openapiConfig: openapi.json
   # -- Catalog pod address
-  endpointCatalog: http://rs-server-catalog-svc.processing.svc.cluster.local:8080  
+  endpointCatalog: http://rs-server-catalog-svc.processing.svc.cluster.local:8080
+  # -- Object Storage bucket for the catalog
+  catalogBucket: {{ rspy.catalog_bucket }}
   station:
     adgs:
       type: auxip
@@ -48,8 +46,22 @@ dask:
   # -- Dask gateway auth type
   gateway_auth_type: jupyterhub
   # -- Jupyter API Token when dask.jupyterhub=jupyterhub
-  # TODO : the following token might need to be generated after jupyterhub is deployed and before rs-server is installed
-  jupyterhub_api_token: {{ jupyterhub.services.daskgateway.apitoken }}
+  # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
+  # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
+  jupyterhub_api_token: {{ rs_server_staging.jupyterhub_token }}
+
+postgres:
+  # -- PostgreSQL port
+  port: "5432"
+  # -- PostgreSQL database name
+  db: {{ rs_server.database.name }}
+  # -- PostgreSQL service URL
+  host: {{ rs_server.database.host }}
+  secret:
+    # -- Username to authenticate with the PostgreSQL service
+    user: {{ rs_server.database.username }}
+    # -- Password to authenticate with the PostgreSQL service
+    pass: {{ rs_server.database.password }}
 
 obs:
   # -- URL of the object storage service endpoint

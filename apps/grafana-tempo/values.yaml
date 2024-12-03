@@ -168,6 +168,7 @@ server:
 
 storage:
   trace:
+    backend: s3
     s3:
       access_key: {{ s3.access_key }}
       secret_key: {{ s3.secret_key }}
