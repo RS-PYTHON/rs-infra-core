@@ -43,13 +43,13 @@ cluster_configuration = {
         node_labels = ""
         node_taints = ""
     }
-    daskcluster = {
+    staging = {
         flavor = "s6.small.1"
         amount = 0
         additionnal_disk_size = 0
-        type = "daskcluster"
-        k8s_roles = "daskcluster"
-        node_labels = "node-role.kubernetes.io/daskcluster: ''"
+        type = "staging"
+        k8s_roles = "staging"
+        node_labels = "node-role.kubernetes.io/staging: ''"
         node_taints = "role=access_csc:NoSchedule"
     }
     ondemanddpr = {
