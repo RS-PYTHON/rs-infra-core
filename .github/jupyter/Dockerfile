@@ -14,7 +14,7 @@
 
 FROM ghcr.io/rs-python/rs-client-libraries_store:latest as rs-client
 
-FROM quay.io/jupyter/base-notebook:hub-4.1.5
+FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-4.1.5
 
 ARG ssh_key
 
