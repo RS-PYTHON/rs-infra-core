@@ -13,6 +13,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a7] - 2024-11-22
+
+### Added
+
+- Dask-gateway : new server parameter `scheduler_extra_container_config`
+- RSPY-360 : Add taint on nodes
+- RSPY-479 : OVH : start a single isolated node
+- RSPY-480 : OVH : deploy IAM for publication service
+
+### Changed
+
+- rs-server-staging : pre-requirement about the JupyterHub token updated (docs and conf)
+
+### Fixed
+
+- RSPY-503 : STAC Browser AUXIP deployment missing
+- apikeymanager: set use_authlib_oauth to `true`
+- RSPY-509 : Unable to retrieve traces older than 24 hours
+- Tempo : missing backend configuration for S3
+- RSPY-531 : [RS-STAGING] Bucket name not modifiable on current configuration
+
 ## [0.2a6] - 2024-11-07
 
 ### Added

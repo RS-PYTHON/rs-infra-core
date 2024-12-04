@@ -134,8 +134,18 @@ rs_server:
     username: test
     secret: status-database-password
 
+rs_server_staging:
+  # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
+  # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
+  jupyterhub_token: <REPLACE_WITH_TOKEN_GENERATED_FROM_JUPYUTER>
+
 rs_server_station_credentials:
   adgs:
+    username: test
+    password: test
+    client_id: client_id
+    client_secret: client_secret
+  adgs2:
     username: test
     password: test
     client_id: client_id

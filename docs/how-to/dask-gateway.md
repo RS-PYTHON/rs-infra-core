@@ -2,15 +2,14 @@
 
 ## Prerequisite
 
-Install following libraries on the terminal before applying the commands below:
-
-``` bash
-pip install dask-gateway==2024.1.0 dask==2024.1.0 distributed==2024.1.0 msgpack==1.0.7 numpy==1.26.3 pandas==2.1.4 toolz==0.12.0
-```
+Have a token generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token and also set in the rs-server-staging configuration.
 
 ## Connect to the Gateway
 
 ``` Python
+# Set up the environement and connect to the dask-gateway 
+os.environ["JUPYTERHUB_API_TOKEN"] = "<TOKEN_GENERATED_FROM_PREVIOUS_STEP>" 
+
 from dask_gateway import Gateway
 gateway = Gateway(
      address="http://traefik-dask-gateway.dask-gateway.svc.cluster.local",
@@ -43,9 +42,9 @@ for key in options.keys():
     print(f"{key}: {options[key]}")
 
 
-cluster = gateway.new_cluster(worker_cores=1, worker_memory=4.0, namespace='dask-gateway')
+cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infrastructure-dask-gateway:latest')
 print (cluster.name)
-gateway.scale_cluster(cluster.name, 2)
+gateway.scale_cluster(cluster.name, 3)
 ```
 
 ### Shutdown all the dask clusters
