@@ -33,7 +33,7 @@ app:
   eodagConfigFileTokenModule: cadip_ws_config_token_module.yaml
   # -- The method for loading the token for external stations: use the custom module or 
   # -- allow EODAG to handle it (set it to false for EODAG).
-  useTokenModule: true
+  useTokenModule: false
   station:
     # -- CADIP station name
     cadip:
