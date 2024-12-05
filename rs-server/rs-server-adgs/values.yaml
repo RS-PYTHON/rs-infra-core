@@ -38,7 +38,7 @@ app:
   eodagConfigFile: adgs_ws_config.yaml
   eodagConfigFileTokenModule: adgs_ws_config_token_module.yaml
   # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
-  useTokenModule: true
+  useTokenModule: false
   station:
     adgs:
       endpoint:
