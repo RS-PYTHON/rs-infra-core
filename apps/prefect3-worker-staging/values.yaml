@@ -27,6 +27,7 @@ worker:
     workPool:  {{ prefect3worker.staging.name }}
     limit: 10
     baseJobTemplate:
+      name: prefect3-worker-base-job-template
       configuration: |
         {
           "variables": {
