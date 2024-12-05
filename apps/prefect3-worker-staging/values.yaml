@@ -150,7 +150,7 @@ worker:
           },
           "job_configuration": {
             "env": "",
-            "name": "{{ prefect3worker.staging.name }}}",
+            "name": "{{ prefect3worker.staging.name }}",
             "labels": "",
             "command": null,
             "namespace": "processing",
