@@ -13,6 +13,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a8] - 2024-12-13
+
+### Added
+
+- rs-server-staging : switch OGC API persistence to PostgreSQL, added `catalogBucket`
+- rs-server-station-credentials : added adgs2 station
+- dask-gateway : added `imagePullPolicy` and `cluster_name` parameter
+- Prefect 3 server and worker
+
+### Changed
+
+- dask-gateway
+  - removed `rs-server-common`
+  - added `git`
+  - updated `rs-server-staging`
+- rs-server : bumped the versions to 0.2.0-a8
+- `cluster.tfvars` updated
+- docker base image from `quay.io` or `docker.io` migrated on `ghcr.io` (avoid pull limitations in CI)
+
+### Deprecated
+
+- Prefect 2 server and worker (will be removed in Q1 2025)
+
 ## [0.2a7] - 2024-11-22
 
 ### Added
