@@ -32,7 +32,7 @@ RUN pip install -U -r /opt/requirements.txt && \
     layer-cleanup.sh
 
 # Install rs-server-staging
-RUN pip install --upgrade rs-server-staging==0.2a7 && \
+RUN pip install --upgrade rs-server-staging==0.2a8 && \
     layer-cleanup.sh
 
 # Fix versions 
