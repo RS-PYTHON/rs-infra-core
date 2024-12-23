@@ -33,6 +33,7 @@ RUN pip install -U -r /opt/requirements.txt && \
 
 # Install rs-server-staging
 RUN pip install --upgrade rs-server-staging==0.2a8 && \
+    opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
 # Fix versions 

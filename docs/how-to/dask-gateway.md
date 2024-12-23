@@ -25,14 +25,14 @@ gateway.list_clusters()
 
 ## Start cluster
 
-### Create single cluster (without option)
+### Create single cluster (without option) (Option 1)
 
 ``` Python
 cluster = gateway.new_cluster()
 print (cluster.name)
 ```
 
-### Create cluster with options
+### Create a basic cluster with options (Option 2)
 
 ``` Python
 # List of options available
@@ -41,8 +41,23 @@ options = gateway.cluster_options()
 for key in options.keys():
     print(f"{key}: {options[key]}")
 
-
 cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infrastructure-dask-gateway:latest')
+
+print (cluster.name)
+gateway.scale_cluster(cluster.name, 3)
+```
+
+### Create a staging cluster with options (Option 3)
+
+``` Python
+# List of options available
+options = gateway.cluster_options()
+
+for key in options.keys():
+    print(f"{key}: {options[key]}")
+
+cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infrastructure-dask-gateway:0.2a8-fix-staging', cluster_name='dask-staging', scheduler_extra_pod_labels={'cluster_name': 'dask-staging'})
+
 print (cluster.name)
 gateway.scale_cluster(cluster.name, 3)
 ```
