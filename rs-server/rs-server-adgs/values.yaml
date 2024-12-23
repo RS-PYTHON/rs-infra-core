@@ -104,7 +104,13 @@ ingress:
     - /auxip
 
 # -- Pod affinity
-affinity: {}
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/staging
+         operator: Exists
 
 # -- Pod toleration
 tolerations:
