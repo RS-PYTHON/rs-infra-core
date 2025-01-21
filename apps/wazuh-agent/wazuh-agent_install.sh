@@ -14,8 +14,8 @@
 # limitations under the License.#set -x
 
 ## Variables ##############################################
-# See editor configuration 
-# https://documentation.wazuh.com/current/user-manual/deployment-variables/deployment-variables-linux.html 
+# See editor configuration
+# https://documentation.wazuh.com/current/user-manual/deployment-variables/deployment-variables-linux.html
 
 # Wazuh Agent version that should be download and install
 WAZUH_AGENT_VERSION=$1
@@ -59,7 +59,7 @@ FX_ubuntu_wazuh-agent_dpkg () {
 }
 
 FX_ubuntu_wazuh-agent_conf () {
- printf "\n\t\t\t FX Wazuh agent conf\n\n" 
+ printf "\n\t\t\t FX Wazuh agent conf\n\n"
 
  nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
   /usr/bin/sed -i 's/MANAGER_IP/wazuh.security.svc.cluster.local/g' /var/ossec/etc/ossec.conf
@@ -69,15 +69,15 @@ FX_ubuntu_wazuh-agent_conf () {
 }
 
 FX_ubuntu_wazuh-agent_reg () {
-  printf "\n\t\t\t FX Wazuh agent reg\n\n" 
+  printf "\n\t\t\t FX Wazuh agent reg\n\n"
 
-  nsenter --target 1 --mount --uts --ipc --net /bin/bash -c " 
+  nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
     /var/ossec/bin/agent-auth -m ${WAZUH_MANAGER} -p 1515 -P ${WAZUH_REGISTRATION_PASSWORD} -d
   "
 }
 
 FX_ubuntu_wazuh-agent_unreg () {
-  printf "\n\t\t\t FX Wazuh agent unreg\n\n" 
+  printf "\n\t\t\t FX Wazuh agent unreg\n\n"
 
   TOKEN=$(curl -u '${WAZUH_API_USER}:${WAZUH_API_PASSWORD}' -sk -X GET "https://wazuh.security.svc.cluster.local:55000/security/user/authenticate?raw=true")
   getid="curl -sk -X GET \"https://wazuh.security.svc.cluster.local:55000/agents?pretty=true&sort=-ip,name\" -H \"Authorization: Bearer $TOKEN\" | jq -r '.data.affected_items[] | select(.name == \"$(hostname)\").id'"
@@ -85,9 +85,9 @@ FX_ubuntu_wazuh-agent_unreg () {
   removeid="curl -k -X DELETE \"https://wazuh.security.svc.cluster.local:55000/agents?pretty=true&older_than=0s&agents_list=${id}&status=all\" -H \"Authorization: Bearer $TOKEN\""
   eval ${removeid}
 }
- 
+
 FX_ubuntu_wazuh-agent_svc () {
-  printf "\n\t\t\t FX Wazuh agent svc\n\n" 
+  printf "\n\t\t\t FX Wazuh agent svc\n\n"
 
   nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
     /usr/bin/systemctl enable wazuh-agent
@@ -139,7 +139,7 @@ FX_ubuntu_wazuh-agent_chkinst () {
   printf "\n\n\t\t--------------\n\n"
 
   nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
-    /usr/bin/systemctl status wazuh-agent 
+    /usr/bin/systemctl status wazuh-agent
   "
 }
 
@@ -166,8 +166,7 @@ FX_ubuntu_wazuh-agent_uninst () {
     systemctl daemon-reload
   "
 }
- 
- 
+
 FX_ubuntu_wazuh-agent_reinst () {
   printf "\n\t\t Wazuh agent RE-Installation\n\n"
 
@@ -179,16 +178,15 @@ FX_ubuntu_wazuh-agent_reinst () {
   FX_ubuntu_wazuh-agent_svc
   FX_ubuntu_wazuh-agent_rssvco
   FX_ubuntu_wazuh-agent_chkinst
-} 
+}
 
 ####################################
 # Check if Wazuh-agent is already install
- 
+
 WAZUH_AGENT_VERSION_TR=$(echo $WAZUH_AGENT_VERSION | tr -d " ")
 
 agent_inst=$(nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "ls /var/ossec")
 agent_inst2=$?
- 
 
 if [ "$agent_inst2" -eq 2 ] ;
 then
@@ -198,16 +196,14 @@ then
 else
   printf "\n\n\t MAIN Wazuh agent already installed Check version\n\n"
 
-  agent_version=$(nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "dpkg -s wazuh-agent | grep -i version | cut -d ":" -f 2")  
+  agent_version=$(nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "dpkg -s wazuh-agent | grep -i version | cut -d ":" -f 2")
   agent_version_tr=$(echo $agent_version | tr -d " ")
-  
+
   if [ "$WAZUH_AGENT_VERSION_TR" == "$agent_version_tr" ] ;
   then
     printf "\n\n\t MAIN Wazuh agent already installed into expected version\n\n"
-    
     exit 0
-  else 
-
+  else
     printf "\n\n\t MAIN Wazuh agent already installed but NOT into expected version\n\n"
 
     FX_ubuntu_wazuh-agent_uninst
