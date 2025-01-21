@@ -18,4 +18,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 env_path = Path(os.getenv("HOME")) / '.env'
+
+# TODO: temporary change to remove
+os.environ["RSPY_APPLY_STAGING_ENDPOINTS_VALIDATION"] = "0"
 load_dotenv(dotenv_path=env_path)
