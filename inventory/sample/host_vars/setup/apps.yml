@@ -229,11 +229,11 @@ wazuh:
       password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+[]{}<>:?', length=30) }}"
       secret: wazuh-api-cred
     clusterkey:
-      key: "{{ lookup('password', '/dev/null', length=32, chars=['ascii_letters']) }}" 
+      key: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=32) }}" 
       secret: wazuh-cluster-key
   agents:
     authd: 
-      authdpass: "{{ lookup('password', '/dev/null', length=14, chars=['ascii_letters']) }}" 
+      authdpass: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=14) }}" 
       secret: wazuh-authd-pass
 # TODO : move to wazuh part 
 wazuh_url: WAZUH_URL
