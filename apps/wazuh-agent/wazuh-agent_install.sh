@@ -95,22 +95,34 @@ FX_ubuntu_wazuh-agent_svc () {
   "
 }
 
-FX_ubuntu_wazuh-agent_rssvc () {
-  printf "\n\t\t\t FX Wazuh agent rssvc\n\n"
+FX_ubuntu_wazuh-agent_chksvc () {
+  printf "\n\t\t\t FX Wazuh agent chksvc\n\n"
+ 
+  i=0 ;
 
-  agent_status=$(nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "grep \"status=\" /var/ossec/var/run/wazuh-agentd.state")
+  while [ $i -lt 3 ]
+  do
+    ((i++));
+    agent_status=$(nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "grep -F 'status=' /var/ossec/var/run/wazuh-agentd.state") ;
+    if [[ $(echo ${agent_status} | grep -E "disconnected|pending") != "" ]] ;
+    then
+      printf "\n\t\t\t\t Wazuh agent is not connected, restarting the service ..." ;
+      FX_ubuntu_wazuh-agent_rssvc
 
-  if [ $(echo ${agent_status} | grep connected) != "" ] ;
-  then
-    printf "\n\t\t\t\t Wazuh agent status Connected service restart"
+      if [ ${i} -eq 3 ]
+      then
+        FX_ubuntu_wazuh-agent_uninst
+        FX_ubuntu_wazuh-agent_reinst
+      fi
 
-    nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
-      /usr/bin/systemctl restart wazuh-agent
-    "
-  fi
+    else 
+      printf "\n\t\t\t\t Wazuh agent is now connected" ;
+      break ;
+    fi
+  done ;
 }
 
-FX_ubuntu_wazuh-agent_rssvc2 () {
+FX_ubuntu_wazuh-agent_rssvc () {
   nsenter --target 1 --mount --uts --ipc --net /bin/bash -c "
     /usr/bin/systemctl restart wazuh-agent
   "
@@ -151,7 +163,7 @@ FX_ubuntu_wazuh-agent_inst () {
   FX_ubuntu_wazuh-agent_conf
   FX_ubuntu_wazuh-agent_reg
   FX_ubuntu_wazuh-agent_svc
-  FX_ubuntu_wazuh-agent_rssvc2
+  FX_ubuntu_wazuh-agent_rssvc
   FX_ubuntu_wazuh-agent_chkinst
 }
 
@@ -176,7 +188,7 @@ FX_ubuntu_wazuh-agent_reinst () {
   FX_ubuntu_wazuh-agent_conf
   FX_ubuntu_wazuh-agent_reg
   FX_ubuntu_wazuh-agent_svc
-  FX_ubuntu_wazuh-agent_rssvco
+  FX_ubuntu_wazuh-agent_chksvc
   FX_ubuntu_wazuh-agent_chkinst
 }
 
@@ -202,6 +214,10 @@ else
   if [ "$WAZUH_AGENT_VERSION_TR" == "$agent_version_tr" ] ;
   then
     printf "\n\n\t MAIN Wazuh agent already installed into expected version\n\n"
+    printf "\n\n\t Checking connectivity with manager ...\n\n"
+
+    FX_ubuntu_wazuh-agent_chksvc
+
     exit 0
   else
     printf "\n\n\t MAIN Wazuh agent already installed but NOT into expected version\n\n"
