@@ -20,8 +20,8 @@ ARG DASK_GATEWAY_TAG="2024.1.0"
 
 USER root
 
-#COPY ./resources/requirements.txt /opt/
-#COPY ./resources/requirements-force.txt /opt/
+COPY ./resources/requirement-dask-eopf.txt /opt/
+COPY ./resources/requirement-dask-staging.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
