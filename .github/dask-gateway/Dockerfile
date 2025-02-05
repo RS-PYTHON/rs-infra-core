@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+FROM ghcr.io/dask/dask-gateway:2024.1.0
+
 ARG IMAGE2BUILD
 ARG DASK_TAG="2024.5.2"
 ARG DASK_GATEWAY_TAG="2024.1.0"
-
-FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 USER root
 
