@@ -13,6 +13,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a9] - 2025-01-15
+
+:sparkler: Happy new year !
+
+### Changed
+
+- Documentation for dask-gateway
+- rs-server : bumped the versions to 0.2.0-a9
+
+### Fixed
+
+- RSPY-548 : No OpenTelemetry support in dask cluster
+- RSPY-558 : Affinity and Toleration not set on rs-server-cadip, rs-server-adgs
+- Grafana : generic oAuth, several users with the same email were not allowed
+
 ## [0.2a8] - 2024-12-13
 
 ### Added
