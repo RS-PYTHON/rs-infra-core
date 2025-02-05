@@ -33,6 +33,7 @@ RUN \
     layer-cleanup.sh
 
 RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
+    sed -i "s|\(^\s*dask-gateway-server\)|# \1|g" /opt/Dockerfile.requirements.txt && \
     pip install --no-cache-dir -r /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
 
