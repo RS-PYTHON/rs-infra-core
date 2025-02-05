@@ -26,8 +26,7 @@ COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 # Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
-RUN \
-    apt-get update && \
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y libpq-dev gcc git wget && \
     layer-cleanup.sh
@@ -49,6 +48,9 @@ RUN pip install \
 # Install whatever
 RUN --mount=type=secret,id=eopf_token \
     pip install -r /opt/requirement-${IMAGE2BUILD}.txt && \
+    layer-cleanup.sh
+
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
