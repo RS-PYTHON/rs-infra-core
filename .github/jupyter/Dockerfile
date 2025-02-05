@@ -46,8 +46,8 @@ RUN \
     pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
     pip install --force-reinstall -r /opt/requirements-force.txt && \
     conda clean --all --yes && \
-    curl -L -o /tmp/firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
-    tar -xjf /tmp/firefox.tar.bz2 -C /opt/ && ln -s /opt/firefox/firefox /usr/bin/firefox && rm /tmp/firefox.tar.bz2 && \
+    curl -L -o /tmp/firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
+    tar -xf /tmp/firefox.tar.xz -C /opt/ && ln -s /opt/firefox/firefox /usr/bin/firefox && rm /tmp/firefox.tar.xz && \
     layer-cleanup.sh
 
 RUN \
