@@ -46,7 +46,7 @@ RUN pip install \
     layer-cleanup.sh
 
 # Install whatever
-RUN --mount=type=secret,id=EOPF_TOKEN,env=EOPF_TOKEN \
+RUN --mount=type=secret,id=eopf_token,env=EOPF_TOKEN \
     pip install -r /opt/requirement-${IMAGE2BUILD}.txt && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
