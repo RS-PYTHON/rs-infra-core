@@ -79,12 +79,15 @@ runs:
       with:
         build-args: |
           ssh_key=${{ inputs.ssh_key }}
+          IMAGE2BUILD=${{ inputs.image2build }}
         context: ${{ inputs.build_context_path }}
         file: ${{ inputs.dockerfile }}
         load: true
         tags: ${{ env.docker_image }}
         labels: ${{ steps.meta.outputs.labels }}
         push: false # push after the security scans below
+        secrets: |
+            EOPF_TOKEN=${{ secrets.EOPF_TOKEN }}
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master

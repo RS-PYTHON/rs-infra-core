@@ -1,0 +1,2 @@
+-i https://__token__:${EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/14/packages/pypi/simple
+eopf==2.5.2

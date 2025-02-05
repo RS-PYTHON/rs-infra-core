@@ -12,32 +12,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ARG IMAGE2BUILD
+ARG DASK_TAG="2024.5.2"
+ARG DASK_GATEWAY_TAG="2024.1.0"
+
 FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 USER root
 
-COPY ./resources/requirements.txt /opt/
-COPY ./resources/requirements-force.txt /opt/
+#COPY ./resources/requirements.txt /opt/
+#COPY ./resources/requirements-force.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 # Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
 RUN \
-    apt update && \
-    apt install -y libpq-dev gcc git && \
+    apt-get update && \
+    && apt-get upgrade -y \
+    && apt-get install -y libpq-dev gcc git wget && \
     layer-cleanup.sh
 
-# Install requirements
-RUN pip install -U -r /opt/requirements.txt && \
+RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
+    pip install --no-cache-dir -r /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
 
-# Install rs-server-staging
-RUN pip install --upgrade rs-server-staging==0.2a9 && \
+# Install Dask with correct version
+RUN pip install \
+    dask==${DASK_TAG} \
+    dask-gateway==${DASK_GATEWAY_TAG} \
+    dask-gateway-server[local]==${DASK_GATEWAY_TAG} \
+    bokeh>=3.1.0 \
+    jupyter-server-proxy && \
+    layer-cleanup.sh
+
+# Install whatever
+RUN --mount=type=secret,EOPF_TOKEN=EOPF_TOKEN,env=EOPF_TOKEN \
+    pip install -r /opt/requirement-${IMAGE2BUILD}.txt && \
     opentelemetry-bootstrap -a install && \
-    layer-cleanup.sh
-
-# Fix versions 
-RUN pip install --force-reinstall -r /opt/requirements-force.txt && \
     layer-cleanup.sh
 
 # Add a default user
