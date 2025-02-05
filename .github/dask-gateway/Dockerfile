@@ -28,8 +28,8 @@ RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 # Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
 RUN \
     apt-get update && \
-    && apt-get upgrade -y \
-    && apt-get install -y libpq-dev gcc git wget && \
+    apt-get upgrade -y && \
+    apt-get install -y libpq-dev gcc git wget && \
     layer-cleanup.sh
 
 RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
