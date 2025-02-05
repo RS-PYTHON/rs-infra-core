@@ -90,7 +90,7 @@ runs:
         labels: ${{ steps.meta.outputs.labels }}
         push: false # push after the security scans below
         secrets: |
-          "id=${{ inputs.eopf_token }}"
+          EOPF_TOKEN=${{ inputs.eopf_token }}
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
