@@ -37,6 +37,9 @@ inputs:
   ssh_key:
     description: SSH key to clone rs-demo repository
     required: true
+  eopf_token:
+    description: secrets.EOPF_TOKEN
+    required: true
 
 outputs:
   docker_image:
@@ -87,7 +90,7 @@ runs:
         labels: ${{ steps.meta.outputs.labels }}
         push: false # push after the security scans below
         secrets: |
-            EOPF_TOKEN=${{ secrets.EOPF_TOKEN }}
+            EOPF_TOKEN=${{ inputs.eopf_token }}
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
