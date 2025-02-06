@@ -16,6 +16,11 @@ FROM ghcr.io/rs-python/rs-client-libraries_store:latest as rs-client
 
 FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-4.1.5
 
+ARG DASK_TAG="2024.5.2"
+ARG DASK_GATEWAY_TAG="2024.1.0"
+ARG PREFECT_TAG="3.1.4"
+ARG PYTHON_TAG="3.11.7"
+
 USER root
 
 RUN adduser rspy
@@ -40,11 +45,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     layer-cleanup.sh
 
 # Install python dependencies
-RUN conda install --yes conda-forge::python=3.11.7 && \
+RUN conda install --yes conda-forge::python=${PYTHON_TAG} && \
     pip install \
-    dask[complete]==2024.5.2 \
-    dask-gateway==2024.1.0 \
-    prefect[dask,aws]==3.1.4 \
+    dask[complete]==${DASK_TAG} \
+    dask-gateway==${DASK_GATEWAY_TAG} \
+    prefect[dask,aws]==${PREFECT_TAG} \
     ipywidgets \
     dask-labextension \
     graphviz \
