@@ -52,7 +52,10 @@ RUN conda install --yes conda-forge::python=3.11.7 && \
     dask-labextension \
     graphviz \
     s3fs \
-    boto3 && \
+    boto3
+
+RUN echo /tmp/*.whl && \
+    find /tmp/ && \
     pip install /tmp/*.whl && \
     conda clean --all --yes && \
     layer-cleanup.sh
