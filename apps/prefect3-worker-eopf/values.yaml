@@ -14,7 +14,7 @@
 
 ## Common parameters
 # -- fully override common.names.fullname
-fullnameOverride: "prefect3-worker-staging"
+fullnameOverride: "prefect3-worker-eopf"
 
 worker:
   clusterUid: "rspy"
@@ -24,10 +24,10 @@ worker:
     pullPolicy: IfNotPresent
   apiConfig: server
   config:
-    workPool: {{ prefect3worker.staging.name }}
+    workPool: {{ prefect3worker.eopf.name }}
     limit: 10
     baseJobTemplate:
-      name: prefect3-worker-staging-base-job-template
+      name: prefect3-worker-eopf-base-job-template
       configuration: |
         {
           "variables": {
@@ -57,7 +57,7 @@ worker:
                     "type": "null"
                   }
                 ],
-                "title": "prefect-pool-staging",
+                "title": "prefecft-pool-eopf",
                 "description": "Name given to infrastructure created by a worker."
               },
               "image": {
@@ -202,7 +202,7 @@ worker:
           },
           "job_configuration": {
             "env": "{{ env }}",
-            "name": "prefect-pool-staging",
+            "name": "prefecft-pool-eopf",
             "labels": "{{ labels }}",
             "command": "{{ command }}",
             "namespace": "processing",
@@ -216,7 +216,7 @@ worker:
                         {
                           "matchExpressions": [
                             {
-                              "key": "node-role.kubernetes.io/staging",
+                              "key": "node-role.kubernetes.io/infra",
                               "operator": "Exists"
                             }
                           ]
@@ -248,7 +248,7 @@ worker:
               "metadata": {
                 "labels": "{{ labels }}",
                 "namespace": "processing",
-                "generateName": "prefect-pool-staging"
+                "generateName": "prefecft-pool-eopf"
               },
               "apiVersion": "batch/v1"
             },
@@ -264,7 +264,7 @@ worker:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
           - matchExpressions:
-            - key: "node-role.kubernetes.io/staging"
+            - key: "node-role.kubernetes.io/infra"
               operator: Exists
 
   serverApiConfig:
@@ -274,4 +274,4 @@ worker:
   livenessProbe:
     enabled: true
 
-  replicaCount: {{ prefect3worker.staging.number | default(2) }}
+  replicaCount: {{ prefect3worker.eopf.number | default(2) }}

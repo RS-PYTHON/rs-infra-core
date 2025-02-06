@@ -34,9 +34,6 @@ inputs:
   docker_tag:
     description: Tag the docker images
     required: false
-  ssh_key:
-    description: SSH key to clone rs-demo repository
-    required: true
   eopf_token:
     description: secrets.EOPF_TOKEN
     required: true

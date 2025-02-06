@@ -14,17 +14,13 @@
 
 commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
-namespace: dask-gateway
+
+namespace: processing
 
 helmCharts:
-- name: dask-gateway
-  repo: https://helm.dask.org/
+- name: prefect-worker
+  repo: https://prefecthq.github.io/prefect-helm
   releaseName: "{{ app_name }}"
-  version: 2024.1.0
-  namespace: dask-gateway
+  version: 2024.11.21014951
+  namespace: processing
   valuesFile: values.yaml
-  includeCRDs: true
-  
-resources:
-  - secret.yaml
-  - ingress.yaml

@@ -17,11 +17,12 @@ FROM ghcr.io/dask/dask-gateway:2024.1.0
 ARG IMAGE2BUILD
 ARG DASK_TAG="2024.5.2"
 ARG DASK_GATEWAY_TAG="2024.1.0"
+ARG PREFECT_TAG="3.1.4"
 
 USER root
 
-COPY ./resources/requirement-dask-eopf.txt /opt/
-COPY ./resources/requirement-dask-staging.txt /opt/
+COPY ./resources/requirements-dask-eopf.txt /opt/
+COPY ./resources/requirements-dask-staging.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
@@ -31,25 +32,29 @@ RUN apt-get update && \
     apt-get install -y libpq-dev gcc git wget && \
     layer-cleanup.sh
 
+# Download and install dask-gateway-server requirements
 RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
     sed -i "s|\(^\s*dask-gateway-server\)|# \1|g" /opt/Dockerfile.requirements.txt && \
     pip install --no-cache-dir -r /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
 
+# Install whatever
+RUN --mount=type=secret,id=eopf_token \
+    pip install -r /opt/requirements-${IMAGE2BUILD}.txt && \
+    layer-cleanup.sh
+
 # Install Dask with correct version
 RUN pip install \
-    dask==${DASK_TAG} \
+    dask[complete]==${DASK_TAG} \
+    distributed==${DASK_TAG} \
     dask-gateway==${DASK_GATEWAY_TAG} \
-    dask-gateway-server[local]==${DASK_GATEWAY_TAG} \
+    dask-gateway-server[kubernetes]==${DASK_GATEWAY_TAG} \
+    prefect[dask,aws]==${PREFECT_TAG} \
     bokeh>=3.1.0 \
     jupyter-server-proxy && \
     layer-cleanup.sh
 
-# Install whatever
-RUN --mount=type=secret,id=eopf_token \
-    pip install -r /opt/requirement-${IMAGE2BUILD}.txt && \
-    layer-cleanup.sh
-
+# Install and auto configure opentelemetry
 RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
@@ -58,3 +63,10 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
 RUN useradd -m user
 USER user
 WORKDIR /home/user
+
+# Set labels based on the Open Containers Initiative (OCI):
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+#
+LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infrastructure"
+LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infrastructure-dask-gateway"
+LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infrastructure/blob/develop/.github/dask-gateway/Dockerfile"
