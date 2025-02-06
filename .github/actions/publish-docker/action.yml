@@ -34,6 +34,9 @@ inputs:
   docker_tag:
     description: Tag the docker images
     required: false
+  image2build:
+    description: Name of the docker image to build
+    required: false
   eopf_token:
     description: secrets.EOPF_TOKEN
     required: true
