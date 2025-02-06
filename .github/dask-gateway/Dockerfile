@@ -52,7 +52,7 @@ RUN pip install \
     bokeh>=3.1.0 \
     jupyter-server-proxy && \
     if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
-    pip install prefect[dask,aws]==${PREFECT_TAG} \
+    pip install prefect[dask,aws]==${PREFECT_TAG} ; \
     fi && \
     layer-cleanup.sh
 
