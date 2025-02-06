@@ -24,7 +24,6 @@ ENV SHELL /bin/bash
 ENV HOME /home/rspy
 
 COPY --from=rs-client /dist/whl/*.whl /tmp/
-COPY ./resources/requirements-jupyter.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
