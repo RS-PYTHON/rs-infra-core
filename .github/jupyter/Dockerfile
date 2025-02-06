@@ -27,6 +27,9 @@ COPY --from=rs-client /dist/whl/*.whl /tmp/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
+#DEBUG
+RUN find /tmp/
+
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
