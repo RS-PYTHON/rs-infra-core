@@ -23,12 +23,9 @@ RUN adduser rspy
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
 
-COPY --from=rs-client /dist/whl/*.whl /tmp/
+COPY --from=rs-client /dist/whl/*.whl /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
-
-#DEBUG
-RUN find /tmp/
 
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
@@ -52,11 +49,8 @@ RUN conda install --yes conda-forge::python=3.11.7 && \
     dask-labextension \
     graphviz \
     s3fs \
-    boto3
-
-RUN echo /tmp/*.whl && \
-    find /tmp/ && \
-    pip install /tmp/*.whl && \
+    boto3 && \
+    pip install /opt/*.whl && \
     conda clean --all --yes && \
     layer-cleanup.sh
 
