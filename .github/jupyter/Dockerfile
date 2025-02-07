@@ -41,7 +41,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     unzip \
     tzdata \
     libgtk-3-0 libasound2 libx11-xcb1 \
-    xclip && \
+    xclip \
+    graphviz \
+    python3-pydot && \
     layer-cleanup.sh
 
 # Install python dependencies
@@ -53,8 +55,6 @@ RUN conda install --yes conda-forge::python=${PYTHON_TAG} && \
     prefect[dask,aws]==${PREFECT_TAG} \
     ipywidgets \
     dask-labextension \
-    graphviz \
-    python3-pydot \
     s3fs \
     boto3 && \
     pip install /opt/*.whl && \
