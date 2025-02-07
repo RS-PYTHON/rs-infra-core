@@ -190,4 +190,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           docker_tag: ${{ needs.set-env.outputs.docker_tag }}
           image2build: ${{ matrix.image }}
-          eopf_token: ${{ secrets.EOPF_TOKEN }}

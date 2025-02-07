@@ -39,8 +39,8 @@ RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags
     layer-cleanup.sh
 
 # Install whatever
-RUN --mount=type=secret,id=eopf_token \
-    pip install -r /opt/requirements-${IMAGE2BUILD}.txt && \
+RUN pip install -r /opt/requirements-${IMAGE2BUILD}.txt && \
+    rm /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt && \
     layer-cleanup.sh
 
 # Install Dask with correct version
