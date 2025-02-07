@@ -29,7 +29,7 @@ RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 # Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y libpq-dev gcc git wget && \
+    apt-get install -y libpq-dev libexpat1 gcc git wget && \
     layer-cleanup.sh
 
 # Download and install dask-gateway-server requirements
@@ -60,6 +60,8 @@ RUN pip install \
 RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
+
+RUN apt autoremove -y gcc
 
 # Add a default user
 RUN useradd -m user
