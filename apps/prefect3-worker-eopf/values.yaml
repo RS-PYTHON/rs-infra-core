@@ -14,7 +14,7 @@
 
 ## Common parameters
 # -- fully override common.names.fullname
-fullnameOverride: "prefect3-worker-eopf"
+fullnameOverride: "{{ prefect3worker.eopf.name }}"
 
 worker:
   clusterUid: "rspy"
@@ -27,7 +27,7 @@ worker:
     workPool: {{ prefect3worker.eopf.name }}
     limit: 10
     baseJobTemplate:
-      name: prefect3-worker-eopf-base-job-template
+      name: {{ prefect3worker.eopf.name }}-base-job-template
       configuration: |
         {
           "variables": {
@@ -57,7 +57,7 @@ worker:
                     "type": "null"
                   }
                 ],
-                "title": "prefect-pool-eopf",
+                "title": "{{ prefect3worker.eopf.name }}",
                 "description": "Name given to infrastructure created by a worker."
               },
               "image": {
@@ -202,10 +202,10 @@ worker:
             "description": "Default variables for the Kubernetes worker.\n\nThe schema for this class is used to populate the `variables` section of the default\nbase job template."
           },
           "job_configuration": {
-            "env": "{{ env }}",
-            "name": "prefect-pool-eopf",
-            "labels": "{{ labels }}",
-            "command": "{{ command }}",
+            "env": "{{ env | default(None) }}",
+            "name": "{{ prefect3worker.eopf.name }}",
+            "labels": "{{ labels | default(None) }}",
+            "command": "{{ command | default(None) }}",
             "namespace": "processing",
             "job_manifest": {
               "kind": "Job",
@@ -230,8 +230,8 @@ worker:
                   "spec": {
                     "containers": [
                       {
-                        "env": "{{ env }}",
-                        "args": "{{ command }}",
+                        "env": "{{ env | default(None) }}",
+                        "args": "{{ command | default(None) }}",
                         "name": "prefect-job",
                         "image": "ghcr.io/rs-python/prefect/rs-client-libraries/k8s:feat-rspy570-empty-dpr-processor",
                         "imagePullPolicy": "IfNotPresent"
@@ -240,23 +240,23 @@ worker:
                     "completions": 1,
                     "parallelism": 1,
                     "restartPolicy": "Never",
-                    "serviceAccountName": "prefect3-worker"
+                    "serviceAccountName": "{{ prefect3worker.eopf.name }}"
                   }
                 },
                 "backoffLimit": 0,
                 "ttlSecondsAfterFinished": 86400
               },
               "metadata": {
-                "labels": "{{ labels }}",
+                "labels": "{{ labels | default(None) }}",
                 "namespace": "processing",
-                "generateName": "prefect-pool-eopf"
+                "generateName": "{{ prefect3worker.eopf.name }}"
               },
               "apiVersion": "batch/v1"
             },
-            "stream_output": "{{ stream_output }}",
-            "cluster_config": "{{ cluster_config }}",
-            "job_watch_timeout_seconds": "{{ job_watch_timeout_seconds }}",
-            "pod_watch_timeout_seconds": "{{ pod_watch_timeout_seconds }}"
+            "stream_output": "{{ stream_output | default(None) }}",
+            "cluster_config": "{{ cluster_config | default(None) }}",
+            "job_watch_timeout_seconds": "{{ job_watch_timeout_seconds | default(None) }}",
+            "pod_watch_timeout_seconds": "{{ pod_watch_timeout_seconds | default(None) }}"
           }
         }
 
@@ -276,3 +276,4 @@ worker:
     enabled: true
 
   replicaCount: {{ prefect3worker.eopf.number | default(2) }}
+  

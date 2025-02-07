@@ -116,10 +116,10 @@ prefect3:
 
 prefect3worker:
   staging:
-    name: prefect-staging-pool
+    name: staging-prefect-pool
     number: 2
   eopf:
-    name: prefect-eopf-pool
+    name: eopf-prefect-pool
     number: 2
 
 rs_server_catalog:
