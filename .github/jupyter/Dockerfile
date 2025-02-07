@@ -48,11 +48,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
 RUN conda install --yes conda-forge::python=${PYTHON_TAG} && \
     pip install \
     dask[complete]==${DASK_TAG} \
+    distributed==${DASK_TAG} \
     dask-gateway==${DASK_GATEWAY_TAG} \
     prefect[dask,aws]==${PREFECT_TAG} \
     ipywidgets \
     dask-labextension \
     graphviz \
+    python3-pydot \
     s3fs \
     boto3 && \
     pip install /opt/*.whl && \
