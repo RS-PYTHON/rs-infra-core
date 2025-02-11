@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - rs-server : bumped the versions to 0.2.0-a10
 - RSPY-596 : Update to stac-browser 3.3
+- RSPY-577 : Update cluster deployment to OVH
+- RSPY-580 : Changed cluster start and stop to be compatible with OVH
 
 ### Deprecated
 
