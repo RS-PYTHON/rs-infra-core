@@ -16,7 +16,10 @@ FROM ghcr.io/rs-python/rs-client-libraries_store:latest as rs-client
 
 FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-4.1.5
 
-ARG ssh_key
+ARG DASK_TAG="2024.5.2"
+ARG DASK_GATEWAY_TAG="2024.1.0"
+ARG PREFECT_TAG="3.1.4"
+ARG PYTHON_TAG="3.11.7"
 
 USER root
 
@@ -25,14 +28,12 @@ RUN adduser rspy
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
 
-COPY --from=rs-client /dist/whl/*.whl /tmp/
-COPY ./resources/requirements.txt /opt/
-COPY ./resources/requirements-force.txt /opt/
+COPY --from=rs-client /dist/whl/*.whl /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
-RUN \
-    DEBIAN_FRONTEND=noninteractive apt update && \
+# Install system dependencies
+RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
     vim \
     git \
@@ -40,24 +41,40 @@ RUN \
     unzip \
     tzdata \
     libgtk-3-0 libasound2 libx11-xcb1 \
-    xclip && \
-    conda install --yes conda-forge::python=3.11.7 && \
-    pip install -U -r /opt/requirements.txt && \
-    pip install -U /tmp/*.whl && opentelemetry-bootstrap -a install && \
-    pip install --force-reinstall -r /opt/requirements-force.txt && \
-    conda clean --all --yes && \
-    curl -L -o /tmp/firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
-    tar -xf /tmp/firefox.tar.xz -C /opt/ && ln -s /opt/firefox/firefox /usr/bin/firefox && rm /tmp/firefox.tar.xz && \
+    xclip \
+    graphviz \
+    python3-pydot && \
     layer-cleanup.sh
 
-RUN \
-    cd /opt && \
-    mkdir -p /root/.ssh && \
-    chmod 0700 /root/.ssh && \
-    ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts && \
-    eval "$(ssh-agent -s)" && \
-    echo -e $ssh_key | ssh-add - > /dev/null && \
-    git clone git@github.com:RS-PYTHON/rs-demo.git
+# Install python dependencies
+RUN conda install --yes conda-forge::python=${PYTHON_TAG} && \
+    pip install \
+    dask[complete]==${DASK_TAG} \
+    distributed==${DASK_TAG} \
+    dask-gateway==${DASK_GATEWAY_TAG} \
+    prefect[dask,aws]==${PREFECT_TAG} \
+    ipywidgets \
+    dask-labextension \
+    s3fs \
+    boto3 && \
+    pip install /opt/*.whl && \
+    conda clean --all --yes && \
+    layer-cleanup.sh
+
+# Install and auto configure opentelemetry
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
+    opentelemetry-bootstrap -a install && \
+    layer-cleanup.sh
+
+# Install last version of firefox for automated tests
+RUN curl -L -o /tmp/firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
+    tar -xf /tmp/firefox.tar.xz -C /opt/ && \
+    ln -s /opt/firefox/firefox /usr/bin/firefox && \
+    rm /tmp/firefox.tar.xz
+
+# Clone rs-demo repository
+RUN cd /opt && \
+    git clone https://github.com/RS-PYTHON/rs-demo.git
 
 COPY --chown=rspy:rspy ./resources/00-read-env.py /tmp/00-read-env.py
 COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_config.py
@@ -72,3 +89,10 @@ EXPOSE 8888
 USER rspy
 
 WORKDIR "$HOME"
+
+# Set labels based on the Open Containers Initiative (OCI):
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+#
+LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infrastructure"
+LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infrastructure-jupyter"
+LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infrastructure/blob/develop/.github/jupyter/Dockerfile"

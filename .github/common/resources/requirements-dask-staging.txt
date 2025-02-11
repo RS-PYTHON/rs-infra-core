@@ -12,19 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-namespace: dask-gateway
-
-helmCharts:
-- name: dask-gateway
-  repo: https://helm.dask.org/
-  releaseName: "{{ app_name }}"
-  version: 2024.1.0
-  namespace: dask-gateway
-  valuesFile: values.yaml
-  includeCRDs: true
-  
-resources:
-  - secret.yaml
-  - ingress.yaml
+rs-server-staging==0.2a9

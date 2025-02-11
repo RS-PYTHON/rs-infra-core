@@ -12,19 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
-namespace: dask-gateway
-
-helmCharts:
-- name: dask-gateway
-  repo: https://helm.dask.org/
-  releaseName: "{{ app_name }}"
-  version: 2024.1.0
-  namespace: dask-gateway
-  valuesFile: values.yaml
-  includeCRDs: true
-  
-resources:
-  - secret.yaml
-  - ingress.yaml
+-i https://gitlab.eopf.copernicus.eu/api/v4/projects/14/packages/pypi/simple
+eopf==2.5.2

@@ -431,19 +431,26 @@ singleuser:
   extraLabels:
     hub.jupyter.org/network-access-hub: "true"
   extraFiles: {}
-  extraEnv: 
-    S3_ENDPOINT: {{ s3.endpoint }}
-    S3_REGION: {{ s3.region }} 
-    PREFECT_API_URL: http://prefect-server.processing.svc.cluster.local:4200/api
-    RSPY_DPR_SIMU_URL: http://mockup-processor-dpr-svc.processing.svc.cluster.local:8080
-    RSPY_WEBSITE: https://{{ platform_domain_name }}
-    RSPY_PREFECT_URL: https://processing.{{ platform_domain_name }}
-    RSPY_GRAFANA_URL: https://monitoring.{{ platform_domain_name }}
-    TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
-    RSPY_TEMP_BUCKET: {{ rspy.tmp_bucket }}
+  extraEnv:
+    DASK_GATEWAY_ADDRESS: http://traefik-dask-gateway.dask-gateway.svc.cluster.local
+    DASK_GATEWAY_PUBLIC: https://dash-dask.{{ platform_domain_name }}
+    PREFECT_API_URL: http://prefect3-server.processing.svc.cluster.local:4200/api
+    PREFECT_BLOCK_AUTH: {{ prefect3.block_auth }}
+    PREFECT_BLOCK_S3: {{ prefect3.block_s3 }}
+    PREFECT_WORK_POOL_STAGING: {{ prefect3worker.staging.name }}
+    PREFECT_WORK_POOL_EOPF: {{ prefect3worker.eopf.name }}
     RSPY_CATALOG_BUCKET: {{ rspy.catalog_bucket }}
+    RSPY_DPR_SIMU_URL: http://mockup-processor-dpr-svc.processing.svc.cluster.local:8080
+    RSPY_GRAFANA_URL: https://monitoring.{{ platform_domain_name }}
+    RSPY_PREFECT_URL: https://prefect3.{{ platform_domain_name }}
+    RSPY_TEMP_BUCKET: {{ rspy.tmp_bucket }}
     RSPY_UAC_CHECK_URL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
     RSPY_UAC_HOMEPAGE : https://apikeymanager.{{ platform_domain_name }}/docs
+    RSPY_WEBSITE: https://{{ platform_domain_name }}
+    S3_ENDPOINT: {{ s3.endpoint }}
+    S3_REGION: {{ s3.region }} 
+    TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
+
   lifecycleHooks: {}
   initContainers: []
   extraContainers: []

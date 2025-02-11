@@ -34,8 +34,11 @@ inputs:
   docker_tag:
     description: Tag the docker images
     required: false
-  ssh_key:
-    description: SSH key to clone rs-demo repository
+  image2build:
+    description: Name of the docker image to build
+    required: false
+  eopf_token:
+    description: secrets.EOPF_TOKEN
     required: true
 
 outputs:
@@ -78,7 +81,7 @@ runs:
       uses: docker/build-push-action@v5
       with:
         build-args: |
-          ssh_key=${{ inputs.ssh_key }}
+          IMAGE2BUILD=${{ inputs.image2build }}
         context: ${{ inputs.build_context_path }}
         file: ${{ inputs.dockerfile }}
         load: true
@@ -96,7 +99,7 @@ runs:
         output: trivy-results-docker.sarif
         exit-code: 0
         #severity: HIGH,CRITICAL
-        #timeout: '30m'
+        timeout: '30m'
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
