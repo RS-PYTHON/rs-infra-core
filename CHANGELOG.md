@@ -13,6 +13,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a10] - 2025-02-12
+
+### Added
+- RSPY-570 : Integrate DPR empty processor
+
+### Changed
+
+- rs-server : bumped the versions to 0.2.0-a10
+- RSPY-596 : Update to stac-browser 3.3
+
+### Deprecated
+
+- Prefect 2 is deprecated and is *partially* replaced with Prefect 3 and will be *fully* replaced with Prefect 3 in version `0.2a11`
+
+|                        | Release 0.2a10 (current version)             | Release 0.2a11 (next version)               |
+|------------------------|----------------------------------------------|---------------------------------------------|
+| Prefect 2 internal svc | prefect-server.processing.svc.cluster.local  | X                                           |
+| Prefect 2 public svc   | processing.example.com                       | X                                           |
+| Prefect 3 internal svc | prefect3-server.processing.svc.cluster.local | prefect-server.processing.svc.cluster.local |
+| Prefect 3 public svc   | prefect3.example.com                         | processing.example.com                      |
+
+### Fixed
+
+- RSPY-591 : Wazuh agents are not connected
+
 ## [0.2a9] - 2025-01-15
 
 :sparkler: Happy new year !
