@@ -1,0 +1,92 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: Check if ssh_key exists
+  stat:
+    path: "{{ inventory_dir }}/privatekey.pem"
+  register: privatekey
+
+- name: Create ssh key
+  shell: |
+    ssh-keygen -b 2048 -t rsa -m PEM -N "" -f {{ inventory_dir }}/privatekey.pem;\
+    echo -e "$(grep -v "public_key" {{ inventory_dir }}/cluster.tfvars)\npublic_key = \"$(ssh-keygen -f {{ inventory_dir }}/privatekey.pem -y)\"" > {{ inventory_dir }}/cluster.tfvars
+  when: privatekey.stat.exists == False
+  args:
+    executable: /bin/bash
+
+- name: Create terraform state bucket
+  shell: |
+    pip install s3cmd==2.4.0 -q -q -q && \
+    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport && \
+    echo "host_base=https://s3.{{ s3.region }}.io.cloud.ovh.net/" > {{ inventory_dir }}/s3cfg && \
+    echo "host_bucket=https://%(bucket).s3.{{ s3.region }}.io.cloud.ovh.net" >> {{ inventory_dir }}/s3cfg && \
+    echo "access_key=${AWS_ACCESS_KEY_ID}" >> {{ inventory_dir }}/s3cfg && \
+    echo "secret_key=${AWS_SECRET_ACCESS_KEY}" >> {{ inventory_dir }}/s3cfg && \
+    echo "use_https=True" >> {{ inventory_dir }}/s3cfg && \
+    $CONDA_PREFIX/bin/s3cmd -c {{ inventory_dir }}/s3cfg mb s3://$(grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2) && \
+    pip uninstall s3cmd==2.4.0 --yes -q -q -q
+  args:
+    chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
+
+- name: Terraform init
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -upgrade -backend-config="{{ inventory_dir }}/backend.tfvars"
+  args:
+    chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
+
+- name: Create terraform cluster
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars"
+  args:
+    chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
+
+- name: Get bastion ip from terraform output 
+  command: terraform output -raw bastion_ip
+  register: bastion_ip
+  args:
+    chdir: roles/terraform/cluster/tasks/
+
+- name: Get kubeconfig file from terraform output
+  command: terraform output -raw kubeconfig_file
+  register: kubeconfig_file
+  args:
+    chdir: roles/terraform/cluster/tasks/
+
+- name: Set ansible private key
+  delegate_to: "{{ bastion_ip.stdout }}"
+  set_fact:
+    ansible_ssh_private_key_file: "{{ inventory_dir }}/private_key.pem"
+
+- name: Copy kubeconfig file to bastion
+  ansible.builtin.copy:
+    content: "{{ kubeconfig_file.stdout }}"
+    dest: "/home/ubuntu/kubeconfig"
+    mode: '0600'
+  delegate_to: "ubuntu@{{ bastion_ip.stdout }}"
+
+- name: Copy full working directory to bastion
+  ansible.builtin.synchronize:
+    src: "{{ playbook_dir }}/"
+    dest: "ubuntu@{{ bastion_ip.stdout }}:/home/ubuntu/rs-infrastructure"
+    recursive: yes
+
+- name: Install k8s tools
+  shell: |
+    chmod +x ~/rs-infrastructure/install_k8s_tools.sh && \
+    ~/rs-infrastructure/install_k8s_tools.sh
+  delegate_to: "ubuntu@{{ bastion_ip.stdout }}"
