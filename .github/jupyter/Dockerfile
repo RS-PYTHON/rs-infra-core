@@ -94,5 +94,5 @@ WORKDIR "$HOME"
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infrastructure"
-LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infrastructure-jupyter"
+LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-jupyter"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infrastructure/blob/develop/.github/jupyter/Dockerfile"

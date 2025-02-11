@@ -41,7 +41,7 @@ options = gateway.cluster_options()
 for key in options.keys():
     print(f"{key}: {options[key]}")
 
-cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infrastructure-dask-gateway:latest')
+cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infra-core-dask-gateway:latest')
 
 print (cluster.name)
 gateway.scale_cluster(cluster.name, 3)
@@ -56,7 +56,7 @@ options = gateway.cluster_options()
 for key in options.keys():
     print(f"{key}: {options[key]}")
 
-cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infrastructure-dask-gateway:0.2a8-fix-staging', cluster_name='dask-staging', scheduler_extra_pod_labels={'cluster_name': 'dask-staging'})
+cluster = gateway.new_cluster(worker_cores=1, worker_memory=2.0, namespace='dask-gateway', image='ghcr.io/rs-python/rs-infra-core-dask-gateway:0.2a8-fix-staging', cluster_name='dask-staging', scheduler_extra_pod_labels={'cluster_name': 'dask-staging'})
 
 print (cluster.name)
 gateway.scale_cluster(cluster.name, 3)
