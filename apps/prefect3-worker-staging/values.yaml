@@ -202,10 +202,10 @@ worker:
             "description": "Default variables for the Kubernetes worker.\n\nThe schema for this class is used to populate the `variables` section of the default\nbase job template."
           },
           "job_configuration": {
-            "env": "{{ env | default(None) }}",
+            "env": "{% raw %}{{ env }}{% endraw %}",
             "name": "{{ prefect3worker.staging.name }}",
-            "labels": "{{ labels | default(None) }}",
-            "command": "{{ command | default(None) }}",
+            "labels": "{% raw %}{{ labels }}{% endraw %}",
+            "command": "{% raw %}{{ command }}{% endraw %}",
             "namespace": "processing",
             "job_manifest": {
               "kind": "Job",
@@ -230,8 +230,8 @@ worker:
                   "spec": {
                     "containers": [
                       {
-                        "env": "{{ env | default(None) }}",
-                        "args": "{{ command | default(None) }}",
+                        "env": "{% raw %}{{ env }}{% endraw %}",
+                        "args": "{% raw %}{{ command }}{% endraw %}",
                         "name": "prefect-job",
                         "image": "ghcr.io/rs-python/prefect/rs-client-libraries/k8s:feat-rspy570-empty-dpr-processor",
                         "imagePullPolicy": "IfNotPresent"
@@ -247,16 +247,16 @@ worker:
                 "ttlSecondsAfterFinished": 86400
               },
               "metadata": {
-                "labels": "{{ labels | default(None) }}",
+                "labels": "{% raw %}{{ labels }}{% endraw %}",
                 "namespace": "processing",
                 "generateName": "{{ prefect3worker.staging.name }}"
               },
               "apiVersion": "batch/v1"
             },
-            "stream_output": "{{ stream_output | default(None) }}",
-            "cluster_config": "{{ cluster_config | default(None) }}",
-            "job_watch_timeout_seconds": "{{ job_watch_timeout_seconds | default(None) }}",
-            "pod_watch_timeout_seconds": "{{ pod_watch_timeout_seconds | default(None) }}"
+            "stream_output": "{% raw %}{{ stream_output }}{% endraw %}",
+            "cluster_config": "{% raw %}{{ cluster_config }}{% endraw %}",
+            "job_watch_timeout_seconds": "{% raw %}{{ job_watch_timeout_seconds }}{% endraw %}",
+            "pod_watch_timeout_seconds": "{% raw %}{{ pod_watch_timeout_seconds }}{% endraw %}"
           }
         }
 
