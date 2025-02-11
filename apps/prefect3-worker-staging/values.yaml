@@ -203,7 +203,7 @@ worker:
           },
           "job_configuration": {
             "env": "{% raw %}{{ env }}{% endraw %}",
-            "name": "{{ prefect3worker.staging.name }}",
+            "name": "{{ prefect3worker.staging.name }}-job-",
             "labels": "{% raw %}{{ labels }}{% endraw %}",
             "command": "{% raw %}{{ command }}{% endraw %}",
             "namespace": "processing",
@@ -249,7 +249,7 @@ worker:
               "metadata": {
                 "labels": "{% raw %}{{ labels }}{% endraw %}",
                 "namespace": "processing",
-                "generateName": "{{ prefect3worker.staging.name }}"
+                "generateName": "{{ prefect3worker.staging.name }}-run-"
               },
               "apiVersion": "batch/v1"
             },
