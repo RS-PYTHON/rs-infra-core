@@ -37,7 +37,7 @@ The fully detailled documentation and configuration options are available on its
 ### 1. Get the rs-infrastructure repository
 
 ```shellsession
-git clone https://github.com/RS-PYTHON/rs-infrastructure.git
+git clone https://github.com/RS-PYTHON/rs-infra-core.git
 cd rs-infrastructure
 ```
 
@@ -101,7 +101,7 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 - Values for custom parameters in `inventory/mycluster/host_vars/setup/apps.yml`
 
 !!! warning "Private container registry"
-    As the [RS-PYTHON/rs-infrastructure](https://github.com/RS-PYTHON/rs-infrastructure) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
+    As the [RS-PYTHON/rs-infra-core](https://github.com/RS-PYTHON/rs-infra-core) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
     ) for the private `ghcr.io` registry. Follow the [how-to/GitHub Container Registry](./how-to/GitHub%20Container%20Registry.md).
 
 ```shellsession
