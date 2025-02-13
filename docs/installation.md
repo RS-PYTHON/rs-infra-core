@@ -67,10 +67,7 @@ conda install conda-forge::passlib
 # Init Kubespray collection with remote
 git submodule update --init --remote
 
-pip install -U pyOpenSSL ecdsa -r collections/kubespray/requirements.txt
-
 ansible-galaxy collection install \
-    kubernetes.core \
     openstack.cloud
 ```
 
@@ -83,7 +80,7 @@ cp -rfp inventory/sample inventory/mycluster
 ### 4. Review and change the default configuration to match your needs
 
 ```shellsession
-cp -rfp roles/terraform/create-cluster/tasks/.env.template roles/terraform/create-cluster/tasks/.env
+cp -rfp inventory/mycluster/.env.template inventory/mycluster/tasks/.env
 ```
 
 Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration :
@@ -119,14 +116,7 @@ ansible-playbook cluster.yaml \
 !!! warning "Note: DNS configuration"
     At this point, you should configure your domain name to point to the master's IP from the `inventory/mycluster/hosts.yaml` file.
 
-### 6. Deploy Kubernetes with `kubespray`
-
-```shellsession
-ansible-playbook kubernetes.yaml \
-    -i inventory/mycluster/hosts.yaml
-```
-
-### 7. Deploy the apps
+### 6. Deploy the apps
 
 !!! warning "Disclaimer: For Wazuh Server installation"
     See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
@@ -145,7 +135,7 @@ ansible-playbook apps.yaml \
 !!! warning "Disclaimer: For Neuvector post-configuration"
     See **_"Enable SSO"_** in the [how-to/Neuvector](./how-to/Neuvector.md) after deploy the app.
 
-### 8. Deploy the rs-server
+### 7. Deploy the rs-server
 
 !!! warning "Pre-requirement: JupyterHub token"
     Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.

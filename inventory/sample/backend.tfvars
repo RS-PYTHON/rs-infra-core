@@ -3,5 +3,5 @@
 #Or the newer installation will DESTROY the previous one
 bucket = "some-bucket"
 key = "terraform.tfstate"
-region = "eu-west-0"
-endpoint = "https://oss.eu-west-0.prod-cloud-ocb.orange-business.com"
+region = "gra"
+endpoint = "https://s3.gra.io.cloud.ovh.net/"

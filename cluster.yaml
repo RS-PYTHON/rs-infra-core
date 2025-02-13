@@ -17,4 +17,4 @@
 - name: Create the cluster with terraform
   hosts: localhost
   roles:
-    - { role: "terraform/create-cluster" }
+    - terraform/cluster
