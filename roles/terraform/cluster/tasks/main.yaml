@@ -82,11 +82,11 @@
 - name: Copy full working directory to bastion
   ansible.builtin.synchronize:
     src: "{{ playbook_dir }}/"
-    dest: "ubuntu@{{ bastion_ip.stdout }}:/home/ubuntu/rs-infrastructure"
+    dest: "ubuntu@{{ bastion_ip.stdout }}:/home/ubuntu/rs-infra-core"
     recursive: yes
 
 - name: Install k8s tools
   shell: |
-    chmod +x ~/rs-infrastructure/install_k8s_tools.sh && \
-    ~/rs-infrastructure/install_k8s_tools.sh
+    chmod +x ~/rs-infra-core/install_k8s_tools.sh && \
+    ~/rs-infra-core/install_k8s_tools.sh
   delegate_to: "ubuntu@{{ bastion_ip.stdout }}"
