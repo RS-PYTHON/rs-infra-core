@@ -72,11 +72,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_access_csc" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-access-csc-${var.cluster_name}"
+  name          = "access-csc-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_access_csc_desired_nodes
+  desired_nodes = var.nodepool_access_csc_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
   autoscale     = true
@@ -99,11 +99,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_access_csc" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_prefect_flow" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-prefect-flow-${var.cluster_name}"
+  name          = "prefect-flow-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_prefect_desired_nodes
+  desired_nodes = var.nodepool_prefect_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
   autoscale     = true

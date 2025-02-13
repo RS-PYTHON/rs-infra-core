@@ -25,12 +25,12 @@ variable "nodepool_processing_desired_nodes" {
     type        = number 
 }
 
-variable "nodepool_processing_access_csc_desired_nodes" {
+variable "nodepool_access_csc_desired_nodes" {
     description = "number of desired nodes on nodepool"
     type        = number 
 }
 
-variable "nodepool_processing_prefect_desired_nodes" {
+variable "nodepool_prefect_desired_nodes" {
     description = "number of desired nodes on nodepool"
     type        = number 
 }
