@@ -13,11 +13,11 @@ generated_inventory_vars.yaml
 .vscode
 **/kubespray-venv
 inventory/mycluster
-roles/terraform/create-cluster/tasks/rs-infrastructure.tar.gz
+roles/terraform/create-cluster/tasks/rs-infra-core.tar.gz
 apps/**/*.pem
 apps/**/*.csr
 apps/**/*.srl
-rs-infrastructure.tar.gz
+rs-infra-core.tar.gz
 collections/kubespray**
 apps/04-wazuh-server/idp-metadata.xml
 apps/04-wazuh-server/sp-metadata.xml

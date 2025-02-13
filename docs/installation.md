@@ -34,11 +34,11 @@ The fully detailled documentation and configuration options are available on its
 
 ## Quickstart
 
-### 1. Get the rs-infrastructure repository
+### 1. Get the rs-infra-core repository
 
 ```shellsession
 git clone https://github.com/RS-PYTHON/rs-infra-core.git
-cd rs-infrastructure
+cd rs-infra-core
 ```
 
 ### 2. Install requirements
