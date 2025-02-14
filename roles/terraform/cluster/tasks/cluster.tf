@@ -55,9 +55,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
   autoscale     = true
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/processing" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -82,9 +84,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
   autoscale     = true
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/access_csc" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -109,9 +113,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   autoscale     = true
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/prefect_flow" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -127,7 +133,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_ondemand" {
-  service_name  = "${var.service_name}"
+  kube_id       = ovh_cloud_project_kube.cluster.id
   name          = "processing-ondemand-${var.cluster_name}"
   flavor_name   = "b3-16"
   desired_nodes = var.nodepool_processing_ondemand_desired_nodes
@@ -136,9 +142,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_ondemand" {
   autoscale     = true
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/ondemand_dpr" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -163,9 +171,11 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_systematic" {
   autoscale     = true
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/systematic_dpr" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false

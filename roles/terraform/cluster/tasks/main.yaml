@@ -26,25 +26,24 @@
   args:
     executable: /bin/bash
 
-- name: Create terraform state bucket
-  shell: |
-    pip install s3cmd==2.4.0 -q -q -q && \
-    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport && \
-    echo "host_base=https://s3.{{ s3.region }}.io.cloud.ovh.net" > {{ inventory_dir }}/s3cfg && \
-    echo "host_bucket=https://%(bucket).s3.{{ s3.region }}.io.cloud.ovh.net" >> {{ inventory_dir }}/s3cfg && \
-    echo "access_key=${AWS_ACCESS_KEY_ID}" >> {{ inventory_dir }}/s3cfg && \
-    echo "secret_key=${AWS_SECRET_ACCESS_KEY}" >> {{ inventory_dir }}/s3cfg && \
-    echo "use_https=True" >> {{ inventory_dir }}/s3cfg && \
-    $CONDA_PREFIX/bin/s3cmd -c {{ inventory_dir }}/s3cfg mb s3://$(grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2) && \
-    pip uninstall s3cmd==2.4.0 --yes -q -q -q
-  args:
-    chdir: roles/terraform/cluster/tasks/
-    executable: /bin/bash
+- name: Get terraform state bucket
+  ansible.builtin.shell: grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2
+  register: tf_backend_bucket
+
+- name: Create terraform bucket
+  amazon.aws.s3_bucket:
+    name: "{{ tf_backend_bucket.stdout }}"
+    endpoint_url: "{{ s3.endpoint }}"
+    region: "{{ s3.region }}"
+    aws_access_key: "{{ s3.access_key }}"
+    aws_secret_key: "{{ s3.secret_key }}"
+    validate_bucket_name: false
+    state: present
   run_once: true
 
 - name: Terraform init
   shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -upgrade -backend-config="{{ inventory_dir }}/backend.tfvars"
+    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -reconfigure -backend-config="{{ inventory_dir }}/backend.tfvars"
   args:
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
@@ -56,7 +55,7 @@
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
 
-- name: Get bastion ip from terraform output 
+- name: Get bastion ip from terraform output
   command: terraform output -raw bastion_ip
   register: bastion_ip
   args:

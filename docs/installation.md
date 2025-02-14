@@ -63,12 +63,14 @@ conda install conda-forge::ansible
 conda install conda-forge::terraform
 conda install conda-forge::python-openstackclient
 conda install conda-forge::passlib
+conda install conda-forge::boto3
 
 # Init Kubespray collection with remote
 git submodule update --init --remote
 
 ansible-galaxy collection install \
-    openstack.cloud
+    openstack.cloud \
+    amazon.aws
 ```
 
 ### 3. Copy the sample inventory
