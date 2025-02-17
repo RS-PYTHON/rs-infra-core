@@ -1,5 +1,6 @@
-# Create an user with administrator roles on OVH Public Cloud / Project Management / User & Roles
 # https://www.ovh.com/manager/#/public-cloud/
+# Create an user with administrator roles on OVH Public Cloud / Project Management / User & Roles
+# And download the openrc file of the user created
 export OS_AUTH_URL=https://auth.cloud.ovh.net/v3
 export OS_IDENTITY_API_VERSION=3
 export OS_TENANT_ID=changeme
