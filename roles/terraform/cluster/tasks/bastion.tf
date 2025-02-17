@@ -15,10 +15,6 @@ resource "openstack_compute_instance_v2" "bastion" {
   region          = "GRA11"
 
   network {
-    uuid = openstack_networking_network_v2.private_net.id
-  }
-
-  network {
     name = "Ext-Net"
   }
 
@@ -30,5 +26,5 @@ resource "openstack_compute_instance_v2" "bastion" {
 # Output part
 
 output "bastion_ip" {
-  value = openstack_compute_instance_v2.bastion.network[1].fixed_ip_v4
+  value = openstack_compute_instance_v2.bastion.network[0].fixed_ip_v4
 }
