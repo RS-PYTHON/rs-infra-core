@@ -49,7 +49,7 @@ RUN pip install \
     distributed==${DASK_TAG} \
     dask-gateway==${DASK_GATEWAY_TAG} \
     dask-gateway-server[kubernetes]==${DASK_GATEWAY_TAG} \
-    bokeh>=3.1.0 \
+    bokeh">=3.1.0" \
     jupyter-server-proxy && \
     if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
     pip install prefect[dask,aws]==${PREFECT_TAG} ; \
