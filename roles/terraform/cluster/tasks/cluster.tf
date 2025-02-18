@@ -14,6 +14,17 @@ resource "ovh_cloud_project_kube" "cluster" {
 resource "ovh_cloud_project_kube_iprestrictions" "bastion_only" {
   kube_id      = ovh_cloud_project_kube.cluster.id
   ips          = ["${openstack_compute_instance_v2.bastion.network[0].fixed_ip_v4}/32"]
+
+  # We cannot add ip restrictions to Kube while all nodepools are not OK
+  # OVH ticket CS10780553
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_access_csc,
+    ovh_cloud_project_kube_nodepool.nodepool_infra,
+    ovh_cloud_project_kube_nodepool.nodepool_prefect_flow,
+    ovh_cloud_project_kube_nodepool.nodepool_processing,
+    ovh_cloud_project_kube_nodepool.nodepool_processing_ondemand,
+    ovh_cloud_project_kube_nodepool.nodepool_processing_systematic
+  ]
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
@@ -23,7 +34,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
   desired_nodes = var.nodepool_infra_desired_nodes
   min_nodes     = 0
   max_nodes     = 10
-  autoscale     = true
+  autoscale     = var.nodepool_infra_autoscale
   template {
     metadata {
       annotations = {}
@@ -52,7 +63,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
   desired_nodes = var.nodepool_processing_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_processing_autoscale
   template {
     metadata {
       annotations = {}
@@ -81,7 +92,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
   desired_nodes = var.nodepool_access_csc_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_access_csc_autoscale
   template {
     metadata {
       annotations = {}
@@ -110,7 +121,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   desired_nodes = var.nodepool_prefect_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_prefect_autoscale
   template {
     metadata {
       annotations = {}
@@ -139,7 +150,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_ondemand" {
   desired_nodes = var.nodepool_processing_ondemand_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_processing_ondemand_autoscale
   template {
     metadata {
       annotations = {}
@@ -168,7 +179,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_systematic" {
   desired_nodes = var.nodepool_processing_systematic_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_processing_systematic_autoscale
   template {
     metadata {
       annotations = {}
