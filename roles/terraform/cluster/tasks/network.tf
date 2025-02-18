@@ -17,7 +17,7 @@ resource "openstack_networking_subnet_v2" "private_subnet" {
 resource "openstack_networking_router_v2" "router" {
   name                = "router-${var.cluster_name}"
   admin_state_up      = true
-  external_network_id = openstack_compute_instance_v2.bastion.network[1].uuid
+  external_network_id = openstack_compute_instance_v2.bastion.network[0].uuid
 }
 
 # Attach Private Subnet to Router

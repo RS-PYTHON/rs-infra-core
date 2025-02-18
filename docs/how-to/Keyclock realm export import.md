@@ -27,7 +27,7 @@
        <YAML FROM PREVIOUS STEP>
    ```
 
-- Remove any `authorizationSettings` section with a `config.code` section in it like in this commit: <https://github.com/RS-PYTHON/rs-infrastructure/commit/cbeae0b10851593081cb88e11d31da0157c0d781>
+- Remove any `authorizationSettings` section with a `config.code` section in it like in this commit: <https://github.com/RS-PYTHON/rs-infra-core/commit/cbeae0b10851593081cb88e11d31da0157c0d781>
 - Remove all the `id` to avoid conflict during the import process (replace `<YOUR_REALM_YAML_FILE.yaml>`) using `sed` in a `bash` terminal:
 
   ```bash

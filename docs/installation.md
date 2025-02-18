@@ -34,11 +34,11 @@ The fully detailled documentation and configuration options are available on its
 
 ## Quickstart
 
-### 1. Get the rs-infrastructure repository
+### 1. Get the rs-infra-core repository
 
 ```shellsession
-git clone https://github.com/RS-PYTHON/rs-infrastructure.git
-cd rs-infrastructure
+git clone https://github.com/RS-PYTHON/rs-infra-core.git
+cd rs-infra-core
 ```
 
 ### 2. Install requirements
@@ -63,12 +63,14 @@ conda install conda-forge::ansible
 conda install conda-forge::terraform
 conda install conda-forge::python-openstackclient
 conda install conda-forge::passlib
+conda install conda-forge::boto3
 
 # Init Kubespray collection with remote
 git submodule update --init --remote
 
 ansible-galaxy collection install \
-    openstack.cloud
+    openstack.cloud \
+    amazon.aws
 ```
 
 ### 3. Copy the sample inventory
@@ -80,7 +82,7 @@ cp -rfp inventory/sample inventory/mycluster
 ### 4. Review and change the default configuration to match your needs
 
 ```shellsession
-cp -rfp inventory/mycluster/.env.template inventory/mycluster/tasks/.env
+cp -rfp inventory/mycluster/.env.template inventory/mycluster/.env
 ```
 
 Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration :
@@ -90,15 +92,14 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 ```
 
 - Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
-- Credentials in `roles/terraform/create-cluster/tasks/.env`
+- Credentials in `roles/terraform/cluster/tasks/.env`
 - Credentials, domain name in `inventory/mycluster/openrc.sh`
 - Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
 - S3 backend for terraform in `inventory/mycluster/backend.tfvars`
-- Optimization for well-known zones and/or internal-only domains, i.e. VPN/Object Storage for internal networks in `inventory/mycluster/host_vars/setup/kubespray.yaml`
 - Values for custom parameters in `inventory/mycluster/host_vars/setup/apps.yml`
 
 !!! warning "Private container registry"
-    As the [RS-PYTHON/rs-infrastructure](https://github.com/RS-PYTHON/rs-infrastructure) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
+    As the [RS-PYTHON/rs-infra-core](https://github.com/RS-PYTHON/rs-infra-core) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
     ) for the private `ghcr.io` registry. Follow the [how-to/GitHub Container Registry](./how-to/GitHub%20Container%20Registry.md).
 
 ```shellsession

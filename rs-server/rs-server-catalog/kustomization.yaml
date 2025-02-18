@@ -20,5 +20,5 @@ helmCharts:
 - name: rs-server-catalog
   repo: https://rs-python.github.io/rs-helm
   releaseName: "{{ app_name }}"
-  version: 0.2.0-a9
+  version: 0.2.0-a10
   valuesFile: values.yaml

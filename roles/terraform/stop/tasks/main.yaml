@@ -1,7 +1,7 @@
 ---
 - name: Create override.tfvars
   shell: |
-    sed -E 's/(desired_nodes = )[0-9]+/\10/g' {{ inventory_dir }}/cluster.tfvars > {{ inventory_dir }}/override.tfvars
+    sed -E 's/(desired_nodes = )[0-9]+/\10/g' {{ inventory_dir }}/cluster.tfvars | sed -E 's/(autoscale = )[a-z]+/\1false/g' > {{ inventory_dir }}/override.tfvars
   args:
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
@@ -11,8 +11,8 @@
     set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/override.tfvars" \
       -target=ovh_cloud_project_kube_nodepool.nodepool_infra \
       -target=ovh_cloud_project_kube_nodepool.nodepool_processing \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_processing_access_csc \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_processing_prefect_flow \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_access_csc \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_prefect_flow \
       -target=ovh_cloud_project_kube_nodepool.nodepool_processing_ondemand \
       -target=ovh_cloud_project_kube_nodepool.nodepool_processing_systematic && \
       rm {{ inventory_dir }}/override.tfvars

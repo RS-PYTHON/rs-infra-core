@@ -21,7 +21,7 @@
       shell: |
         source ~/miniforge3/bin/activate rspy && \
         sudo mkdir -p /etc/kubernetes && \
-        cd ~/rs-infrastructure && \
+        cd ~/rs-infra-core && \
         source {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/openrc.sh && \
         sed -i 's#{{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/privatekey.pem#/home/cloud/.ssh/privatekey.pem#' {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml && \
         ansible-playbook collections/kubespray/cluster.yml -i {{ inventory_dir | regex_replace(playbook_dir,'') | replace('/','',1) }}/hosts.yaml --become && \

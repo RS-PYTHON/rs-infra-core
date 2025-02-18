@@ -13,7 +13,18 @@ resource "ovh_cloud_project_kube" "cluster" {
 
 resource "ovh_cloud_project_kube_iprestrictions" "bastion_only" {
   kube_id      = ovh_cloud_project_kube.cluster.id
-  ips          = ["${openstack_compute_instance_v2.bastion.network[1].fixed_ip_v4}/32"]
+  ips          = ["${openstack_compute_instance_v2.bastion.network[0].fixed_ip_v4}/32"]
+
+  # We cannot add ip restrictions to Kube while all nodepools are not OK
+  # OVH ticket CS10780553
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_access_csc,
+    ovh_cloud_project_kube_nodepool.nodepool_infra,
+    ovh_cloud_project_kube_nodepool.nodepool_prefect_flow,
+    ovh_cloud_project_kube_nodepool.nodepool_processing,
+    ovh_cloud_project_kube_nodepool.nodepool_processing_ondemand,
+    ovh_cloud_project_kube_nodepool.nodepool_processing_systematic
+  ]
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
@@ -23,7 +34,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
   desired_nodes = var.nodepool_infra_desired_nodes
   min_nodes     = 0
   max_nodes     = 10
-  autoscale     = true
+  autoscale     = var.nodepool_infra_autoscale
   template {
     metadata {
       annotations = {}
@@ -52,12 +63,14 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
   desired_nodes = var.nodepool_processing_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_processing_autoscale
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/processing" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -72,19 +85,21 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_access_csc" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-access-csc-${var.cluster_name}"
+  name          = "access-csc-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_access_csc_desired_nodes
+  desired_nodes = var.nodepool_access_csc_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_access_csc_autoscale
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/access_csc" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -99,19 +114,21 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_access_csc" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_prefect_flow" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-prefect-flow-${var.cluster_name}"
+  name          = "prefect-flow-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_prefect_desired_nodes
+  desired_nodes = var.nodepool_prefect_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_prefect_autoscale
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/prefect_flow" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -127,18 +144,20 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_prefect_flow" {
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_ondemand" {
-  service_name  = "${var.service_name}"
+  kube_id       = ovh_cloud_project_kube.cluster.id
   name          = "processing-ondemand-${var.cluster_name}"
   flavor_name   = "b3-16"
   desired_nodes = var.nodepool_processing_ondemand_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_processing_ondemand_autoscale
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/ondemand_dpr" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false
@@ -160,12 +179,14 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_systematic" {
   desired_nodes = var.nodepool_processing_systematic_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = true
+  autoscale     = var.nodepool_processing_systematic_autoscale
   template {
     metadata {
+      annotations = {}
       labels = {
         "node-role.kubernetes.io/systematic_dpr" = ""
       }
+      finalizers = []
     }
     spec {
       unschedulable = false

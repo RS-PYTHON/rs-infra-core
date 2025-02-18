@@ -102,8 +102,8 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - Source: <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/3.3.6>
     - Copyright: Copyright (c) Jupyter Development Team. [Authors and Contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors)
   - Container image(s)
-    - ghcr.io/rs-python/rs-infrastructure-jupyter:latest
-      - License: [Apache License 2.0](https://github.com/RS-PYTHON/rs-infrastructure/blob/develop/LICENSE)
+    - ghcr.io/rs-python/rs-infra-core-jupyter:latest
+      - License: [Apache License 2.0](https://github.com/RS-PYTHON/rs-infra-core/blob/develop/LICENSE)
     - quay.io/jupyterhub/k8s-image-awaiter:3.3.6
       - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/3.3.6/LICENSE)
     - quay.io/jupyterhub/k8s-hub:3.3.6

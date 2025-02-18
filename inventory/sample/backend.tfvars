@@ -4,4 +4,4 @@
 bucket = "some-bucket"
 key = "terraform.tfstate"
 region = "gra"
-endpoint = "https://s3.gra.io.cloud.ovh.net/"
+endpoint = "https://s3.gra.io.cloud.ovh.net"
