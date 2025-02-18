@@ -82,7 +82,7 @@ cp -rfp inventory/sample inventory/mycluster
 ### 4. Review and change the default configuration to match your needs
 
 ```shellsession
-cp -rfp inventory/mycluster/.env.template roles/terraform/cluster/tasks/.env
+cp -rfp inventory/mycluster/.env.template inventory/mycluster/.env
 ```
 
 Copy the openrc.sh.template into openrc.sh and change the values inside to match your configuration :
