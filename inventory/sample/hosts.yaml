@@ -17,8 +17,6 @@ all:
     setup:
       ansible_connection: local
       ansible_host: 127.0.0.1
-      ansible_python_interpreter: ~/miniconda3/envs/rspy/bin/python3.11
     localhost:
       ansible_connection: local
       ansible_host: 127.0.0.1
-      ansible_python_interpreter: ~/miniconda3/envs/rspy/bin/python3.11
