@@ -26,24 +26,24 @@
   args:
     executable: /bin/bash
 
-- name: Create terraform state bucket
-  shell: |
-    pip install s3cmd==2.4.0 -q -q -q && \
-    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport && \
-    echo "host_base=https://s3.{{ s3.region }}.io.cloud.ovh.net/" > {{ inventory_dir }}/s3cfg && \
-    echo "host_bucket=https://%(bucket).s3.{{ s3.region }}.io.cloud.ovh.net" >> {{ inventory_dir }}/s3cfg && \
-    echo "access_key=${AWS_ACCESS_KEY_ID}" >> {{ inventory_dir }}/s3cfg && \
-    echo "secret_key=${AWS_SECRET_ACCESS_KEY}" >> {{ inventory_dir }}/s3cfg && \
-    echo "use_https=True" >> {{ inventory_dir }}/s3cfg && \
-    $CONDA_PREFIX/bin/s3cmd -c {{ inventory_dir }}/s3cfg mb s3://$(grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2) && \
-    pip uninstall s3cmd==2.4.0 --yes -q -q -q
-  args:
-    chdir: roles/terraform/cluster/tasks/
-    executable: /bin/bash
+- name: Get terraform state bucket
+  ansible.builtin.shell: grep "bucket =" {{ inventory_dir }}/backend.tfvars | cut -d '"' -f 2
+  register: tf_backend_bucket
+
+- name: Create terraform bucket
+  amazon.aws.s3_bucket:
+    name: "{{ tf_backend_bucket.stdout }}"
+    endpoint_url: "{{ s3.endpoint }}"
+    region: "{{ s3.region }}"
+    aws_access_key: "{{ s3.access_key }}"
+    aws_secret_key: "{{ s3.secret_key }}"
+    validate_bucket_name: false
+    state: present
+  run_once: true
 
 - name: Terraform init
   shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -upgrade -backend-config="{{ inventory_dir }}/backend.tfvars"
+    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -reconfigure -backend-config="{{ inventory_dir }}/backend.tfvars"
   args:
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
@@ -55,7 +55,7 @@
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
 
-- name: Get bastion ip from terraform output 
+- name: Get bastion ip from terraform output
   command: terraform output -raw bastion_ip
   register: bastion_ip
   args:
@@ -70,23 +70,206 @@
 - name: Set ansible private key
   delegate_to: "{{ bastion_ip.stdout }}"
   set_fact:
-    ansible_ssh_private_key_file: "{{ inventory_dir }}/private_key.pem"
+    ansible_ssh_private_key_file: "{{ inventory_dir }}/privatekey.pem"
+
+- name: Add bastion to in-memory inventory
+  ansible.builtin.add_host:
+    hostname: "{{ bastion_ip.stdout }}"
+    ansible_host: "{{ bastion_ip.stdout }}"
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+    ansible_ssh_user: ubuntu
+
+- name: Create kube config directory
+  ansible.builtin.file:
+    path: /home/ubuntu/.kube
+    state: directory
+  delegate_to: "{{ bastion_ip.stdout }}"
 
 - name: Copy kubeconfig file to bastion
   ansible.builtin.copy:
     content: "{{ kubeconfig_file.stdout }}"
-    dest: "/home/ubuntu/kubeconfig"
+    dest: "/home/ubuntu/.kube/config"
     mode: '0600'
-  delegate_to: "ubuntu@{{ bastion_ip.stdout }}"
+  delegate_to: "{{ bastion_ip.stdout }}"
 
 - name: Copy full working directory to bastion
   ansible.builtin.synchronize:
     src: "{{ playbook_dir }}/"
     dest: "ubuntu@{{ bastion_ip.stdout }}:/home/ubuntu/rs-infra-core"
     recursive: yes
+    private_key: "{{ ansible_ssh_private_key_file }}"
 
-- name: Install k8s tools
-  shell: |
-    chmod +x ~/rs-infra-core/install_k8s_tools.sh && \
-    ~/rs-infra-core/install_k8s_tools.sh
-  delegate_to: "ubuntu@{{ bastion_ip.stdout }}"
+- name: Update bastion
+  ansible.builtin.apt:
+    update_cache: yes
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    pkg:
+    - curl
+    - wget
+    - jq
+    - bash-completion
+    - unzip
+    - software-properties-common
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Get latest kubectl version
+  ansible.builtin.uri:
+    url: https://dl.k8s.io/release/stable.txt
+    return_content: yes
+  register: version
+
+- name: Create kubectl versioned directory
+  ansible.builtin.file:
+    path: /opt/kubectl-{{ version.content }}
+    state: directory
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Download the latest kubectl release
+  ansible.builtin.uri:
+    url: https://dl.k8s.io/release/{{ version.content }}/bin/linux/amd64/kubectl
+    dest: /opt/kubectl-{{ version.content }}
+  register: kubectl
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Download the kubectl checksum
+  ansible.builtin.uri:
+    url: https://dl.k8s.io/release/{{ version.content }}/bin/linux/amd64/kubectl.sha256
+    dest: /opt/kubectl-{{ version.content }}
+  register: kubectl
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Get kubectl sha256sum
+  ansible.builtin.shell: sha256sum /opt/kubectl-{{ version.content }}/kubectl | cut -d " " -f1
+  register: file_shasum
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- set_fact:
+    kubectl_shasum1={{ file_shasum.stdout }}
+
+- debug: var=kubectl_shasum1
+  run_once: true
+
+- name: Get sha256sum value from file
+  ansible.builtin.command: cat /opt/kubectl-{{ version.content }}/kubectl.sha256
+  register: downloaded_shasum
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- set_fact:
+    kubectl_shasum2={{ downloaded_shasum.stdout }}
+
+- debug: var=kubectl_shasum2
+  run_once: true
+
+- name: Assert that the kubectl binary is OK
+  ansible.builtin.assert:
+    that:
+      - file_shasum.stdout == downloaded_shasum.stdout
+    fail_msg: "Shasum does not correspond"
+    success_msg: "kubectl shasum verified: ok"
+
+- name: Change kubectl file permission
+  ansible.builtin.file:
+    path: "/opt/kubectl-{{ version.content }}/kubectl"
+    mode: '0755'
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create a symlink to kubectl
+  ansible.builtin.file:
+    src: "/opt/kubectl-{{ version.content }}/kubectl"
+    dest: "/usr/bin/kubectl"
+    state: link
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Download Helm 3 install script
+  ansible.builtin.uri:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: /opt/get_helm.sh
+    follow_redirects: safe
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Change Helm 3 install script file permission
+  ansible.builtin.file:
+    path: /opt/get_helm.sh
+    mode: '0700'
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Install Helm 3
+  ansible.builtin.shell: /opt/get_helm.sh
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Download k9s latest deb package
+  ansible.builtin.apt:
+    deb: https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Add ansible repository from PPA
+  ansible.builtin.apt_repository:
+    repo: ppa:ansible/ansible
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    pkg: ansible
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create Kustomize directory
+  ansible.builtin.file:
+    path: /opt/kustomize
+    state: directory
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Download Kustomize install script
+  ansible.builtin.uri:
+    url: https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh
+    dest: /opt/kustomize/install_kustomize.sh
+    follow_redirects: safe
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Change Kustomize install script file permission
+  ansible.builtin.file:
+    path: /opt/kustomize/install_kustomize.sh
+    mode: '0700'
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Install Kustomize
+  ansible.builtin.shell: /opt/kustomize/install_kustomize.sh /opt/kustomize
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create a symlink to kustomize
+  ansible.builtin.file:
+    src: "/opt/kustomize/kustomize"
+    dest: "/usr/bin/kustomize"
+    state: link
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Clean install scripts
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /opt/kustomize/install_kustomize.sh
+    - /opt/get_helm.sh
+    - /opt/kubectl-{{ version.content }}/kubectl.sha256
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
