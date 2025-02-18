@@ -32,8 +32,10 @@ app:
   SB_allowExternalAccess: "false"
   # -- Detect locale from user
   SB_detectLocaleFromBrowser: "true"
-  # -- Allows search engines to better crawl STAC Browser
+  # -- Allows search engines to better crawl STAC Browser. Must be set to 'history' for OIDC
   SB_historyMode: history
+  # -- Social sharing
+  SB_socialSharing: "email,bsky,mastodon"
   # -- URL of the STAC catalog
   SB_catalogUrl: https://{{ platform_domain_name }}/cadip/
 
