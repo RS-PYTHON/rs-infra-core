@@ -14,6 +14,15 @@ resource "ovh_cloud_project_kube" "cluster" {
 resource "ovh_cloud_project_kube_iprestrictions" "bastion_only" {
   kube_id      = ovh_cloud_project_kube.cluster.id
   ips          = ["${openstack_compute_instance_v2.bastion.network[0].fixed_ip_v4}/32"]
+
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_access_csc,
+    ovh_cloud_project_kube_nodepool.nodepool_infra,
+    ovh_cloud_project_kube_nodepool.nodepool_prefect_flow,
+    ovh_cloud_project_kube_nodepool.nodepool_processing,
+    ovh_cloud_project_kube_nodepool.nodepool_processing_ondemand,
+    ovh_cloud_project_kube_nodepool.nodepool_processing_systematic
+  ]
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
