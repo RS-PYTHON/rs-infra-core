@@ -13,7 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
-## [0.2a10] - 2025-02-13
+## [0.2a10] - 2025-02-18
+
+:rotating_light: The repository has been renamed from `rs-infrastructure` to `rs-infra-core`.
 
 ### Added
 - RSPY-570 : Integrate DPR empty processor
@@ -24,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - RSPY-596 : Update to stac-browser 3.3
 - RSPY-577 : Update cluster deployment to OVH
 - RSPY-580 : Changed cluster start and stop to be compatible with OVH
+- CI/CI : Updated for the rename of the repository
 
 ### Deprecated
 
@@ -35,6 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 | Prefect 2 public svc   | processing.example.com                       | X                                           |
 | Prefect 3 internal svc | prefect3-server.processing.svc.cluster.local | prefect-server.processing.svc.cluster.local |
 | Prefect 3 public svc   | prefect3.example.com                         | processing.example.com                      |
+
+- Some folders and applications will be moved into other repositories to separate what is strictly related to the infrastructure, rs-server and applications needed for rs-srver
 
 ### Fixed
 
