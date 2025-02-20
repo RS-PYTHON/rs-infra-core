@@ -450,8 +450,10 @@ singleuser:
     S3_ENDPOINT: {{ s3.endpoint }}
     S3_REGION: {{ s3.region }} 
     TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
-    WORKER_EXTRA_POD_CONFIG_STAGING: {"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}
-    WORKER_EXTRA_POD_CONFIG_EOPF: {"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/processing","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"processing","effect":"PreferNoSchedule"}]}
+    WORKER_EXTRA_POD_CONFIG_EOPF: |
+      {{"affinity":{{"nodeAffinity":{{"requiredDuringSchedulingIgnoredDuringExecution":{{"nodeSelectorTerms":[{{"matchExpressions":[{{"key":"node-role.kubernetes.io/processing","operator":"Exists"}}]}}]}}}}}}}}
+    WORKER_EXTRA_POD_CONFIG_STAGING: |
+      {{"affinity":{{"nodeAffinity":{{"requiredDuringSchedulingIgnoredDuringExecution":{{"nodeSelectorTerms":[{{"matchExpressions":[{{"key":"node-role.kubernetes.io/staging","operator":"Exists"}}]}}]}}}}}},"tolerations":[{{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}}]}}
 
   lifecycleHooks: {}
   initContainers: []
