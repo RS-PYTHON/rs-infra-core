@@ -23,4 +23,3 @@ helmCharts:
   version: 1.0.0
   namespace: processing
   valuesFile: values.yaml
-  

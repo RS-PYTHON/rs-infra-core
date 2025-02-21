@@ -75,7 +75,7 @@ spec:
       cpu: 300m
 
   storage:
-    storageClass: csi-cinder-sc-retain
+    storageClass: csi-cinder-high-speed-retain
     size: 30Gi
 
   affinity:
