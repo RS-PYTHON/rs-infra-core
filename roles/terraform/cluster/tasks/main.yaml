@@ -185,7 +185,7 @@
 - name: Create a symlink to kubectl
   ansible.builtin.file:
     src: "/opt/kubectl-{{ version.content }}/kubectl"
-    dest: "/usr/bin/kubectl"
+    dest: "/usr/local/bin/kubectl"
     state: link
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
@@ -258,7 +258,7 @@
 - name: Create a symlink to kustomize
   ansible.builtin.file:
     src: "/opt/kustomize/kustomize"
-    dest: "/usr/bin/kustomize"
+    dest: "/usr/local/bin/kustomize"
     state: link
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
