@@ -45,13 +45,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
     }
     spec {
       unschedulable = false
-      taints = [
-        {
-          effect = "NoSchedule"
-          key    = "role"
-          value  = "infra"
-        }
-      ]
+      taints = []
     }
   }
 }
@@ -74,13 +68,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
     }
     spec {
       unschedulable = false
-      taints = [
-        {
-          effect = "PreferNoSchedule"
-          key    = "role"
-          value  = "processing"
-        }
-      ]
+      taints = []
     }
   }
 }
