@@ -122,10 +122,26 @@ ansible-playbook cluster.yaml \
 !!! warning "Disclaimer: For Wazuh Server installation"
     See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
+Connect on the bastion with ssh and go into the ~/rs-infra-core repository :
+```shellsession
+ssh ubuntu@1.2.3.4
+cd ~/rs-infra-core
+```
+
+Deploy the rs-infra-core apps :
+
 ```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
+
+(Optionnal) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
+
+(still on the bastion)
+
+!!! warning "Pre-requirement: JupyterHub token"
+    Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
+    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
 
 !!! warning "Disclaimer: For Prefect-Worker post-configuration"
     See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
@@ -135,16 +151,32 @@ ansible-playbook apps.yaml \
 
 !!! warning "Disclaimer: For Neuvector post-configuration"
     See **_"Enable SSO"_** in the [how-to/Neuvector](./how-to/Neuvector.md) after deploy the app.
-
-### 7. Deploy the rs-server
-
-!!! warning "Pre-requirement: JupyterHub token"
-    Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
-    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
-
 ```shellsession
-ansible-playbook rs-server.yaml \
-    -i inventory/mycluster/hosts.yaml
+
+cd ~ ;
+
+git clone https://github.com/RS-PYTHON/rs-infra-security.git ;
+git clone https://github.com/RS-PYTHON/rs-infra-monitoring.git ;
+git clone https://github.com/RS-PYTHON/rs-workflow-env.git ;
+git clone https://github.com/RS-PYTHON/rs-server-deployment.git ;
+
+cd ~/rs-infra-core ;
+
+ansible-playbook apps.yaml \
+    -i inventory/mycluster/hosts.yaml \
+    -e '{"package_paths": ["~/rs-infra-security/apps/"]}' ;
+
+ansible-playbook apps.yaml \
+    -i inventory/mycluster/hosts.yaml \
+    -e '{"package_paths": ["~/rs-infra-monitoring/apps/"]}' ;
+
+ansible-playbook apps.yaml \
+    -i inventory/mycluster/hosts.yaml \
+    -e '{"package_paths": ["~/rs-workflow-env/apps/"]}' ;
+
+ansible-playbook apps.yaml \
+    -i inventory/mycluster/hosts.yaml \
+    -e '{"package_paths": ["~/rs-server-deployment/apps/"]}' ;
 ```
 
 # Copyright and license
