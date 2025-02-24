@@ -38,7 +38,7 @@ hub:
   # Add initContainer to install itsdangerous without having to modify the image
   initContainers:
     - name: install-python-packages
-      image: python:3.9-slim 
+      image: python:3.9-slim
       command: ["sh", "-c", "pip install --target /srv/jupyterhub/ itsdangerous"]
       volumeMounts:
         - name: shared-volume
@@ -448,12 +448,12 @@ singleuser:
     RSPY_UAC_HOMEPAGE : https://apikeymanager.{{ platform_domain_name }}/docs
     RSPY_WEBSITE: https://{{ platform_domain_name }}
     S3_ENDPOINT: {{ s3.endpoint }}
-    S3_REGION: {{ s3.region }} 
+    S3_REGION: {{ s3.region }}
     TEMPO_ENDPOINT: http://grafana-tempo-distributor.logging.svc.cluster.local:4317
     WORKER_EXTRA_POD_CONFIG_EOPF: |
-      {{"affinity":{{"nodeAffinity":{{"requiredDuringSchedulingIgnoredDuringExecution":{{"nodeSelectorTerms":[{{"matchExpressions":[{{"key":"node-role.kubernetes.io/processing","operator":"Exists"}}]}}]}}}}}}}}
+      {% raw %}{{"affinity":{{"nodeAffinity":{{"requiredDuringSchedulingIgnoredDuringExecution":{{"nodeSelectorTerms":[{{"matchExpressions":[{{"key":"node-role.kubernetes.io/processing","operator":"Exists"}}]}}]}}}}}}}}{% endraw %}
     WORKER_EXTRA_POD_CONFIG_STAGING: |
-      {{"affinity":{{"nodeAffinity":{{"requiredDuringSchedulingIgnoredDuringExecution":{{"nodeSelectorTerms":[{{"matchExpressions":[{{"key":"node-role.kubernetes.io/staging","operator":"Exists"}}]}}]}}}}}},"tolerations":[{{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}}]}}
+      {% raw %}{{"affinity":{{"nodeAffinity":{{"requiredDuringSchedulingIgnoredDuringExecution":{{"nodeSelectorTerms":[{{"matchExpressions":[{{"key":"node-role.kubernetes.io/staging","operator":"Exists"}}]}}]}}}}}},"tolerations":[{{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}}]}}{% endraw %}
 
   lifecycleHooks: {}
   initContainers: []
