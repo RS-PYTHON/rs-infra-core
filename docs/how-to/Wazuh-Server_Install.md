@@ -2,25 +2,11 @@
 
 ## A. Pre-Install
 
-### 1. Enable Bcrypt encryption for installation
-
-Backup original file `encrypt.py` to `encrypt.py.ori`
-
-```bash
-mv ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py.ori
-```
-
-Download library [Passlib library](https://raw.githubusercontent.com/ansible/ansible/3f74bc08cefccec791c9dc5315185d2396e5c5ac/lib/ansible/utils/encrypt.py)
-
-```bash
-wget https://raw.githubusercontent.com/ansible/ansible/3f74bc08cefccec791c9dc5315185d2396e5c5ac/lib/ansible/utils/encrypt.py -O ~/miniforge3/envs/rspy/lib/python3.11/site-packages/ansible/utils/encrypt.py
-```
-
-### 2. Generate self-signed certificates
+### 1. Generate self-signed certificates
 
 Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.com/current/deployment-options/deploying-with-kubernetes/kubernetes-deployment.html#setup-ssl-certificates)
 
-#### 2.1 Generate certificates for dashboard  
+#### 1.1 Generate certificates for dashboard  
 
 ```bash
 ./apps/04-wazuh-server/wazuh/certs/dashboard_http/generate_certs.sh
@@ -35,7 +21,7 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 
 `./apps/04-wazuh-server/wazuh/certs/dashboard_http`
 
-#### 2.2 Generate certificates for all other nodes
+#### 1.2 Generate certificates for all other nodes
 
 ```bash
 ./apps/04-wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
@@ -67,9 +53,9 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 
 `./apps/04-wazuh-server/wazuh/certs/indexer_cluster`
 
-### 3. Setup SSO (Keycloak SAML)
+### 2. Setup SSO (Keycloak SAML)
 
-#### 3.1 Download required files from Keycloak
+#### 2.1 Download required files from Keycloak
 
 Regarding Wazuh editor documentation : [Keycloak](https://documentation.wazuh.com/current/user-manual/user-administration/single-sign-on/administrator/keycloak.html)
 
@@ -89,7 +75,7 @@ The downloaded archive contains two files:
 - idp-metadata.xml
 - sp-metadata.xml
 
-#### 3.2 Import the Keycloak configuration files
+#### 2.2 Import the Keycloak configuration files
 
 From the previous downloaded archive, extract the files `idp-metadata.xml` and `sp-metadata.xml` and copy them to `./apps/04-wazuh-server/`
 

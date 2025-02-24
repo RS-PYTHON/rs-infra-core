@@ -119,14 +119,13 @@ ansible-playbook cluster.yaml \
 
 ### 6. Deploy the apps
 
-!!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
-
 Connect on the bastion with ssh and go into the ~/rs-infra-core repository :
 ```shellsession
 ssh ubuntu@1.2.3.4
 cd ~/rs-infra-core
 ```
+!!! warning "Disclaimer: For Wazuh Server installation"
+    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 Deploy the rs-infra-core apps :
 
