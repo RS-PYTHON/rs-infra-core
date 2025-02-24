@@ -17,7 +17,7 @@
     - name: "{{ package_name }} - {{ app_name }} | Check whether kustomization.yaml file exists"
       stat:
         path: "{{ app_dir }}/kustomization.yaml"
-      delegate_to: localhost
+      delegate_to: bastion
       register: kustomization_file
 
     - name: "{{ package_name }} - {{ app_name }} | Fail if no kustomization file found"
@@ -34,7 +34,7 @@
       stat:
         path: "{{ app_dir }}/.helm_repository_config.yaml"
       register: repository_config
-      delegate_to: localhost
+      delegate_to: bastion
 
     - name: "{{ package_name  }} - {{ app_name }} | Include vars from .helm_repository_config.yaml"
       include_vars:
@@ -101,7 +101,7 @@
       copy:
         content: "{{ resources | join(' ') }}"
         dest: "{{ app_dir }}/resources.txt"
-      delegate_to: localhost
+      delegate_to: bastion
 
   always:
     - name: "{{ package_name }} - {{ app_name }} | Remove resources tmp dir"

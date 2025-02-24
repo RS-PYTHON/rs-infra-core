@@ -16,7 +16,7 @@
   find:
     file_type: directory
     paths: "{{ package_path }}"
-  delegate_to: localhost
+  delegate_to: bastion
   register: result
 
 - name: "{{ package_name  }} | Browse each app"
