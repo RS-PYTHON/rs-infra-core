@@ -96,12 +96,12 @@
   ansible.builtin.synchronize:
     src: "{{ playbook_dir }}/"
     dest: "ubuntu@{{ bastion_ip.stdout }}:/home/ubuntu/rs-infra-core"
-    recursive: yes
+    recursive: true
     private_key: "{{ ansible_ssh_private_key_file }}"
 
 - name: Update bastion
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
@@ -120,7 +120,7 @@
 - name: Get latest kubectl version
   ansible.builtin.uri:
     url: https://dl.k8s.io/release/stable.txt
-    return_content: yes
+    return_content: true
   register: version
 
 - name: Create kubectl versioned directory
