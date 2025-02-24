@@ -481,8 +481,8 @@ singleuser:
     name: ghcr.io/rs-python/rs-infra-core-jupyter
     tag: "latest"
     pullPolicy: Always
-    pullSecrets: 
-      - name: {{ github.registrySecret.name }}
+    pullSecrets: []
+    #  - name: {{ github.registrySecret.name }}
   startTimeout: 300
   cpu:
     limit: 0.75
