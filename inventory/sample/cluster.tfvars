@@ -18,5 +18,5 @@ nodepool_processing_systematic_desired_nodes = 0
 nodepool_processing_systematic_autoscale = true
 
 # Bucket vars
-buckets = ["loki", "tempo", "psql"]
+buckets = ["loki", "tempo", "psql", "velero"]
 buckets_region = "gra"
