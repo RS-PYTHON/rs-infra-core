@@ -51,6 +51,9 @@ spec:
     size: 30Gi
 
   affinity:
+    #enablePodAntiAffinity: true
+    #podAntiAffinityType: preferred
+    #topologyKey: kubernetes.io/hostname
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
