@@ -94,25 +94,13 @@ keycloak:
   realm:
     name: rspy
 
-prefect:
+prefect3:
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
     username: prefect
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     name: prefect
     secret: prefect-database-password
-
-prefectworker:
-  name: on-demand-k8s-pool
-  number: 2
-
-prefect3:
-  database:
-    host: postgresql-cluster-rw.database.svc.cluster.local
-    username: prefect3
-    password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
-    name: prefect3
-    secret: prefect3-database-password
   block_auth: auth
   block_s3: user-s3
 
