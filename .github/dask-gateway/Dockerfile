@@ -64,7 +64,8 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
-RUN apt autoremove -y gcc
+RUN apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh
+RUN apt autoremove -y gcc && layer-cleanup.sh
 
 # Add a default user
 RUN useradd -m user
