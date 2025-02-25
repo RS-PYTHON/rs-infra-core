@@ -1,0 +1,71 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: "{{ app_name }}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ app_name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ app_name }}"
+    spec:
+      #restartPolicy: Always
+      hostPID: true
+      hostNetwork: true
+      #hostIPC: true
+      containers:
+      - name: pause
+        image: gcr.io/google-containers/pause:latest
+      initContainers:
+      - name: sysctl-init
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          sysctl -w fs.fanotify.max_user_groups=256  # Set the maximum number of opened file
+        securityContext:
+          privileged: true
+          #runAsUser: 0
+      tolerations:
+  tolerations:
+    - key: role
+      operator: Equal
+      value: infra
+      effect: NoSchedule
+    - key: role
+      operator: Equal
+      value: processing
+      effect: NoSchedule
+    - key: role
+      operator: Equal
+      value: access_csc
+      effect: NoSchedule
+    - key: role
+      operator: Equal
+      value: prefect_flow
+      effect: NoSchedule
+    - key: role
+      operator: Equal
+      value: ondemand_dpr
+      effect: NoSchedule
+    - key: role
+      operator: Equal
+      value: systematic_dpr
+      effect: NoSchedule
