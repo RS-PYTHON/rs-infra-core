@@ -18,6 +18,7 @@ ARG IMAGE2BUILD
 ARG DASK_TAG="2024.5.2"
 ARG DASK_GATEWAY_TAG="2024.1.0"
 ARG PREFECT_TAG="3.1.4"
+ARG PREFECT_DASK_TAG="0.3.3"
 
 USER root
 
@@ -45,14 +46,16 @@ RUN pip install -r /opt/requirements-${IMAGE2BUILD}.txt && \
 
 # Install Dask with correct version
 RUN pip install \
-    dask[complete]==${DASK_TAG} \
-    distributed==${DASK_TAG} \
-    dask-gateway==${DASK_GATEWAY_TAG} \
-    dask-gateway-server[kubernetes]==${DASK_GATEWAY_TAG} \
-    bokeh">=3.1.0" \
-    jupyter-server-proxy && \
+        dask[complete]==${DASK_TAG} \
+        distributed==${DASK_TAG} \
+        dask-gateway==${DASK_GATEWAY_TAG} \
+        dask-gateway-server[kubernetes]==${DASK_GATEWAY_TAG} \
+        bokeh">=3.1.0" \
+        jupyter-server-proxy && \
     if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
-    pip install prefect[dask,aws]==${PREFECT_TAG} ; \
+        pip install \
+            prefect[aws]==${PREFECT_TAG} \
+            prefect-dask==${PREFECT_DASK_TAG} ; \
     fi && \
     layer-cleanup.sh
 
