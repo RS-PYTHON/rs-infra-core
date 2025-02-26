@@ -114,6 +114,7 @@
     - bash-completion
     - unzip
     - software-properties-common
+    - python3-passlib
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
