@@ -40,7 +40,9 @@ RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags
     layer-cleanup.sh
 
 # Install whatever
-RUN pip install -r /opt/requirements-${IMAGE2BUILD}.txt && \
+RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
+    GITLAB_EOPF_TOKEN=$(cat /run/secrets/GITLAB_EOPF_TOKEN) \
+    pip install -U -r /opt/requirements-${IMAGE2BUILD}.txt && \
     rm /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt && \
     layer-cleanup.sh
 
@@ -64,7 +66,9 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
-RUN apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh
+RUN if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
+        apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh; \
+    fi
 RUN apt autoremove -y gcc && layer-cleanup.sh
 
 # Add a default user
