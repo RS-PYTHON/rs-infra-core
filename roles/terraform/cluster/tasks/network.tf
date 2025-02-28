@@ -47,12 +47,13 @@ resource "openstack_networking_secgroup_v2" "bastion_sg" {
 
 # Allow SSH from specific IPs
 resource "openstack_networking_secgroup_rule_v2" "allow_ssh_restricted" {
+  for_each          = toset(var.allowed_ip_list)
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 22
   port_range_max    = 22
-  remote_ip_prefix  = "${var.allowed_ip_list}/32"
+  remote_ip_prefix  = "${each.value}/32"
   security_group_id = openstack_networking_secgroup_v2.bastion_sg.id
 }
 

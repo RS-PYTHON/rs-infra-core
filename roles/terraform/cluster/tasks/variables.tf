@@ -26,7 +26,7 @@ variable "region" {
 
 variable "allowed_ip_list" {
     description = "list of allowed ip"
-    type        = string
+    type        = list(string)
 }
 
 variable "nodepool_infra_desired_nodes" {
