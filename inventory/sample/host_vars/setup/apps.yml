@@ -117,10 +117,10 @@ rs_server_catalog:
 rs_server:
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
-    name: rspydemo
+    name: pygeoapi
     password: test
     username: test
-    secret: status-database-password
+    secret: pygeoapi-database-password
 
 rs_server_staging:
   # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
