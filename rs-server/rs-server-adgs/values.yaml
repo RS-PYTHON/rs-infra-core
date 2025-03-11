@@ -43,11 +43,11 @@ app:
     adgs:
       endpoint:
         # -- ADGS URL
-        url: http://mockup-station-adgs-svc.processing.svc.cluster.local:8080/Products
+        url: http://mockup-station-adgs.processing.svc.cluster.local:8080/Products
     adgs2:
       endpoint:
         # -- ADGS URL
-        url: http://mockup-station-adgs2-svc.processing.svc.cluster.local:8080/Products
+        url: http://mockup-station-adgs2.processing.svc.cluster.local:8080/Products
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 

@@ -440,7 +440,7 @@ singleuser:
     PREFECT_WORK_POOL_STAGING: {{ prefect3worker.staging.name }}
     PREFECT_WORK_POOL_EOPF: {{ prefect3worker.eopf.name }}
     RSPY_CATALOG_BUCKET: {{ rspy.catalog_bucket }}
-    RSPY_DPR_SIMU_URL: http://mockup-processor-dpr-svc.processing.svc.cluster.local:8080
+    RSPY_DPR_SIMU_URL: http://mockup-processor-dpr.processing.svc.cluster.local:8080
     RSPY_GRAFANA_URL: https://monitoring.{{ platform_domain_name }}
     RSPY_PREFECT_URL: https://prefect3.{{ platform_domain_name }}
     RSPY_TEMP_BUCKET: {{ rspy.tmp_bucket }}

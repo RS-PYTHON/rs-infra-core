@@ -126,7 +126,7 @@ prefect3worker:
 
 rs_server_catalog:
   database:
-    host: rs-server-catalog-db-svc.database.svc.cluster.local
+    host: rs-server-catalog-db.database.svc.cluster.local
     name: catalog
     password: password
     username: postgres
@@ -214,7 +214,7 @@ neuvector:
       Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+[]{}<>:?', length=30) }}"
     secret: neuvector-init
   exporter:
-    host: neuvector-svc-controller-api.svc.cluster.local
+    host: neuvector-controller-api.svc.cluster.local
     CTRL_USERNAME: exporter
     CTRL_PASSWORD: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+[]{}<>:?', length=30) }}"
     secret: exporter
