@@ -24,5 +24,3 @@ helmCharts:
   namespace: infra
   valuesFile: values.yaml
   includeCRDs: true
-
-  

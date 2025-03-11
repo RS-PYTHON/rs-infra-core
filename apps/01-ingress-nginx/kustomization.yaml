@@ -20,5 +20,5 @@ helmCharts:
   repo: https://kubernetes.github.io/ingress-nginx
   releaseName: "{{ app_name }}"
   version: v4.9.1
-  namespace: kube-system
+  namespace: ingress-nginx
   valuesFile: values.yaml

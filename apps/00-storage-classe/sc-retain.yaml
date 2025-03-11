@@ -12,15 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-- name: Start the cluster
-  hosts: localhost
-  roles:
-    - { role: "terraform/start" }
-  tags: start
-
-- name: Stop the cluster
-  hosts: localhost
-  roles:
-    - { role: "terraform/stop" }
-  tags: stop
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+  labels:
+    mks.ovh/version: 1.31.1-4
+  name: csi-cinder-high-speed-retain
+parameters:
+  availability: nova
+  fsType: ext4
+  type: high-speed
+provisioner: cinder.csi.openstack.org
+reclaimPolicy: Retain
+volumeBindingMode: Immediate

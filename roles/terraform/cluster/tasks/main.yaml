@@ -96,12 +96,12 @@
   ansible.builtin.synchronize:
     src: "{{ playbook_dir }}/"
     dest: "ubuntu@{{ bastion_ip.stdout }}:/home/ubuntu/rs-infra-core"
-    recursive: yes
+    recursive: true
     private_key: "{{ ansible_ssh_private_key_file }}"
 
 - name: Update bastion
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
@@ -114,13 +114,14 @@
     - bash-completion
     - unzip
     - software-properties-common
+    - python3-passlib
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
 - name: Get latest kubectl version
   ansible.builtin.uri:
     url: https://dl.k8s.io/release/stable.txt
-    return_content: yes
+    return_content: true
   register: version
 
 - name: Create kubectl versioned directory
@@ -185,7 +186,7 @@
 - name: Create a symlink to kubectl
   ansible.builtin.file:
     src: "/opt/kubectl-{{ version.content }}/kubectl"
-    dest: "/usr/bin/kubectl"
+    dest: "/usr/local/bin/kubectl"
     state: link
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
@@ -258,7 +259,37 @@
 - name: Create a symlink to kustomize
   ansible.builtin.file:
     src: "/opt/kustomize/kustomize"
-    dest: "/usr/bin/kustomize"
+    dest: "/usr/local/bin/kustomize"
+    state: link
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create Kubectl node-shell pluging directory
+  ansible.builtin.file:
+    path: /opt/node-shell
+    state: directory
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Download Kubectl node-shell pluging
+  ansible.builtin.uri:
+    url: https://github.com/kvaps/kubectl-node-shell/raw/master/kubectl-node_shell
+    dest: /opt/node-shell/kubectl-node_shell
+    follow_redirects: safe
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Change Kustomize install script file permission
+  ansible.builtin.file:
+    path: /opt/node-shell/kubectl-node_shell
+    mode: '0775'
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create a symlink to kustomize
+  ansible.builtin.file:
+    src: "/opt/node-shell/kubectl-node_shell"
+    dest: "/usr/local/bin/kubectl-node_shell"
     state: link
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"

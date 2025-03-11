@@ -16,9 +16,11 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
+  - ns-dask-gateway.yaml
   - ns-database.yaml
   - ns-iam.yaml
   - ns-infra.yaml
+  - ns-ingress-nginx.yaml
   - ns-logging.yaml
   - ns-monitoring.yaml
   - ns-networking.yaml

@@ -1,3 +1,17 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Network part
 
 resource "openstack_networking_network_v2" "private_net" {
@@ -33,12 +47,13 @@ resource "openstack_networking_secgroup_v2" "bastion_sg" {
 
 # Allow SSH from specific IPs
 resource "openstack_networking_secgroup_rule_v2" "allow_ssh_restricted" {
+  for_each          = toset(var.allowed_ip_list)
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 22
   port_range_max    = 22
-  remote_ip_prefix  = "${var.allowed_ip_list}/32"
+  remote_ip_prefix  = "${each.value}/32"
   security_group_id = openstack_networking_secgroup_v2.bastion_sg.id
 }
 

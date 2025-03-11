@@ -12,15 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-- name: Start the cluster
-  hosts: localhost
-  roles:
-    - { role: "terraform/start" }
-  tags: start
-
-- name: Stop the cluster
-  hosts: localhost
-  roles:
-    - { role: "terraform/stop" }
-  tags: stop
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-nginx

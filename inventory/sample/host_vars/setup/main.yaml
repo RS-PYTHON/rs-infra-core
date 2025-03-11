@@ -17,7 +17,7 @@ platform_domain_name: rspy.example.com
 
 # S3 credential to be reused accross apps
 s3:
-  endpoint: https://s3.gra.io.cloud.ovh.net/
+  endpoint: https://s3.gra.io.cloud.ovh.net
   region: gra
   access_key: AK
   secret_key: SK
