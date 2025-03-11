@@ -40,20 +40,20 @@ app:
       endpoint:
         # -- CADIP station URL
         url:
-          token: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080/oauth2/token
-          odata: http://mockup-station-cadip-cadip-svc.processing.svc.cluster.local:8080
+          token: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080/oauth2/token
+          odata: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080
     # @ignored
     sgs:
       endpoint:
         url: 
-          token: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080/oauth2/token
-          odata: http://mockup-station-cadip-sgs-svc.processing.svc.cluster.local:8080
+          token: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080/oauth2/token
+          odata: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080
     # @ignored
     mti:
       endpoint:
         url: 
-          token: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080/oauth2/token
-          odata: http://mockup-station-cadip-mti-svc.processing.svc.cluster.local:8080
+          token: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080/oauth2/token
+          odata: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 

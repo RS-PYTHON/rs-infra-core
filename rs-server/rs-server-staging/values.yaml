@@ -27,7 +27,7 @@ app:
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
   # -- Catalog pod address
-  endpointCatalog: http://rs-server-catalog-svc.processing.svc.cluster.local:8080
+  endpointCatalog: http://rs-server-catalog.processing.svc.cluster.local:8080
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   station:

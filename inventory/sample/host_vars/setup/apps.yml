@@ -126,7 +126,7 @@ prefect3worker:
 
 rs_server_catalog:
   database:
-    host: rs-server-catalog-db-svc.database.svc.cluster.local
+    host: rs-server-catalog-db.database.svc.cluster.local
     name: catalog
     password: password
     username: postgres
