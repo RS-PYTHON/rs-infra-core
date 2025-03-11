@@ -264,14 +264,14 @@
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
-- name: Create Kubectl node-shell pluging directory
+- name: Create Kubectl node-shell plugin directory
   ansible.builtin.file:
     path: /opt/node-shell
     state: directory
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
-- name: Download Kubectl node-shell pluging
+- name: Download Kubectl node-shell plugin
   ansible.builtin.uri:
     url: https://github.com/kvaps/kubectl-node-shell/raw/master/kubectl-node_shell
     dest: /opt/node-shell/kubectl-node_shell
@@ -279,14 +279,14 @@
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
-- name: Change Kustomize install script file permission
+- name: Change Kubectl node-shell plugin file permission
   ansible.builtin.file:
     path: /opt/node-shell/kubectl-node_shell
     mode: '0775'
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
-- name: Create a symlink to kustomize
+- name: Create a symlink to Kubectl node-shell plugin
   ansible.builtin.file:
     src: "/opt/node-shell/kubectl-node_shell"
     dest: "/usr/local/bin/kubectl-node_shell"
