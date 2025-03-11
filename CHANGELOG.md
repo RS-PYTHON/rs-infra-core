@@ -13,11 +13,50 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a11] - 2025-03-12
+
+:rotating_light: **Breaking changes**
+
+- Many apps have been moved from `rs-infra-core` to `rs-infra-security`, `rs-infra-monitoring`, `rs-server-deployment` and `rs-workflow-env`
+- Starting from this version (0.2a11), RS cannot be installed on Orange and shall be installed on OVH.
+
+### Added
+
+- RSPY-581 : OVH: deployment of rs-infra-core
+- RSPY-583 : OVH: deployment of rs-infra-monitoring
+- RSPY-584 : OVH: deployment of rs-infra-security
+- RSPY-585 : OVH: deployment of rs-workflow-env (rs-workflow-env-deployment repository )
+- RSPY-586 : OVH: deployment of rs-server (rs-server-deployment repository)
+- RSPY-602 : Update stac-fastapi / stac-fastapi-pgstac / pgstac to 5.0.x / 4.0.x / 0.9.x
+- RSPY-607 : Update S1L0 processing Prefect flow with real S1L0Processor 0.9.0
+- New apps `ds-fanotify` to increase fanotify limit on the node (the limit was quickly reached on the OVH node)
+
+### Changed
+
+- Many apps have been moved from `rs-infra-core` to `rs-infra-security`, `rs-infra-monitoring`, `rs-server-deployment` and `rs-workflow-env`
+- Updated keycloak realm to Remove old references to phase1
+- Updated to storage classes for OVH
+- Ingress nginx
+  - svc is now `LoadBalancer` (instead of `NodePort`) (needed for OVH)
+  - Has its own namespace `ingress-nginx` (instead of `kube-system`)
+
+### Deprecated
+
+- Prefect 2 is completely deprecated and is replaced with Prefect 3
+- Removed old ClusterRoleBinding from phase1
+
+### Fixed
+
+- RSPY-416 : [Security] Cannot connect to Wazuh GUI with SSO
+- Missing namespaces : ingress-nginx and dask-gateway
+- Remove `NoSchedule` and `PreferNoSchedule` on infra and processing nodepool
+
 ## [0.2a10] - 2025-02-18
 
 :rotating_light: The repository has been renamed from `rs-infrastructure` to `rs-infra-core`.
 
 ### Added
+
 - RSPY-570 : Integrate DPR empty processor
 
 ### Changed
@@ -194,7 +233,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Fixed
 
 - RSPY-254 : [Safety] Errors displayed on Wazuh UI
-
 
 ## [0.1a10] - 2024-06-05
 
