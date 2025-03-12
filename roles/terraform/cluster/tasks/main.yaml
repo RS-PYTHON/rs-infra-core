@@ -56,13 +56,15 @@
     executable: /bin/bash
 
 - name: Get bastion ip from terraform output
-  command: terraform output -raw bastion_ip
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw bastion_ip
   register: bastion_ip
   args:
     chdir: roles/terraform/cluster/tasks/
 
 - name: Get kubeconfig file from terraform output
-  command: terraform output -raw kubeconfig_file
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw kubeconfig_file
   register: kubeconfig_file
   args:
     chdir: roles/terraform/cluster/tasks/
