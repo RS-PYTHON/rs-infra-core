@@ -134,18 +134,16 @@ ansible-playbook apps.yaml \
 
 (still on the bastion)
 
-!!! warning "Pre-requirement: JupyterHub token"
+!!! warning "Disclaimer: **After** Jupyterhub installation (rs-workflow-env)"
     Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
     See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
 
-!!! warning "Disclaimer: For Prefect-Worker post-configuration"
-    See **_"2. set `Concurrency Limit` on workpool _on-demand-k8s-pool_"_** in the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploy the app.
+!!! warning "Disclaimer: **After** Prefect-Worker installation (rs-workflow-env)"
+    See the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploying rs-workflow-env.
 
-!!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"B. Post-Install: Apply modifications set during installation process (new credentials and SSO)"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts after deploy the app.
+!!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
+    See the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts **before** deploying rs-infra-security.
 
-!!! warning "Disclaimer: For Neuvector post-configuration"
-    See **_"Enable SSO"_** in the [how-to/Neuvector](./how-to/Neuvector.md) after deploy the app.
 ```shellsession
 
 cd ~ ;
