@@ -114,12 +114,11 @@ ansible-playbook cluster.yaml \
 ### 6. Deploy the apps
 
 Connect on the bastion with ssh and go into the ~/rs-infra-core repository :
+
 ```shellsession
-ssh ubuntu@1.2.3.4
+ssh -i inventory/mycluster/privatekey.pem ubuntu@<BASTION_IP>
 cd ~/rs-infra-core
 ```
-!!! warning "Disclaimer: For Wazuh Server installation"
-    See **_"A. Pre-Install 1. Enable Bcrypt encryption for installation"_** in the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and update the `encrypt.py` library before deploy the apps.
 
 Deploy the rs-infra-core apps :
 
@@ -129,7 +128,7 @@ ansible-playbook apps.yaml \
 ```
 
 !!! warning "Note: DNS configuration"
-    At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (kubectl -n ingress-nginx get svc ingress-nginx-controller).
+    At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (`kubectl -n ingress-nginx get svc ingress-nginx-controller`).
 
 (Optionnal) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
 
