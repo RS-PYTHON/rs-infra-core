@@ -97,10 +97,7 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 - Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
 - S3 backend for terraform in `inventory/mycluster/backend.tfvars`
 - Values for custom parameters in `inventory/mycluster/host_vars/setup/apps.yml`
-
-!!! warning "Private container registry"
-    As the [RS-PYTHON/rs-infra-core](https://github.com/RS-PYTHON/rs-infra-core) is private for now, the custom docker image for JupyterHub is also private for now. You need to generate a token in order to set up the [docker config secrets](https://kubernetes.io/docs/concepts/configuration/secret/#docker-config-secrets
-    ) for the private `ghcr.io` registry. Follow the [how-to/GitHub Container Registry](./how-to/GitHub%20Container%20Registry.md).
+- Values for `all.hosts.setup.ansible_python_interpreter` and `all.hosts.localhost.ansible_python_interpreter` in `inventory/mycluster/hosts.yaml`
 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
@@ -113,9 +110,6 @@ ansible-playbook generate_inventory.yaml \
 ansible-playbook cluster.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
-
-!!! warning "Note: DNS configuration"
-    At this point, you should configure your domain name to point to the master's IP from the `inventory/mycluster/hosts.yaml` file.
 
 ### 6. Deploy the apps
 
@@ -133,6 +127,9 @@ Deploy the rs-infra-core apps :
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
+
+!!! warning "Note: DNS configuration"
+    At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (kubectl -n ingress-nginx get svc ingress-nginx-controller).
 
 (Optionnal) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
 
