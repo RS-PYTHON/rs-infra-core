@@ -148,7 +148,7 @@ cd ~/rs-infra-core ;
 ```
 
 !!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
-    See the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts **before** deploying rs-infra-security.
+    See the [how-to/Wazuh-Server_Install](./how-to/Wazuh%20server%20install.md) and execute scripts **before** deploying rs-infra-security.
 
 ```shellsession
 
@@ -168,10 +168,10 @@ ansible-playbook apps.yaml \
 
 !!! warning "Disclaimer: **After** Jupyterhub installation (rs-workflow-env)"
     Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
-    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
+    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/Dask-gateway.md).
 
 !!! warning "Disclaimer: **After** Prefect-Worker installation (rs-workflow-env)"
-    See the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploying rs-workflow-env.
+    See the [how-to/Prefect-Worker](./how-to/Prefect%20Worker.md) after deploying rs-workflow-env.
 
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
