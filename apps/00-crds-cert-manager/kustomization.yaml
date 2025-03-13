@@ -16,4 +16,4 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - cert-manager.crds.yaml
+  - https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.crds.yaml

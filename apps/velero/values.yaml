@@ -33,7 +33,7 @@ metrics:
     autodetect: false
     enabled: true
 
-upgradeCRDs: true
+upgradeCRDs: false
 
 cleanUpCRDs: false
 

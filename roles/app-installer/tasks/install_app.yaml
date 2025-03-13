@@ -64,7 +64,7 @@
         src: "{{ app_dir }}/{{ item.path }}"
         dest: "{{ resources_dir.path }}"
       with_community.general.filetree: "{{ app_dir }}/"
-      when: 
+      when:
         - item.state == 'directory'
       delegate_to: bastion
 
@@ -77,7 +77,7 @@
         {{ "--username " + item.1.username if item.1.username is defined else omit }} \
         {{ "--password " + item.1.password if item.1.password is defined else omit }}
       loop: "{{ kustomization.helmCharts | product(helm_repositories) }}"
-      when: 
+      when:
         - repository_config.stat.exists
         - helm_repositories is defined
         - kustomization.helmCharts is defined

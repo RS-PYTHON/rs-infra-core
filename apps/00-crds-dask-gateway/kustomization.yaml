@@ -16,7 +16,5 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_clusters.yaml
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_backups.yaml
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_poolers.yaml
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
+  - https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/2024.1.0/resources/helm/dask-gateway/crds/daskclusters.yaml
+  - https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/2024.1.0/resources/helm/dask-gateway/crds/traefik.yaml

@@ -16,13 +16,13 @@ commonLabels:
   app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - monitoring.coreos.com_alertmanagerconfigs.yaml
-  - monitoring.coreos.com_prometheusagents.yaml
-  - monitoring.coreos.com_servicemonitors.yaml
-  - monitoring.coreos.com_alertmanagers.yaml
-  - monitoring.coreos.com_prometheuses.yaml
-  - monitoring.coreos.com_thanosrulers.yaml
-  - monitoring.coreos.com_podmonitors.yaml
-  - monitoring.coreos.com_prometheusrules.yaml
-  - monitoring.coreos.com_probes.yaml
-  - monitoring.coreos.com_scrapeconfigs.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-alertmanagerconfigs.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusagents.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-alertmanagers.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheuses.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-thanosrulers.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusrules.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml
+  - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds/crds/crd-scrapeconfigs.yaml
