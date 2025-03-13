@@ -134,16 +134,6 @@ ansible-playbook apps.yaml \
 
 (still on the bastion)
 
-!!! warning "Disclaimer: **After** Jupyterhub installation (rs-workflow-env)"
-    Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
-    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
-
-!!! warning "Disclaimer: **After** Prefect-Worker installation (rs-workflow-env)"
-    See the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploying rs-workflow-env.
-
-!!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
-    See the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts **before** deploying rs-infra-security.
-
 ```shellsession
 
 cd ~ ;
@@ -154,6 +144,13 @@ git clone https://github.com/RS-PYTHON/rs-workflow-env.git ;
 git clone https://github.com/RS-PYTHON/rs-server-deployment.git ;
 
 cd ~/rs-infra-core ;
+
+```
+
+!!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
+    See the [how-to/Wazuh-Server_Install](./how-to/Wazuh-Server_Install.md) and execute scripts **before** deploying rs-infra-security.
+
+```shellsession
 
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
@@ -167,9 +164,19 @@ ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
     -e '{"package_paths": ["~/rs-workflow-env/apps/"]}' ;
 
+```
+
+!!! warning "Disclaimer: **After** Jupyterhub installation (rs-workflow-env)"
+    Because Dask is configured to use JupyterHub authentication, you need to generated a token from JupyterHub and configure rs-server-staging with this token, so it can uses the Dask cluster.
+    See **_"Prerequisite"_** in the [how-to/Dask Gateway](./how-to/dask-gateway.md).
+
+!!! warning "Disclaimer: **After** Prefect-Worker installation (rs-workflow-env)"
+    See the [how-to/Prefect-Worker](./how-to/Prefect-Worker.md) after deploying rs-workflow-env.
+
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
     -e '{"package_paths": ["~/rs-server-deployment/apps/"]}' ;
+
 ```
 
 # Copyright and license
