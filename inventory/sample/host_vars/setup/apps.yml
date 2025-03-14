@@ -15,8 +15,6 @@
 package_paths:
 - apps
 
-# TODO:
-# Clean unused secrets here and in realmimport 
 grafana_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 kubectl_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 prometheus_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
@@ -73,7 +71,7 @@ keycloak:
   image: quay.io/keycloak/keycloak:23.0.6
   operator:
     image: quay.io/keycloak/keycloak-operator:23.0.6
-  database: 
+  database:
     host: postgresql-cluster-rw.database.svc.cluster.local
     name: keycloak
     username: keycloak
@@ -188,40 +186,40 @@ neuvector:
   core:
     admin:
       Fullname: "admin"
-      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
     exporter:
       Fullname: "exporter"
-      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
     secops:
       Fullname: "rspysecopsadm"
-      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
     secret: neuvector-init
   exporter:
     host: neuvector-svc-controller-api.svc.cluster.local
     CTRL_USERNAME: exporter
-    CTRL_PASSWORD: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+    CTRL_PASSWORD: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
     secret: exporter
 
 wazuh:
   server:
-    kibanaserver:  
+    kibanaserver:
       username: "kibanaserver"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
       secret: dashboard-cred
-    admin: 
-      username: "admin"              
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+    admin:
+      username: "admin"
+      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
       secret: indexer-cred
-    api: 
+    api:
       username: "wazuh-wui"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='!#$%&*()-_=+:?', length=30) }}"
+      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.*+?-', length=30) }}"
       secret: wazuh-api-cred
     clusterkey:
-      key: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=32) }}" 
+      key: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=32) }}"
       secret: wazuh-cluster-key
   agents:
-    authd: 
-      authdpass: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=14) }}" 
+    authd:
+      authdpass: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=14) }}"
       secret: wazuh-authd-pass
   exchange_key: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits') }}"
 
@@ -235,16 +233,16 @@ loki:
 
 grafanatempo:
   metaMonitoring:
-    serviceMonitor: 
-      interval: 30s  
+    serviceMonitor:
+      interval: 30s
       scrapeTimeout: 10s
   s3:
     bucket: "{{ cluster_name }}-tempo"
 
 velero:
-  bucket:  "{{ cluster_name }}-velero"
+  bucket: "{{ cluster_name }}-velero"
   bckStorageLoc:
-    name:  "{{ cluster_name }}-velero"
+    name: "{{ cluster_name }}-velero"
   volSnapLoc:
     name: aws-default
 
@@ -268,11 +266,11 @@ github:
     password: YOUR_GITHUB_TOKEN
 
 # To use the vault the first time you have
-# to manually create an empty secret named 
+# to manually create an empty secret named
 # generated_inventory_vars in the vault UI
 # and set the upload_existing to false and upload_backup to true
 vault:
-  # Download the inventory from the vault 
+  # Download the inventory from the vault
   download_inventory_vars: false
   # Path to the inventory in the vault ending without "/"
   path: null
