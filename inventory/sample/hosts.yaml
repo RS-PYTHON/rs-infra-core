@@ -17,11 +17,11 @@ all:
     setup:
       ansible_connection: local
       ansible_host: 127.0.0.1
-      ansible_python_interpreter: <changeme_with_full_path>/miniforge3/envs/rspyovh/bin/python3.11
+      ansible_python_interpreter: <changeme_with_full_path>/miniforge3/envs/rspy/bin/python3.11
     localhost:
       ansible_connection: local
       ansible_host: 127.0.0.1
-      ansible_python_interpreter: <changeme_with_full_path>/miniforge3/envs/rspyovh/bin/python3.11
+      ansible_python_interpreter: <changeme_with_full_path>/miniforge3/envs/rspy/bin/python3.11
     bastion:
       ansible_connection: local
       ansible_host: 127.0.0.1
