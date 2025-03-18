@@ -61,6 +61,7 @@
   register: bastion_ip
   args:
     chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
 
 - name: Get kubeconfig file from terraform output
   shell: |
@@ -68,6 +69,7 @@
   register: kubeconfig_file
   args:
     chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
 
 - name: Set ansible private key
   delegate_to: "{{ bastion_ip.stdout }}"
