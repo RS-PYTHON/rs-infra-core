@@ -80,5 +80,6 @@ WORKDIR /home/user
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
+# ghcr.io/rs-python/rs-infra-core-dask-staging or ghcr.io/rs-python/rs-infra-core-dask-eopf
 LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-${IMAGE2BUILD}"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/dask-gateway/Dockerfile"
