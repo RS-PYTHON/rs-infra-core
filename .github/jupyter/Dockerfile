@@ -23,7 +23,7 @@ ARG PYTHON_TAG="3.12.8"
 
 USER root
 
-RUN adduser rspy
+RUN useradd -ms /bin/bash rspy
 
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
@@ -39,8 +39,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     git \
     curl \
     unzip \
+    xz-utils \
     tzdata \
-    libgtk-3-0 libasound2 libx11-xcb1 \
+    libgtk-3-0 libasound2t64 libx11-xcb1 \
     xclip \
     graphviz \
     python3-pydot && \
