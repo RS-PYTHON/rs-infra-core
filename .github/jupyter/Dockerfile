@@ -14,16 +14,16 @@
 
 FROM ghcr.io/rs-python/rs-client-libraries_store:latest as rs-client
 
-FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-4.1.5
+FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-5.2.1
 
 ARG DASK_TAG="2024.5.2"
 ARG DASK_GATEWAY_TAG="2024.1.0"
 ARG PREFECT_TAG="3.1.4"
-ARG PYTHON_TAG="3.11.7"
+ARG PYTHON_TAG="3.12.8"
 
 USER root
 
-RUN adduser rspy
+RUN useradd -ms /bin/bash -U rspy
 
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
@@ -39,8 +39,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     git \
     curl \
     unzip \
+    xz-utils \
     tzdata \
-    libgtk-3-0 libasound2 libx11-xcb1 \
+    libgtk-3-0 libasound2t64 libx11-xcb1 \
     xclip \
     graphviz \
     python3-pydot && \
