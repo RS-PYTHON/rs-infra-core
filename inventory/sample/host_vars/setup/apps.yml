@@ -247,6 +247,7 @@ velero:
     name: aws-default
 
 jupyterhub:
+  jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
   services:
     daskgateway:
       apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
