@@ -23,7 +23,7 @@ ARG PYTHON_TAG="3.12.8"
 
 USER root
 
-RUN useradd -ms /bin/bash rspy
+RUN useradd -ms /bin/bash -U rspy
 
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
