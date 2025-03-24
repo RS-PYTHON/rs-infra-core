@@ -15,10 +15,10 @@
 FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 ARG IMAGE2BUILD
-ARG DASK_TAG="2024.5.2"
-ARG DASK_GATEWAY_TAG="2024.1.0"
-ARG PREFECT_TAG="3.1.4"
-ARG PREFECT_DASK_TAG="0.3.3"
+ARG DASK_TAG=2024.5.2
+ARG DASK_GATEWAY_TAG=2024.1.0
+ARG PREFECT_TAG=3.2.13
+ARG PREFECT_DASK_TAG=0.3.3
 
 USER root
 
@@ -80,5 +80,6 @@ WORKDIR /home/user
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
+# ghcr.io/rs-python/rs-infra-core-dask-staging or ghcr.io/rs-python/rs-infra-core-dask-eopf
 LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-${IMAGE2BUILD}"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/dask-gateway/Dockerfile"
