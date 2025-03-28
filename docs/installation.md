@@ -173,6 +173,8 @@ ansible-playbook apps.yaml \
 !!! warning "Disclaimer: **After** Prefect-Worker installation (rs-workflow-env)"
     See the [how-to/Prefect-Worker](./how-to/Prefect%20Worker.md) after deploying rs-workflow-env.
 
+```shellsession
+
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
     -e '{"package_paths": ["~/rs-server-deployment/apps/"]}' ;
