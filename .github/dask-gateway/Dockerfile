@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/dask/dask-gateway:2024.1.0
+FROM ghcr.io/rs-python/dask/dask-gateway:2024.1.0-python3.12.9
 
 ARG IMAGE2BUILD
 ARG DASK_TAG=2024.5.2
