@@ -62,7 +62,7 @@ RUN pip install \
     layer-cleanup.sh
 
 # Install and auto configure opentelemetry
-RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-instrumentation-aws-lambda opentelemetry-test-utils && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
