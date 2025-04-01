@@ -20,7 +20,7 @@ set -euo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-PYTHON_VERSION=3.12.9
+PYTHON_VERSION=3.13.2
 DASK_GATEWAY_TAG=2024.1.0
 DASK_TAG=2024.5.2
 
@@ -50,16 +50,12 @@ matrix_image="dask-gateway"
         "python:${PYTHON_VERSION}-slim-bullseye" \
         sh -c 'pip install pip-tools==6.* && pip-compile --upgrade --output-file=Dockerfile.requirements.txt Dockerfile.requirements.in' \
 )
+req="${matrix_image}/Dockerfile.requirements.txt"
 
 # Force the dask versions
-for c in dask distributed fsspec; do
-(\
-    cd "${matrix_image}" && \
-    sed -i "s|dask==.*|dask==${DASK_TAG}|g" Dockerfile.requirements.txt && \
-    sed -i "s|distributed==.*|distributed==${DASK_TAG}|g" Dockerfile.requirements.txt && \
-    sed -i "s|fsspec==.*|fsspec|g" Dockerfile.requirements.txt \
-)
-done
+sed -i "s|dask==.*|dask==${DASK_TAG}|g" "$req"
+sed -i "s|distributed==.*|distributed==${DASK_TAG}|g" "$req"
+sed -i "s|fsspec==.*|fsspec|g" "$req"
 
 # Build the docker image
 target="ghcr.io/rs-python/dask/dask-gateway:${DASK_GATEWAY_TAG}-python${PYTHON_VERSION}"
