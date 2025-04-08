@@ -120,6 +120,7 @@ jobs:
           cp ./.github/common/resources/* ./.github/${{ matrix.path }}/resources/
 
       - id: publish-docker
+        name: Publish docker
         if: ${{ matrix.image }} != 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
@@ -134,6 +135,7 @@ jobs:
             "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
 
       - id: publish-docker-mock
+        name: Publish docker mock
         if: ${{ matrix.image }} == 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
