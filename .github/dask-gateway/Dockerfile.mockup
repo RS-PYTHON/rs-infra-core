@@ -44,7 +44,7 @@ RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags
 # Install whatever
 RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     GITLAB_EOPF_TOKEN=$(cat /run/secrets/GITLAB_EOPF_TOKEN) \
-    pip install -U -r /opt/requirements-${IMAGE2BUILD}.txt && \
+    pip install -U -r /opt/requirements-dask-eopf.txt && \
     rm /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt && \
     layer-cleanup.sh
 
