@@ -133,7 +133,7 @@ jobs:
           secrets: |
             "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
 
-      - id: publish-docker
+      - id: publish-docker-mock
         if: ${{ matrix.image }} == 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
