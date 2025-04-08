@@ -83,11 +83,12 @@ RUN apt autoremove -y gcc && layer-cleanup.sh
 
 # Add a default user
 RUN useradd -m user
-USER user
-WORKDIR /home/user
 
 # Give USERNAME rights to write in /src
 RUN chown -R user /src
+
+USER user
+WORKDIR /home/user
 
 # Set labels based on the Open Containers Initiative (OCI):
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
