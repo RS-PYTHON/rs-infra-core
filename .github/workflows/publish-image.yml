@@ -99,7 +99,9 @@ jobs:
           - path: dask-gateway
             image: dask-staging
           - path: dask-gateway
-            image: dask-eopf 
+            image: dask-eopf
+          - path: dask-gateway
+            image: dask-eopf-mockup
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: "Docker image for ${{ matrix.image }}"
@@ -118,9 +120,24 @@ jobs:
           cp ./.github/common/resources/* ./.github/${{ matrix.path }}/resources/
 
       - id: publish-docker
+        if: ${{ matrix.image }} != 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile
+          build_context_path: ./.github/${{ matrix.path }}
+          image_suffix: -${{ matrix.image }}
+          version_name: ${{ needs.set-env.outputs.docker_tag }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          docker_tag: ${{ needs.set-env.outputs.docker_tag }}
+          image2build: ${{ matrix.image }}
+          secrets: |
+            "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
+
+      - id: publish-docker
+        if: ${{ matrix.image }} == 'dask-eopf-mockup'
+        uses: ./.github/actions/publish-docker
+        with:
+          dockerfile: ./.github/${{ matrix.path }}/Dockerfile.mockup
           build_context_path: ./.github/${{ matrix.path }}
           image_suffix: -${{ matrix.image }}
           version_name: ${{ needs.set-env.outputs.docker_tag }}
