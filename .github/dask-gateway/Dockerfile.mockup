@@ -66,7 +66,7 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-i
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
-RUN apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh; \
+RUN apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh
 
 # Copy the src folder from the dpr_mock image
 COPY --from=dpr_mock /src /src
