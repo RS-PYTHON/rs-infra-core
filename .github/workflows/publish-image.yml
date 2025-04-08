@@ -121,7 +121,7 @@ jobs:
 
       - id: publish-docker
         name: Publish docker
-        if: ${{ matrix.image }} != 'dask-eopf-mockup'
+        if: matrix.image != 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile
@@ -136,7 +136,7 @@ jobs:
 
       - id: publish-docker-mock
         name: Publish docker mock
-        if: ${{ matrix.image }} == 'dask-eopf-mockup'
+        if: matrix.image == 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile.mockup
