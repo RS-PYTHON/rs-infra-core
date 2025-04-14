@@ -18,7 +18,9 @@
 --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/52/packages/pypi/simple
 --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/14/packages/pypi/simple
 --extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/102/packages/pypi/simple
-eopf==2.4.4
-l0==0.9.0
-# this version of kafka-python is needed by eopf 2.4.4
+#eopf==2.5.5
+git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/vincent.privat/eopf-cpm.git@rspy_2.5.5#egg=eopf
+#l0==1.0.0
+git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/vincent.privat/l0.git@rspy#egg=l0
+# this version of kafka-python is needed by eopf 2.5.5
 kafka-python==2.0.2
