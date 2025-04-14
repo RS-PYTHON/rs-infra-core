@@ -13,6 +13,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a12] - 2025-04-14
+
+### Added
+
+- RSPY-236: Upgrade to Ubuntu 24.04.2
+- RSPY-644: [S3L0 demo] Use OpenTelemetry
+- New docker image `ghcr.io/rs-python/rs-infra-core-mockup`
+
+### Changed
+
+- Bump rs-server-staging version to `0.2a12`
+- RSPY-631: Update to latest stable version of Prefect 3 (3.2.13) and drop Prefect 2
+- Bump ingress-nginx to fix CVE-2025-1974
+
+### Fixed
+
+- Documentation outdated : bumped cots version
+- Typos in installation documentation
+- Typos in installation scripts
+- Changed executable to `/bin/bash` for several steps in ansible
+- Removed several special chars in the auto generated passwords that breaks YAML when it's the first caracter in the string
+
 ## [0.2a11] - 2025-03-12
 
 :rotating_light: **Breaking changes**
