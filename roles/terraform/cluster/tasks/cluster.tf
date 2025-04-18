@@ -90,7 +90,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
 resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
   kube_id       = ovh_cloud_project_kube.cluster.id
   name          = "access-csc-${var.cluster_name}"
-  flavor_name   = "b3-16"
+  flavor_name   = "b3-8"
   desired_nodes = var.nodepool_access_csc_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
