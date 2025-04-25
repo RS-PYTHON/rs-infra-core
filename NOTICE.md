@@ -29,7 +29,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
       - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.12.1/LICENSE)
     - docker.io/library/nginx:1.25.5-alpine
       - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.25.5/LICENSE)
-  
+
 - Grafana Operator
   - Helm chart: *None*
     - Version: 1.1.0
@@ -88,7 +88,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
   - Container image(s): *None*
   - Version: 4.7.2
   - License: [GNU General Public License v2.0](https://github.com/wazuh/wazuh/blob/v4.7.2/LICENSE)
-  
+
 - Containerd
   - Helm chart: *None*
   - Container image(s): *None*

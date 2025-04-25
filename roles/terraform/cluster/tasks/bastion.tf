@@ -14,19 +14,19 @@
 
 # Bastion part
 
- resource "openstack_compute_keypair_v2" "keypair" {
-   provider = openstack.ovh
-   name = "keypair-${var.cluster_name}"
-   public_key = var.public_key
+resource "openstack_compute_keypair_v2" "keypair" {
+  provider   = openstack.ovh
+  name       = "keypair-${var.cluster_name}"
+  public_key = var.public_key
 }
 
 resource "openstack_compute_instance_v2" "bastion" {
-  provider        = openstack.ovh
-  name            = "bastion-${var.cluster_name}"
-  flavor_name     = "b3-8"
-  image_name      = "Ubuntu 24.04"
-  key_pair        = openstack_compute_keypair_v2.keypair.name
-  region          = "GRA11"
+  provider    = openstack.ovh
+  name        = "bastion-${var.cluster_name}"
+  flavor_name = "b3-8"
+  image_name  = "Ubuntu 24.04"
+  key_pair    = openstack_compute_keypair_v2.keypair.name
+  region      = "GRA11"
 
   network {
     name = "Ext-Net"

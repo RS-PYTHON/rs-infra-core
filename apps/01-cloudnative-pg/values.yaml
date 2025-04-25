@@ -113,7 +113,7 @@ service:
   name: cnpg-webhook-service
   port: 443
 
-resources: 
+resources:
   limits:
     cpu: 100m
     memory: 200Mi
@@ -135,7 +135,7 @@ affinity:
         - matchExpressions:
           - key: "node-role.kubernetes.io/infra"
             operator: Exists
-            
+
 monitoring:
   # -- Specifies whether the monitoring should be enabled. Requires Prometheus Operator CRDs.
   podMonitorEnabled: true

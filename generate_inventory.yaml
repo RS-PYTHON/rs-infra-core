@@ -30,7 +30,7 @@
       set_fact:
         cluster_name: "{{ cluster_name_tmp[1] }}"
 
-    - name: Create group_vars/all directory 
+    - name: Create group_vars/all directory
       file:
         path: "{{ generated_inventory_vars_path | dirname }}"
         state: directory
@@ -65,7 +65,7 @@
           X-Vault-Token: "{{ vault.token }}"
         body_format: json
         body: '{"data": {{ inventory_vars_content | from_yaml | to_json }} }'
-      when: 
+      when:
         - vault is defined
         - not ( vault.download_inventory_vars | default(false) )
         - vault.upload_backup | default(false)

@@ -7,10 +7,10 @@
   1. Select the realm
   2. Click on Realm settings
   3. Click on Action
-  4. Click on Partial export  
+  4. Click on Partial export
   ![Keycloak export part 1](../media/keycloak_export_1.png)
 - On the new pop-up
-  1. Turn "On" for the two options "Include groups and roles" and "Include clients"  
+  1. Turn "On" for the two options "Include groups and roles" and "Include clients"
   ![Keycloak export part 2](../media/keycloak_export_2.png)
 - Convert the downloaded file from `JSON` to `YAML`
 - Create the `KeycloakRealmImport` file (you can find an e.g. in [the keycloak app folder](../../apps/keycloak/keycloakrealmimport.yaml)):
@@ -80,8 +80,8 @@ kubectl -n iam logs <YOUR REALM NAME>-<random suffix> --follow
 E.g. :
 
 ```bash
-kubectl -n iam logs rspytest-gp7zv --follow            
-                                                    
+kubectl -n iam logs rspytest-gp7zv --follow
+
 Changes detected in configuration. Updating the server image.
 Updating the configuration and installing your custom providers, if any. Please wait.
 2024-09-04 08:08:33,077 INFO  [io.quarkus.deployment.QuarkusAugmentor] (main) Quarkus augmentation completed in 13853ms
@@ -91,7 +91,7 @@ Server configuration updated and persisted. Run the following command to review 
 
 Next time you run the server, just run:
 
-        kc.sh build --optimized 
+        kc.sh build --optimized
 
 The following run time non-cli properties were found, but will be ignored during build time: kc.db-url-host, kc.db-username, kc.db-password, kc.hostname, kc.hostname-admin-url, kc.http-enabled, kc.http-port, kc.https-port, kc.proxy, kc.log-level
 Updating the configuration and installing your custom providers, if any. Please wait.
@@ -110,8 +110,8 @@ The following build time non-cli properties were found, but will be ignored duri
 2024-09-04 08:08:49,380 INFO  [org.keycloak.connections.infinispan.DefaultInfinispanConnectionProviderFactory] (main) Node name: node_754822, Site name: null
 2024-09-04 08:08:50,255 INFO  [org.keycloak.exportimport.singlefile.SingleFileImportProvider] (main) Full importing from file /mnt/realm-import/rspytest-realm.json
 2024-09-04 08:08:56,052 INFO  [org.keycloak.exportimport.util.ImportUtils] (main) Realm 'rspytest' imported
-2024-09-04 08:08:56,184 INFO  [io.quarkus] (main) Keycloak 23.0.6 on JVM (powered by Quarkus 3.2.10.Final) started in 12.339s. Listening on: 
-2024-09-04 08:08:56,184 INFO  [io.quarkus] (main) Profile import_export activated. 
+2024-09-04 08:08:56,184 INFO  [io.quarkus] (main) Keycloak 23.0.6 on JVM (powered by Quarkus 3.2.10.Final) started in 12.339s. Listening on:
+2024-09-04 08:08:56,184 INFO  [io.quarkus] (main) Profile import_export activated.
 2024-09-04 08:08:56,184 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-h2, jdbc-mariadb, jdbc-mssql, jdbc-mysql, jdbc-oracle, jdbc-postgresql, keycloak, logging-gelf, micrometer, narayana-jta, reactive-routes, resteasy-reactive, resteasy-reactive-jackson, smallrye-context-propagation, smallrye-health, vertx]
 2024-09-04 08:08:56,240 INFO  [io.quarkus] (main) Keycloak stopped in 0.052s
 ```
