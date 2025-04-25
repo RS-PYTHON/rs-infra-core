@@ -22,6 +22,7 @@ ARG PREFECT_DASK_TAG=0.3.3
 
 USER root
 
+COPY ./*.whl ./
 COPY ./resources/requirements-dask-eopf.txt /opt/
 COPY ./resources/requirements-dask-staging.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
@@ -31,10 +32,11 @@ RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y libpq-dev libexpat1 gcc git wget && \
+    pip install --no-cache-dir -q --upgrade pip && \
     layer-cleanup.sh
 
 # Download and install dask-gateway-server requirements
-RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
+RUN wget -q -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
     sed -i "s|\(^\s*dask-gateway-server\)|# \1|g" /opt/Dockerfile.requirements.txt && \
     pip install --no-cache-dir -r /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
@@ -42,8 +44,10 @@ RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags
 # Install whatever
 RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     GITLAB_EOPF_TOKEN=$(cat /run/secrets/GITLAB_EOPF_TOKEN) \
+    RS_SERVER_COMMON_WHEEL=$(find . -maxdepth 1 -type f -name 'rs_server_common-*-py3-none-any.whl' | head -n 1) \
+    RS_SERVER_STAGING_WHEEL=$(find . -maxdepth 1 -type f -name 'rs_server_staging-*-py3-none-any.whl' | head -n 1) \
     pip install -U -r /opt/requirements-${IMAGE2BUILD}.txt && \
-    rm /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt && \
+    rm -f /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt ./*.whl && \
     layer-cleanup.sh
 
 # Install Dask with correct version
