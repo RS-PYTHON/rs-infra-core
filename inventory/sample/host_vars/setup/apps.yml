@@ -254,6 +254,12 @@ jupyterhub:
       apiurl: http://hub.processing.svc.cluster.local:8081/api
     metrics:
       apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+    # -- OpenTelemetry
+    otel:
+      # -- Trace request headers with OpenTelemetry ?
+      trace_headers: false
+      # -- Trace request bodies and response contents with OpenTelemetry ?
+      trace_body: false
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the
