@@ -120,29 +120,51 @@ jobs:
           cp ./.github/common/resources/* ./.github/${{ matrix.path }}/resources/
 
       - name: Get latest run ID from rs-server
-        if: matrix.image == 'dask-staging'
+        if: (matrix.image == 'dask-staging') || (matrix.image == 'jupyter')
         env:
           REPO_OWNER: ${{ github.repository_owner }}
           RS_SERVER_PAT: ${{ secrets.RS_SERVER_PAT }}
+          WORKFLOW_FILE: "publish-binaries.yml"
+          CURRENT_BRANCH: ${{ needs.set-env.outputs.branch_name }}
         run: |
-          REPO_NAME="rs-server"
-          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
-            BRANCH="${GITHUB_REF_NAME}"
+
+          # Other parameters depend on the docker image to build
+          set -x
+          if [[ ${{ matrix.image }} == "dask-staging" ]]; then
+            REPO_NAME="rs-server"
+            VAR_RUN_ID="rs_server_run_id"
+          elif [[ ${{ matrix.image }} == "jupyter" ]]; then
+            REPO_NAME="rs-client-libraries"
+            VAR_RUN_ID="rs_client_libraries_run_id"
+          fi
+          set +x
+
+          # Test to download from the current branch name, or develop
+          if [[ $CURRENT_BRANCH == develop ]]; then
+              BRANCHES="develop"
           else
-            BRANCH="develop"
+              BRANCHES="$CURRENT_BRANCH develop"
           fi
-          WORKFLOW_FILE="publish-binaries.yml"
-          # Fetch the latest run for the branch
-          RUNS=$(curl -s -H "Authorization: Bearer $RS_SERVER_PAT" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/workflows/$WORKFLOW_FILE/runs?branch=$BRANCH&status=completed&per_page=1")
-          # Extract the run ID
-          RUN_ID=$(echo "$RUNS" | jq -r '.workflow_runs[0].id')
-          if [ -z "$RUN_ID" ]; then
-            echo "No workflow run found for branch $BRANCH in $REPO_OWNER/$REPO_NAME"
-            exit 1
-          fi
-          echo "Latest run ID from $BRANCH: $RUN_ID"
-          echo "run_id=$RUN_ID" >> $GITHUB_ENV
+          for BRANCH in $BRANCHES; do
+
+              # Fetch the latest run for the branch
+              URL="https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/workflows/$WORKFLOW_FILE/runs?branch=$BRANCH&status=completed&per_page=1"
+              echo "$URL"
+              RUNS=$(curl -s -H "Authorization: Bearer $RS_SERVER_PAT" "$URL")
+
+              # Extract the run ID
+              RUN_ID=$(echo "$RUNS" | jq -r '.workflow_runs[0].id')
+              if [[ -z "$RUN_ID" || "$RUN_ID" == null ]]; then
+                  echo "No workflow run found for branch $BRANCH in $REPO_OWNER/$REPO_NAME"
+              else
+                  echo "Latest run ID from $BRANCH: $RUN_ID"
+                  echo "$VAR_RUN_ID=$RUN_ID" >> $GITHUB_ENV
+                  exit 0
+              fi
+          done
+
+          # No branch found
+          exit 1
 
       - name: Download rs-server-wheels
         uses: actions/download-artifact@v4
@@ -153,7 +175,18 @@ jobs:
           merge-multiple: true # to avoid having a directory named after filename
           github-token: ${{ secrets.RS_SERVER_PAT }} # token with actions:read permissions on target repo
           repository: RS-PYTHON/rs-server
-          run-id: ${{ env.run_id }}
+          run-id: ${{ env.rs_server_run_id }}
+
+      - name: Download rs-client-libraries-wheels
+        uses: actions/download-artifact@v4
+        if: matrix.image == 'jupyter'
+        with:
+          path: ./.github/${{ matrix.path }}
+          pattern: rs_client_libraries-*-py3-none-any.whl
+          merge-multiple: true
+          github-token: ${{ secrets.RS_SERVER_PAT }}
+          repository: RS-PYTHON/rs-client-libraries
+          run-id: ${{ env.rs_client_libraries_run_id }}
 
       - id: publish-docker
         name: Publish docker
