@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/rs-python/rs-client-libraries_store:latest as rs-client
-
 FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-4.1.5
 
 ARG DASK_TAG=2024.5.2
@@ -28,7 +26,7 @@ RUN adduser rspy
 ENV SHELL /bin/bash
 ENV HOME /home/rspy
 
-COPY --from=rs-client /dist/whl/*.whl /opt/
+COPY ./*.whl /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
