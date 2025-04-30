@@ -28,9 +28,6 @@ on:
       docker_tag:
         description: Tag the docker images as e.g. 'latest'
         required: false
-      version_name:
-        description: Version name for the release as e.g. 'v0.1'
-        required: true
 env:
   PYTHON_VERSION: 3.11
   DOCKER_REGISTRY: ghcr.io
@@ -62,17 +59,17 @@ jobs:
           # For a pull request, use the branch name
           if [[ ${{ github.event_name }} == pull_request ]]; then
             docker_tag="$branch_name"
-            version_name="$branch_name"
 
           # For a push on develop or a tag, use the docker tag :latest
           elif [[ ${{ github.event_name }} == push ]]; then
             docker_tag=latest
-            version_name=latest
 
-          # For a manual trigger, use the user-defined tag
+          # For a manual trigger, use the user-defined tag, or latest if empty
           elif [[ ${{ github.event_name }} == workflow_dispatch ]]; then
             docker_tag=${{ github.event.inputs.docker_tag }}
-            version_name=${{ github.event.inputs.version_name }}
+            if [[ -z "$docker_tag" ]]; then
+              docker_tag=latest
+            fi
 
           else
             >&2 echo "Unknown trigger"
@@ -81,12 +78,10 @@ jobs:
 
           # Replace special characters by -
           docker_tag=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag")
-          version_name=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$version_name")
 
           # Save values
           echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
           echo "docker_tag=$docker_tag" >> $GITHUB_OUTPUT
-          echo "version_name=$version_name" >> $GITHUB_OUTPUT
         shell: bash
 
   publish-docker-matrix:
@@ -198,7 +193,6 @@ jobs:
           image_suffix: -${{ matrix.image }}
           version_name: ${{ needs.set-env.outputs.docker_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          docker_tag: ${{ needs.set-env.outputs.docker_tag }}
           image2build: ${{ matrix.image }}
           secrets: |
             "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
@@ -213,7 +207,6 @@ jobs:
           image_suffix: -${{ matrix.image }}
           version_name: ${{ needs.set-env.outputs.docker_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          docker_tag: ${{ needs.set-env.outputs.docker_tag }}
           image2build: ${{ matrix.image }}
           secrets: |
             "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
