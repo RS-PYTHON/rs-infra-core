@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/dask/dask-gateway:2024.1.0
-
 # Get the wheel of the rs-dpr-service, in order to install it later on
 FROM ghcr.io/rs-python/rs-dpr-service:latest as dpr_service
+
+FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 ARG IMAGE2BUILD
 ARG DASK_TAG=2024.5.2
