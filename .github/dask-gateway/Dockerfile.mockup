@@ -14,6 +14,9 @@
 
 FROM ghcr.io/rs-python/rs-testmeans_dpr-processor-mock:latest as dpr_mock
 
+# Get the wheel of the rs-dpr-service, in order to install it later on
+FROM ghcr.io/rs-python/rs-dpr-service:latest as dpr_service
+
 FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 ARG IMAGE2BUILD
@@ -24,8 +27,6 @@ ARG PREFECT_DASK_TAG=0.3.3
 
 USER root
 
-COPY ./resources/requirements-dask-eopf.txt /opt/
-COPY ./resources/requirements-dask-staging.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
@@ -43,11 +44,12 @@ RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags
 
 # Install whatever
 RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
-    GITLAB_EOPF_TOKEN=$(cat /run/secrets/GITLAB_EOPF_TOKEN) \
-    pip install -U -r /opt/requirements-dask-eopf.txt && \
-    rm /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt && \
+    rm /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
 
+# copy the dpr-service requirements file and the wheel as well
+COPY ./resources/requirements-dpr-service.txt /opt/
+COPY --from=dpr_service /rs-dpr-service/whl /tmp/whl
 # Install Dask with correct version
 RUN pip install \
         dask[complete]==${DASK_TAG} \
@@ -59,7 +61,11 @@ RUN pip install \
     pip install \
         prefect[aws]==${PREFECT_TAG} \
         prefect-dask==${PREFECT_DASK_TAG} && \
+    pip install -U -r /opt/requirements.dpr-service.txt && \
+    pip install --no-cache-dir /tmp/whl/rs_dpr_service-*.whl && \
+    rm -f /opt/requirements.dpr-service.txt && \
     layer-cleanup.sh
+
 
 # Install and auto configure opentelemetry
 RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-instrumentation-aws-lambda opentelemetry-test-utils && \
