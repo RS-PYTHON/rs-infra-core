@@ -1,0 +1,10 @@
+pygeoapi @ git+https://github.com/geopython/pygeoapi.git@master
+uvicorn>=0.34.1,<0.35.0
+fastapi>=0.115.12,<0.116.0
+geoalchemy2>=0.17.1,<0.18.0
+SQLAlchemy==2.0.37
+jsonpatch==1.33
+dask-gateway==2024.1.0
+dask[distributed]==2024.5.2
+openapi-core==0.19.5
+httpx==0.28.1
