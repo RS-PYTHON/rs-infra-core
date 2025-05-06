@@ -54,7 +54,7 @@ RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     layer-cleanup.sh
 
 # copy the dpr-service requirements file and the wheel as well
-COPY ./resources/requirements-dpr-service.txt /opt/
+COPY ./resources/requirements.dpr-service.txt /opt/
 COPY --from=dpr_service /rs-dpr-service/whl /tmp/whl
 # Install Dask with correct version
 RUN pip install \
