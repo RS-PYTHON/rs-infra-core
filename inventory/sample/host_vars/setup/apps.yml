@@ -120,67 +120,276 @@ rs_server:
     username: test
     secret: pygeoapi-database-password
 
+rs_server_cadip_station: |
+  cadip:
+    endpoint:
+      # -- CADIP station URL
+      url:
+        token: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080/oauth2/token
+        odata: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080
+  sgs:
+    endpoint:
+      url: 
+        token: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080/oauth2/token
+        odata: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080
+  mti:
+    endpoint:
+      url: 
+        token: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080/oauth2/token
+        odata: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080
+
+rs_server_adgs_station: |
+  adgs:
+    endpoint:
+      # -- ADGS URL
+      url: http://mockup-station-adgs.processing.svc.cluster.local:8080/Products
+
+rs_server_catalog:
+  database:
+    host: rs-server-catalog-db.database.svc.cluster.local
+    name: catalog
+    password: password
+    username: postgres
+
+rs_server_catalog_db:
+  stac:
+    extensions: |
+      - https://stac-extensions.github.io/eo/v1.1.0/schema.json
+      - https://stac-extensions.github.io/sat/v1.0.0/schema.json
+      - https://stac-extensions.github.io/projection/v1.1.0/schema.json
+      - https://stac-extensions.github.io/processing/v1.2.0/schema.json
+      - https://stac-extensions.github.io/product/v0.1.0/schema.json
+      - https://stac-extensions.github.io/sar/v1.0.0/schema.json
+      - https://stac-extensions.github.io/raster/v1.1.0/schema.json
+      - https://stac-extensions.github.io/authentication/v1.1.0/schema.json
+      - https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json
+      - https://stac-extensions.github.io/timestamps/v1.1.0/schema.json
+    
+    queryables: |
+      - eo:snow_cover
+      - sat:absolute_orbit
+      - sat:relative_orbit
+      - processing:level
+      - processing:facility
+      - processing:datetime
+      - processing:version
+      - product:type
+      - product:timeliness
+      - product:timeliness_category
+      - sar:instrument_mode
+      - published
+      - expires
+      - unpublished
+
+rs_server_catalog_staging_configmap: |
+  *,*,*,30,rspython-ops-catalog-playground
+  copernicus,*,*,7300,rspython-ops-catalog-copernicus-default
+  copernicus,*,*ADF*,7300,rspython-ops-catalog-copernicus-aux
+  copernicus,s1-l0,*,30,rspython-ops-catalog-copernicus-s1-l0
+  copernicus,s1-l1,*,30,rspython-ops-catalog-copernicus-s1-l1
+  copernicus,s1-l2,*,30,rspython-ops-catalog-copernicus-s1-l2
+  copernicus,s2-l0,*,30,rspython-ops-catalog-copernicus-s2-l0
+  copernicus,s2-l1,*,30,rspython-ops-catalog-copernicus-s2-l1
+  copernicus,s2-l2,*,30,rspython-ops-catalog-copernicus-s2-l2
+  copernicus,s3-l0,*,30,rspython-ops-catalog-copernicus-s3-l0
+  copernicus,s3-l1-nrt,*,30,rspython-ops-catalog-copernicus-s3-l1-nrt
+  copernicus,s3-l2-nrt,*,30,rspython-ops-catalog-copernicus-s3-l2-nrt
+  copernicus,s3-l1-ntc, *,30,rspython-ops-catalog-copernicus-s3-l1-ntc 
+  copernicus,s3-l2-ntc,*,30,rspython-ops-catalog-copernicus-s3-l2-ntc 
+  copernicus,s3-l1-stc,*,30,rspython-ops-catalog-copernicus-s3-l1-stc
+  copernicus,s3-l2-stc, *,30,rspython-ops-catalog-copernicus-s3-l2-stc
+
 rs_server_staging:
   # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
   # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
   jupyterhub_token: <REPLACE_WITH_TOKEN_GENERATED_FROM_JUPYUTER>
 
-rs_server_station_credentials:
+rs_server_station_secrets:
+  stations: |
+    adgs:
+      service:
+        name: auxip
+        url: http://mockup-station-adgs.processing.svc.cluster.local:8080
+      domain: mockup-station-adgs.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-adgs.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    adgs2:
+      service:
+        name: auxip
+        url: http://mockup-station-adgs2.processing.svc.cluster.local:8080
+      domain: mockup-station-adgs2.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-adgs2.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    cadip:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-cadip.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    ins:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-ins.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-ins.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-ins.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    mps:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-mps.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-mps.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-mps.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    mti:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-mti.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: openid
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    nsg:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-nsg.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-nsg.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-nsg.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    sgs:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-sgs.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
+    lta:
+      service:
+        name: lta
+        url: http://mockup-lta-lta.processing.svc.cluster.local:8080
+      domain: mockup-lta-lta.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-lta-lta.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    s1a:
+      service:
+        name: prip
+        url: http://mockup-prip-s1a.processing.svc.cluster.local:8080
+      domain: mockup-prip-s1a.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s1a.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    s2a:
+      service:
+        name: prip
+        url: http://mockup-prip-s2a.processing.svc.cluster.local:8080
+      domain: mockup-prip-s2a.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s2a.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+
+rs_station_mockup:
   adgs:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  adgs2:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
+    adgs:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/ADGS/
+    adgs2:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/ADGS/
   cadip:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  ins:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  mps:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  mti:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  nsg:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  sgs:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  lta:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  s1a:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
-  s2a:
-    username: test
-    password: test
-    client_id: client_id
-    client_secret: client_secret
+    cadip:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/CADIP/
+    mti:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/CADIP/
+    sgs:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/CADIP/
 
 neuvector:
   core:
