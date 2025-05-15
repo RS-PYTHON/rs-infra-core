@@ -52,7 +52,7 @@
 
 - name: kubectl | Copy conf file from ansible controller to the gateways
   become: false
-  copy: 
+  copy:
     src: "{{ inventory_dir }}/artifacts/admin.conf"
     dest: ~/.kube/config
     group: "{{ ansible_user }}"

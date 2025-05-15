@@ -20,7 +20,7 @@ apiVersion: v1
 data:
   create-database.sh: |-
     #!/bin/bash
-    
+
     echo "Create database ..."
     PGPASSWORD=${PGPASSWORD} psql -h ${PGHOST} -p ${PGPORT} -U ${PGADMIN} postgres -c "create user ${PGNEWUSER} with encrypted password '${PGNEWPASS}'" ;
     PGPASSWORD=${PGPASSWORD} psql -h ${PGHOST} -p ${PGPORT} -U ${PGADMIN} postgres -c "create database ${DATABASE}" ;

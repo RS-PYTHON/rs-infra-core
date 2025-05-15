@@ -26,7 +26,7 @@ spec:
   includedResources:
     - '*'
   volumeSnapshotLocations:
-    - aws-default  
+    - aws-default
   labelSelector:
     matchLabels:
       velero: grafana-backup

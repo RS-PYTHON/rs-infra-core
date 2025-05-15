@@ -15,12 +15,12 @@
 
 ### Terraform
 
-This project exploits Terraform to deploy the infrastructure on the Cloud Provider.  
+This project exploits Terraform to deploy the infrastructure on the Cloud Provider.
 The fully detailed documentation and configuration options are available on its page: [https://www.terraform.io/](https://www.terraform.io/)
 
 ### Kubespray
 
-This project exploits Kubespray to deploy Kubernetes.  
+This project exploits Kubespray to deploy Kubernetes.
 The fully detailed documentation and configuration options are available on its page: [https://kubespray.io/](https://kubespray.io/)
 
 ### HashiCorp Vault (optional)
@@ -29,7 +29,7 @@ This project can integrate credentials from a custom `HashiCorp Vault` instance,
 
 ### Openstack CLI
 
-This project exploits Openstack CLI to manage the state of the infrastructure on the Cloud Provider.  
+This project exploits Openstack CLI to manage the state of the infrastructure on the Cloud Provider.
 The fully detailled documentation and configuration options are available on its page: [https://docs.openstack.org/newton/user-guide/cli.html](https://docs.openstack.org/newton/user-guide/cli.html)
 
 ## Quickstart

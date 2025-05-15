@@ -15,19 +15,19 @@
 # Cluster part
 
 resource "ovh_cloud_project_kube" "cluster" {
-  name         = "${var.cluster_name}"
-  region       = "${var.region}"
+  name               = var.cluster_name
+  region             = var.region
   private_network_id = openstack_networking_network_v2.private_net.id
-  nodes_subnet_id = openstack_networking_subnet_v2.private_subnet.id
+  nodes_subnet_id    = openstack_networking_subnet_v2.private_subnet.id
   private_network_configuration {
-      default_vrack_gateway              = ""
-      private_network_routing_as_default = true
+    default_vrack_gateway              = ""
+    private_network_routing_as_default = true
   }
 }
 
 resource "ovh_cloud_project_kube_iprestrictions" "bastion_only" {
-  kube_id      = ovh_cloud_project_kube.cluster.id
-  ips          = ["${openstack_compute_instance_v2.bastion.network[0].fixed_ip_v4}/32"]
+  kube_id = ovh_cloud_project_kube.cluster.id
+  ips     = ["${openstack_compute_instance_v2.bastion.network[0].fixed_ip_v4}/32"]
 
   # We cannot add ip restrictions to Kube while all nodepools are not OK
   # OVH ticket CS10780553
@@ -59,7 +59,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
     }
     spec {
       unschedulable = false
-      taints = []
+      taints        = []
     }
   }
 }
@@ -82,7 +82,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
     }
     spec {
       unschedulable = false
-      taints = []
+      taints        = []
     }
   }
 }

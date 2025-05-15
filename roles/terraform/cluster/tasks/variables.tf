@@ -15,103 +15,103 @@
 # Variables part
 
 variable "cluster_name" {
-    description = "cluster name"
-    type        = string
+  description = "cluster name"
+  type        = string
 }
 
 variable "region" {
-    description = "OVH region"
-    type        = string
+  description = "OVH region"
+  type        = string
 }
 
 variable "allowed_ip_list" {
-    description = "list of allowed ip"
-    type        = list(string)
+  description = "list of allowed ip"
+  type        = list(string)
 }
 
 variable "nodepool_infra_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "number of desired nodes on nodepool"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_infra_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool"
+  type        = bool
+  default     = true
 }
 
 variable "nodepool_processing_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "number of desired nodes on nodepool"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_processing_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool"
+  type        = bool
+  default     = true
 }
 
 variable "nodepool_access_csc_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "number of desired nodes on nodepool"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_access_csc_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool"
+  type        = bool
+  default     = true
 }
 
 variable "nodepool_prefect_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "number of desired nodes on nodepool"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_prefect_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool"
+  type        = bool
+  default     = true
 }
 
 variable "nodepool_processing_ondemand_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "number of desired nodes on nodepool"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_processing_ondemand_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool"
+  type        = bool
+  default     = true
 }
 
 variable "nodepool_processing_systematic_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "number of desired nodes on nodepool"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_processing_systematic_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool"
+  type        = bool
+  default     = true
 }
 
 variable "buckets" {
-    description = "bucket list"
-    type        = list(string)
+  description = "bucket list"
+  type        = list(string)
 }
 
 variable "buckets_region" {
-    description = "buckets region"
-    type        = string
+  description = "buckets region"
+  type        = string
 }
 
 variable "public_key" {
-    description = "public_key"
-    type = string
+  description = "public_key"
+  type        = string
 }

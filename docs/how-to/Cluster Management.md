@@ -17,7 +17,7 @@ NOTE: This wont delete the object from the cloud provider, it just won't be mana
 terraform state rm <terraform_object>
 ```
 
-## Show the output variables 
+## Show the output variables
 
 ```shellsession
 terraform output

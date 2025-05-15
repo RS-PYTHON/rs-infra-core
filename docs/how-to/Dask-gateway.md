@@ -7,8 +7,8 @@ Have a token generated from https://processing.{{ platform_domain_name }}/jupyte
 ## Connect to the Gateway
 
 ``` Python
-# Set up the environement and connect to the dask-gateway 
-os.environ["JUPYTERHUB_API_TOKEN"] = "<TOKEN_GENERATED_FROM_PREVIOUS_STEP>" 
+# Set up the environement and connect to the dask-gateway
+os.environ["JUPYTERHUB_API_TOKEN"] = "<TOKEN_GENERATED_FROM_PREVIOUS_STEP>"
 
 from dask_gateway import Gateway
 gateway = Gateway(
