@@ -182,6 +182,25 @@ rs_server_station_credentials:
     client_id: client_id
     client_secret: client_secret
 
+rs_station_mockup:
+  adgs:
+    adgs:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/ADGS/
+    adgs2:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/ADGS/
+  cadip:
+    cadip:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/CADIP/
+    mti:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/CADIP/
+    sgs:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/CADIP/
+
 neuvector:
   core:
     admin:
