@@ -20,8 +20,6 @@ FROM ghcr.io/dask/dask-gateway:2024.1.0
 ARG IMAGE2BUILD
 ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
-ARG PREFECT_TAG=3.2.13
-ARG PREFECT_DASK_TAG=0.3.3
 
 USER root
 
@@ -65,9 +63,6 @@ RUN pip install \
         bokeh">=3.1.0" \
         jupyter-server-proxy && \
     if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
-        pip install \
-            prefect[aws]==${PREFECT_TAG} \
-            prefect-dask==${PREFECT_DASK_TAG} && \
         pip install -U -r /opt/requirements.dpr-service.txt && \
         pip install --no-cache-dir /tmp/whl/rs_dpr_service-*.whl && \
         rm -f /opt/requirements.dpr-service.txt ; \
