@@ -13,6 +13,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a13] - 2025-05-15
+
+### Added
+
+- [PR#129](https://github.com/RS-PYTHON/rs-infra-core/pull/129) :  Trace requests headers and body with opentelemetry
+- [RSPY-652/653/654](https://github.com/RS-PYTHON/rs-infra-core/pull/132) : Add rs-dpr-service
+
+### Changed
+
+- [RSPY-664](https://github.com/RS-PYTHON/rs-infra-core/pull/125) : use smaller nodes for staging
+- [RSPY-594](https://github.com/RS-PYTHON/rs-infra-core/pull/127) : Use latest rs-server wheels when building the dask-staging image
+- [RSPY-594](https://github.com/RS-PYTHON/rs-infra-core/pull/130) : Build jupyter with latest rs-client-libraries wheel
+- [PR#131](https://github.com/RS-PYTHON/rs-infra-core/pull/131) : Remove old phase1 files
+- [PR#133](https://github.com/RS-PYTHON/rs-infra-core/pull/133) : Use custom pygeo projects
+
+### Fixed
+
+- [PR#124](https://github.com/RS-PYTHON/rs-infra-core/pull/124) : remove old ogc validation env var
+
 ## [0.2a12] - 2025-04-14
 
 ### Added
