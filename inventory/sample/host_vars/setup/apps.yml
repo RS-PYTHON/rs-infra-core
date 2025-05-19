@@ -94,8 +94,6 @@ prefect3:
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     name: prefect
     secret: prefect-database-password
-  block_auth: auth
-  block_s3: user-s3
 
 prefect3worker:
   staging:
