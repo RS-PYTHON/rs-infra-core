@@ -105,13 +105,6 @@ prefect3worker:
     name: eopf-prefect-pool
     number: 2
 
-rs_server_catalog:
-  database:
-    host: rs-server-catalog-db.database.svc.cluster.local
-    name: catalog
-    password: password
-    username: postgres
-
 rs_server:
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
@@ -129,12 +122,12 @@ rs_server_cadip_station: |
         odata: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080
   sgs:
     endpoint:
-      url: 
+      url:
         token: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080/oauth2/token
         odata: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080
   mti:
     endpoint:
-      url: 
+      url:
         token: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080/oauth2/token
         odata: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080
 
@@ -164,7 +157,7 @@ rs_server_catalog_db:
       - https://stac-extensions.github.io/authentication/v1.1.0/schema.json
       - https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json
       - https://stac-extensions.github.io/timestamps/v1.1.0/schema.json
-    
+
     queryables: |
       - eo:snow_cover
       - sat:absolute_orbit
@@ -194,8 +187,8 @@ rs_server_catalog_staging_configmap: |
   copernicus,s3-l0,*,30,rspython-ops-catalog-copernicus-s3-l0
   copernicus,s3-l1-nrt,*,30,rspython-ops-catalog-copernicus-s3-l1-nrt
   copernicus,s3-l2-nrt,*,30,rspython-ops-catalog-copernicus-s3-l2-nrt
-  copernicus,s3-l1-ntc, *,30,rspython-ops-catalog-copernicus-s3-l1-ntc 
-  copernicus,s3-l2-ntc,*,30,rspython-ops-catalog-copernicus-s3-l2-ntc 
+  copernicus,s3-l1-ntc, *,30,rspython-ops-catalog-copernicus-s3-l1-ntc
+  copernicus,s3-l2-ntc,*,30,rspython-ops-catalog-copernicus-s3-l2-ntc
   copernicus,s3-l1-stc,*,30,rspython-ops-catalog-copernicus-s3-l1-stc
   copernicus,s3-l2-stc, *,30,rspython-ops-catalog-copernicus-s3-l2-stc
 
