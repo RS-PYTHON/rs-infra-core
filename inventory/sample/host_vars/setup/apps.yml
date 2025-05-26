@@ -425,6 +425,9 @@ wazuh:
     clusterkey:
       key: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=32) }}"
       secret: wazuh-cluster-key
+    github:
+      token: test
+      secret: wazuh-github-token
   agents:
     authd:
       authdpass: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=14) }}"
