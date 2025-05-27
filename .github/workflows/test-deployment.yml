@@ -30,10 +30,8 @@ jobs:
     if: github.actor != 'dependabot[bot]' # ignore pull requests by github bot
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository (with submodules)
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - name: Install requirements
         run: |
           # Install miniforge
