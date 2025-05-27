@@ -20,8 +20,7 @@ The fully detailed documentation and configuration options are available on its 
 
 ### Kubespray
 
-This project exploits Kubespray to deploy Kubernetes.
-The fully detailed documentation and configuration options are available on its page: [https://kubespray.io/](https://kubespray.io/)
+This project exploits Kubespray to download kubectl and kustomize.
 
 ### HashiCorp Vault (optional)
 
