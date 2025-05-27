@@ -22,7 +22,7 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Fail if no kustomization file found"
       fail:
-        msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/COPRS/infrastructure/blob/release/0.3.0/doc/how-to/Add%20an%20application.md"
+        msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/RS-PYTHON/rs-infra-core/blob/develop/docs/installation.md"
       when: not kustomization_file.stat.exists
 
     - name: "{{ package_name }} - {{ app_name }} | Include vars from kustomization.yaml"
@@ -125,7 +125,7 @@
     - name: "{{ package_name }} - {{ app_name }} | Warn about not deleted tmp folder"
       debug:
         msg:
-          - "DEBUG: the temporary folder containing the k8s resources has been kept tfor debugging purpose"
+          - "DEBUG: the temporary folder containing the k8s resources has been kept for debugging purpose"
           - "{{ resources_dir.path }}"
           - "DO NOT FORGET TO DELETE IT WHEN YOU ARE DONE"
       when:
