@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/2024.1.0/resources/helm/dask-gateway/crds/daskclusters.yaml
-  - https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/2024.1.0/resources/helm/dask-gateway/crds/traefik.yaml
+- https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/2024.1.0/resources/helm/dask-gateway/crds/daskclusters.yaml
+- https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/2024.1.0/resources/helm/dask-gateway/crds/traefik.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
