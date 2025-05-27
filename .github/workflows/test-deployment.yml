@@ -1,0 +1,74 @@
+# Copyright 2025 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Test Ansible playbook deployment
+
+# Run workflow only for ...
+on:
+  pull_request: # pull requests
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - develop # pushes on the 'develop' branch
+    tags:
+      - '**' # new git tags (including hierarchical tags like v1.0/beta)
+  workflow_dispatch: # manual trigger
+
+jobs:
+  test-deploy:
+    if: github.actor != 'dependabot[bot]' # ignore pull requests by github bot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install requirements
+        run: |
+          # Install miniforge
+          mkdir -p ~/miniforge3
+          wget -q "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" -O ~/miniforge3/miniforge.sh
+          bash ~/miniforge3/miniforge.sh -b -u -p ~/miniforge3
+          rm -f ~/miniforge3/miniforge.sh
+
+          # Init conda
+          ~/miniforge3/bin/conda init bash
+
+          # Create conda env with python
+          conda create -y -n rspy python=3.11
+
+          # Install Ansible, Terraform, Openstackclient
+          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-client
+
+          conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws
+        shell: bash
+      - name: Start minikube
+        uses: medyagh/setup-minikube@latest
+      - name: Generate inventory
+        run: |
+          cp -rfp inventory/sample inventory/mycluster
+          cp -rfp inventory/mycluster/.env.template inventory/mycluster/.env
+          cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
+          sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
+          conda run -n rspy ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
+        shell: bash
+#      - name: "Create and configure machines (check)"
+#        run: |
+#          conda run -n rspy ansible-playbook --check cluster.yaml -i inventory/mycluster/hosts.yaml
+#        shell: bash
+      - name: Deploy the apps (check)
+        run: |
+          ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl
+          conda run -n rspy ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml
+        shell: bash
