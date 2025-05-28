@@ -14,9 +14,6 @@
 
 FROM ghcr.io/rs-python/rs-testmeans_dpr-processor-mock:latest as dpr_mock
 
-# Get the wheel of the rs-dpr-service, in order to install it later on
-FROM ghcr.io/rs-python/rs-dpr-service:latest as dpr_service
-
 FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 ARG IMAGE2BUILD
@@ -30,11 +27,32 @@ USER root
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
-# Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y libpq-dev libexpat1 gcc git wget && \
+    apt-get install -y libexpat1 wget git && \
     layer-cleanup.sh
+
+############################################
+# Install the DPR mockup (=fake processor) #
+############################################
+
+# Copy the src folder from the dpr_mock image
+COPY --from=dpr_mock /src /src
+WORKDIR /src/DPR
+
+# Export the poetry dependencies into a requirements.txt file then install it with pip
+RUN \
+    pip install -U pip && \
+    pip install --no-cache-dir poetry pip-autoremove && \
+    poetry self add poetry-plugin-export && \
+    poetry export --without-hashes --format=requirements.txt > requirements.txt && \
+    pip-autoremove -y poetry && \
+    pip install -r requirements.txt && \
+    rm -f requirements.txt
+
+##################
+# End DPR mockup #
+##################
 
 # Download and install dask-gateway-server requirements
 RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
@@ -47,9 +65,6 @@ RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     rm /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
 
-# copy the dpr-service requirements file and the wheel as well
-COPY ./resources/requirements.dpr-service.txt /opt/
-COPY --from=dpr_service /rs-dpr-service/whl /tmp/whl
 # Install Dask with correct version
 RUN pip install \
         dask[complete]==${DASK_TAG} \
@@ -61,11 +76,7 @@ RUN pip install \
     pip install \
         prefect[aws]==${PREFECT_TAG} \
         prefect-dask==${PREFECT_DASK_TAG} && \
-    pip install -U -r /opt/requirements.dpr-service.txt && \
-    pip install --no-cache-dir /tmp/whl/rs_dpr_service-*.whl && \
-    rm -f /opt/requirements.dpr-service.txt && \
     layer-cleanup.sh
-
 
 # Install and auto configure opentelemetry
 RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-instrumentation-aws-lambda opentelemetry-test-utils && \
@@ -73,19 +84,6 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-i
     layer-cleanup.sh
 
 RUN apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh
-
-# Copy the src folder from the dpr_mock image
-COPY --from=dpr_mock /src /src
-WORKDIR /src/DPR
-RUN python3.11 -m pip install --upgrade pip
-# Install poetry
-RUN python3.11 -m pip install --no-cache-dir poetry
-SHELL ["/bin/bash", "-c"]
-RUN poetry install --no-root
-# tempfix
-RUN pip install crcmod
-
-RUN apt autoremove -y gcc && layer-cleanup.sh
 
 # Add a default user
 RUN useradd -m user
