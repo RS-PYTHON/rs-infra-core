@@ -24,7 +24,7 @@ Generate SSL certificates [Kubernetes deployments](https://documentation.wazuh.c
 #### 1.2 Generate certificates for all other nodes
 
 ```bash
-./apps/04-wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
+./apps/01-wazuh-server/wazuh/certs/indexer_cluster/generate_certs.sh
 ```
 
 *Several files should be generated:*
