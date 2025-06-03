@@ -12,16 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Get the wheel of the rs-dpr-service, in order to install it later on
-FROM ghcr.io/rs-python/rs-dpr-service:latest as dpr_service
-
 FROM ghcr.io/dask/dask-gateway:2024.1.0
 
 ARG IMAGE2BUILD
 ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
-ARG PREFECT_TAG=3.2.13
-ARG PREFECT_DASK_TAG=0.3.3
 
 USER root
 
@@ -31,7 +26,6 @@ COPY ./resources/requirements-dask-staging.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
-# Install dependencies necessary for execution (e.g. libpq) not compilation (gcc)
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y libpq-dev libexpat1 gcc git wget && \
@@ -53,9 +47,6 @@ RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     rm -f /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt ./*.whl && \
     layer-cleanup.sh
 
-# copy the dpr-service requirements file and the wheel as well
-COPY ./resources/requirements.dpr-service.txt /opt/
-COPY --from=dpr_service /rs-dpr-service/whl /tmp/whl
 # Install Dask with correct version
 RUN pip install \
         dask[complete]==${DASK_TAG} \
@@ -64,14 +55,6 @@ RUN pip install \
         dask-gateway-server[kubernetes]==${DASK_GATEWAY_TAG} \
         bokeh">=3.1.0" \
         jupyter-server-proxy && \
-    if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
-        pip install \
-            prefect[aws]==${PREFECT_TAG} \
-            prefect-dask==${PREFECT_DASK_TAG} && \
-        pip install -U -r /opt/requirements.dpr-service.txt && \
-        pip install --no-cache-dir /tmp/whl/rs_dpr_service-*.whl && \
-        rm -f /opt/requirements.dpr-service.txt ; \
-    fi && \
     layer-cleanup.sh
 
 # Install and auto configure opentelemetry

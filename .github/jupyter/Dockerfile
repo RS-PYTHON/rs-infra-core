@@ -88,6 +88,9 @@ USER rspy
 
 WORKDIR "$HOME"
 
+# To be able to import notebooks/resources/ from python
+ENV PYTHONPATH="$HOME/notebooks"
+
 # Set labels based on the Open Containers Initiative (OCI):
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
