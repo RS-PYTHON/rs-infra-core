@@ -46,10 +46,11 @@ jobs:
           ~/miniforge3/bin/conda init bash
 
           # Create conda env with python
+          # conda update -n base -c defaults conda
           conda create -y -n rspy python=3.11
 
           # Install Ansible, Terraform, Openstackclient
-          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-client
+          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client
 
           conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws
         shell: bash
