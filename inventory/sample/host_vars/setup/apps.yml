@@ -86,6 +86,14 @@ keycloak:
   logLevel: info
   realm:
     name: rspy
+  smtp:
+    from: test@example.com
+    host: HOST
+    password: PASSWORD
+    port: 25
+    user: test@example.com
+    ssl: true
+    starttls: false
 
 prefect3:
   database:
