@@ -2144,7 +2144,19 @@ spec:
       contentSecurityPolicy: frame-src 'self'; frame-ancestors 'self'; object-src 'none';
       xXSSProtection: 1; mode=block
       strictTransportSecurity: max-age=31536000; includeSubDomains
-    smtpServer: {}
+    smtpServer:
+      auth: 'true'
+      envelopeFrom: ''
+      from: '{{ keycloak.smtp.from }}'
+      fromDisplayName: ''
+      host: '{{ keycloak.smtp.host }}'
+      password: '{{ keycloak.smtp.password }}'
+      port: '{{ keycloak.smtp.port }}'
+      replyTo: ''
+      replyToDisplayName: ''
+      ssl: 'false'
+      starttls: 'false'
+      user: '{{ keycloak.smtp.user }}'
     loginTheme: keycloak
     accountTheme: keycloak.v2
     adminTheme: keycloak.v2
