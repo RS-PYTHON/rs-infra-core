@@ -92,6 +92,8 @@ keycloak:
     password: PASSWORD
     port: 25
     user: test@example.com
+    ssl: true
+    starttls: false
 
 prefect3:
   database:

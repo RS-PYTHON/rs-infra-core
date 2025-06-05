@@ -2154,8 +2154,8 @@ spec:
       port: '{{ keycloak.smtp.port }}'
       replyTo: ''
       replyToDisplayName: ''
-      ssl: 'false'
-      starttls: 'false'
+      ssl: '{{ keycloak.smtp.ssl }}'
+      starttls: '{{ keycloak.smtp.starttls }}'
       user: '{{ keycloak.smtp.user }}'
     loginTheme: keycloak
     accountTheme: keycloak.v2
