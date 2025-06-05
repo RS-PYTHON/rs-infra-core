@@ -32,12 +32,13 @@ resource "ovh_cloud_project_kube_iprestrictions" "bastion_only" {
   # We cannot add ip restrictions to Kube while all nodepools are not OK
   # OVH ticket CS10780553
   depends_on = [
-    ovh_cloud_project_kube_nodepool.nodepool_access_csc,
     ovh_cloud_project_kube_nodepool.nodepool_infra,
+    ovh_cloud_project_kube_nodepool.nodepool_rs_server,
+    ovh_cloud_project_kube_nodepool.nodepool_rs_env,
+    ovh_cloud_project_kube_nodepool.nodepool_access_csc,
     ovh_cloud_project_kube_nodepool.nodepool_prefect_flow,
-    ovh_cloud_project_kube_nodepool.nodepool_processing,
-    ovh_cloud_project_kube_nodepool.nodepool_processing_ondemand,
-    ovh_cloud_project_kube_nodepool.nodepool_processing_systematic
+    ovh_cloud_project_kube_nodepool.nodepool_dask_scheduler,
+    ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand
   ]
 }
 
@@ -64,25 +65,60 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_rs_server" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-${var.cluster_name}"
+  name          = "rs-server-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_desired_nodes
+  desired_nodes = var.nodepool_rs_server_desired_nodes
   min_nodes     = 0
-  max_nodes     = 5
-  autoscale     = var.nodepool_processing_autoscale
+  max_nodes     = 3
+  autoscale     = var.nodepool_rs_server_autoscale
   template {
     metadata {
       annotations = {}
       labels = {
-        "node-role.kubernetes.io/processing" = ""
+        "node-role.kubernetes.io/rs_server" = ""
       }
       finalizers = []
     }
     spec {
       unschedulable = false
-      taints        = []
+      taints = [
+        {
+          effect = "NoSchedule"
+          key    = "role"
+          value  = "rs_server"
+        }
+      ]
+    }
+  }
+}
+
+resource "ovh_cloud_project_kube_nodepool" "nodepool_rs_env" {
+  kube_id       = ovh_cloud_project_kube.cluster.id
+  name          = "rs-env-${var.cluster_name}"
+  flavor_name   = "b3-16"
+  desired_nodes = var.nodepool_rs_env_desired_nodes
+  min_nodes     = 0
+  max_nodes     = 3
+  autoscale     = var.nodepool_rs_env_autoscale
+  template {
+    metadata {
+      annotations = {}
+      labels = {
+        "node-role.kubernetes.io/rs_env" = ""
+      }
+      finalizers = []
+    }
+    spec {
+      unschedulable = false
+      taints = [
+        {
+          effect = "NoSchedule"
+          key    = "role"
+          value  = "rs_env"
+        }
+      ]
     }
   }
 }
@@ -120,10 +156,10 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   kube_id       = ovh_cloud_project_kube.cluster.id
   name          = "prefect-flow-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_prefect_desired_nodes
+  desired_nodes = var.nodepool_prefect_flow_desired_nodes
   min_nodes     = 0
   max_nodes     = 5
-  autoscale     = var.nodepool_prefect_autoscale
+  autoscale     = var.nodepool_prefect_flow_autoscale
   template {
     metadata {
       annotations = {}
@@ -145,19 +181,19 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_ondemand" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_scheduler" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-ondemand-${var.cluster_name}"
-  flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_ondemand_desired_nodes
+  name          = "dask-scheduler-${var.cluster_name}"
+  flavor_name   = "R3-64"
+  desired_nodes = var.nodepool_dask_scheduler_desired_nodes
   min_nodes     = 0
-  max_nodes     = 5
-  autoscale     = var.nodepool_processing_ondemand_autoscale
+  max_nodes     = 1
+  autoscale     = var.nodepool_dask_scheduler_autoscale
   template {
     metadata {
       annotations = {}
       labels = {
-        "node-role.kubernetes.io/ondemand_dpr" = ""
+        "node-role.kubernetes.io/dask_scheduler" = ""
       }
       finalizers = []
     }
@@ -167,26 +203,26 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_ondemand" {
         {
           effect = "NoSchedule"
           key    = "role"
-          value  = "ondemand_dpr"
+          value  = "dask_scheduler"
         }
       ]
     }
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_systematic" {
+resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
   kube_id       = ovh_cloud_project_kube.cluster.id
-  name          = "processing-systematic-${var.cluster_name}"
+  name          = "dask-worker-on-demand-${var.cluster_name}"
   flavor_name   = "b3-16"
-  desired_nodes = var.nodepool_processing_systematic_desired_nodes
+  desired_nodes = var.nodepool_dask_worker_on_demand_desired_nodes
   min_nodes     = 0
-  max_nodes     = 5
-  autoscale     = var.nodepool_processing_systematic_autoscale
+  max_nodes     = 8
+  autoscale     = var.nodepool_dask_worker_on_demand_autoscale
   template {
     metadata {
       annotations = {}
       labels = {
-        "node-role.kubernetes.io/systematic_dpr" = ""
+        "node-role.kubernetes.io/dask_worker_on_demand" = ""
       }
       finalizers = []
     }
@@ -196,7 +232,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_processing_systematic" {
         {
           effect = "NoSchedule"
           key    = "role"
-          value  = "systematic_dpr"
+          value  = "dask_worker_on_demand"
         }
       ]
     }

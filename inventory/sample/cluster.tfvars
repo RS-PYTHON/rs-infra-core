@@ -17,6 +17,22 @@ nodepool_processing_ondemand_autoscale = true
 nodepool_processing_systematic_desired_nodes = 0
 nodepool_processing_systematic_autoscale = true
 
+nodepool_infra_desired_nodes = 2
+nodepool_rs_server_desired_nodes = 1
+nodepool_rs_env_desired_nodes = 1
+nodepool_access_csc_desired_nodes = 1
+nodepool_prefect_flow_desired_nodes = 0
+nodepool_dask_scheduler_desired_nodes = 0
+nodepool_dask_worker_on_demand_desired_nodes = 0
+
+nodepool_infra_autoscale = true
+nodepool_rs_server_autoscale = true
+nodepool_rs_env_autoscale = true
+nodepool_access_csc_autoscale = true
+nodepool_prefect_flow_autoscale = true
+nodepool_dask_scheduler_autoscale = true
+nodepool_dask_worker_on_demand_autoscale = true
+
 # Bucket vars
 buckets = ["loki", "tempo", "psql", "velero"]
 buckets_region = "gra"
