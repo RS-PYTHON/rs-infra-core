@@ -13,6 +13,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a14] - 2025-06-10
+
+### Added
+
+- [PR#136](https://github.com/RS-PYTHON/rs-infra-core/pull/136) : Add operational and dask-gateway rolebinding
+- [RSPY-672](https://github.com/RS-PYTHON/rs-infra-core/pull/135) : Split dpr processing flow
+- [PR#145](https://github.com/RS-PYTHON/rs-infra-core/pull/145) : Add Keycloak SMTP configuration
+
+### Changed
+
+- [PR#141](https://github.com/RS-PYTHON/rs-infra-core/pull/141) : Enable CI/CD
+- [PR#144](https://github.com/RS-PYTHON/rs-infra-core/pull/144) : Update Python and conda
+
+### Fixed
+
+- [PR#138](https://github.com/RS-PYTHON/rs-infra-core/pull/138) : Fix pre-commit violations
+- [PR#140](https://github.com/RS-PYTHON/rs-infra-core/pull/140) : Fix links and typos
+- [PR#143](https://github.com/RS-PYTHON/rs-infra-core/pull/143) : Fix doc
+
 ## [0.2a13] - 2025-05-15
 
 ### Added
