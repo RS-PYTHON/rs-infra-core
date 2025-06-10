@@ -381,6 +381,12 @@ spec:
             clientRole: true
             containerId: 76276cc7-1453-4e8d-8898-582fa5491c35
             attributes: {}
+        osam:
+          - name: uma_protection
+            composite: false
+            clientRole: true
+            containerId: d5061bd5-ba20-4eaf-b13d-065554104027
+            attributes: {}
         account:
           - name: view-consent
             description: ${role_view-consent}
@@ -588,6 +594,25 @@ spec:
             - uma_protection
         notBefore: 0
         groups: []
+      - createdTimestamp: 1748850693552
+        username: service-account-osam
+        enabled: true
+        totp: false
+        emailVerified: false
+        serviceAccountClientId: osam
+        disableableCredentialTypes: []
+        requiredActions: []
+        realmRoles:
+          - default-roles-rspy
+        clientRoles:
+          realm-management:
+            - view-users
+            - query-users
+            - manage-users
+          osam:
+            - uma_protection
+        notBefore: 0
+        groups: []
       - createdTimestamp: 1707491949122
         username: service-account-grafana
         enabled: true
@@ -780,6 +805,95 @@ spec:
           - phone
           - offline_access
           - microprofile-jwt
+      - clientId: osam
+        name: osam
+        description: ""
+        rootUrl: https://iam.{{ platform_domain_name }}
+        adminUrl: https://iam.{{ platform_domain_name }}
+        baseUrl: ""
+        surrogateAuthRequired: false
+        enabled: true
+        alwaysDisplayInConsole: false
+        clientAuthenticatorType: client-secret
+        secret: "{{ osam_oidc_client_secret }}"
+        redirectUris:
+          - "*"
+        webOrigins:
+          - "*"
+        notBefore: 0
+        bearerOnly: false
+        consentRequired: false
+        standardFlowEnabled: true
+        implicitFlowEnabled: true
+        directAccessGrantsEnabled: true
+        serviceAccountsEnabled: true
+        authorizationServicesEnabled: true
+        publicClient: false
+        frontchannelLogout: true
+        protocol: openid-connect
+        attributes:
+          oidc.ciba.grant.enabled: "false"
+          client.secret.creation.time: "1748850693"
+          backchannel.logout.session.required: "true"
+          post.logout.redirect.uris: +
+          oauth2.device.authorization.grant.enabled: "true"
+          backchannel.logout.revoke.offline.tokens: "false"
+        authenticationFlowBindingOverrides: {}
+        fullScopeAllowed: true
+        nodeReRegistrationTimeout: -1
+        protocolMappers:
+          - name: Client IP Address
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: clientAddress
+              introspection.token.claim: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: clientAddress
+              jsonType.label: String
+          - name: Client Host
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: clientHost
+              introspection.token.claim: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: clientHost
+              jsonType.label: String
+          - name: Client ID
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: client_id
+              introspection.token.claim: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: client_id
+              jsonType.label: String
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - good-service
+          - email
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        authorizationSettings:
+          allowRemoteResourceManagement: true
+          policyEnforcementMode: ENFORCING
+          resources: []
+          policies: []
+          scopes: []
+          decisionStrategy: UNANIMOUS
       - clientId: apikeymanager
         name: ""
         description: ""
