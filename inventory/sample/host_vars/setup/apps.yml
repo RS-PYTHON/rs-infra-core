@@ -22,6 +22,7 @@ oauth2_proxy_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 cha
 jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 apikeymanager_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 apikeymanager_cookieSecret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
+osam_oidc_client_secret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
 # https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/#generating-a-cookie-secret
 oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') | b64encode }}"
 neuvector_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
@@ -389,6 +390,20 @@ rs_station_mockup:
     sgs:
       bucketName: rspython-ops-catalog-playground
       bucketPath: stations/CADIP/
+
+rs_osam:
+  provider:
+    secret:
+      # Create a new API key or re-use the one you used to set up the ovh managed k8s
+      # AK, AS and CK on https://www.ovh.com/auth/api/createToken
+      # with GET, POST, PUT, DELETE on *
+      ovh_endpoint: "ovh-eu"    
+      ovh_application_key: ""
+      ovh_application_secret: ""
+      ovh_consumer_key: ""
+      # OVH Service (used in endpoint /cloud/project/<ovh_service>/user )
+      # Aka projet id from web console https://www.ovh.com/manager/#/public-cloud/pci/projects/<project_id>/
+      ovh_service: ""
 
 neuvector:
   core:
