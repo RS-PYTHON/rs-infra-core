@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PR#136](https://github.com/RS-PYTHON/rs-infra-core/pull/136) : Add operational and dask-gateway rolebinding
 - [RSPY-672](https://github.com/RS-PYTHON/rs-infra-core/pull/135) : Split dpr processing flow
 - [PR#145](https://github.com/RS-PYTHON/rs-infra-core/pull/145) : Add Keycloak SMTP configuration
+- [RSPY-601-603](https://github.com/RS-PYTHON/rs-infra-core/pull/147) : Add osam service
 
 ### Changed
 
