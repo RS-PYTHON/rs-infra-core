@@ -27,5 +27,6 @@ rm -rf /usr/local/share/.cache/*
 # including /usr/local/share/.cache/yarn
 
 rm -rf /tmp/* /var/tmp/*
+rm -rf /opt/conda/pkgs/cache
 
 exit 0
