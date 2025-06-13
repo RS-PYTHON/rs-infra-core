@@ -33,6 +33,7 @@ RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
+    jq \
     vim \
     git \
     curl \
