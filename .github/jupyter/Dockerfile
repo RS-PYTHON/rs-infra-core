@@ -23,8 +23,8 @@ USER root
 
 RUN adduser rspy
 
-ENV SHELL /bin/bash
-ENV HOME /home/rspy
+ENV SHELL=/bin/bash
+ENV HOME=/home/rspy
 
 COPY ./*.whl /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
@@ -46,7 +46,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     layer-cleanup.sh
 
 # Install python dependencies
-RUN conda install --yes conda-forge::python=${PYTHON_TAG} && \
+RUN conda update -n base -c conda-forge conda && \
+    conda install --yes conda-forge::python=${PYTHON_TAG} && \
+    pip install --upgrade pip && \
     pip install \
     dask[complete]==${DASK_TAG} \
     distributed==${DASK_TAG} \
