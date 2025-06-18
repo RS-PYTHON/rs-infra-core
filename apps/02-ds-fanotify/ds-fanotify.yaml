@@ -45,26 +45,23 @@ spec:
           #runAsUser: 0
       tolerations:
         - key: role
-          operator: Equal
           value: infra
           effect: NoSchedule
         - key: role
-          operator: Equal
-          value: processing
+          value: rs_server
           effect: NoSchedule
         - key: role
-          operator: Equal
+          value: rs_env
+          effect: NoSchedule
+        - key: role
           value: access_csc
           effect: NoSchedule
         - key: role
-          operator: Equal
           value: prefect_flow
           effect: NoSchedule
         - key: role
-          operator: Equal
-          value: ondemand_dpr
+          value: dask_scheduler
           effect: NoSchedule
         - key: role
-          operator: Equal
-          value: systematic_dpr
+          value: dask_worker_on_demand
           effect: NoSchedule
