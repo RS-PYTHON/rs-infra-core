@@ -59,6 +59,8 @@ conda install conda-forge::terraform
 conda install conda-forge::python-openstackclient
 conda install conda-forge::passlib
 conda install conda-forge::boto3
+conda install conda-forge::kubernetes-helm
+conda install conda-forge::kubernetes-client
 
 ansible-galaxy collection install \
     openstack.cloud \
