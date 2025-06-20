@@ -85,7 +85,7 @@ The calculations for `cluster_max_workers`, `cluster_max_cores`, `cluster_max_me
 
 * `cluster_max_workers`: $`scale\_value + 1`$
 * `cluster_max_cores`: $`(scale\_value + 1) * worker\_cores`$
-* `cluster_max_memory`: $`(scale\_value + 1) * worker\_memory * 2{30}`$
+* `cluster_max_memory`: $`(scale\_value + 1) * worker\_memory * 2^{30}`$
 
 Where $`scale\_value`$ = maximum desired worker, 2 in the prevous example.
 
@@ -123,7 +123,7 @@ The calculations for `cluster_max_workers`, `cluster_max_cores`, `cluster_max_me
 
 * `cluster_max_workers`: $`scale\_value + 1`$
 * `cluster_max_cores`: $`(scale\_value + 1) * worker\_cores`$
-* `cluster_max_memory`: $`(scale\_value + 1) * worker\_memory * 2{30}`$
+* `cluster_max_memory`: $`(scale\_value + 1) * worker\_memory * 2^{30}`$
 
 Where $`scale\_value`$ = maximum desired worker, 2 in the prevous example.
 
