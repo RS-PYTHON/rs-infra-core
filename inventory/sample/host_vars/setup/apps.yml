@@ -203,6 +203,15 @@ rs_server_staging:
   # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
   # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
   jupyterhub_token: <REPLACE_WITH_TOKEN_GENERATED_FROM_JUPYUTER>
+  dask:
+    # See how to calculate the following numbers
+    # https://github.com/RS-PYTHON/rs-infra-core/blob/develop/docs/how-to/Dask-gateway.md#create-a-dask-cluster-for-staging-with-options-option-3
+    worker_cores: 1
+    worker_memory: 2.0
+    worker_count: 3
+    cluster_max_cores: 4 # = ( worker_count * worker_cores ) + 1
+    cluster_max_workers: 4 # = worker_count + 1
+    cluster_max_memory: 8589934592 # = ( worker_count + 1 ) ∗  worker_memory * 2^30
 
 rs_server_station_secrets:
   stations: |
