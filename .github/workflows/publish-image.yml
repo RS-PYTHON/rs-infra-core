@@ -18,9 +18,13 @@ name: Publish Docker image
 on:
   pull_request: # pull requests
     types: [opened, synchronize, reopened]
+    paths:
+      - '.github/**'
   push:
     branches:
       - develop # pushes on the 'develop' branch
+    paths:
+      - '.github/**'
     tags:
       - '**' # new git tags (including hierarchical tags like v1.0/beta)
   workflow_dispatch: # manual trigger
