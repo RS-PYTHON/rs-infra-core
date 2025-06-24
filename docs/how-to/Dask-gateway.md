@@ -73,8 +73,58 @@ cluster = gateway.new_cluster(
     cluster_max_workers=3,
     cluster_max_cores=3,
     cluster_max_memory=9663676416, # In Bytes
-    worker_extra_pod_config={'affinity': {'nodeAffinity': {'requiredDuringSchedulingIgnoredDuringExecution': {'nodeSelectorTerms': [{'matchExpressions': [{'key': 'node-role.kubernetes.io/access_csc', 'operator': 'Exists'}]}]}}}, 'tolerations': [{'key': 'role', 'operator': 'Equal', 'value': 'access_csc', 'effect': 'NoSchedule'}]},
-    scheduler_extra_pod_config={'affinity': {'nodeAffinity': {'requiredDuringSchedulingIgnoredDuringExecution': {'nodeSelectorTerms': [{'matchExpressions': [{'key': 'node-role.kubernetes.io/access_csc', 'operator': 'Exists'}]}]}}}, 'tolerations': [{'key': 'role', 'operator': 'Equal', 'value': 'access_csc', 'effect': 'NoSchedule'}]}
+    worker_extra_pod_config={
+       "affinity": {
+         "nodeAffinity": {
+           "requiredDuringSchedulingIgnoredDuringExecution": {
+             "nodeSelectorTerms": [
+               {
+                 "matchExpressions": [
+                   {
+                     "key": "node-role.kubernetes.io/access_csc",
+                     "operator": "Exists"
+                   }
+                 ]
+               }
+             ]
+           }
+         }
+       },
+       "tolerations": [
+         {
+           "key": "role",
+           "operator": "Equal",
+           "value": "access_csc",
+           "effect": "NoSchedule"
+         }
+       ]
+    },
+    scheduler_extra_pod_config={
+       "affinity": {
+         "nodeAffinity": {
+           "requiredDuringSchedulingIgnoredDuringExecution": {
+             "nodeSelectorTerms": [
+               {
+                 "matchExpressions": [
+                   {
+                     "key": "node-role.kubernetes.io/access_csc",
+                     "operator": "Exists"
+                   }
+                 ]
+               }
+             ]
+           }
+         }
+       },
+       "tolerations": [
+         {
+           "key": "role",
+           "operator": "Equal",
+           "value": "access_csc",
+           "effect": "NoSchedule"
+         }
+       ]
+    }
 )
 
 print (cluster.name)
@@ -111,8 +161,58 @@ cluster = gateway.new_cluster(
     cluster_max_cores=3,
     cluster_max_memory=9663676416, # In Bytes
     scheduler_memory_limit=60, # In GB
-    worker_extra_pod_config={'affinity': {'nodeAffinity': {'requiredDuringSchedulingIgnoredDuringExecution': {'nodeSelectorTerms': [{'matchExpressions': [{'key': 'node-role.kubernetes.io/dask_worker_on_demand', 'operator': 'Exists'}]}]}}}, 'tolerations': [{'key': 'role', 'operator': 'Equal', 'value': 'dask_worker_on_demand', 'effect': 'NoSchedule'}]},
-    scheduler_extra_pod_config={'affinity': {'nodeAffinity': {'requiredDuringSchedulingIgnoredDuringExecution': {'nodeSelectorTerms': [{'matchExpressions': [{'key': 'node-role.kubernetes.io/dask_scheduler', 'operator': 'Exists'}]}]}}}, 'tolerations': [{'key': 'role', 'operator': 'Equal', 'value': 'dask_scheduler', 'effect': 'NoSchedule'}]}
+    worker_extra_pod_config={
+       "affinity": {
+         "nodeAffinity": {
+           "requiredDuringSchedulingIgnoredDuringExecution": {
+             "nodeSelectorTerms": [
+               {
+                 "matchExpressions": [
+                   {
+                     "key": "node-role.kubernetes.io/dask_worker_on_demand",
+                     "operator": "Exists"
+                   }
+                 ]
+               }
+             ]
+           }
+         }
+       },
+       "tolerations": [
+         {
+           "key": "role",
+           "operator": "Equal",
+           "value": "dask_worker_on_demand",
+           "effect": "NoSchedule"
+         }
+       ]
+    },
+    scheduler_extra_pod_config={
+       "affinity": {
+         "nodeAffinity": {
+           "requiredDuringSchedulingIgnoredDuringExecution": {
+             "nodeSelectorTerms": [
+               {
+                 "matchExpressions": [
+                   {
+                     "key": "node-role.kubernetes.io/dask_scheduler",
+                     "operator": "Exists"
+                   }
+                 ]
+               }
+             ]
+           }
+         }
+       },
+       "tolerations": [
+         {
+           "key": "role",
+           "operator": "Equal",
+           "value": "dask_scheduler",
+           "effect": "NoSchedule"
+         }
+       ]
+    }
 )
 
 print (cluster.name)
