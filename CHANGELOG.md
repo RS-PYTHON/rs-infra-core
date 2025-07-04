@@ -13,6 +13,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a15] - 2025-07-04
+
+### Added
+
+- [PR#148](https://github.com/RS-PYTHON/rs-infra-core/pull/148) : Install jq in jupyter
+- [RSPY-659](https://github.com/RS-PYTHON/rs-infra-core/pull/151) : Create dask staging cluster automatically
+- [RSPY-609](https://github.com/RS-PYTHON/rs-infra-core/pull/154) : Test latest L0 processor
+
+### Changed
+
+- [PR#149](https://github.com/RS-PYTHON/rs-infra-core/pull/149) : Optimisation on security scan on CI
+- [RSPY-697](https://github.com/RS-PYTHON/rs-infra-core/pull/146) : Update nodepools
+- [PR#152](https://github.com/RS-PYTHON/rs-infra-core/pull/152) : Optimisation on docker build CI
+
+### Fixed
+
+- [PR#150](https://github.com/RS-PYTHON/rs-infra-core/pull/150) : Fix typo in doc
+- [PR#153](https://github.com/RS-PYTHON/rs-infra-core/pull/153) : Fix indentation in doc
+
 ## [0.2a14] - 2025-06-10
 
 ### Added
