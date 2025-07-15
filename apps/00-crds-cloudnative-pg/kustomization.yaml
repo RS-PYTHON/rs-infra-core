@@ -12,11 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_clusters.yaml
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_backups.yaml
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_poolers.yaml
-  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_clusters.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_backups.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_poolers.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'

@@ -12,13 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
 
 helmCharts:
 - name: ingress-nginx
-  repo: https://kubernetes.github.io/ingress-nginx
-  releaseName: "{{ app_name }}"
-  version: v4.12.1
   namespace: ingress-nginx
+  releaseName: '{{ app_name }}'
+  repo: https://kubernetes.github.io/ingress-nginx
   valuesFile: values.yaml
+  version: v4.12.1
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'

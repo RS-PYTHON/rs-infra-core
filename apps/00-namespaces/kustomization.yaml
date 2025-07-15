@@ -12,18 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - ns-dask-gateway.yaml
-  - ns-database.yaml
-  - ns-iam.yaml
-  - ns-infra.yaml
-  - ns-ingress-nginx.yaml
-  - ns-logging.yaml
-  - ns-monitoring.yaml
-  - ns-networking.yaml
-  - ns-operational.yaml
-  - ns-processing.yaml
-  - ns-security.yaml
+- ns-dask-gateway.yaml
+- ns-database.yaml
+- ns-iam.yaml
+- ns-infra.yaml
+- ns-ingress-nginx.yaml
+- ns-logging.yaml
+- ns-monitoring.yaml
+- ns-networking.yaml
+- ns-operational.yaml
+- ns-processing.yaml
+- ns-security.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
