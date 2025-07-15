@@ -18,11 +18,6 @@
 This project exploits Terraform to deploy the infrastructure on the Cloud Provider.
 The fully detailed documentation and configuration options are available on its page: [https://www.terraform.io/](https://www.terraform.io/)
 
-### Kubespray
-
-This project exploits Kubespray to deploy Kubernetes.
-The fully detailed documentation and configuration options are available on its page: [https://kubespray.io/](https://kubespray.io/)
-
 ### HashiCorp Vault (optional)
 
 This project can integrate credentials from a custom `HashiCorp Vault` instance, see the specific documentation: [how to/Credentials](./how-to/Credentials.md)
@@ -64,9 +59,8 @@ conda install conda-forge::terraform
 conda install conda-forge::python-openstackclient
 conda install conda-forge::passlib
 conda install conda-forge::boto3
-
-# Init Kubespray collection with remote
-git submodule update --init --remote
+conda install conda-forge::kubernetes-helm
+conda install conda-forge::kubernetes-client
 
 ansible-galaxy collection install \
     openstack.cloud \
