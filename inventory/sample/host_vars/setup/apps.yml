@@ -470,7 +470,9 @@ rspy:
 
 loki:
   retention: 1460h
-  bucket: "{{ cluster_name }}-loki"
+  bucket:
+    chunks: "{{ cluster_name }}-loki-chunks"
+    ruler: "{{ cluster_name }}-loki-ruler"
 
 grafanatempo:
   metaMonitoring:
