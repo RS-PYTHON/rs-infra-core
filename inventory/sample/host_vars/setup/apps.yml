@@ -53,7 +53,7 @@ grafana:
     enabled: "true"
     from_address: test@example.com
     from_name: Test
-    host: HOST
+    host: HOST:port
   smtp_credentials:
     password: PASSWORD
     user: test@example.com
