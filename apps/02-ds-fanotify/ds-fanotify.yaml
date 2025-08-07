@@ -39,7 +39,9 @@ spec:
         - /bin/sh
         - -c
         - |
-          sysctl -w fs.fanotify.max_user_groups=256  # Set the maximum number of opened file
+           sysctl -w fs.fanotify.max_user_groups=256  # Set the maximum number of opened file
+           sysctl -w fs.inotify.max_user_instances=8192
+           sysctl -w fs.inotify.max_user_watches=65536
         securityContext:
           privileged: true
           #runAsUser: 0
