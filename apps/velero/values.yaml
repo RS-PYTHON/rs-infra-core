@@ -29,11 +29,11 @@ terminationGracePeriodSeconds: 3600
 
 affinity:
   nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/infra
-            operator: Exists
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node-role.kubernetes.io/infra
+          operator: Exists
 
 metrics:
   enabled: true
