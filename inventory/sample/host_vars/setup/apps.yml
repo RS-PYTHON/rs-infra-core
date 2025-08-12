@@ -120,6 +120,14 @@ rs_server:
     username: test
     secret: pygeoapi-database-password
 
+rs_performance_indicator:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: performance
+    password: test
+    username: test
+    secret: pi-database-password
+
 rs_server_cadip_station: |
   cadip:
     endpoint:
