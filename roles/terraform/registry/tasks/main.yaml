@@ -13,6 +13,13 @@
 # limitations under the License.
 
 ---
+- name: Terraform init
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -reconfigure -backend-config="{{ inventory_dir }}/backend.tfvars"
+  args:
+    chdir: roles/terraform/registry/tasks/
+    executable: /bin/bash
+
 - name: Create registry
   shell: |
     set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars"
@@ -46,61 +53,134 @@
     executable: /bin/bash
 
 - name: Configure Harbor Proxy Cache Registry
-  #hosts: localhost
-  gather_facts: no
-  vars:
+  set_fact:
     harbor_url: "{{ registry_url.stdout }}"
     harbor_user: "{{ registry_user.stdout }}"
     harbor_pass: "{{ registry_pass.stdout }}"
-    #dockerhub_user: "your_dockerhub_username"
-    #dockerhub_pass: "your_dockerhub_password"
-    #proxy_project_name: "proxy-cache-project"
 
-  tasks:
-    - name: Create registry endpoint
-      ansible.builtin.uri:
-        url: "{{ harbor_url }}/api/v2.0/registries"
-        method: POST
-        user: "{{ harbor_user }}"
-        password: "{{ harbor_pass }}"
-        force_basic_auth: true
-        body_format: json
-        body:
-          name: "dockerhub"
-          type: "docker-hub"
-          url: "https://registry-1.docker.io"
-          access_id: "{{ dockerhub_user }}"
-          access_secret: "{{ dockerhub_pass }}"
-        status_code: 201
-      register: registry_creation
+- name: Read cluster.tfvars
+  slurp:
+    src: "{{ inventory_dir }}/cluster.tfvars"
+  register: cluster_vars_raw
 
-    - name: Get registry ID
-      ansible.builtin.uri:
-        url: "{{ harbor_url }}/api/v2.0/registries?q=name%3Ddockerhub"
-        method: GET
-        user: "{{ harbor_user }}"
-        password: "{{ harbor_pass }}"
-        force_basic_auth: true
-        return_content: true
-        status_code: 200
-      register: registry_query
+- name: Decode cluster.tfvars content
+  set_fact:
+    cluster_vars_content: "{{ cluster_vars_raw.content | b64decode }}"
 
-    - name: Extract registry ID
-      set_fact:
-        registry_id: "{{ (registry_query.content | from_json)[0].id }}"
+- name: Extract public_dockerhub_user
+  set_fact:
+    public_dockerhub_user_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
+  when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"[^\"]+\"')
 
-    - name: Create proxy cache project
-      ansible.builtin.uri:
-        url: "{{ harbor_url }}/api/v2.0/projects"
-        method: POST
-        user: "{{ harbor_user }}"
-        password: "{{ harbor_pass }}"
-        force_basic_auth: true
-        body_format: json
-        body:
-          project_name: "proxycache"
-          public: false
-          registry_id: "{{ registry_id }}"
-          proxy_cache: true
-        status_code: 201
-      register: proxy_project_creation
+- name: Set public_dockerhub_user if valid
+  set_fact:
+    public_dockerhub_user: "{{ public_dockerhub_user_raw }}"
+  when: public_dockerhub_user_raw | default('') | trim | length > 0
+
+- name: Extract public_dockerhub_pass
+  set_fact:
+    public_dockerhub_pass_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
+  when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"[^\"]+\"')
+
+- name: Set public_dockerhub_pass if valid
+  set_fact:
+    public_dockerhub_pass: "{{ public_dockerhub_pass_raw }}"
+  when: public_dockerhub_pass_raw | default('') | trim | length > 0
+
+- name: Generate checksum
+  set_fact:
+    checksum: "{{ lookup('community.general.random_string', upper=false, special=false, length=6) }}"
+
+- name: Set registry name with checksum
+  set_fact:
+    registry_name: "dockerhub-{{ checksum }}"
+
+- name: Create registry endpoint
+  ansible.builtin.uri:
+    url: "{{ harbor_url }}/api/v2.0/registries"
+    method: POST
+    user: "{{ harbor_user }}"
+    password: "{{ harbor_pass }}"
+    force_basic_auth: true
+    body_format: json
+    body: >
+      {{
+        {
+          "name": registry_name,
+          "type": "docker-hub",
+          "url": "https://registry-1.docker.io"
+        }
+        | combine(
+          (
+            (public_dockerhub_user | default('') | trim | length > 0) and
+            (public_dockerhub_pass | default('') | trim | length > 0)
+          )
+          | ternary(
+            {
+              "access_id": public_dockerhub_user | default('') | trim,
+              "access_secret": public_dockerhub_pass | default('') | trim
+            },
+            {}
+          )
+        )
+      }}
+    status_code: 201
+  register: registry_creation
+
+- name: Get registry ID
+  ansible.builtin.uri:
+    url: "{{ harbor_url }}/api/v2.0/registries?q=name%3D{{ registry_name }}"
+    method: GET
+    user: "{{ harbor_user }}"
+    password: "{{ harbor_pass }}"
+    force_basic_auth: true
+    return_content: true
+    status_code: 200
+  register: registry_query
+
+- name: Extract registry ID
+  set_fact:
+    registry_id: "{{ (registry_query.content | from_json)[0].id | int }}"
+
+- name: Check if proxycache project exists
+  ansible.builtin.uri:
+    url: "{{ harbor_url }}/api/v2.0/projects?name=proxycache"
+    method: GET
+    user: "{{ harbor_user }}"
+    password: "{{ harbor_pass }}"
+    force_basic_auth: true
+    status_code: 200
+    return_content: true
+  register: proxycache_check
+
+- name: Delete existing proxycache project
+  ansible.builtin.uri:
+    url: "{{ harbor_url }}/api/v2.0/projects/proxycache"
+    method: DELETE
+    user: "{{ harbor_user }}"
+    password: "{{ harbor_pass }}"
+    force_basic_auth: true
+    status_code: 200
+  when: (proxycache_check.content | from_json) | length > 0
+
+- name: Create proxy cache project
+  vars:
+    proxy_cache_body: >
+      {{
+        {
+          "project_name": "proxycache",
+          "public": False,
+          "registry_id": registry_id | int,
+          "proxy_cache": True
+        }
+      }}
+  ansible.builtin.uri:
+    url: "{{ harbor_url }}/api/v2.0/projects"
+    method: POST
+    user: "{{ harbor_user }}"
+    password: "{{ harbor_pass }}"
+    force_basic_auth: true
+    body_format: json
+    body: "{{ proxy_cache_body }}"
+    status_code: 201
+  register: proxy_project_creation

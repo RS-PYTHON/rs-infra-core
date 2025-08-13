@@ -12,11 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_providers {
-    ovh = {
-      source  = "ovh/ovh"
-      version = "1.4.0"
-    }
-  }
+# Variables part
+
+variable "cluster_name" {
+  description = "cluster name"
+  type        = string
+}
+
+variable "public_dockerhub_user" {
+  description = "Public dockerhub user"
+  type        = string
+}
+
+variable "public_dockerhub_pass" {
+  description = "Public dockerhub pass"
+  type        = string
+  sensitive   = true
+}
+
+variable "registry_username" {
+  description = "Private registry username"
+  type        = string
+}
+
+variable "registry_email" {
+  description = "Private registry email"
+  type        = string
 }
