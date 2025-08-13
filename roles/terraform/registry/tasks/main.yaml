@@ -21,16 +21,40 @@
     executable: /bin/bash
   tags: create
 
+- name: Get registry url from terraform output
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw registry-url
+  register: registry_url
+  args:
+    chdir: roles/terraform/registry/tasks/
+    executable: /bin/bash
+
+- name: Get registry username from terraform output
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw user
+  register: registry_user
+  args:
+    chdir: roles/terraform/registry/tasks/
+    executable: /bin/bash
+
+- name: Get registry password from terraform output
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw password
+  register: registry_pass
+  args:
+    chdir: roles/terraform/registry/tasks/
+    executable: /bin/bash
+
 - name: Configure Harbor Proxy Cache Registry
-  hosts: localhost
+  #hosts: localhost
   gather_facts: no
   vars:
-    harbor_url: "https://your-harbor-domain.com"
-    harbor_user: "admin"
-    harbor_pass: "your_password"
-    dockerhub_user: "your_dockerhub_username"
-    dockerhub_pass: "your_dockerhub_password"
-    proxy_project_name: "proxy-cache-project"
+    harbor_url: "{{ registry_url.stdout }}"
+    harbor_user: "{{ registry_user.stdout }}"
+    harbor_pass: "{{ registry_pass.stdout }}"
+    #dockerhub_user: "your_dockerhub_username"
+    #dockerhub_pass: "your_dockerhub_password"
+    #proxy_project_name: "proxy-cache-project"
 
   tasks:
     - name: Create registry endpoint
@@ -74,7 +98,7 @@
         force_basic_auth: true
         body_format: json
         body:
-          project_name: "{{ proxy_project_name }}"
+          project_name: "proxycache"
           public: false
           registry_id: "{{ registry_id }}"
           proxy_cache: true
