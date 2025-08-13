@@ -29,13 +29,3 @@ variable "public_dockerhub_pass" {
   type        = string
   sensitive   = true
 }
-
-variable "registry_username" {
-  description = "Private registry username"
-  type        = string
-}
-
-variable "registry_email" {
-  description = "Private registry email"
-  type        = string
-}

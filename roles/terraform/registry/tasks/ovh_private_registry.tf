@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+resource "random_string" "registry_username" {
+  length  = 8
+  upper   = false
+  special = false
+}
+
 data "ovh_cloud_project_capabilities_containerregistry_filter" "capabilities" {
   plan_name    = "MEDIUM"
   region       = "GRA"
@@ -27,6 +33,6 @@ resource "ovh_cloud_project_containerregistry" "myregistry" {
 resource "ovh_cloud_project_containerregistry_user" "myuser" {
   service_name = ovh_cloud_project_containerregistry.myregistry.service_name
   registry_id  = ovh_cloud_project_containerregistry.myregistry.id
-  email        = "${var.registry_email}"
-  login        = "${var.registry_username}"
+  email        = "${random_string.registry_username.result}@${replace(ovh_cloud_project_containerregistry.myregistry.url, "https://", "")}"
+  login        = random_string.registry_username.result
 }
