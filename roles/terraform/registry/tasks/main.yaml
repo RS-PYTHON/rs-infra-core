@@ -184,3 +184,12 @@
     body: "{{ proxy_cache_body }}"
     status_code: 201
   register: proxy_project_creation
+
+- name: Write Harbor variables to registry.yaml
+  copy:
+    dest: "{{ inventory_dir }}/host_vars/setup/registry.yaml"
+    content: |
+      registry:
+        harbor_url: "{{ harbor_url }}"
+        harbor_user: "{{ harbor_user }}"
+        harbor_pass: "{{ harbor_pass }}"
