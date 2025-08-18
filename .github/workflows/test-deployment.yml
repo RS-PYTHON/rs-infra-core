@@ -68,7 +68,6 @@ jobs:
 #        run: |
 #          conda run -n rspy ansible-playbook --check cluster.yaml -i inventory/mycluster/hosts.yaml
 #        shell: bash
-        shell: bash
       - name: Deploy the apps (check)
         run: |
           ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl
