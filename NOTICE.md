@@ -127,13 +127,13 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - oauth2-proxy
   - Helm chart:
-    - Version: 7.1.0
-    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-7.1.0/LICENSE)
-    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-7.1.0>
+    - Version: 8.2.1
+    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-8.2.1/LICENSE)
+    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-8.2.1>
     - Copyright: Copyright The oauth2-proxy Development Team. [Authors and Contributors](https://github.com/oauth2-proxy/manifests/graphs/contributors)
   - Container image(s)
-    - quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
-      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.6.0/LICENSE)
+    - quay.io/oauth2-proxy/oauth2-proxy:v7.12.0
+      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.12.0/LICENSE)
 
 - Prefect
   - Helm chart:

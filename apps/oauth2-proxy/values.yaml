@@ -51,9 +51,10 @@ ingress:
 
 sessionStorage:
   type: redis
+  redis:
+    clientType: "standalone"
 redis:
   enabled: true
-  architecture: standalone
   master:
     affinity:
       nodeAffinity:
