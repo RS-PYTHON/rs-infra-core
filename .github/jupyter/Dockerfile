@@ -57,7 +57,12 @@ RUN conda update -n base -c conda-forge conda && \
     ipywidgets \
     dask-labextension \
     s3fs \
-    boto3 && \
+    boto3 \
+    xarray \
+    cartopy \
+    geopandas \
+    matplotlib \
+    stac-api-validator && \
     pip install /opt/*.whl && \
     conda clean --all --yes && \
     layer-cleanup.sh
