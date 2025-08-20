@@ -42,7 +42,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     libgtk-3-0 libasound2 libx11-xcb1 \
     xclip \
     graphviz \
-    python3-pydot && \
+    python3-pydot \
+    texlive-xetex texlive-fonts-recommended texlive-plain-generic && \
     layer-cleanup.sh
 
 # Install python dependencies
@@ -56,6 +57,7 @@ RUN conda update -n base -c conda-forge conda && \
     prefect[dask,aws]==${PREFECT_TAG} \
     ipywidgets \
     dask-labextension \
+    nbconvert[webpdf] \
     s3fs \
     boto3 \
     cftime \
