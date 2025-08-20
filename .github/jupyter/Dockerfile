@@ -58,10 +58,19 @@ RUN conda update -n base -c conda-forge conda && \
     dask-labextension \
     s3fs \
     boto3 \
+    cftime \
+    zarr \
+    scipy \
     xarray \
-    cartopy \
+    netCDF4 \
+    h5netcdf \
     geopandas \
     matplotlib \
+    nc-time-axis \
+    pooch \
+    fsspec \
+    cartopy \
+    seaborn \
     stac-api-validator && \
     pip install /opt/*.whl && \
     conda clean --all --yes && \
