@@ -42,32 +42,43 @@ jobs:
 
           # Init conda
           ~/miniforge3/bin/conda init bash
+          conda update -n base -c defaults conda
 
           # Create conda env with python
           # conda update -n base -c defaults conda
           conda create -y -n rspy python=3.11
 
           # Install Ansible, Terraform, Openstackclient
-          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client
+          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
 
-          conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws
+          conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws kubernetes.core
+          ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl
         shell: bash
       - name: Start minikube
         uses: medyagh/setup-minikube@latest
+        with:
+          start-args: '--profile cluster.local'
+          memory: 8000m
+      - name: "Configure cluster"
+        run: |
+          kubectl label node cluster.local node-role.kubernetes.io/infra=
+        shell: bash
       - name: Generate inventory
         run: |
           cp -rfp inventory/sample inventory/mycluster
-          cp -rfp inventory/mycluster/.env.template inventory/mycluster/.env
-          cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
+          mv inventory/mycluster/.env.template inventory/mycluster/.env
+          mv inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
           sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
-          conda run -n rspy ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
-#      - name: "Create and configure machines (check)"
-#        run: |
-#          conda run -n rspy ansible-playbook --check cluster.yaml -i inventory/mycluster/hosts.yaml
-#        shell: bash
       - name: Deploy the apps (check)
         run: |
-          ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl
-          conda run -n rspy ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml
+        shell: bash
+      - name: Deploy the apps (for real)
+        run: |
+          sed -i 's!debug: false!debug: true!g' roles/app-installer/tasks/install_app.yaml
+          sed -i 's!csi-cinder-high-speed-retain!standard!g' apps/01-cloudnative-pg/cluster.yaml
+          sed -i -e 's!https://iam.{{ platform_domain_name }}!http://keycloak-service.iam.svc.cluster.local:8080!g' -e 's!insecure_oidc_skip_issuer_verification="false"!insecure_oidc_skip_issuer_verification="true"!g' apps/oauth2-proxy/values.yaml
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook -v apps.yaml -i inventory/mycluster/hosts.yaml
         shell: bash

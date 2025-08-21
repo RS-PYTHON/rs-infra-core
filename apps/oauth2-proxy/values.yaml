@@ -28,6 +28,7 @@ config:
     whitelist_domains=".{{ platform_domain_name }}"
     email_domains=[ "*" ]
     cookie_domains=".{{ platform_domain_name }}"
+    insecure_oidc_skip_issuer_verification="false"
     insecure_oidc_allow_unverified_email="true"
     reverse_proxy="true"
 
