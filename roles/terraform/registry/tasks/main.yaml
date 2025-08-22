@@ -100,102 +100,100 @@
   set_fact:
     registry_name: "dockerhub-{{ checksum }}"
 
-- name: Create registry endpoint
+
+- name: Proxycache check & delete (skipped in CI)
   when: not ci_mode | bool
-  ansible.builtin.uri:
-    url: "{{ harbor_url }}/api/v2.0/registries"
-    method: POST
-    user: "{{ harbor_user }}"
-    password: "{{ harbor_pass }}"
-    force_basic_auth: true
-    body_format: json
-    body: >
-      {{
-        {
-          "name": registry_name,
-          "type": "docker-hub",
-          "url": "https://registry-1.docker.io"
-        }
-        | combine(
-          (
-            (public_dockerhub_user | default('') | trim | length > 0) and
-            (public_dockerhub_pass | default('') | trim | length > 0)
-          )
-          | ternary(
+  block:
+
+    - name: Create registry endpoint
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/registries"
+        method: POST
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        body_format: json
+        body: >
+          {{
             {
-              "access_id": public_dockerhub_user | default('') | trim,
-              "access_secret": public_dockerhub_pass | default('') | trim
-            },
-            {}
-          )
-        )
-      }}
-    status_code: 201
-  register: registry_creation
+              "name": registry_name,
+              "type": "docker-hub",
+              "url": "https://registry-1.docker.io"
+            }
+            | combine(
+              (
+                (public_dockerhub_user | default('') | trim | length > 0) and
+                (public_dockerhub_pass | default('') | trim | length > 0)
+              )
+              | ternary(
+                {
+                  "access_id": public_dockerhub_user | default('') | trim,
+                  "access_secret": public_dockerhub_pass | default('') | trim
+                },
+                {}
+              )
+            )
+          }}
+        status_code: 201
+      register: registry_creation
 
-- name: Get registry ID
-  when: not ci_mode | bool
-  ansible.builtin.uri:
-    url: "{{ harbor_url }}/api/v2.0/registries?q=name%3D{{ registry_name }}"
-    method: GET
-    user: "{{ harbor_user }}"
-    password: "{{ harbor_pass }}"
-    force_basic_auth: true
-    return_content: true
-    status_code: 200
-  register: registry_query
+    - name: Get registry ID
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/registries?q=name%3D{{ registry_name }}"
+        method: GET
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        return_content: true
+        status_code: 200
+      register: registry_query
 
-- name: Extract registry ID
-  when: not ci_mode | bool
-  set_fact:
-    registry_id: "{{ (registry_query.content | from_json)[0].id | int }}"
+    - name: Extract registry ID
+      set_fact:
+        registry_id: "{{ (registry_query.content | from_json)[0].id | int }}"
 
-- name: Check if proxycache project exists
-  when: not ci_mode | bool
-  ansible.builtin.uri:
-    url: "{{ harbor_url }}/api/v2.0/projects?name=proxycache"
-    method: GET
-    user: "{{ harbor_user }}"
-    password: "{{ harbor_pass }}"
-    force_basic_auth: true
-    status_code: 200
-    return_content: true
-  register: proxycache_check
+    - name: Check if proxycache project exists
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/projects?name=proxycache"
+        method: GET
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        status_code: 200
+        return_content: true
+      register: proxycache_check
 
-- name: Delete existing proxycache project
-  ansible.builtin.uri:
-    url: "{{ harbor_url }}/api/v2.0/projects/proxycache"
-    method: DELETE
-    user: "{{ harbor_user }}"
-    password: "{{ harbor_pass }}"
-    force_basic_auth: true
-    status_code: 200
-  when:
-    - (proxycache_check.content | from_json) | length > 0
-    - not ci_mode | bool
+    - name: Delete existing proxycache project
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/projects/proxycache"
+        method: DELETE
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        status_code: 200
+      when: (proxycache_check.content | from_json) | length > 0
 
-- name: Create proxy cache project
-  when: not ci_mode | bool
-  vars:
-    proxy_cache_body: >
-      {{
-        {
-          "project_name": "proxycache",
-          "public": False,
-          "registry_id": registry_id | int,
-          "proxy_cache": True
-        }
-      }}
-  ansible.builtin.uri:
-    url: "{{ harbor_url }}/api/v2.0/projects"
-    method: POST
-    user: "{{ harbor_user }}"
-    password: "{{ harbor_pass }}"
-    force_basic_auth: true
-    body_format: json
-    body: "{{ proxy_cache_body }}"
-    status_code: 201
-  register: proxy_project_creation
+    - name: Create proxy cache project
+      vars:
+        proxy_cache_body: >
+          {{
+            {
+              "project_name": "proxycache",
+              "public": False,
+              "registry_id": registry_id | int,
+              "proxy_cache": True
+            }
+          }}
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/projects"
+        method: POST
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        body_format: json
+        body: "{{ proxy_cache_body }}"
+        status_code: 201
+      register: proxy_project_creation
 
 # If we're in CI mode, override Harbor values with fakes
 - name: Override Harbor vars for CI
