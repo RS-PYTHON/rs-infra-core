@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Set CI mode flag with a default (can be overridden via -e private_registry=true)
+- name: Use managed private docker registry (default false)
+  set_fact:
+    private_registry: "{{ (private_registry | default(false)) | bool }}"
+
 - name: Install app
   block:
     - name: "{{ package_name }} - {{ app_name }} | Check whether kustomization.yaml file exists"
@@ -91,21 +96,28 @@
     - name: "{{ package_name }} - {{ app_name }} | Deploy resources"
       shell: |
         kustomize build --enable-helm {{ resources_dir.path }} \
+        {% if private_registry | bool %} \
         | sed -E '/image:/ {
-            /image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@\s]+)?(@sha256:[a-f0-9]{64})?/ {
-              s|image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@\s]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\2\3\4|
-            }
-            /image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@\s]+)?(@sha256:[a-f0-9]{64})?/ {
-              s|image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@\s]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
-            }
-          }' \
+          /image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
+            s|image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\2\3\4|
+            b
+          }
+          /image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
+            s|image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
+            b
+          }
+          /image: ([a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
+            s|image: ([a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
+          }
+        }' \
         | yq eval 'select(.kind == "Pod") |= .spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "Deployment") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "StatefulSet") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "DaemonSet") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "Job") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "CronJob") |= .spec.jobTemplate.spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
-            select(.kind == "ReplicaSet") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}]' - \ 
+            select(.kind == "ReplicaSet") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}]' - \
+        {% endif %} \
         | kubectl apply -f - \
         {% if ansible_check_mode and not app_name.startswith('crds') and app_name != 'namespaces' %} \
           --dry-run=server \
