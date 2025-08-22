@@ -60,7 +60,7 @@ jobs:
           cp -rfp inventory/mycluster/.env.template inventory/mycluster/.env
           cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
           sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
-          conda run -n rspy ansible-playbook --check registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
+          conda run -n rspy ansible-playbook registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
           find /home/runner/work/rs-infra-core/rs-infra-core/inventory/mycluster/host_vars/setup/
           find inventory/mycluster/
           conda run -n rspy ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
