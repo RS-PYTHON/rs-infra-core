@@ -203,17 +203,18 @@
     harbor_user: "hello"
     harbor_pass: "world"
 
-- name: Ensure setup directory exists
-  file:
-    path: "{{ inventory_dir }}/host_vars/setup"
-    state: directory
-    mode: '0755'
-
-- name: Debug inventory_dir
-  debug:
-    var: inventory_dir
+- name: Write Harbor variables to registry.yaml
+  when: ci_mode | bool
+  copy:
+    dest: "/home/runner/work/rs-infra-core/rs-infra-core/inventory/mycluster/host_vars/setup/registry.yaml"
+    content: |
+      registry:
+        harbor_url: "{{ harbor_url }}"
+        harbor_user: "{{ harbor_user }}"
+        harbor_pass: "{{ harbor_pass }}"
 
 - name: Write Harbor variables to registry.yaml
+  when: not ci_mode | bool
   copy:
     dest: "{{ inventory_dir }}/host_vars/setup/registry.yaml"
     content: |
