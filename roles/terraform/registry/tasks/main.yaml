@@ -163,7 +163,6 @@
   register: proxycache_check
 
 - name: Delete existing proxycache project
-  when: not ci_mode | bool
   ansible.builtin.uri:
     url: "{{ harbor_url }}/api/v2.0/projects/proxycache"
     method: DELETE
@@ -171,7 +170,9 @@
     password: "{{ harbor_pass }}"
     force_basic_auth: true
     status_code: 200
-  when: (proxycache_check.content | from_json) | length > 0
+  when:
+    - (proxycache_check.content | from_json) | length > 0
+    - not ci_mode | bool
 
 - name: Create proxy cache project
   when: not ci_mode | bool
