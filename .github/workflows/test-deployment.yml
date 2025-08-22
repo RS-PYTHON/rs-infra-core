@@ -61,7 +61,8 @@ jobs:
           cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
           sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
           conda run -n rspy ansible-playbook --check registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
-          # if [ $? -eq 0 ]; then echo -e 'registry:\n  harbor_url: "example.com"\n  harbor_user: "fresh"\n  harbor_pass: "beer"' > inventory/mycluster/host_vars/setup/registry.yaml ; fi ; 
+          # if [ $? -eq 0 ]; then echo -e 'registry:\n  harbor_url: "example.com"\n  harbor_user: "fresh"\n  harbor_pass: "beer"' > inventory/mycluster/host_vars/setup/registry.yaml ; fi ;
+          cat inventory/mycluster/host_vars/setup/registry.yaml
           conda run -n rspy ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
 #      - name: "Create and configure machines (check)"
