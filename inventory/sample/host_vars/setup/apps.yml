@@ -111,6 +111,9 @@ prefect3worker:
   eopf:
     name: eopf-prefect-pool
     number: 2
+  general:
+    name: general-prefect-pool
+    number: 2
 
 rs_server:
   database:
