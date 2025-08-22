@@ -18,92 +18,91 @@
   set_fact:
     ci_mode: "{{ (ci_mode | default(false)) | bool }}"
 
-- name: Terraform init
-  shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -reconfigure -backend-config="{{ inventory_dir }}/backend.tfvars"
-  args:
-    chdir: roles/terraform/registry/tasks/
-    executable: /bin/bash
-
-- name: Create registry
-  shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars"
-  args:
-    chdir: roles/terraform/registry/tasks/
-    executable: /bin/bash
-  tags: create
-
-- name: Get registry url from terraform output
-  shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw registry-url
-  register: registry_url
-  args:
-    chdir: roles/terraform/registry/tasks/
-    executable: /bin/bash
-
-- name: Get registry username from terraform output
-  shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw user
-  register: registry_user
-  args:
-    chdir: roles/terraform/registry/tasks/
-    executable: /bin/bash
-
-- name: Get registry password from terraform output
-  shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw password
-  register: registry_pass
-  args:
-    chdir: roles/terraform/registry/tasks/
-    executable: /bin/bash
-
-- name: Configure Harbor Proxy Cache Registry
-  set_fact:
-    harbor_url: "{{ registry_url.stdout }}"
-    harbor_user: "{{ registry_user.stdout }}"
-    harbor_pass: "{{ registry_pass.stdout }}"
-
-- name: Read cluster.tfvars
-  slurp:
-    src: "{{ inventory_dir }}/cluster.tfvars"
-  register: cluster_vars_raw
-
-- name: Decode cluster.tfvars content
-  set_fact:
-    cluster_vars_content: "{{ cluster_vars_raw.content | b64decode }}"
-
-- name: Extract public_dockerhub_user
-  set_fact:
-    public_dockerhub_user_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
-  when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"[^\"]+\"')
-
-- name: Set public_dockerhub_user if valid
-  set_fact:
-    public_dockerhub_user: "{{ public_dockerhub_user_raw }}"
-  when: public_dockerhub_user_raw | default('') | trim | length > 0
-
-- name: Extract public_dockerhub_pass
-  set_fact:
-    public_dockerhub_pass_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
-  when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"[^\"]+\"')
-
-- name: Set public_dockerhub_pass if valid
-  set_fact:
-    public_dockerhub_pass: "{{ public_dockerhub_pass_raw }}"
-  when: public_dockerhub_pass_raw | default('') | trim | length > 0
-
-- name: Generate checksum
-  set_fact:
-    checksum: "{{ lookup('community.general.random_string', upper=false, special=false, length=6) }}"
-
-- name: Set registry name with checksum
-  set_fact:
-    registry_name: "dockerhub-{{ checksum }}"
-
-
 - name: Proxycache check & delete (skipped in CI)
   when: not ci_mode | bool
   block:
+
+    - name: Terraform init
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -reconfigure -backend-config="{{ inventory_dir }}/backend.tfvars"
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Create registry
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars"
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+      tags: create
+
+    - name: Get registry url from terraform output
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw registry-url
+      register: registry_url
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Get registry username from terraform output
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw user
+      register: registry_user
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Get registry password from terraform output
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw password
+      register: registry_pass
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Configure Harbor Proxy Cache Registry
+      set_fact:
+        harbor_url: "{{ registry_url.stdout }}"
+        harbor_user: "{{ registry_user.stdout }}"
+        harbor_pass: "{{ registry_pass.stdout }}"
+
+    - name: Read cluster.tfvars
+      slurp:
+        src: "{{ inventory_dir }}/cluster.tfvars"
+      register: cluster_vars_raw
+
+    - name: Decode cluster.tfvars content
+      set_fact:
+        cluster_vars_content: "{{ cluster_vars_raw.content | b64decode }}"
+
+    - name: Extract public_dockerhub_user
+      set_fact:
+        public_dockerhub_user_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
+      when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"[^\"]+\"')
+
+    - name: Set public_dockerhub_user if valid
+      set_fact:
+        public_dockerhub_user: "{{ public_dockerhub_user_raw }}"
+      when: public_dockerhub_user_raw | default('') | trim | length > 0
+
+    - name: Extract public_dockerhub_pass
+      set_fact:
+        public_dockerhub_pass_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
+      when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"[^\"]+\"')
+
+    - name: Set public_dockerhub_pass if valid
+      set_fact:
+        public_dockerhub_pass: "{{ public_dockerhub_pass_raw }}"
+      when: public_dockerhub_pass_raw | default('') | trim | length > 0
+
+    - name: Generate checksum
+      set_fact:
+        checksum: "{{ lookup('community.general.random_string', upper=false, special=false, length=6) }}"
+
+    - name: Set registry name with checksum
+      set_fact:
+        registry_name: "dockerhub-{{ checksum }}"
 
     - name: Create registry endpoint
       ansible.builtin.uri:
@@ -194,6 +193,7 @@
         body: "{{ proxy_cache_body }}"
         status_code: 201
       register: proxy_project_creation
+# end block
 
 # If we're in CI mode, override Harbor values with fakes
 - name: Override Harbor vars for CI
@@ -202,6 +202,16 @@
     harbor_url: "example.com"
     harbor_user: "hello"
     harbor_pass: "world"
+
+- name: Ensure setup directory exists
+  file:
+    path: "{{ inventory_dir }}/host_vars/setup"
+    state: directory
+    mode: '0755'
+
+- name: Debug inventory_dir
+  debug:
+    var: inventory_dir
 
 - name: Write Harbor variables to registry.yaml
   copy:
