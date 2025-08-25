@@ -21,7 +21,7 @@ helmCharts:
   releaseName: '{{ app_name }}'
   repo: https://cloudnative-pg.io/charts/
   valuesFile: values.yaml
-  version: 0.20.1
+  version: 0.26.0
 
 resources:
 - cluster.yaml
