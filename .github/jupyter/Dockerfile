@@ -42,7 +42,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     libgtk-3-0 libasound2 libx11-xcb1 \
     xclip \
     graphviz \
-    python3-pydot && \
+    python3-pydot \
+    texlive-xetex texlive-fonts-recommended texlive-plain-generic && \
     layer-cleanup.sh
 
 # Install python dependencies
@@ -56,8 +57,23 @@ RUN conda update -n base -c conda-forge conda && \
     prefect[dask,aws]==${PREFECT_TAG} \
     ipywidgets \
     dask-labextension \
+    nbconvert[webpdf] \
     s3fs \
-    boto3 && \
+    boto3 \
+    cftime \
+    zarr \
+    scipy \
+    xarray \
+    netCDF4 \
+    h5netcdf \
+    geopandas \
+    matplotlib \
+    nc-time-axis \
+    pooch \
+    fsspec \
+    cartopy \
+    seaborn \
+    stac-api-validator && \
     pip install /opt/*.whl && \
     conda clean --all --yes && \
     layer-cleanup.sh

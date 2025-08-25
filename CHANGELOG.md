@@ -13,6 +13,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2] - 2025-08-04
+
+### Added
+
+- [PR#160](https://github.com/RS-PYTHON/rs-infra-core/pull/160) : add port in sample for grafana smtp configuration
+- [PR#161](https://github.com/RS-PYTHON/rs-infra-core/pull/161) : feat: update inventory for loki
+
+### Fixed
+
+- [PR#139](https://github.com/RS-PYTHON/rs-infra-core/pull/139) : Remove Kubernetes deployment code
+- [PR#142](https://github.com/RS-PYTHON/rs-infra-core/pull/142) : kustomize edit fix --vars on all apps
+- [PR#157](https://github.com/RS-PYTHON/rs-infra-core/pull/157) : Remove collections directory
+- [PR#158](https://github.com/RS-PYTHON/rs-infra-core/pull/158) : Restore kube_oidc configuration removed accidentally with kubespray
+- [PR#159](https://github.com/RS-PYTHON/rs-infra-core/pull/159) : Fix SARIF upload category
+
 ## [0.2a15] - 2025-07-04
 
 ### Added

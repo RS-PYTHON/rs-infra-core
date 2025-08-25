@@ -111,6 +111,9 @@ prefect3worker:
   eopf:
     name: eopf-prefect-pool
     number: 2
+  general:
+    name: general-prefect-pool
+    number: 2
 
 rs_server:
   database:
@@ -119,6 +122,15 @@ rs_server:
     password: test
     username: test
     secret: pygeoapi-database-password
+  full_domain: "{{ platform_domain_name }}"
+
+rs_performance_indicator:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: performance
+    password: test
+    username: test
+    secret: pi-database-password
 
 rs_server_cadip_station: |
   cadip:
@@ -415,7 +427,7 @@ rs_osam:
       # Create a new API key or re-use the one you used to set up the ovh managed k8s
       # AK, AS and CK on https://www.ovh.com/auth/api/createToken
       # with GET, POST, PUT, DELETE on *
-      ovh_endpoint: "ovh-eu"    
+      ovh_endpoint: "ovh-eu"
       ovh_application_key: ""
       ovh_application_secret: ""
       ovh_consumer_key: ""

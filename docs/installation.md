@@ -61,8 +61,10 @@ conda install conda-forge::passlib
 conda install conda-forge::boto3
 conda install conda-forge::kubernetes-helm
 conda install conda-forge::kubernetes-client
+conda install conda-forge::python-kubernetes
 
 ansible-galaxy collection install \
+    kubernetes.core \
     openstack.cloud \
     amazon.aws
 ```

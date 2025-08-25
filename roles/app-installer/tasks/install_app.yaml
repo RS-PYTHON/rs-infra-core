@@ -146,6 +146,132 @@
         dest: "{{ app_dir }}/resources.txt"
       delegate_to: bastion
 
+    - name: "{{ package_name }} - {{ app_name }} | Detect jobs for this app"
+      kubernetes.core.k8s_info:
+        kind: Job
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+      register: jobs
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Wait until jobs are complete (if any)"
+      kubernetes.core.k8s_info:
+        kind: Job
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 120
+        wait_condition:
+          type: Complete
+      when: jobs.resources | length > 0
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Detect pods for this app"
+      kubernetes.core.k8s_info:
+        kind: Pod
+        label_selectors:
+          - "!job-name"
+          - "app.kubernetes.io/instance={{ app_name }}"
+      register: pods
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Wait until pods are ready (if any)"
+      kubernetes.core.k8s_info:
+        kind: Pod
+        label_selectors:
+          - "!job-name"
+          - "app.kubernetes.io/instance={{ app_name }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 120
+      when: pods.resources | length > 0
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Detect deployments for this app"
+      kubernetes.core.k8s_info:
+        kind: Deployment
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+      register: deployments
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Wait until deployments are ready (if any)"
+      kubernetes.core.k8s_info:
+        kind: Deployment
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 120
+      when: deployments.resources | length > 0
+      delegate_to: bastion
+
+  rescue:
+    - name: "{{ package_name }} - {{ app_name }} | Show jobs status"
+      debug:
+        var: jobs.resources
+      when: jobs.resources | length > 0
+
+    - name: "{{ package_name }} - {{ app_name }} | Get logs of each job"
+      kubernetes.core.k8s_log:
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace }}"
+      loop: "{{ jobs.resources }}"
+      when: jobs.resources | length > 0
+      ignore_errors: true
+      register: job_logs
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Show jobs logs"
+      debug:
+        var: job_logs
+      when: jobs.resources | length > 0
+
+    - name: "{{ package_name }} - {{ app_name }} | Show pods status"
+      debug:
+        var: pods.resources
+      when: pods.resources | length > 0
+
+    - name: "{{ package_name }} - {{ app_name }} | Get logs of each pod"
+      kubernetes.core.k8s_log:
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace }}"
+      loop: "{{ pods.resources }}"
+      when: pods.resources | length > 0
+      ignore_errors: true
+      register: pod_logs
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Show pods logs"
+      debug:
+        var: pod_logs
+      when: pods.resources | length > 0
+
+    - name: "{{ package_name }} - {{ app_name }} | Show deployments status"
+      debug:
+        var: deployments.resources
+      when: deployments.resources | length > 0
+
+    - name: "{{ package_name }} - {{ app_name }} | Get logs of each deployment"
+      kubernetes.core.k8s_log:
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace }}"
+      loop: "{{ deployments.resources }}"
+      when: deployments.resources | length > 0
+      ignore_errors: true
+      register: deployment_logs
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Show deployments logs"
+      debug:
+        var: deployment_logs
+      when: deployments.resources | length > 0
+
+    - name: "{{ package_name }} - {{ app_name }} | Fail the playbook"
+      fail:
+        msg: "Deployment {{ app_name }} failed! See debug info above."
+
   always:
     - name: "{{ package_name }} - {{ app_name }} | Remove resources tmp dir"
       file:

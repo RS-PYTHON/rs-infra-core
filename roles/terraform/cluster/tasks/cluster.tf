@@ -184,7 +184,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
 resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_scheduler" {
   kube_id       = ovh_cloud_project_kube.cluster.id
   name          = "dask-scheduler-${var.cluster_name}"
-  flavor_name   = "R3-64"
+  flavor_name   = "r3-64"
   desired_nodes = var.nodepool_dask_scheduler_desired_nodes
   min_nodes     = 0
   max_nodes     = 1
