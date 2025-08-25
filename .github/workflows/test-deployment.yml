@@ -74,7 +74,7 @@ jobs:
         shell: bash
       - name: Deploy the apps (check)
         run: |
-          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml -e private_registry=true
         shell: bash
       - name: Deploy the apps (for real)
         run: |
