@@ -1,4 +1,4 @@
-# Copyright 2025 CS Group
+# Copyright 2024 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: operational
+# Variables part
+
+variable "cluster_name" {
+  description = "cluster name"
+  type        = string
+}
+
+variable "public_dockerhub_user" {
+  description = "Public dockerhub user"
+  type        = string
+}
+
+variable "public_dockerhub_pass" {
+  description = "Public dockerhub pass"
+  type        = string
+  sensitive   = true
+}

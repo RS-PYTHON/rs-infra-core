@@ -90,24 +90,37 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 - Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
 - Credentials in `roles/terraform/cluster/tasks/.env`
 - Credentials, domain name in `inventory/mycluster/openrc.sh`
-- Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
+- Node groups, Network sizing, S3 buckets, public docker hub account (optionnal) in `inventory/mycluster/cluster.tfvars`
 - S3 backend for terraform in `inventory/mycluster/backend.tfvars`
 - Values for custom parameters in `inventory/mycluster/host_vars/setup/apps.yml`
 - Values for `all.hosts.setup.ansible_python_interpreter` and `all.hosts.localhost.ansible_python_interpreter` in `inventory/mycluster/hosts.yaml`
+
+### 5. Deploy the managed private docker registry (optionnal)
+
+You can opt-in to deploy a managed private docker registry. It can be used later to avoid pulling multiple time the docker images from the public docker hub (docker.io). It will deploy an a private harbor registry configured as a ([proxy cache](https://goharbor.io/docs/2.4.0/administration/configure-proxy-cache/)). 
+
+```shellsession
+ansible-playbook registry.yaml \
+    -i inventory/mycluster/hosts.yaml
+```
+
+Note: if you want to use the managed private docker registry with the rest of the deployment, set the flag private_registry to true when calling the `apps.yaml` ansible playbooks.
+
+### 6. Generate the inventory
 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 5. Create and configure machines
+### 7. Create and configure machines
 
 ```shellsession
 ansible-playbook cluster.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 6. Deploy the apps
+### 8. Deploy the apps
 
 Connect on the bastion with ssh and go into the ~/rs-infra-core repository :
 
@@ -121,7 +134,10 @@ Deploy the rs-infra-core apps :
 ```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
+    -e private_registry=true
 ```
+
+(Optionnal) : You can add a flag to enable of disable the usage of the managed private docker registry. By default it's disabled : `-e private_registry=false` 
 
 !!! warning "Note: DNS configuration"
     At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (`kubectl -n ingress-nginx get svc ingress-nginx-controller`).
@@ -131,7 +147,6 @@ ansible-playbook apps.yaml \
 (still on the bastion)
 
 ```shellsession
-
 cd ~ ;
 
 git clone https://github.com/RS-PYTHON/rs-infra-security.git ;
@@ -140,26 +155,30 @@ git clone https://github.com/RS-PYTHON/rs-workflow-env.git ;
 git clone https://github.com/RS-PYTHON/rs-server-deployment.git ;
 
 cd ~/rs-infra-core ;
-
 ```
 
 !!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
     See the [how-to/Wazuh-Server_Install](./how-to/Wazuh%20server%20install.md) and execute scripts **before** deploying rs-infra-security.
 
 ```shellsession
-
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-infra-security/apps/"]}' ;
+    -e '{"package_paths": ["~/rs-infra-security/apps/"]}'
+    -e private_registry=true ;
+```
 
+```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-infra-monitoring/apps/"]}' ;
+    -e '{"package_paths": ["~/rs-infra-monitoring/apps/"]}'
+    -e private_registry=true ;
+```
 
+```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-workflow-env/apps/"]}' ;
-
+    -e '{"package_paths": ["~/rs-workflow-env/apps/"]}'
+    -e private_registry=true ;
 ```
 
 !!! warning "Disclaimer: **After** Jupyterhub installation (rs-workflow-env)"
@@ -170,11 +189,10 @@ ansible-playbook apps.yaml \
     See the [how-to/Prefect-Worker](./how-to/Prefect%20Worker.md) after deploying rs-workflow-env.
 
 ```shellsession
-
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
     -e '{"package_paths": ["~/rs-server-deployment/apps/"]}' ;
-
+    -e private_registry=true ;
 ```
 
 # Copyright and license

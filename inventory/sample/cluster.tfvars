@@ -3,6 +3,10 @@ cluster_name = "rs-cluster"
 region = "GRA11"
 allowed_ip_list = ["5.6.7.8", "1.2.3.4"]
 
+# If you have a valid public docker.io account, set it here, else leave empty but do not remove
+public_dockerhub_user = ""
+public_dockerhub_pass = ""
+
 # Nodepools vars
 nodepool_infra_desired_nodes = 2
 nodepool_rs_server_desired_nodes = 1

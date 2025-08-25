@@ -1,0 +1,213 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+# Set CI mode flag with a default (can be overridden via -e ci_mode=true)
+- name: Set CI mode (default false)
+  set_fact:
+    ci_mode: "{{ (ci_mode | default(false)) | bool }}"
+
+- name: Proxycache check & delete (skipped in CI)
+  when: not ci_mode | bool
+  block:
+
+    - name: Terraform init
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; set +o allexport; terraform init -reconfigure -backend-config="{{ inventory_dir }}/backend.tfvars"
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Create registry
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars"
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+      tags: create
+
+    - name: Get registry url from terraform output
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw registry-url
+      register: registry_url
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Get registry username from terraform output
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw user
+      register: registry_user
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Get registry password from terraform output
+      shell: |
+        set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw password
+      register: registry_pass
+      args:
+        chdir: roles/terraform/registry/tasks/
+        executable: /bin/bash
+
+    - name: Configure Harbor Proxy Cache Registry
+      set_fact:
+        harbor_url: "{{ registry_url.stdout }}"
+        harbor_user: "{{ registry_user.stdout }}"
+        harbor_pass: "{{ registry_pass.stdout }}"
+
+    - name: Read cluster.tfvars
+      slurp:
+        src: "{{ inventory_dir }}/cluster.tfvars"
+      register: cluster_vars_raw
+
+    - name: Decode cluster.tfvars content
+      set_fact:
+        cluster_vars_content: "{{ cluster_vars_raw.content | b64decode }}"
+
+    - name: Extract public_dockerhub_user
+      set_fact:
+        public_dockerhub_user_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
+      when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_user\\s*=\\s*\"[^\"]+\"')
+
+    - name: Set public_dockerhub_user if valid
+      set_fact:
+        public_dockerhub_user: "{{ public_dockerhub_user_raw }}"
+      when: public_dockerhub_user_raw | default('') | trim | length > 0
+
+    - name: Extract public_dockerhub_pass
+      set_fact:
+        public_dockerhub_pass_raw: "{{ (cluster_vars_content | regex_findall('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"([^\"]+)\"')) | first | default('') | trim }}"
+      when: cluster_vars_content is search('(?m)^\\s*public_dockerhub_pass\\s*=\\s*\"[^\"]+\"')
+
+    - name: Set public_dockerhub_pass if valid
+      set_fact:
+        public_dockerhub_pass: "{{ public_dockerhub_pass_raw }}"
+      when: public_dockerhub_pass_raw | default('') | trim | length > 0
+
+    - name: Generate checksum
+      set_fact:
+        checksum: "{{ lookup('community.general.random_string', upper=false, special=false, length=6) }}"
+
+    - name: Set registry name with checksum
+      set_fact:
+        registry_name: "dockerhub-{{ checksum }}"
+
+    - name: Create registry endpoint
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/registries"
+        method: POST
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        body_format: json
+        body: >
+          {{
+            {
+              "name": registry_name,
+              "type": "docker-hub",
+              "url": "https://registry-1.docker.io"
+            }
+            | combine(
+              (
+                (public_dockerhub_user | default('') | trim | length > 0) and
+                (public_dockerhub_pass | default('') | trim | length > 0)
+              )
+              | ternary(
+                {
+                  "access_id": public_dockerhub_user | default('') | trim,
+                  "access_secret": public_dockerhub_pass | default('') | trim
+                },
+                {}
+              )
+            )
+          }}
+        status_code: 201
+      register: registry_creation
+
+    - name: Get registry ID
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/registries?q=name%3D{{ registry_name }}"
+        method: GET
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        return_content: true
+        status_code: 200
+      register: registry_query
+
+    - name: Extract registry ID
+      set_fact:
+        registry_id: "{{ (registry_query.content | from_json)[0].id | int }}"
+
+    - name: Check if proxycache project exists
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/projects?name=proxycache"
+        method: GET
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        status_code: 200
+        return_content: true
+      register: proxycache_check
+
+    - name: Delete existing proxycache project
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/projects/proxycache"
+        method: DELETE
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        status_code: 200
+      when: (proxycache_check.content | from_json) | length > 0
+
+    - name: Create proxy cache project
+      vars:
+        proxy_cache_body: >
+          {{
+            {
+              "project_name": "proxycache",
+              "public": False,
+              "registry_id": registry_id | int,
+              "proxy_cache": True
+            }
+          }}
+      ansible.builtin.uri:
+        url: "{{ harbor_url }}/api/v2.0/projects"
+        method: POST
+        user: "{{ harbor_user }}"
+        password: "{{ harbor_pass }}"
+        force_basic_auth: true
+        body_format: json
+        body: "{{ proxy_cache_body }}"
+        status_code: 201
+      register: proxy_project_creation
+# end block
+
+# If we're in CI mode, override Harbor values with fakes
+- name: Override Harbor vars for CI
+  when: ci_mode | bool
+  set_fact:
+    harbor_url: "example.com"
+    harbor_user: "hello"
+    harbor_pass: "world"
+
+- name: Write Harbor variables to registry.yaml
+  copy:
+    dest: "{{ inventory_dir }}/host_vars/setup/registry.yaml"
+    content: |
+      registry:
+        harbor_url: "{{ harbor_url }}"
+        harbor_user: "{{ harbor_user }}"
+        harbor_pass: "{{ harbor_pass }}"
