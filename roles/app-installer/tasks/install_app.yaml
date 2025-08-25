@@ -217,6 +217,7 @@
       kubernetes.core.k8s_log:
         name: "{{ item.metadata.name }}"
         namespace: "{{ item.metadata.namespace }}"
+        all_containers: true
       loop: "{{ jobs.resources }}"
       when: jobs.resources | length > 0
       ignore_errors: true
@@ -237,6 +238,7 @@
       kubernetes.core.k8s_log:
         name: "{{ item.metadata.name }}"
         namespace: "{{ item.metadata.namespace }}"
+        all_containers: true
       loop: "{{ pods.resources }}"
       when: pods.resources | length > 0
       ignore_errors: true
@@ -257,6 +259,7 @@
       kubernetes.core.k8s_log:
         name: "{{ item.metadata.name }}"
         namespace: "{{ item.metadata.namespace }}"
+        all_containers: true
       loop: "{{ deployments.resources }}"
       when: deployments.resources | length > 0
       ignore_errors: true
