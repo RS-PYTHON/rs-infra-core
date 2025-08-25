@@ -66,10 +66,10 @@ Below are all the FOSS (Free and open-source software) used and their respective
 - Keycloak
   - Helm chart: *None*
   - Container image(s)
-    - quay.io/keycloak/keycloak:23.0.6
-      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/23.0.6/LICENSE.txt)
-    - quay.io/keycloak/keycloak-operator:23.0.6
-      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/23.0.6/LICENSE.txt)
+    - quay.io/keycloak/keycloak:24.0.5
+      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/24.0.5/LICENSE.txt)
+    - quay.io/keycloak/keycloak-operator:24.0.5
+      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/24.0.5/LICENSE.txt)
 
 - CoreDNS
   - Helm chart: *None*
