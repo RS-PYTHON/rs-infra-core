@@ -26,6 +26,7 @@ on:
       - develop # pushes on the 'develop' branch
     paths:
       - '.github/**'
+      - '!.github/workflows/test-deployment.yml'
     tags:
       - '**' # new git tags (including hierarchical tags like v1.0/beta)
   workflow_dispatch: # manual trigger
