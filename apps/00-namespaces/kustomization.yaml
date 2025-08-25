@@ -22,7 +22,6 @@ resources:
 - ns-logging.yaml
 - ns-monitoring.yaml
 - ns-networking.yaml
-- ns-operational.yaml
 - ns-processing.yaml
 - ns-security.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1

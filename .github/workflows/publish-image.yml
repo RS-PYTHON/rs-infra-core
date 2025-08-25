@@ -20,6 +20,7 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - '.github/**'
+      - '!.github/workflows/test-deployment.yml'
   push:
     branches:
       - develop # pushes on the 'develop' branch
