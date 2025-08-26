@@ -132,6 +132,12 @@
     - name: "{{ package_name }} - {{ app_name }} | reset facts"
       set_fact:
         resources: []
+        jobs:
+          resources: []
+        pods:
+          resources: []
+        deployments:
+          resources: []
       delegate_to: bastion
 
     - name: "{{ package_name }} - {{ app_name }} | Extract deployed resources"
@@ -270,6 +276,17 @@
       debug:
         var: deployment_logs
       when: deployments.resources | length > 0
+
+    - name: Retrieve Kubernetes events
+      shell: |
+        kubectl get events --all-namespaces --sort-by=.metadata.creationTimestamp | tail -n 100 || true
+      register: k8s_debug
+      ignore_errors: yes
+
+    - name: Show collected debug info
+      debug:
+        msg: |
+          {{ k8s_debug.stdout_lines | default('') }}
 
     - name: "{{ package_name }} - {{ app_name }} | Fail the playbook"
       fail:
