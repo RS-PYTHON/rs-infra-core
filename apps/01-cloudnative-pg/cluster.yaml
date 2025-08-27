@@ -18,6 +18,7 @@ metadata:
   name: postgresql-cluster
   labels:
     app.kubernetes.io/instance: '{{ app_name }}'
+    wait-for-deployment: Ready
 spec:
   instances: 3
 

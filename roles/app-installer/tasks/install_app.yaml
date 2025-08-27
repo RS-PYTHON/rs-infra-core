@@ -30,9 +30,9 @@
         msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/RS-PYTHON/rs-infra-core/blob/develop/docs/installation.md"
       when: not kustomization_file.stat.exists
 
-    - name: "{{ package_name }} - {{ app_name }} | Include vars from kustomization.yaml"
+    - name: "{{ package_name }} - {{ app_name }} | Include vars from {{ kustomization_file.stat.path }}"
       include_vars:
-        file: "{{ app_dir }}/kustomization.yaml"
+        file: "{{ kustomization_file.stat.path }}"
         name: kustomization
       delegate_to: bastion
 
@@ -124,6 +124,7 @@
         {% endif %} \
         --server-side \
         --force-conflicts \
+        -o yaml \
         -l app.kubernetes.io/instance={{ app_name }}
       register: result
       delegate_to: bastion
@@ -142,15 +143,39 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Extract deployed resources"
       set_fact:
-        resources: "{{ resources|d([]) + [item.split()[0]] }}"
-      loop: "{{ result.stdout_lines }}"
+        # cleanup the yaml to fix invalid CRD definitions before parsing
+        resources: >-
+          {{
+            result.stdout
+            | regex_replace('(?m)^([ ]*)- =$' , '\1- "="')
+            | regex_replace('(?m)^([ ]*)- =~$', '\1- "=~"')
+            | from_yaml_all
+            | list
+          }}
       delegate_to: bastion
 
     - name: "{{ package_name }} - {{ app_name }} | Collect deployed resources and write them into resources.txt"
       copy:
-        content: "{{ resources | join(' ') }}"
+        content: "{{ resources }}"
         dest: "{{ app_dir }}/resources.txt"
       delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Wait for deployed resources readiness (when asked)"
+      include_tasks: wait_ready.yaml
+      args:
+        apply:
+          delegate_to: bastion
+      # kubectl apply -o yaml does not produce the exact same output when applying one resource or several ones
+      # make sure our resources list handles all cases
+      loop: >-
+        {{
+          resources
+          | map('community.general.json_query', "items || [@]")
+          | flatten
+          | list
+        }}
+      loop_control:
+        label: "{{ item.kind }}/{{ item.metadata.name }}"
 
     - name: "{{ package_name }} - {{ app_name }} | Detect jobs for this app"
       kubernetes.core.k8s_info:
@@ -214,6 +239,11 @@
       delegate_to: bastion
 
   rescue:
+    - name: "{{ package_name }} - {{ app_name }} | Show resources"
+      debug:
+        var: resources
+      when: resources | length > 0
+
     - name: "{{ package_name }} - {{ app_name }} | Show jobs status"
       debug:
         var: jobs.resources
