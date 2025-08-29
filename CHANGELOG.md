@@ -13,6 +13,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a1] - 2025-08-29
+
+### Added
+
+- [RSPY-737](https://github.com/RS-PYTHON/rs-infra-core/pull/162) : Make s3l0 processing work
+- [RSPY-728](https://github.com/RS-PYTHON/rs-infra-core/pull/165) : Update oauth2 proxy
+- [RSPY-735](https://github.com/RS-PYTHON/rs-infra-core/pull/169) : Add rs_performance_indicator and add new general prefect workpool
+- [RSPY-766](https://github.com/RS-PYTHON/rs-infra-core/pull/174) : Add plotting python libraries in jupyter docker image
+- [PR#175](https://github.com/RS-PYTHON/rs-infra-core/pull/175) : Add more Python libraries to open and plot zarr files
+- [PR#177](https://github.com/RS-PYTHON/rs-infra-core/pull/177) : Install nbconvert in Jupyter image to convert notebooks to PDF files
+- [RSPY-737](https://github.com/RS-PYTHON/rs-infra-core/pull/176) : Update to S3L0 1.2.1
+- [PR#178](https://github.com/RS-PYTHON/rs-infra-core/pull/178) : Test real deployment in ci/cd
+- [PR#187](https://github.com/RS-PYTHON/rs-infra-core/pull/187) : Improve deployment tests 
+- [RSPY-729](https://github.com/RS-PYTHON/rs-infra-core/pull/170) : Use OVH private docker registry
+
+### Changed
+
+- [RSPY-667](https://github.com/RS-PYTHON/rs-infra-core/pull/172) : Define rs_server.full_domain variable
+- [PR#186](https://github.com/RS-PYTHON/rs-infra-core/pull/186) : Remove storage-class label, version is managed by OVH
+
+### Fixed
+
+- [PR#166](https://github.com/RS-PYTHON/rs-infra-core/pull/166) : Fix ds-anotify
+- [PR#167](https://github.com/RS-PYTHON/rs-infra-core/pull/167) : Add gitlab token for private repo
+- [PR#168](https://github.com/RS-PYTHON/rs-infra-core/pull/168) : Add missing node affinity and toleration
+- [PR#171](https://github.com/RS-PYTHON/rs-infra-core/pull/171) : Fix template name for node dask_scheduler
+- [PR#180](https://github.com/RS-PYTHON/rs-infra-core/pull/180) : Updated nodepoool in start/stop playbook 
+
 ## [0.2] - 2025-08-04
 
 ### Added
