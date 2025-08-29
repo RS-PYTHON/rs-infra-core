@@ -139,6 +139,10 @@
           resources: []
         deployments:
           resources: []
+        statefulsets:
+          resources: []
+        daemonsets:
+          resources: []
       delegate_to: bastion
 
     - name: "{{ package_name }} - {{ app_name }} | Extract deployed resources"
@@ -236,6 +240,44 @@
         wait_sleep: 1
         wait_timeout: 120
       when: deployments.resources | length > 0
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Detect statefulsets for this app"
+      kubernetes.core.k8s_info:
+        kind: StatefulSet
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+      register: statefulsets
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Wait until statefulsets are ready (if any)"
+      kubernetes.core.k8s_info:
+        kind: StatefulSet
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 120
+      when: statefulsets.resources | length > 0
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Detect daemonsets for this app"
+      kubernetes.core.k8s_info:
+        kind: DaemonSet
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+      register: daemonsets
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Wait until daemonsets are ready (if any)"
+      kubernetes.core.k8s_info:
+        kind: DaemonSet
+        label_selectors:
+          - "app.kubernetes.io/instance = {{ app_name }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: 120
+      when: daemonsets.resources | length > 0
       delegate_to: bastion
 
   rescue:
