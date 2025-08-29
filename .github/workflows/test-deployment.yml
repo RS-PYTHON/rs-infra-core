@@ -58,6 +58,7 @@ jobs:
         uses: medyagh/setup-minikube@latest
         with:
           start-args: '--profile cluster.local'
+          cpus: 4
           memory: 8000m
       - name: "Configure cluster"
         run: |
@@ -80,6 +81,7 @@ jobs:
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/tasks/install_app.yaml
           sed -i 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g' apps/00-storage-class/sc-retain.yaml
+          sed -i 's!instances: 3!instances: 2!g' apps/01-cloudnative-pg/cluster.yaml
           sed -i -e 's!https://iam.{{ platform_domain_name }}!http://keycloak-service.iam.svc.cluster.local:8080!g' -e 's!insecure_oidc_skip_issuer_verification="false"!insecure_oidc_skip_issuer_verification="true"!g' apps/oauth2-proxy/values.yaml
-          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook -v apps.yaml -i inventory/mycluster/hosts.yaml
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
