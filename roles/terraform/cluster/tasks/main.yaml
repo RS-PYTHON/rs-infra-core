@@ -115,6 +115,7 @@
     - curl
     - wget
     - jq
+    - yq
     - bash-completion
     - unzip
     - software-properties-common
