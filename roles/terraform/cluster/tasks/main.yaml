@@ -316,7 +316,7 @@
 - name: Change yq file permission
   ansible.builtin.file:
     path: /opt/yq/yq
-    mode: '0775'
+    mode: '0700'
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
 
