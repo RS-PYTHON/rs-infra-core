@@ -297,7 +297,45 @@
     state: link
   become: true
   delegate_to: "{{ bastion_ip.stdout }}"
+  
+- name: Create yq directory
+  ansible.builtin.file:
+    path: /opt/yq
+    state: directory
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
 
+- name: Download yq from makefarah github
+  ansible.builtin.uri:
+    url: https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+    dest: /opt/yq/yq
+    follow_redirects: safe
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Change yq file permission
+  ansible.builtin.file:
+    path: /opt/yq/yq
+    mode: '0700'
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create a symlink to yq
+  ansible.builtin.file:
+    src: "/opt/yq/yq"
+    dest: "/usr/local/bin/yq"
+    state: link
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+
+- name: Create a symlink to yq
+  ansible.builtin.file:
+    src: "/opt/yq/yq"
+    dest: "/usr/bin/yq"
+    state: link
+  become: true
+  delegate_to: "{{ bastion_ip.stdout }}"
+  
 - name: Clean install scripts
   ansible.builtin.file:
     path: "{{ item }}"
