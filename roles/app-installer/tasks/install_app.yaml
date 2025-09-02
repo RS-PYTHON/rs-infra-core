@@ -102,12 +102,12 @@
             s|image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\2\3\4|
             b
           }
-          /image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
-            s|image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
+          /^image: [a-z0-9\-]+\/[a-z0-9\-]+(:[^@ ]+)?(@sha256:[a-f0-9]{64})?$/ {
+            s|^image: ([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
             b
           }
-          /image: ([a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
-            s|image: ([a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
+          /^image: [a-z0-9\-]+(:[^@ ]+)?(@sha256:[a-f0-9]{64})?$/ {
+            s|^image: ([a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\1\2\3|
           }
         }' \
         | yq eval 'select(.kind == "Pod") |= .spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
