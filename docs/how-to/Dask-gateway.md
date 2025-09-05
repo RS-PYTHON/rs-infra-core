@@ -41,11 +41,17 @@ options = gateway.cluster_options()
 for key in options.keys():
     print(f"{key}: {options[key]}")
 
+# NOTE: use one of the following images:
+# - ghcr.io/rs-python/rs-infra-core-dask-staging
+# - ghcr.io/rs-python/rs-infra-core-dask-l0
+# - ghcr.io/rs-python/rs-infra-core-dask-s1ard
+# - ...
+
 cluster = gateway.new_cluster(
     worker_cores=1,
     worker_memory=2.0,
     namespace='dask-gateway',
-    image='ghcr.io/rs-python/rs-infra-core-dask-eopf:latest'
+    image='ghcr.io/rs-python/rs-infra-core-dask-l0:latest'
 )
 
 print (cluster.name)
@@ -150,11 +156,16 @@ options = gateway.cluster_options()
 for key in options.keys():
     print(f"{key}: {options[key]}")
 
+# NOTE: use one of the following images and cluster names:
+# - ghcr.io/rs-python/rs-infra-core-dask-l0 cluster_name:dask-l0
+# - ghcr.io/rs-python/rs-infra-core-dask-s1ard cluster_name:dask-s1ard
+# - ...
+
 cluster = gateway.new_cluster(
     namespace='dask-gateway',
-    image='ghcr.io/rs-python/rs-infra-core-dask-eopf:latest',
-    cluster_name='dask-eopf',
-    scheduler_extra_pod_labels={'cluster_name': 'dask-eopf'},
+    image='ghcr.io/rs-python/rs-infra-core-dask-l0:latest',
+    cluster_name='dask-l0',
+    scheduler_extra_pod_labels={'cluster_name': 'dask-l0'},
     worker_cores=1,
     worker_memory=2.0, # In GB
     cluster_max_workers=3,

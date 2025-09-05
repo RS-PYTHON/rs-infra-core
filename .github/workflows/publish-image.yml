@@ -93,16 +93,19 @@ jobs:
   publish-docker-matrix:
     strategy:
       matrix:
-        image: [jupyter, dask-staging, dask-eopf]
+        # path: relative path on disk where to find resources and Dockerfile
+        # image: used for the name of the docker image to build
         include:
           - path: jupyter
             image: jupyter
           - path: dask-gateway
             image: dask-staging
           - path: dask-gateway
-            image: dask-eopf
-          - path: dask-gateway
             image: dask-eopf-mockup
+          - path: dask-gateway
+            image: dask-l0
+          - path: dask-gateway
+            image: dask-s1ard
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: "Docker image for ${{ matrix.image }}"
