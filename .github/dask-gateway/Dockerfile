@@ -21,8 +21,7 @@ ARG DASK_GATEWAY_TAG=2024.1.0
 USER root
 
 COPY ./*.whl ./
-COPY ./resources/requirements-dask-eopf.txt /opt/
-COPY ./resources/requirements-dask-staging.txt /opt/
+COPY ./resources/requirements-dask-*.txt /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
@@ -44,7 +43,7 @@ RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     RS_SERVER_COMMON_WHEEL=$(find . -maxdepth 1 -type f -name 'rs_server_common-*-py3-none-any.whl' | head -n 1) \
     RS_SERVER_STAGING_WHEEL=$(find . -maxdepth 1 -type f -name 'rs_server_staging-*-py3-none-any.whl' | head -n 1) \
     pip install -U -r /opt/requirements-${IMAGE2BUILD}.txt && \
-    rm -f /opt/Dockerfile.requirements.txt /opt/requirements-dask-eopf.txt /opt/requirements-dask-staging.txt ./*.whl && \
+    rm -f /opt/Dockerfile.requirements.txt /opt/requirements-dask-*.txt ./*.whl && \
     layer-cleanup.sh
 
 # Install Dask with correct version
@@ -62,7 +61,7 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-i
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
-RUN if [ "${IMAGE2BUILD}" = "dask-eopf" ]; then \
+RUN if [ "${IMAGE2BUILD}" != "dask-staging" ]; then \
         apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh; \
     fi
 RUN apt autoremove -y gcc && layer-cleanup.sh
@@ -76,6 +75,11 @@ WORKDIR /home/user
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
-# ghcr.io/rs-python/rs-infra-core-dask-staging or ghcr.io/rs-python/rs-infra-core-dask-eopf
 LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-${IMAGE2BUILD}"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/dask-gateway/Dockerfile"
+
+# This Dockerfile is used to build:
+# ghcr.io/rs-python/rs-infra-core-dask-staging
+# ghcr.io/rs-python/rs-infra-core-dask-l0
+# ghcr.io/rs-python/rs-infra-core-dask-s1ard
+

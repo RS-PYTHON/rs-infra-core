@@ -45,7 +45,7 @@ cluster = gateway.new_cluster(
     worker_cores=1,
     worker_memory=2.0,
     namespace='dask-gateway',
-    image='ghcr.io/rs-python/rs-infra-core-dask-eopf:latest'
+    image='ghcr.io/rs-python/rs-infra-core-dask-l0:latest'
 )
 
 print (cluster.name)
@@ -152,9 +152,9 @@ for key in options.keys():
 
 cluster = gateway.new_cluster(
     namespace='dask-gateway',
-    image='ghcr.io/rs-python/rs-infra-core-dask-eopf:latest',
-    cluster_name='dask-eopf',
-    scheduler_extra_pod_labels={'cluster_name': 'dask-eopf'},
+    image='ghcr.io/rs-python/rs-infra-core-dask-l0:latest',
+    cluster_name='dask-l0',
+    scheduler_extra_pod_labels={'cluster_name': 'dask-l0'},
     worker_cores=1,
     worker_memory=2.0, # In GB
     cluster_max_workers=3,
