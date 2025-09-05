@@ -41,6 +41,12 @@ options = gateway.cluster_options()
 for key in options.keys():
     print(f"{key}: {options[key]}")
 
+# NOTE: use one of the following images:
+# - ghcr.io/rs-python/rs-infra-core-dask-staging
+# - ghcr.io/rs-python/rs-infra-core-dask-l0
+# - ghcr.io/rs-python/rs-infra-core-dask-s1ard
+# - ...
+
 cluster = gateway.new_cluster(
     worker_cores=1,
     worker_memory=2.0,
@@ -149,6 +155,11 @@ options = gateway.cluster_options()
 
 for key in options.keys():
     print(f"{key}: {options[key]}")
+
+# NOTE: use one of the following images and cluster names:
+# - ghcr.io/rs-python/rs-infra-core-dask-l0 cluster_name:dask-l0
+# - ghcr.io/rs-python/rs-infra-core-dask-s1ard cluster_name:dask-s1ard
+# - ...
 
 cluster = gateway.new_cluster(
     namespace='dask-gateway',
