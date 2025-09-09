@@ -19,6 +19,10 @@
 # --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/14/packages/pypi/simple # eopf cpm
 --extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/114/packages/pypi/simple # s1-ard-core
 
+# s1 needs "eopf>=2.5.8" but we have errors with the latest versions. So we force this old version.
+eopf==2.5.8
+
+# Install s1
 git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/vincent.privat/s1-l12-rp@rspy
 
 # other python dependencies
