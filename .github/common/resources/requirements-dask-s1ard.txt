@@ -22,8 +22,9 @@
 # s1 needs "eopf>=2.5.8" but we have errors with the latest versions. So we force this old version.
 eopf==2.5.8
 
-# Install s1
-git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/vincent.privat/s1-l12-rp@rspy
+# Install s1. Use forked 0.2.0 branch.
+git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/jgaucher/s1-l12-rp@forked-0.2.0
 
 # other python dependencies
+proj
 graphviz
