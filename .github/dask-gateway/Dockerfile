@@ -22,6 +22,7 @@ USER root
 
 COPY ./*.whl ./
 COPY ./resources/requirements-dask-*.txt /opt/
+COPY ./resources/post-install-dask-*.sh /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
@@ -37,7 +38,7 @@ RUN wget -q -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/t
     pip install --no-cache-dir -r /opt/Dockerfile.requirements.txt && \
     layer-cleanup.sh
 
-# Install whatever
+# pip install the requirements.txt file for the requested image IMAGE2BUILD
 RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
     GITLAB_EOPF_TOKEN=$(cat /run/secrets/GITLAB_EOPF_TOKEN) \
     RS_SERVER_COMMON_WHEEL=$(find . -maxdepth 1 -type f -name 'rs_server_common-*-py3-none-any.whl' | head -n 1) \
@@ -64,6 +65,11 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-i
 RUN if [ "${IMAGE2BUILD}" != "dask-staging" ]; then \
         apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh; \
     fi
+
+# Run post-install script as root if it exists
+RUN [ -f /opt/post-install-${IMAGE2BUILD}.sh ] && /opt/post-install-${IMAGE2BUILD}.sh && layer-cleanup.sh; \
+    rm -f /opt/post-install-dask-*.sh
+
 RUN apt autoremove -y gcc && layer-cleanup.sh
 
 # Add a default user
