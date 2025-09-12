@@ -41,7 +41,6 @@ cainjector:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
 
-
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
