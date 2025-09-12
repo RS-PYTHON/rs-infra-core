@@ -16,8 +16,14 @@ apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
   name: backup-postgresql-cluster
+  labels:
+    wait-for-deployment: Ready
 spec:
+  immediate: true
   schedule: "0 0 11 * * *"
   backupOwnerReference: self
   cluster:
     name: postgresql-cluster
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io

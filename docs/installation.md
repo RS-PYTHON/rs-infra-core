@@ -54,19 +54,9 @@ conda create -y -n rspy python=3.11
 conda activate rspy
 
 # Install Ansible, Terraform, Openstackclient
-conda install conda-forge::ansible
-conda install conda-forge::terraform
-conda install conda-forge::python-openstackclient
-conda install conda-forge::passlib
-conda install conda-forge::boto3
-conda install conda-forge::kubernetes-helm
-conda install conda-forge::kubernetes-client
-conda install conda-forge::python-kubernetes
+conda run conda install -y -c conda-forge "ansible<12" terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
 
-ansible-galaxy collection install \
-    kubernetes.core \
-    openstack.cloud \
-    amazon.aws
+conda run ansible-galaxy collection install kubernetes.core openstack.cloud amazon.aws
 ```
 
 ### 3. Copy the sample inventory

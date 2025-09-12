@@ -24,18 +24,11 @@ spec:
 
   enableSuperuserAccess: true
 
-  backup:
-    barmanObjectStore:
-      destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
-      endpointURL: {{ s3.endpoint }}
-      s3Credentials:
-        accessKeyId:
-          key: AK
-          name: psql-backup-obs
-        secretAccessKey:
-          key: SK
-          name: psql-backup-obs
-    retentionPolicy: "10d"
+  plugins:
+  - name: barman-cloud.cloudnative-pg.io
+    isWALArchiver: true
+    parameters:
+      barmanObjectName: ovh-gra
 
   postgresql:
     parameters:

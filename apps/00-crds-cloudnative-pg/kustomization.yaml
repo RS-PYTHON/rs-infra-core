@@ -14,10 +14,17 @@
 
 
 resources:
-- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_clusters.yaml
-- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_backups.yaml
-- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_poolers.yaml
-- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.22.1/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_clusters.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_backups.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_poolers.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_imagecatalogs.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_clusterimagecatalogs.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_databases.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_publications.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_subscriptions.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v1.27.0/config/crd/bases/postgresql.cnpg.io_failoverquorums.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/plugin-barman-cloud/refs/tags/v0.6.0/config/crd/bases/barmancloud.cnpg.io_objectstores.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:

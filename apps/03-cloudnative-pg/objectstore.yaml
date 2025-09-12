@@ -12,25 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-namespace: database
-
-helmCharts:
-- name: cloudnative-pg
-  namespace: database
-  releaseName: '{{ app_name }}'
-  repo: https://cloudnative-pg.io/charts/
-  valuesFile: values.yaml
-  version: 0.20.1
-
-resources:
-- cluster.yaml
-- configmap-create-database.yaml
-- secrets.yaml
-- scheduled-backup.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: ovh-gra
+spec:
+  configuration:
+    destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
+    endpointURL: {{ s3.endpoint }}
+    s3Credentials:
+      accessKeyId:
+        key: AK
+        name: psql-backup-obs
+      secretAccessKey:
+        key: SK
+        name: psql-backup-obs
+  retentionPolicy: "10d"

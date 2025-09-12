@@ -58,10 +58,12 @@ config:
   # -- The content of the configmap/secret, see
   # https://cloudnative-pg.io/documentation/current/operator_conf/#available-options
   # for all the available options.
-  data: {}
+  data:
   # INHERITED_ANNOTATIONS: categories
   # INHERITED_LABELS: environment, workload, app
   # WATCH_NAMESPACE: namespace-a,namespace-b
+    WATCH_NAMESPACE: database
+  clusterWide: false
 
 serviceAccount:
   # -- Specifies whether the service account should be created.
