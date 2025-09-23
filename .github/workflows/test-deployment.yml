@@ -49,7 +49,7 @@ jobs:
           conda create -y -n rspy python=3.11
 
           # Install Ansible, Terraform, Openstackclient
-          conda run -n rspy conda install -y -c conda-forge "ansible<12" terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
+          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
 
           conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws kubernetes.core community.general
 
@@ -84,7 +84,7 @@ jobs:
           sed -i 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g' apps/00-storage-class/sc-retain.yaml
           sed -i 's!instances: 3!instances: 1!g' apps/03-cloudnative-pg/cluster.yaml
           sed -i -e 's!https://iam.{{ platform_domain_name }}!http://keycloak-service.iam.svc.cluster.local:8080!g' -e 's!insecure_oidc_skip_issuer_verification="false"!insecure_oidc_skip_issuer_verification="true"!g' apps/oauth2-proxy/values.yaml
-          
+
           # Minio for cloudnative pg
           sed -i -e 's!{{ s3.access_key }}!access_key!' -e 's!{{ s3.secret_key }}!secret_key!' apps/03-cloudnative-pg/secrets.yaml
           sed -i -e 's!{{ postgresql.bucket }}!bucket!' -e 's!{{ s3.endpoint }}!http://minio.minio.svc.cluster.local:9000!' apps/03-cloudnative-pg/objectstore.yaml
