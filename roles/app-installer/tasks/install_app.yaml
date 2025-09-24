@@ -140,16 +140,23 @@
         daemonsets: {"resources": []}
       delegate_to: bastion
 
-    - name: "{{ package_name }} - {{ app_name }} | Extract deployed resources"
+    - name: "{{ package_name }} - {{ app_name }} | Cleanup deployed resources YAML"
       set_fact:
         # cleanup the yaml to fix invalid CRD definitions before parsing
-        resources: >-
+        cleaned_resources_yaml: >-
           {{
-            result.stdout
+            (result.stdout | default(''))
             | regex_replace('(?m)^([ ]*)- =$' , '\1- "="')
             | regex_replace('(?m)^([ ]*)- =~$', '\1- "=~"')
-            | from_yaml_all
-            | list
+          }}
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Extract deployed resources"
+      set_fact:
+        resources: >-
+          {{
+            [] if (cleaned_resources_yaml | default('') | trim) == ''
+            else (cleaned_resources_yaml | from_yaml_all | list)
           }}
       delegate_to: bastion
 
