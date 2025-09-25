@@ -40,7 +40,7 @@ graylog:
 
 ## Reuse credentials
 
-Like in the example values, you can reuse crendentials already set up in the inventory files. This functionnality is used in the sample inventory for the S3 keys and endpoints that are often the same accross applications:
+Like in the example values, you can reuse credentials already set up in the inventory files. This functionality is used in the sample inventory for the S3 keys and endpoints that are often the same accross applications:
 
 ```yaml
 # {{ inventory_dir }}/host_vars/setup/main.yaml
@@ -52,17 +52,17 @@ s3:
 ```
 
 ```yaml
-# {{ inventory_dir }}/host_vars/setup/apps/thanos.yaml
-thanos:
+# apps/velero/values.yaml
+velero:
   s3:
-    bucket: THANOS_BUCKET
-    endpoint: "{{ common.s3.endpoint }}"
-    region: "{{ common.s3.region }}"
-    access_key: "{{ common.s3.access_key }}"
-    secret_key: "{{ common.s3.secret_key }}"
+    bucket: VELERO_BUCKET
+    endpoint: "{{ s3.endpoint }}"
+    region: "{{ s3.region }}"
+    access_key: "{{ s3.access_key }}"
+    secret_key: "{{ s3.secret_key }}"
 ```
 
-## Retrieve indivindual credentials from a HashiCorp Vault
+## Retrieve individual credentials from a HashiCorp Vault
 
 You can retrieve credentials from a *HashiCorp Vault* instance using the *hvac* ansible plugin:
 
