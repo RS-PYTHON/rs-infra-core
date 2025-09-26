@@ -96,6 +96,7 @@
     - name: "{{ package_name }} - {{ app_name }} | Deploy resources"
       shell: |
         kustomize build --enable-helm {{ resources_dir.path }} \
+        | yq eval 'select(.metadata.annotations."helm.sh/hook" != "test")' - \
                 {% if private_registry | bool %} \
         | sed -E '/image:/ {
           /image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
