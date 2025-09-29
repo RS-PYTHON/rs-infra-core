@@ -52,6 +52,8 @@ ingress:
 sessionStorage:
   type: redis
 redis:
+  image:
+    repository: bitnamilegacy/redis
   enabled: true
   architecture: standalone
   master:
