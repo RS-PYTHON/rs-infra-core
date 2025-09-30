@@ -55,6 +55,9 @@ sessionStorage:
     clientType: "standalone"
 redis:
   enabled: true
+  replicas: 1
+  persistentVolume:
+    enabled: false
   master:
     affinity:
       nodeAffinity:
