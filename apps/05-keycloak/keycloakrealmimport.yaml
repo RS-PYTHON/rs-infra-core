@@ -17,6 +17,8 @@ kind: KeycloakRealmImport
 metadata:
   name: rspy
   namespace: iam
+  labels:
+    wait-for-deployment: Done
 spec:
   keycloakCRName: keycloak
   realm:
