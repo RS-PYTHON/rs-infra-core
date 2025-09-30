@@ -54,8 +54,6 @@ sessionStorage:
   redis:
     clientType: "standalone"
 redis:
-  image:
-    repository: bitnamilegacy/redis
   enabled: true
   replicas: 1
   redis:
