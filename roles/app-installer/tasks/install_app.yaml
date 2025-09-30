@@ -223,7 +223,7 @@
           - "app.kubernetes.io/instance={{ app_name }}"
         wait: true
         wait_sleep: 1
-        wait_timeout: 120
+        wait_timeout: 360
       when: pods.resources | length > 0
       delegate_to: bastion
 
