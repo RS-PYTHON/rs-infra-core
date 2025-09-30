@@ -156,6 +156,16 @@ rs_server_adgs_station: |
       # -- ADGS URL
       url: http://mockup-station-adgs.processing.svc.cluster.local:8080/Products
 
+rs_server_prip_station: |
+  s1a:
+    endpoint:
+      # -- PRIP station URL
+      url: http://mockup-prip-s1a.processing.svc.cluster.local:8080/Products
+  s2b:
+    endpoint:
+      # -- PRIP station URL
+      url: http://mockup-prip-s2b.processing.svc.cluster.local:8080/Products
+
 rs_server_catalog:
   database:
     host: rs-server-catalog-db.database.svc.cluster.local
@@ -377,14 +387,14 @@ rs_server_station_secrets:
         client_id: client_id
         client_secret: client_secret
         authorization: Basic test
-    s2a:
+    s2b:
       service:
         name: prip
-        url: http://mockup-prip-s2a.processing.svc.cluster.local:8080
-      domain: mockup-prip-s2a.processing.svc.cluster.local
+        url: http://mockup-prip-s2b.processing.svc.cluster.local:8080
+      domain: mockup-prip-s2b.processing.svc.cluster.local
       authentication:
         auth_type: oauth2
-        token_url: http://mockup-prip-s2a.processing.svc.cluster.local:8080/oauth2/token
+        token_url: http://mockup-prip-s2b.processing.svc.cluster.local:8080/oauth2/token
         grant_type: password
         scope: null
         username: test
@@ -420,6 +430,13 @@ rs_station_mockup:
     sgs:
       bucketName: rspython-ops-catalog-playground
       bucketPath: stations/CADIP/
+  prip:
+    s1a:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/PRIP/
+    s2b:
+      bucketName: rspython-ops-catalog-playground
+      bucketPath: stations/PRIP/
 
 rs_osam:
   provider:

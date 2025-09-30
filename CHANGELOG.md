@@ -13,6 +13,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a2] - 2025-09-30
+
+### Added
+
+- [PR#183](https://github.com/RS-PYTHON/rs-infra-core/pull/183) : Update CloudNativePG
+- [PR#173](https://github.com/RS-PYTHON/rs-infra-core/pull/173) : Update OAuth2 Proxy (bye bye bitnami)
+- [PR#195](https://github.com/RS-PYTHON/rs-infra-core/pull/195) : Add S1 ARD processor
+
+### Changed
+
+- [PR#196](https://github.com/RS-PYTHON/rs-infra-core/pull/196) : Allow latest version of Ansible
+- Update inventory for prip stations
+
+### Fixed
+
+- [PR#193](https://github.com/RS-PYTHON/rs-infra-core/pull/193) : Add missing depedencies
+
 ## [1.0a1] - 2025-08-29
 
 ### Added
