@@ -16,6 +16,8 @@ apiVersion: k8s.keycloak.org/v2alpha1
 kind: Keycloak
 metadata:
   name: keycloak
+  labels:
+    wait-for-deployment: Ready
 spec:
   db:
     vendor: postgres
