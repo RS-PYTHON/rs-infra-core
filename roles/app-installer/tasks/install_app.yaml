@@ -96,8 +96,8 @@
     - name: "{{ package_name }} - {{ app_name }} | Deploy resources"
       shell: |
         kustomize build --enable-helm {{ resources_dir.path }} \
-        | yq eval 'select(.metadata.annotations."helm.sh/hook" != "test")' - \
-                {% if private_registry | bool %} \
+        | yq eval 'select(.metadata.annotations."helm.sh/hook" != "test" and .metadata.annotations."helm.sh/hook" != "test-success")' - \
+        {% if private_registry | bool %} \
         | sed -E '/image:/ {
           /image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?/ {
             s|image: (docker.io\/)?([a-z0-9\-]+\/[a-z0-9\-]+)(:[^@ ]+)?(@sha256:[a-f0-9]{64})?|image: {{ registry.harbor_url | regex_replace('^https?://', '') }}/proxycache/\2\3\4|
@@ -223,7 +223,7 @@
           - "app.kubernetes.io/instance={{ app_name }}"
         wait: true
         wait_sleep: 1
-        wait_timeout: 120
+        wait_timeout: 360
       when: pods.resources | length > 0
       delegate_to: bastion
 

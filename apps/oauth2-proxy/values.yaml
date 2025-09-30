@@ -51,11 +51,18 @@ ingress:
 
 sessionStorage:
   type: redis
+  redis:
+    clientType: "standalone"
 redis:
   image:
     repository: bitnamilegacy/redis
   enabled: true
-  architecture: standalone
+  replicas: 1
+  redis:
+    config:
+      min-replicas-to-write: 0
+  persistentVolume:
+    enabled: false
   master:
     affinity:
       nodeAffinity:
