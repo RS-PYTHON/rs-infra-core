@@ -183,7 +183,7 @@
         }}
       loop_control:
         label: "{{ item.kind }}/{{ item.metadata.name }}"
-      when: item.kind in ['Job', 'Pod', 'Deployment', 'StatefulSet', 'DaemonSet', 'Cluster', 'ScheduledBackup']
+      when: item.kind in ['Job', 'Pod', 'Deployment', 'StatefulSet', 'DaemonSet', 'Cluster', 'ScheduledBackup', 'Keycloak', 'KeycloakRealmImport']
 
     - name: "{{ package_name }} - {{ app_name }} | Detect jobs for this app"
       kubernetes.core.k8s_info:

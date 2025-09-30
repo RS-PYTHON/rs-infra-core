@@ -37,7 +37,7 @@
         wait_condition:
           type: "{{ item.metadata.labels['wait-for-deployment'] }}"
       when:
-        - item.kind == 'Cluster'
+        - item.kind in ['Cluster', 'Keycloak', 'KeycloakRealmImport']
 
     - name: Wait using condition for ScheduledBackup
       block:
@@ -102,7 +102,7 @@
           type: Established
       when: item.kind == 'CustomResourceDefinition'
 
-  when: 
+  when:
     - not ansible_check_mode
     - item.metadata.labels['wait-for-deployment'] is defined
   delegate_to: bastion
