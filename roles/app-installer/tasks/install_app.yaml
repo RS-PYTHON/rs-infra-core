@@ -187,6 +187,7 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Detect jobs for this app"
       kubernetes.core.k8s_info:
+        api_version: batch/v1
         kind: Job
         label_selectors:
           - "app.kubernetes.io/instance = {{ app_name }}"
@@ -195,6 +196,7 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Wait until jobs are complete (if any)"
       kubernetes.core.k8s_info:
+        api_version: batch/v1
         kind: Job
         label_selectors:
           - "app.kubernetes.io/instance = {{ app_name }}"
