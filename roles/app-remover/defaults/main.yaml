@@ -1,0 +1,4 @@
+# Keep the temporary folder containing the applications resources to deploy
+# /!\ DO NOT FORGET TO DELETE THIS TEMPORARY FOLDER MANUALLY AFTER DEBUGGGING
+# AS IT MAY CONTAINS SENSITIVE DATA.
+debug: false
