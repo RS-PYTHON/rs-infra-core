@@ -99,6 +99,9 @@ COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_
 COPY resources/start-notebook.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/start-notebook.sh
 
+# Remove apt repository list and custom scripts
+RUN rm -f /etc/apt/sources.list /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+
 ENTRYPOINT ["start-notebook.sh"]
 
 EXPOSE 8888
