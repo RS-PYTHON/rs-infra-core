@@ -30,6 +30,7 @@ config:
     cookie_domains=".{{ platform_domain_name }}"
     insecure_oidc_skip_issuer_verification="false"
     insecure_oidc_allow_unverified_email="true"
+    provider_ca_files="{{ oauth2_proxy_provider_ca_files }}"
     reverse_proxy="true"
 
 ingress:
@@ -45,7 +46,7 @@ ingress:
       hosts:
         - oauth2-proxy.{{ platform_domain_name }}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
 

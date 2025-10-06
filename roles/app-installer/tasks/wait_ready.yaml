@@ -19,7 +19,7 @@
         api_version: "{{ item.apiVersion }}"
         kind: "{{ item.kind }}"
         name: "{{ item.metadata.name }}"
-        namespace: "{{ item.metadata.namespace }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
         wait: true
         wait_sleep: 1
         wait_timeout: 180
@@ -30,14 +30,14 @@
         api_version: "{{ item.apiVersion }}"
         kind: "{{ item.kind }}"
         name: "{{ item.metadata.name }}"
-        namespace: "{{ item.metadata.namespace }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
         wait: true
         wait_sleep: 1
         wait_timeout: 180
         wait_condition:
           type: "{{ item.metadata.labels['wait-for-deployment'] }}"
       when:
-        - item.kind in ['Cluster', 'Keycloak', 'KeycloakRealmImport']
+        - item.kind in ['Certificate', 'Cluster', 'ClusterIssuer', 'Keycloak', 'KeycloakRealmImport']
 
     - name: Wait using condition for ScheduledBackup
       block:
@@ -45,7 +45,7 @@
           kubernetes.core.k8s_info:
             kind: Backup
             api_version: "{{ item.apiVersion }}"
-            namespace: "{{ item.metadata.namespace }}"
+            namespace: "{{ item.metadata.namespace | default('default', true) }}"
             label_selectors:
               - "cnpg.io/cluster=postgresql-cluster"
           register: backup_info
@@ -81,7 +81,7 @@
         api_version: "{{ item.apiVersion }}"
         kind: "{{ item.kind }}"
         name: "{{ item.metadata.name }}"
-        namespace: "{{ item.metadata.namespace }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
         wait: true
         wait_sleep: 1
         wait_timeout: 180

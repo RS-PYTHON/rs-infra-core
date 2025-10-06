@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2025 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Platform domain name
-platform_domain_name: rspy.example.com
-
-# Cluster issuer (letsencrypt-prod, letsencrypt-staging, local-ca-issuer)
-cluster_issuer: letsencrypt-prod
-
-# S3 credential to be reused accross apps
-s3:
-  endpoint: https://s3.gra.io.cloud.ovh.net
-  region: gra
-  access_key: s3_access_key
-  secret_key: s3_secret_key
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-ca-configmap
+  namespace: <ns>
+data:
+  tls.crt: |
