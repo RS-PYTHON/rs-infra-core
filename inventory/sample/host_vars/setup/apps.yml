@@ -36,6 +36,9 @@ apikeymanager:
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     secret: apikeymanager-database-password
 
+cinder:
+  provisioner: cinder.csi.openstack.org
+
 certmanager:
   clusterissuer:
     acme:
@@ -67,6 +70,7 @@ postgresql:
   replication_password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_user: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   bucket: "{{ cluster_name }}-psql"
+  instances: 3
 
 keycloak:
   image: quay.io/keycloak/keycloak:23.0.6

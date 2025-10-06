@@ -23,6 +23,6 @@ parameters:
   availability: nova
   fsType: ext4
   type: high-speed
-provisioner: cinder.csi.openstack.org
+provisioner: "{{ cinder.provisioner }}"
 reclaimPolicy: Retain
 volumeBindingMode: Immediate

@@ -79,6 +79,7 @@ jobs:
           mv inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
           sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
           sed -i 's!https://s3.gra.io.cloud.ovh.net!http://minio.minio.svc.cluster.local:9000!' inventory/mycluster/host_vars/setup/main.yaml
+          sed -i -e 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g' -e 's!instances: 3!instances: 1!g' inventory/mycluster/host_vars/setup/apps.yml
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
@@ -89,8 +90,6 @@ jobs:
       - name: Deploy the apps (for real)
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
-          sed -i 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g' apps/00-storage-class/sc-retain.yaml
-          sed -i 's!instances: 3!instances: 1!g' apps/03-cloudnative-pg/cluster.yaml
           sed -i -e 's!https://iam.{{ platform_domain_name }}!http://keycloak-service.iam.svc.cluster.local:8080!g' -e 's!insecure_oidc_skip_issuer_verification="false"!insecure_oidc_skip_issuer_verification="true"!g' apps/oauth2-proxy/values.yaml
 
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
