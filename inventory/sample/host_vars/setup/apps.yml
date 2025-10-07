@@ -211,8 +211,8 @@ rs_server_catalog_staging_configmap: |
   copernicus,s01-session,*,30,prip-rs-sentinel-1-s01-session
   copernicus,s02-aux*,*,30,prip-rs-sentinel-2-s02-aux
   copernicus,s02-session,*,30,prip-rs-sentinel-2-s02-session
-  copernicus,s03-aux*,*,30,prip-rs-sentinel-2-s03-aux
-  copernicus,s03-session,*,30,prip-rs-sentinel-2-s03-session
+  copernicus,s03-aux*,*,30,prip-rs-sentinel-3-s03-aux
+  copernicus,s03-session,*,30,prip-rs-sentinel-3-s03-session
   copernicus,s01siwraw,*,30,prip-rs-sentinel-1-s01siwraw
   copernicus,s01sewraw,*,30,prip-rs-sentinel-1-s01sewraw
   copernicus,s01ssmraw,*,30,prip-rs-sentinel-1-s01ssmraw
