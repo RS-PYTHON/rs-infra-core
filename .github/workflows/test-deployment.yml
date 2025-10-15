@@ -58,12 +58,12 @@ jobs:
       - name: Start minikube
         uses: medyagh/setup-minikube@latest
         with:
-          start-args: '--profile cluster.local'
+          addons: 'metallb'
           cpus: 4
           memory: 8000m
-      - name: "Configure cluster"
+      - name: "Configure cluster labels, IP and DNS (host + CoreDNS)"
         run: |
-          kubectl label node cluster.local node-role.kubernetes.io/infra=
+          .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy"
         shell: bash
       - name: Deploy minio
         run: |
@@ -78,7 +78,19 @@ jobs:
           mv inventory/mycluster/.env.template inventory/mycluster/.env
           mv inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
           sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
-          sed -i 's!https://s3.gra.io.cloud.ovh.net!http://minio.minio.svc.cluster.local:9000!' inventory/mycluster/host_vars/setup/main.yaml
+          # --- Use minio as S3 provider and local CA issuer instead of Let's Encrypt
+          sed -i\
+              -e 's!https://s3.gra.io.cloud.ovh.net!http://minio.minio.svc.cluster.local:9000!'\
+              -e 's!letsencrypt-prod!local-ca-issuer!g'\
+              inventory/mycluster/host_vars/setup/main.yaml
+          # --- Configure minikube storage class provisioner, ingress-nginx LoadBalancer to retrieve fixed IP address from metalLB, oauth2-proxy to trust local-ca
+          sed -i \
+              -e 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g'\
+              -e 's!instances: 3!instances: 1!g'\
+              -e 's!annotations: {}!annotations:\n    metallb.universe.tf/address-pool: default!g'\
+              -e 's!provider_ca_files: ""!provider_ca_files: "/etc/ssl/certs/local-ca/tls.crt"!g'\
+              inventory/mycluster/host_vars/setup/apps.yml
+          # --- Generate inventory
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
@@ -89,9 +101,68 @@ jobs:
       - name: Deploy the apps (for real)
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
-          sed -i 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g' apps/00-storage-class/sc-retain.yaml
-          sed -i 's!instances: 3!instances: 1!g' apps/03-cloudnative-pg/cluster.yaml
-          sed -i -e 's!https://iam.{{ platform_domain_name }}!http://keycloak-service.iam.svc.cluster.local:8080!g' -e 's!insecure_oidc_skip_issuer_verification="false"!insecure_oidc_skip_issuer_verification="true"!g' apps/oauth2-proxy/values.yaml
 
+          # --- Use local cluster issuer instead of Let's Encrypt
+          .github/common/resources/configure-local-ca.sh iam:iam kube:default oauth2-proxy:iam
+
+          # --- Install applications and wait for their successful deployment
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
+      - name: Export Keycloak realm
+        if: always()
+        run: |
+          set -euo pipefail
+
+          # --- Extract configuration values ---
+          DOMAIN=$(yq e '.platform_domain_name' inventory/mycluster/host_vars/setup/main.yaml)
+          REALM_NAME=$(yq e '.keycloak.realm.name' inventory/mycluster/group_vars/all/generated_inventory_vars.yaml)
+
+          # Construct the external Keycloak URL
+          KEYCLOAK_URL="https://iam.$DOMAIN"
+
+          echo "🌐 Using Keycloak URL: $KEYCLOAK_URL"
+          echo "🧩 Realm name: $REALM_NAME"
+
+          # --- Get admin credentials from Kubernetes secret ---
+          ADMIN_USER=$(kubectl -n iam get secret keycloak-initial-admin -o jsonpath='{.data.username}' | base64 --decode)
+          ADMIN_PASSWORD=$(kubectl -n iam get secret keycloak-initial-admin -o jsonpath='{.data.password}' | base64 --decode)
+
+          # --- Obtain admin access token ---
+          echo "🔑 Getting admin token..."
+          TOKEN=$(wget -qO- --post-data "username=$ADMIN_USER&password=$ADMIN_PASSWORD&grant_type=password&client_id=admin-cli" \
+            --header="Content-Type: application/x-www-form-urlencoded" \
+            --no-check-certificate \
+            "$KEYCLOAK_URL/realms/master/protocol/openid-connect/token" | jq -r .access_token)
+
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "❌ Failed to obtain Keycloak token"
+            exit 1
+          fi
+
+          # --- Perform partial realm export ---
+          echo "📦 Exporting realm '$REALM_NAME'..."
+          wget -q -O realm-export.json \
+            --header="Authorization: Bearer $TOKEN" \
+            --header="Content-Type: application/json" \
+            --no-check-certificate \
+            --post-data "" \
+            "$KEYCLOAK_URL/admin/realms/$REALM_NAME/partial-export?exportClients=true&exportGroupsAndRoles=true"
+
+          echo "✅ Realm export completed:"
+          ls -lh realm-export.json
+
+          # --- Convert the JSON export to YAML ---
+          echo "🔄 Converting JSON export to YAML..."
+          pip install ruamel.yaml
+          ./.github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
+
+          echo "✅ Conversion completed:"
+          ls -lh realm-export.yaml
+        shell: bash
+      - name: Upload Keycloak realm export artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: keycloak-realm-export
+          path: |
+            realm-export.json
+            realm-export.yaml

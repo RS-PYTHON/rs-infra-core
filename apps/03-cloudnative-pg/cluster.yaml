@@ -20,7 +20,7 @@ metadata:
     app.kubernetes.io/instance: '{{ app_name }}'
     wait-for-deployment: Ready
 spec:
-  instances: 3
+  instances: {{ postgresql.instances }}
 
   enableSuperuserAccess: true
 

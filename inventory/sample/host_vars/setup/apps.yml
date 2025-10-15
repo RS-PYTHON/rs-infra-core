@@ -27,6 +27,7 @@ osam_oidc_client_secret: "{{ lookup('password', '/dev/null length=64 chars=ascii
 oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') | b64encode }}"
 neuvector_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 rsserver_cookieSecret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
+oauth2_proxy_provider_ca_files: ""
 
 apikeymanager:
   database:
@@ -35,6 +36,9 @@ apikeymanager:
     username: apikeymanager
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     secret: apikeymanager-database-password
+
+cinder:
+  provisioner: cinder.csi.openstack.org
 
 certmanager:
   clusterissuer:
@@ -61,12 +65,16 @@ grafana:
     interval: 30s
     scrapeTimeout: 10s
 
+ingress:
+  annotations: {}
+
 postgresql:
   postgres_user:
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   replication_user: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   bucket: "{{ cluster_name }}-psql"
+  instances: 3
 
 keycloak:
   image: quay.io/keycloak/keycloak:23.0.6

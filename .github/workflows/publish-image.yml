@@ -19,8 +19,10 @@ on:
   pull_request: # pull requests
     types: [opened, synchronize, reopened]
     paths:
-      - '.github/**'
-      - '!.github/workflows/test-deployment.yml'
+      - '.github/actions/**'
+      - '.github/common/resources/*.sh'
+      - '.github/common/resources/*.txt'
+      - '.github/workflows/publish-image.yml'
   push:
     branches:
       - develop # pushes on the 'develop' branch
@@ -121,7 +123,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p ./.github/${{ matrix.path }}/resources/
-          cp ./.github/common/resources/* ./.github/${{ matrix.path }}/resources/
+          cp ./.github/common/resources/*.* ./.github/${{ matrix.path }}/resources/
 
       - name: Get latest run ID from rs-server
         if: (matrix.image == 'dask-staging') || (matrix.image == 'jupyter')

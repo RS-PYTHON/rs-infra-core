@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2025 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,17 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-allowVolumeExpansion: true
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
-  name: csi-cinder-high-speed-retain
-parameters:
-  availability: nova
-  fsType: ext4
-  type: high-speed
-provisioner: "{{ cinder.provisioner }}"
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
+  name: local-ca-configmap
+  namespace: <ns>
+data:
+  tls.crt: |
