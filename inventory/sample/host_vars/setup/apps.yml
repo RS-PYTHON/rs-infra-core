@@ -168,7 +168,7 @@ rs_server_prip_station: |
 
 rs_server_catalog:
   database:
-    host: rs-server-catalog-db.database.svc.cluster.local
+    host: cnpgstac-rw.database.svc.cluster.local
     name: catalog
     password: password
     username: postgres
