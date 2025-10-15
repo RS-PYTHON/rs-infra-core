@@ -213,7 +213,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_scheduler" {
 resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
   kube_id       = ovh_cloud_project_kube.cluster.id
   name          = "dask-worker-on-demand-${var.cluster_name}"
-  flavor_name   = "b3-16"
+  flavor_name   = "r3-64"
   desired_nodes = var.nodepool_dask_worker_on_demand_desired_nodes
   min_nodes     = 0
   max_nodes     = 8
