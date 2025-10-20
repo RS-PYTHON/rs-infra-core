@@ -34,7 +34,8 @@ read -r -a SUBDOMAINS <<< "$SUBDOMAINS_INPUT"
 
 # --- Label the minikube node ---
 echo "🏷️  Applying labels to node 'minikube': $LABELS_INPUT"
-kubectl label node minikube "$LABELS_INPUT"
+read -r -a LABELS <<< "$LABELS_INPUT"
+kubectl label node minikube "${LABELS[@]}"
 
 # --- Extract domain and IP
 DOMAIN=$(yq e '.platform_domain_name' ./inventory/sample/host_vars/setup/main.yaml)
