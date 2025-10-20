@@ -34,26 +34,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install requirements
         run: |
-          # Install miniforge
-          mkdir -p ~/miniforge3
-          wget -q "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" -O ~/miniforge3/miniforge.sh
-          bash ~/miniforge3/miniforge.sh -b -u -p ~/miniforge3
-          rm -f ~/miniforge3/miniforge.sh
-
-          # Init conda
-          ~/miniforge3/bin/conda init bash
-          conda update -n base -c defaults conda
-
-          # Create conda env with python
-          # conda update -n base -c defaults conda
-          conda create -y -n rspy python=3.11
-
-          # Install Ansible, Terraform, Openstackclient
-          conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
-
-          conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws kubernetes.core community.general
-
-          ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl
+          .github/common/resources/install-requirements.sh
         shell: bash
       - name: Start minikube
         uses: medyagh/setup-minikube@latest
