@@ -48,8 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Set environment"
     outputs:
-      docker_tag: ${{ steps.set-env.outputs.docker_tag }}
       branch_name: ${{ steps.set-env.outputs.branch_name }}
+      docker_tag1: ${{ steps.set-env.outputs.docker_tag1 }}
+      docker_tag2: ${{ steps.set-env.outputs.docker_tag2 }}
     steps:
       - id: set-env
         name: "Set environment"
@@ -63,20 +64,21 @@ jobs:
             branch_name=${{ github.ref_name }}
           fi
 
-          # Determine the docker tag to set to new docker images.
+          # Determine the docker tags to set to new docker images.
           # For a pull request, use the branch name
           if [[ ${{ github.event_name }} == pull_request ]]; then
-            docker_tag="$branch_name"
+            docker_tag1="$branch_name"
 
-          # For a push on develop or a tag, use the docker tag :latest
+          # For a push on develop or a tag, use the branch name and :latest
           elif [[ ${{ github.event_name }} == push ]]; then
-            docker_tag=latest
+            docker_tag1="$branch_name"
+            docker_tag2=latest
 
           # For a manual trigger, use the user-defined tag, or latest if empty
           elif [[ ${{ github.event_name }} == workflow_dispatch ]]; then
-            docker_tag=${{ github.event.inputs.docker_tag }}
-            if [[ -z "$docker_tag" ]]; then
-              docker_tag=latest
+            docker_tag1=${{ github.event.inputs.docker_tag }}
+            if [[ -z "$docker_tag1" ]]; then
+              docker_tag1=latest
             fi
 
           else
@@ -85,11 +87,13 @@ jobs:
           fi
 
           # Replace special characters by -
-          docker_tag=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag")
+          docker_tag1=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag1")
+          docker_tag2=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag2")
 
           # Save values
           echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
-          echo "docker_tag=$docker_tag" >> $GITHUB_OUTPUT
+          echo "docker_tag1=$docker_tag1" >> $GITHUB_OUTPUT
+          echo "docker_tag2=$docker_tag2" >> $GITHUB_OUTPUT
         shell: bash
 
   publish-docker-matrix:
@@ -202,7 +206,8 @@ jobs:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile
           build_context_path: ./.github/${{ matrix.path }}
           image_suffix: -${{ matrix.image }}
-          version_name: ${{ needs.set-env.outputs.docker_tag }}
+          version_name: ${{ needs.set-env.outputs.docker_tag1 }}
+          docker_tag: ${{ needs.set-env.outputs.docker_tag2 }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           image2build: ${{ matrix.image }}
           secrets: |
@@ -216,7 +221,8 @@ jobs:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile.mockup
           build_context_path: ./.github/${{ matrix.path }}
           image_suffix: -${{ matrix.image }}
-          version_name: ${{ needs.set-env.outputs.docker_tag }}
+          version_name: ${{ needs.set-env.outputs.docker_tag1 }}
+          docker_tag: ${{ needs.set-env.outputs.docker_tag2 }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           image2build: ${{ matrix.image }}
           secrets: |
