@@ -2,7 +2,7 @@
 
 ## Update the inventory
 
-Edit the inventory file (rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml)
+Edit the inventory file (~/rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml)
 
 From :
 
@@ -44,51 +44,59 @@ prefect3server:
 
 ### Deplicate the folder
 
-Duplicate `rs-workflow-env/apps/01-prefect3-db` to `rs-workflow-env/apps/01-prefect3-db-playground`.
+Duplicate `~/rs-workflow-env/apps/01-prefect3-db` to `~/rs-workflow-env/apps/01-prefect3-db-playground`.
 
 ### Replace the name
 
-Edit the values (rs-workflow-env/apps/01-prefect3-db-playground/database.yaml) by changing `prefect3server.ops` to `prefect3server.playground`. For e.g. with sed :
+Edit the values (~/rs-workflow-env/apps/01-prefect3-db-playground/database.yaml) by changing `prefect3server.ops` to `prefect3server.playground`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3server.ops#prefect3server.playground#g' -i rs-workflow-env/apps/01-prefect3-db-playground/database.yaml
+sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/01-prefect3-db-playground/database.yaml
 ```
 
 ## Duplicate the apps prefect3-server
 
 ### Deplicate the folder
 
-Duplicate `rs-workflow-env/apps/prefect3-server` to `rs-workflow-env/apps/prefect3-server-playground`.
+Duplicate `~/rs-workflow-env/apps/prefect3-server` to `~/rs-workflow-env/apps/prefect3-server-playground`.
 
 ### Replace the name
 
-Edit the values (rs-workflow-env/apps/prefect3-server-playground/values.yaml) by changing `prefect3server.ops` to `prefect3server.playground`. For e.g. with sed :
+Edit the values (~/rs-workflow-env/apps/prefect3-server-playground/values.yaml) by changing `prefect3server.ops` to `prefect3server.playground`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3server.ops#prefect3server.playground#g' -i rs-workflow-env/apps/prefect3-server-playground/values.yaml
+sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/prefect3-server-playground/values.yaml
 ```
 
 ## Duplicate the workpools prefect3-worker-eopf, prefect3-worker-general, prefect3-worker-staging
 
 ### Deplicate the folders
 
-Duplicate `rs-workflow-env/apps/prefect3-worker-eopf` to `prefect3-worker-eopf-playground`.  
-Duplicate `rs-workflow-env/apps/prefect3-worker-general` to `prefect3-worker-general-playground`.  
-Duplicate `rs-workflow-env/apps/prefect3-worker-staging` to `prefect3-worker-staging-playground`.
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-eopf` to `~/rs-workflow-env/apps/prefect3-worker-eopf-playground`.  
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-general` to `~/rs-workflow-env/apps/prefect3-worker-general-playground`.  
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-staging` to `~/rs-workflow-env/apps/prefect3-worker-staging-playground`.
 
 ### Replace the name
 
-Edit the values (prefect3-worker-eopf-playground/values.yaml) by changing `prefect3server.ops` to `prefect3server.playground`. For e.g. with sed :
+Edit the values (~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml) by changing `prefect3server.ops` to `prefect3server.playground`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3server.ops#prefect3server.playground#g' -i rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
+sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
 ```
+
+And changing `prefect3worker.eopf.serverName` to `prefect3worker.eopfplayground.serverName`. For e.g. with sed :
+
+```Bash
+sed 's#prefect3worker.eopf.serverName#prefect3worker.eopfplayground.serverName#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
+```
+
+Repeat for every new workpools.
 
 ## Deploy the apps
 
 Deploy the new apps like any other apps:
-- rs-workflow-env/apps/01-prefect3-db-playground
-- rs-workflow-env/apps/prefect3-server-playground
-- rs-workflow-env/apps/prefect3-worker-staging-playground
-- rs-workflow-env/apps/prefect3-worker-general-playground
-- rs-workflow-env/apps/prefect3-worker-eopf-playground
+- ~/rs-workflow-env/apps/01-prefect3-db-playground
+- ~/rs-workflow-env/apps/prefect3-server-playground
+- ~/rs-workflow-env/apps/prefect3-worker-staging-playground
+- ~/rs-workflow-env/apps/prefect3-worker-general-playground
+- ~/rs-workflow-env/apps/prefect3-worker-eopf-playground
