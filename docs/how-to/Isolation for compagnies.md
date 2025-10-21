@@ -1,6 +1,6 @@
-# Isolation for compagnies
+# Isolation for companies
 
-To be able to isolate between compagnies, we will create a namespace per compagny and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
+To be able to isolate between companies, we will create a namespace per compagny and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
 
 ## Create a namespace for the compagny
 
