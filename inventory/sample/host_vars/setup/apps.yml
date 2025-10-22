@@ -107,6 +107,7 @@ keycloak:
 prefect3server:
   ops:
     name: prefect
+    namespace: processing
     subDomain: processing
     allowedRoles: "role:RS-JUPYTER-USER"
     database:
@@ -117,14 +118,17 @@ prefect3server:
 prefect3worker:
   staging:
     name: staging-prefect-pool
+    namespace: processing
     serverName: prefect
     number: 2
   eopf:
     name: eopf-prefect-pool
+    namespace: processing
     serverName: prefect
     number: 2
   general:
     name: general-prefect-pool
+    namespace: processing
     serverName: prefect
     number: 2
 
@@ -534,6 +538,7 @@ velero:
 jupyterhub:
   ops:
     name: jupyterhub
+    namespace: processing
     subDomain: processing
     allowedGroups:
       - RS-JUPYTER-USER
