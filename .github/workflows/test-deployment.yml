@@ -120,7 +120,7 @@ jobs:
           # --- Convert the JSON export to YAML ---
           echo "🔄 Converting JSON export to YAML..."
           pip install ruamel.yaml
-          ./.github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
+          .github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
 
           echo "✅ Conversion completed:"
           ls -lh realm-export.yaml
@@ -132,3 +132,8 @@ jobs:
           path: |
             realm-export.json
             realm-export.yaml
+      - name: 🩺 Kubernetes failure diagnostics
+        if: failure()
+        run: |
+          .github/common/resources/minikube-diagnostics.sh
+        shell: bash
