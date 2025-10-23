@@ -13,6 +13,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a3] - 2025-10-23
+
+### Added
+
+- [PR#203](https://github.com/RS-PYTHON/rs-infra-core/pull/203) : Add remove application playbook and doc
+
+### Changed
+
+- [PR#205](https://github.com/RS-PYTHON/rs-infra-core/pull/205) : Update layer-cleanup.sh 
+- [PR#207](https://github.com/RS-PYTHON/rs-infra-core/pull/207) : feat: update inventory for cnpgstac
+- [PR#206](https://github.com/RS-PYTHON/rs-infra-core/pull/206) : update template for R3-64 on dask-worker-on-demand-rspython-ops
+- [RSPY-816](https://github.com/RS-PYTHON/rs-infra-core/pull/208) : Externalize inventory configuration script and improve CI/CD
+- [PR#210](https://github.com/RS-PYTHON/rs-infra-core/pull/210) : Increase timeout from 120s to 180s in CI/CD
+- [PR#211](https://github.com/RS-PYTHON/rs-infra-core/pull/211) : Externalize install-requirements.sh
+- [PR#212](https://github.com/RS-PYTHON/rs-infra-core/pull/212) : Fix docker image tags
+- [RSPY-795](https://github.com/RS-PYTHON/rs-infra-core/pull/213) : Multiple-prefect-instances
+
 ## [1.0a2] - 2025-09-30
 
 ### Added
