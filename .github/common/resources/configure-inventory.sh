@@ -28,6 +28,7 @@ sed -i\
 sed -i \
     -e 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g'\
     -e 's!instances: 3!instances: 1!g'\
+    -e 's!number: 2!number: 1!g'\
     -e 's!annotations: {}!annotations:\n    metallb.universe.tf/address-pool: default!g'\
     -e 's!provider_ca_files: ""!provider_ca_files: "/etc/ssl/certs/local-ca/tls.crt"!g'\
     inventory/mycluster/host_vars/setup/apps.yml
