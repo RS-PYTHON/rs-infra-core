@@ -29,6 +29,11 @@ sed -i \
     -e 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g'\
     -e 's!instances: 3!instances: 1!g'\
     -e 's!number: 2!number: 1!g'\
+    -e 's!worker_memory: 2.0!worker_memory: 0.05!g'\
+    -e 's!worker_count: 3!worker_count: 1!g'\
+    -e 's!cluster_max_cores: 4!cluster_max_cores: 1!g'\
+    -e 's!cluster_max_workers: 4!cluster_max_workers: 1!g'\
+    -e 's!cluster_max_memory: 8589934592!cluster_max_memory: 53687092!g'\
     -e 's!annotations: {}!annotations:\n    metallb.universe.tf/address-pool: default!g'\
     -e 's!provider_ca_files: ""!provider_ca_files: "/etc/ssl/certs/local-ca/tls.crt"!g'\
     inventory/mycluster/host_vars/setup/apps.yml
