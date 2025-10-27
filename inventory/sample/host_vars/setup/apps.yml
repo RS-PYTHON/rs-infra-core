@@ -250,7 +250,7 @@ rs_server_catalog_staging_configmap: |
   copernicus,s02msil2a,*,30,prip-rs-sentinel-2-s02msil2a
   copernicus,s02msisca,*,30,prip-rs-sentinel-2-s02msisca
   copernicus,s02msidca,*,30,prip-rs-sentinel-2-s02msidca
-  copernicus,s03sral0_,*,30,prip-rs-sentinel-3-s03sral0_
+  copernicus,s03altl0_,*,30,prip-rs-sentinel-3-s03altl0_
   copernicus,s03sral0c,*,30,prip-rs-sentinel-3-s03sral0c
   copernicus,s03altl1a,*,30,prip-rs-sentinel-3-s03altl1a
   copernicus,s03altl1b,*,30,prip-rs-sentinel-3-s03altl1b
