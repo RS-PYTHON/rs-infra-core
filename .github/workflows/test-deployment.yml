@@ -32,7 +32,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install requirements
+      - name: Cache Miniforge and Conda env
+        id: cache-conda
+        uses: actions/cache@v4
+        with:
+          path: ~/miniforge3
+          key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
+          restore-keys: |
+            conda-${{ runner.os }}-
+      - name: Install requirements (if cache missed)
+        if: steps.cache-conda.outputs.cache-hit != 'true'
         run: |
           .github/common/resources/install-requirements.sh
         shell: bash
