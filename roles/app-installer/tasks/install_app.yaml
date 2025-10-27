@@ -295,13 +295,23 @@
         var: jobs.resources
       when: jobs.resources | length > 0
 
-    - name: "{{ package_name }} - {{ app_name }} | Get logs of each job"
+    - name: "{{ package_name }} - {{ app_name }} | Get pods of each failed job"
+      kubernetes.core.k8s_info:
+        kind: Pod
+        label_selectors:
+          - "job-name={{ item.metadata.name }}"
+      loop: "{{ jobs.resources }}"
+      register: job_pods
+      when: jobs.resources | length > 0
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Get logs of pods from failed jobs"
       kubernetes.core.k8s_log:
         name: "{{ item.metadata.name }}"
         namespace: "{{ item.metadata.namespace }}"
         all_containers: true
-      loop: "{{ jobs.resources }}"
-      when: jobs.resources | length > 0
+      loop: "{{ job_pods.results | map(attribute='resources') | flatten }}"
+      when: (job_pods.results | map(attribute='resources') | flatten | length) > 0
       ignore_errors: true
       register: job_logs
       delegate_to: bastion
