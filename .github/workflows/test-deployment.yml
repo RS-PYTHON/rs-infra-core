@@ -36,7 +36,9 @@ jobs:
         id: cache-conda
         uses: actions/cache@v4
         with:
-          path: ~/miniforge3
+          path: |
+            ~/miniforge3
+            /usr/share/miniconda
           key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
           restore-keys: |
             conda-${{ runner.os }}-
