@@ -184,7 +184,7 @@ rs_server_catalog:
     host: cnpgstac-rw.database.svc.cluster.local
     name: catalog
     password: password
-    username: postgres
+    username: catalog
 
 rs_server_catalog_db:
   stac:
