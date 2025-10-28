@@ -71,7 +71,7 @@ Add the file `~/rs-infra-core/apps/00-networkpolicies-playground/networkpolicy-i
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-ingress-nginx
+  name: allow-ingress-nginx-prefect
 spec:
   podSelector:
     matchLabels:
@@ -86,9 +86,29 @@ spec:
     ports:
     - protocol: TCP
       port: 4200
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-nginx-jupyter
+spec:
+  podSelector:
+    matchLabels:
+      app: jupyterhub
+      component: hub
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 80
 ```
 
-It is the policy to allow traffic from the nginx ingress-controller to the prefect service.
+It is the policy to allow traffic from the nginx ingress-controller to the prefect and jupyter services.
 
 ### networkpolicy-intra.yaml
 
@@ -106,38 +126,6 @@ spec:
   ingress:
   - from:
     - podSelector: {}
-```
-It is the policy to allow all ingress traffic within the same namespace.
-
-### networkpolicy-jupyter.yaml (temporary)
-
-This file is temporary and will be removed in the next sprint after the completion of story 796, with jupyter isolation completed.
-
-Add the file `~/rs-infra-core/apps/00-networkpolicies-playground/networkpolicy-jupyter.yaml` with the following content :
-
-```YAML
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-ingress-nginx
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: prefect-server
-  policyTypes:
-  - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: processing
-      podSelector:
-        matchLabels:
-          app: jupyterhub
-          component: singleuser-server
-    ports:
-    - protocol: TCP
-      port: 4200
 ```
 It is the policy to allow all ingress traffic within the same namespace.
 
@@ -164,12 +152,132 @@ resources:
 
 ## Jupyter isolation
 
+### Update the inventory
+
+Edit the inventory file (~/rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml) to add the new clientid and jupyterhub instance. In this example it's under `jupyterhub_oidc_client_secret` and `jupyterhub.playground`.
+
+From :
+
+```YAML
+[...]
+jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+[...]
+jupyterhub:
+  ops:
+    name: jupyterhub
+    namespace: processing
+    subDomain: processing
+    allowedGroups:
+      - RS-JUPYTER-USER
+    adminGroups:
+      - RS-ADMIN
+    jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+    services:
+      daskgateway:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+        apiurl: http://hub.processing.svc.cluster.local:8081/api
+      metrics:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      # -- OpenTelemetry
+      otel:
+        # -- Trace request headers with OpenTelemetry ?
+        trace_headers: false
+        # -- Trace request bodies and response contents with OpenTelemetry ?
+        trace_body: false
+```
+
+To :
+
+```YAML
+[...]
+jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+jupyterhubplayground_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+[...]
+jupyterhub:
+  ops:
+    name: jupyterhub
+    namespace: processing
+    subDomain: processing
+    allowedGroups:
+      - RS-JUPYTER-USER
+    adminGroups:
+      - RS-ADMIN
+    jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+    services:
+      daskgateway:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+        apiurl: http://hub.processing.svc.cluster.local:8081/api
+      metrics:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      # -- OpenTelemetry
+      otel:
+        # -- Trace request headers with OpenTelemetry ?
+        trace_headers: false
+        # -- Trace request bodies and response contents with OpenTelemetry ?
+        trace_body: false
+  playground:
+    name: jupyterhub
+    namespace: playground
+    subDomain: playground
+    allowedGroups:
+      - RS-JUPYTER-USER
+    adminGroups:
+      - RS-ADMIN
+    jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+    services:
+      daskgateway:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+        apiurl: http://hub.playground.svc.cluster.local:8081/api
+      metrics:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      # -- OpenTelemetry
+      otel:
+        # -- Trace request headers with OpenTelemetry ?
+        trace_headers: false
+        # -- Trace request bodies and response contents with OpenTelemetry ?
+        trace_body: false
+```
+
+### Update the realm
+
+Execute the following commands :
+
+```Bash
+export TEMPLATE_JUPYTER="jupyterhub"
+export NEW_JUPYTER="jupyterplayground"
+
+yq '
+.spec.realm.clients += (
+  .spec.realm.clients[]
+  | select(.clientId == env(TEMPLATE_JUPYTER))
+  | .clientId = env(NEW_JUPYTER)
+  | .name = env(NEW_JUPYTER)
+  | .adminUrl = "https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"
+  | .rootUrl = "https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"
+  | .secret = "{{ " + env(NEW_JUPYTER) + "_oidc_client_secret }}"
+  | .redirectUris = ["https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter/*"]
+  | .webOrigins = ["https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"]
+)
+| .spec.realm.users += (
+  .spec.realm.users[]
+  | select(.serviceAccountClientId == env(TEMPLATE_JUPYTER))
+  | .username = "service-account-" + env(NEW_JUPYTER)
+  | .serviceAccountClientId = env(NEW_JUPYTER)
+  | .clientRoles = (.clientRoles + { (env(NEW_JUPYTER)): .clientRoles[env(TEMPLATE_JUPYTER)] })
+  | del(.clientRoles[env(TEMPLATE_JUPYTER)])
+)
+| .spec.realm.roles.client[env(NEW_JUPYTER)] = (
+  .spec.realm.roles.client[env(TEMPLATE_JUPYTER)]
+  | map(select(.name == "uma_protection") | del(.containerId))
+)
+' realm_test.yaml > realm_test2.yaml
+```
+
+### Change client_id
+
 TODO
-
-This is temporary and will be completed in the next sprint with the completion of story 796.
-
-Meanwhile we allow all ingress traffic from the jupyterhub instance in the processing namespace.
-
+update client_id: jupyterhub in values values.yaml for jupyterhubplayground
+update *ops*
 
 ## Prefect isolation
 
