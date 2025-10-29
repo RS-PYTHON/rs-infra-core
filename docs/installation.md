@@ -87,7 +87,7 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 
 ### 5. Deploy the managed private docker registry (optionnal)
 
-You can opt-in to deploy a managed private docker registry. It can be used later to avoid pulling multiple time the docker images from the public docker hub (docker.io). It will deploy an a private harbor registry configured as a ([proxy cache](https://goharbor.io/docs/2.4.0/administration/configure-proxy-cache/)). 
+You can opt-in to deploy a managed private docker registry. It can be used later to avoid pulling multiple time the docker images from the public docker hub (docker.io). It will deploy an a private harbor registry configured as a ([proxy cache](https://goharbor.io/docs/2.4.0/administration/configure-proxy-cache/)).
 
 ```shellsession
 ansible-playbook registry.yaml \
@@ -127,12 +127,18 @@ ansible-playbook apps.yaml \
     -e private_registry=true
 ```
 
-(Optionnal) : You can add a flag to enable of disable the usage of the managed private docker registry. By default it's disabled : `-e private_registry=false` 
+(Optional) : You can add a flag to enable of disable the usage of the managed private docker registry. By default it's disabled : `-e private_registry=false`
+
+(Optional) : You can change the default wait timeouts by adding one of these flags. Values are expressed in seconds:
+- `-e crd_wait_timeout=30` for `CustomResourceDefinition`
+- `-e job_wait_timeout=180` for `Job`
+- `-e custom_wait_timeout=180` for `Certificate`, `Cluster`, `ClusterIssuer`, `Keycloak` and `KeycloakRealmImport`
+- `-e native_wait_timeout=360` for `Pod`, `Deployment`, `StatefulSet` and `DaemonSet`
 
 !!! warning "Note: DNS configuration"
     At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (`kubectl -n ingress-nginx get svc ingress-nginx-controller`).
 
-(Optionnal) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
+(Optional) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
 
 (still on the bastion)
 
