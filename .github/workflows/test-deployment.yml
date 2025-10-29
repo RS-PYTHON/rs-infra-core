@@ -67,7 +67,7 @@ jobs:
           # Minio for cloudnative pg - https://github.com/minio/minio/tree/master/helm/minio#installing-the-chart-toy-setup
           helm repo add minio https://charts.min.io/
           helm repo update minio
-          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=512Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
+          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=128Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
         shell: bash
       - name: Generate inventory
         run: |
@@ -86,6 +86,7 @@ jobs:
 
           # --- Use local cluster issuer instead of Let's Encrypt
           .github/common/resources/configure-local-ca.sh iam:iam kube:default oauth2-proxy:iam
+          .github/common/resources/configure-minikube-deployment.sh
 
           # --- Install applications and wait for their successful deployment
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
