@@ -32,7 +32,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install requirements
+      - name: Cache Miniforge and Conda env
+        id: cache-conda
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/miniforge3
+            /usr/share/miniconda
+          key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
+          restore-keys: |
+            conda-${{ runner.os }}-
+      - name: Aggressive cleanup
+        run: |
+          # Cleanup disk space (level between 0 and 14, more cleaning takes more time)
+          .github/common/resources/aggressive-cleanup.sh 1
+        shell: bash
+      - name: Install requirements (if cache missed)
+        if: steps.cache-conda.outputs.cache-hit != 'true'
         run: |
           .github/common/resources/install-requirements.sh
         shell: bash
@@ -51,7 +67,7 @@ jobs:
           # Minio for cloudnative pg - https://github.com/minio/minio/tree/master/helm/minio#installing-the-chart-toy-setup
           helm repo add minio https://charts.min.io/
           helm repo update minio
-          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=512Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
+          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=128Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
         shell: bash
       - name: Generate inventory
         run: |
@@ -70,6 +86,7 @@ jobs:
 
           # --- Use local cluster issuer instead of Let's Encrypt
           .github/common/resources/configure-local-ca.sh iam:iam kube:default oauth2-proxy:iam
+          .github/common/resources/configure-minikube-deployment.sh
 
           # --- Install applications and wait for their successful deployment
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
@@ -120,7 +137,7 @@ jobs:
           # --- Convert the JSON export to YAML ---
           echo "🔄 Converting JSON export to YAML..."
           pip install ruamel.yaml
-          ./.github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
+          .github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
 
           echo "✅ Conversion completed:"
           ls -lh realm-export.yaml
@@ -132,3 +149,8 @@ jobs:
           path: |
             realm-export.json
             realm-export.yaml
+      - name: 🩺 Kubernetes failure diagnostics
+        if: failure()
+        run: |
+          .github/common/resources/minikube-diagnostics.sh
+        shell: bash

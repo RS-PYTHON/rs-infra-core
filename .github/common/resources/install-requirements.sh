@@ -33,5 +33,3 @@ conda create -y -n rspy python=3.11
 conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
 
 conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws kubernetes.core community.general
-
-ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl

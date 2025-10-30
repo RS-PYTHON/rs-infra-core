@@ -183,106 +183,7 @@
         }}
       loop_control:
         label: "{{ item.kind }}/{{ item.metadata.name }}"
-      when: item.kind in ['Job', 'Pod', 'Deployment', 'StatefulSet', 'DaemonSet', 'Certificate', 'Cluster', 'ClusterIssuer', 'ScheduledBackup', 'Keycloak', 'KeycloakRealmImport']
-
-    - name: "{{ package_name }} - {{ app_name }} | Detect jobs for this app"
-      kubernetes.core.k8s_info:
-        kind: Job
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-      register: jobs
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Wait until jobs are complete (if any)"
-      kubernetes.core.k8s_info:
-        kind: Job
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-        wait: true
-        wait_sleep: 1
-        wait_timeout: 180
-        wait_condition:
-          type: Complete
-      when: jobs.resources | length > 0
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Detect pods for this app"
-      kubernetes.core.k8s_info:
-        kind: Pod
-        label_selectors:
-          - "!job-name"
-          - "app.kubernetes.io/instance={{ app_name }}"
-      register: pods
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Wait until pods are ready (if any)"
-      kubernetes.core.k8s_info:
-        kind: Pod
-        label_selectors:
-          - "!job-name"
-          - "app.kubernetes.io/instance={{ app_name }}"
-        wait: true
-        wait_sleep: 1
-        wait_timeout: 360
-      when: pods.resources | length > 0
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Detect deployments for this app"
-      kubernetes.core.k8s_info:
-        kind: Deployment
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-      register: deployments
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Wait until deployments are ready (if any)"
-      kubernetes.core.k8s_info:
-        kind: Deployment
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-        wait: true
-        wait_sleep: 1
-        wait_timeout: 180
-      when: deployments.resources | length > 0
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Detect statefulsets for this app"
-      kubernetes.core.k8s_info:
-        kind: StatefulSet
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-      register: statefulsets
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Wait until statefulsets are ready (if any)"
-      kubernetes.core.k8s_info:
-        kind: StatefulSet
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-        wait: true
-        wait_sleep: 1
-        wait_timeout: 180
-      when: statefulsets.resources | length > 0
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Detect daemonsets for this app"
-      kubernetes.core.k8s_info:
-        kind: DaemonSet
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-      register: daemonsets
-      delegate_to: bastion
-
-    - name: "{{ package_name }} - {{ app_name }} | Wait until daemonsets are ready (if any)"
-      kubernetes.core.k8s_info:
-        kind: DaemonSet
-        label_selectors:
-          - "app.kubernetes.io/instance = {{ app_name }}"
-        wait: true
-        wait_sleep: 1
-        wait_timeout: 180
-      when: daemonsets.resources | length > 0
-      delegate_to: bastion
+      when: item.kind in ['CustomResourceDefinition', 'Job', 'Pod', 'Deployment', 'StatefulSet', 'DaemonSet', 'Certificate', 'Cluster', 'ClusterIssuer', 'ScheduledBackup', 'Keycloak', 'KeycloakRealmImport']
 
   rescue:
     - name: "{{ package_name }} - {{ app_name }} | Show resources"
@@ -295,13 +196,23 @@
         var: jobs.resources
       when: jobs.resources | length > 0
 
-    - name: "{{ package_name }} - {{ app_name }} | Get logs of each job"
+    - name: "{{ package_name }} - {{ app_name }} | Get pods of each failed job"
+      kubernetes.core.k8s_info:
+        kind: Pod
+        label_selectors:
+          - "job-name={{ item.metadata.name }}"
+      loop: "{{ jobs.resources }}"
+      register: job_pods
+      when: jobs.resources | length > 0
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Get logs of pods from failed jobs"
       kubernetes.core.k8s_log:
         name: "{{ item.metadata.name }}"
         namespace: "{{ item.metadata.namespace }}"
         all_containers: true
-      loop: "{{ jobs.resources }}"
-      when: jobs.resources | length > 0
+      loop: "{{ job_pods.results | map(attribute='resources') | flatten }}"
+      when: (job_pods.results | map(attribute='resources') | flatten | length) > 0
       ignore_errors: true
       register: job_logs
       delegate_to: bastion

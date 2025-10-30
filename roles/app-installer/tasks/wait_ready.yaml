@@ -22,7 +22,7 @@
         namespace: "{{ item.metadata.namespace | default('default', true) }}"
         wait: true
         wait_sleep: 1
-        wait_timeout: 180
+        wait_timeout: "{{ native_wait_timeout | default(360) | int }}"
       when: item.kind in ['Pod', 'Deployment', 'StatefulSet', 'DaemonSet']
 
     - name: Wait using condition for "{{ item.kind }}"
@@ -33,11 +33,12 @@
         namespace: "{{ item.metadata.namespace | default('default', true) }}"
         wait: true
         wait_sleep: 1
-        wait_timeout: 180
+        wait_timeout: "{{ custom_wait_timeout | default(180) | int }}"
         wait_condition:
           type: "{{ item.metadata.labels['wait-for-deployment'] }}"
       when:
         - item.kind in ['Certificate', 'Cluster', 'ClusterIssuer', 'Keycloak', 'KeycloakRealmImport']
+        - item.metadata.labels['wait-for-deployment'] is defined
 
     - name: Wait using condition for ScheduledBackup
       block:
@@ -84,7 +85,7 @@
         namespace: "{{ item.metadata.namespace | default('default', true) }}"
         wait: true
         wait_sleep: 1
-        wait_timeout: 180
+        wait_timeout: "{{ job_wait_timeout | default(180) | int }}"
         wait_condition:
           type: Complete
       when:
@@ -96,7 +97,7 @@
         kind: "{{ item.kind }}"
         name: "{{ item.metadata.name }}"
         wait: true
-        wait_timeout: 180
+        wait_timeout: "{{ crd_wait_timeout | default(30) | int }}"
         wait_sleep: 1
         wait_condition:
           type: Established
@@ -104,5 +105,4 @@
 
   when:
     - not ansible_check_mode
-    - item.metadata.labels['wait-for-deployment'] is defined
   delegate_to: bastion

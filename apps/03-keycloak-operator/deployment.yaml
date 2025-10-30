@@ -62,7 +62,7 @@ spec:
               memory: 450Mi
             requests:
               cpu: 300m
-              memory: 450Mi
+              memory: 400Mi
               ephemeral-storage: "100M"
           readinessProbe:
             failureThreshold: 3

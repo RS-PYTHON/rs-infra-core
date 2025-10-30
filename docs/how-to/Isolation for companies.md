@@ -1,10 +1,10 @@
 # Isolation for companies
 
-To be able to isolate between companies, we will create a namespace per compagny and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
+To be able to isolate between companies, we will create a namespace per company and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
 
-## Create a namespace for the compagny
+## Create a namespace for the company
 
-Add the new namespace for the compagny in `~/rs-infra-core/apps/00-namespaces`. For e.g. if the new namespace is `playground-ns` :
+Add the new namespace for the company in `~/rs-infra-core/apps/00-namespaces`. For e.g. if the new namespace is `playground-ns` :
 
 ```YAML
 apiVersion: v1
@@ -362,8 +362,8 @@ sed 's#processing#playground-ns#g' -i ~/rs-workflow-env/apps/prefect3-server-pla
 
 #### Deplicate the folders
 
-Duplicate `~/rs-workflow-env/apps/prefect3-worker-eopf` to `~/rs-workflow-env/apps/prefect3-worker-eopf-playground`.  
-Duplicate `~/rs-workflow-env/apps/prefect3-worker-general` to `~/rs-workflow-env/apps/prefect3-worker-general-playground`.  
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-eopf` to `~/rs-workflow-env/apps/prefect3-worker-eopf-playground`.
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-general` to `~/rs-workflow-env/apps/prefect3-worker-general-playground`.
 Duplicate `~/rs-workflow-env/apps/prefect3-worker-staging` to `~/rs-workflow-env/apps/prefect3-worker-staging-playground`.
 
 #### Replace the name

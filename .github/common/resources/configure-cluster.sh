@@ -29,6 +29,8 @@ if [[ -z "$LABELS_INPUT" || -z "$SUBDOMAINS_INPUT" ]]; then
   exit 1
 fi
 
+ln -s /usr/share/miniconda/envs/rspy/bin/kubectl /usr/local/bin/kubectl
+
 # --- Convert inputs to arrays ---
 read -r -a SUBDOMAINS <<< "$SUBDOMAINS_INPUT"
 
