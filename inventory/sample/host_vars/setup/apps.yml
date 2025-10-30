@@ -581,10 +581,12 @@ jupyterhub:
     name: jupyterhub
     namespace: processing
     subDomain: processing
-    allowedGroups:
+    allowedGroups: |
       - RS-JUPYTER-USER
-    adminGroups:
+
+    adminGroups: |
       - RS-ADMIN
+
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
