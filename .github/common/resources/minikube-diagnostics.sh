@@ -58,8 +58,11 @@ fi
 
 echo ""
 echo "--- Logs for $ns/$pod ---"
-kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null || \
-    echo "⚠️ No logs available (pod may have terminated)"
+if ! kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null; then
+    echo "⚠️ No current logs available, trying previous logs..."
+    kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=30 2>/dev/null || \
+        echo "⚠️ No logs available (pod may have terminated)"
+fi
 done
 
 echo ""
