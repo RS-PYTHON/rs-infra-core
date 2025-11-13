@@ -107,6 +107,7 @@ keycloak:
 prefect3server:
   ops:
     name: prefect
+    namespace: processing
     subDomain: processing
     allowedRoles: "role:RS-JUPYTER-USER"
     database:
@@ -117,15 +118,15 @@ prefect3server:
 prefect3worker:
   staging:
     name: staging-prefect-pool
-    serverName: prefect
+    namespace: processing
     number: 2
   eopf:
     name: eopf-prefect-pool
-    serverName: prefect
+    namespace: processing
     number: 2
   general:
     name: general-prefect-pool
-    serverName: prefect
+    namespace: processing
     number: 2
 
 rs_server:
@@ -576,19 +577,29 @@ velero:
     name: aws-default
 
 jupyterhub:
-  jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
-  services:
-    daskgateway:
-      apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
-      apiurl: http://hub.processing.svc.cluster.local:8081/api
-    metrics:
-      apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
-    # -- OpenTelemetry
-    otel:
-      # -- Trace request headers with OpenTelemetry ?
-      trace_headers: false
-      # -- Trace request bodies and response contents with OpenTelemetry ?
-      trace_body: false
+  ops:
+    name: jupyterhub
+    namespace: processing
+    subDomain: processing
+    allowedGroups: |
+      - RS-JUPYTER-USER
+
+    adminGroups: |
+      - RS-ADMIN
+
+    jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+    services:
+      daskgateway:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+        apiurl: http://hub.processing.svc.cluster.local:8081/api
+      metrics:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      # -- OpenTelemetry
+      otel:
+        # -- Trace request headers with OpenTelemetry ?
+        trace_headers: false
+        # -- Trace request bodies and response contents with OpenTelemetry ?
+        trace_body: false
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the

@@ -1164,8 +1164,8 @@ spec:
       - clientId: jupyterhub
         name: jupyterhub
         description: ""
-        rootUrl: https://processing.{{ platform_domain_name }}/jupyter
-        adminUrl: https://processing.{{ platform_domain_name }}/jupyter
+        rootUrl: https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
+        adminUrl: https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
         baseUrl: ""
         surrogateAuthRequired: false
         enabled: true
@@ -1174,9 +1174,9 @@ spec:
         secret: "{{ jupyterhub_oidc_client_secret }}"
         redirectUris:
           - ""
-          - https://processing.{{ platform_domain_name }}/jupyter/*
+          - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter/*
         webOrigins:
-          - https://processing.{{ platform_domain_name }}/jupyter
+          - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
         notBefore: 0
         bearerOnly: false
         consentRequired: false
