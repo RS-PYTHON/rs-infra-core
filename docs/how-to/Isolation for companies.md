@@ -147,7 +147,6 @@ resources:
 - networkpolicy-acme.yaml
 - networkpolicy-ingress.yaml
 - networkpolicy-intra.yaml
-- networkpolicy-jupyter.yaml
 ```
 
 ## Prefect isolation
