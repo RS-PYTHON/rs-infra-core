@@ -431,11 +431,12 @@ sed 's#jupyterhub.ops#jupyterhub.playground#g' -i ~/rs-workflow-env/apps/jupyter
 sed 's#jupyterhub.ops#jupyterhub.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/secret.yaml
 ```
 
-#### Replace the prefect worker variables
+#### Replace the prefect variables
 
 For e.g. with sed :
 
 ```Bash
+sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.eopf.name#prefect3worker.eopfplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.general.name#prefect3worker.generalplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
