@@ -30,6 +30,6 @@ conda update -n base -c defaults conda
 conda create -y -n rspy python=3.11
 
 # Install Ansible, Terraform, Openstackclient
-conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 "kubernetes-helm<4" kubernetes-client python-kubernetes
+conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 "kubernetes-helm<4" kubernetes-client python-kubernetes "bcrypt<5"
 
 conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws kubernetes.core community.general
