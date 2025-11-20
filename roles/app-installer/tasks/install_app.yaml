@@ -130,6 +130,14 @@
       register: result
       delegate_to: bastion
       check_mode: false
+      retries: 5
+      delay: 15
+      until: >
+        (result.rc == 0) or
+        ('503' not in result.stderr and
+        '502' not in result.stderr and
+        '500' not in result.stderr and
+        'Service Unavailable' not in result.stderr)
 
     - name: "{{ package_name }} - {{ app_name }} | reset facts"
       set_fact:
