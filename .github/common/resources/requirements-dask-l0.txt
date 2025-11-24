@@ -17,10 +17,10 @@
 --extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/78/packages/pypi/simple # pyrugged
 --extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/52/packages/pypi/simple # asgard
 --extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/14/packages/pypi/simple # eopf cpm
---extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/102/packages/pypi/simple # l0
-l0==1.4.2
+#--extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/102/packages/pypi/simple # l0
+#l0==1.4.2
 # Fork used to fix some bugs in L0 if any
-#git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/jgaucher/l0@develop
+git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/jgaucher/l0@l0-v-1-4-1
 
 # other python dependencies
 graphviz
