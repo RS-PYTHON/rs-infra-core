@@ -15,7 +15,7 @@
 # Network part
 
 resource "openstack_networking_network_v2" "private_net" {
-  name = "private-net-${var.cluster_name}"
+  name           = "private-net-${var.cluster_name}"
   admin_state_up = true
 }
 

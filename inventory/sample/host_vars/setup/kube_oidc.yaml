@@ -1,0 +1,25 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## Variables for OpenID Connect Configuration https://kubernetes.io/docs/admin/authentication/
+## To use OpenID you have to deploy additional an OpenID Provider (e.g Dex, Keycloak, ...)
+
+kube_oidc_url: https://iam.{{ platform_domain_name }}/realms/{{ keycloak.realm.name }}
+kube_oidc_client_id: kubectl
+## Optional settings for OIDC
+# kube_oidc_ca_file: "{{ kube_cert_dir }}/ca.pem"
+# kube_oidc_username_claim: sub
+# kube_oidc_username_prefix: 'oidc:'
+kube_oidc_groups_claim: cluster-roles
+kube_oidc_groups_prefix: ''

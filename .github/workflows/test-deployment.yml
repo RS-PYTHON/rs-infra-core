@@ -1,0 +1,156 @@
+# Copyright 2025 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Test Ansible playbook deployment
+
+# Run workflow only for ...
+on:
+  pull_request: # pull requests
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - develop # pushes on the 'develop' branch
+    tags:
+      - '**' # new git tags (including hierarchical tags like v1.0/beta)
+  workflow_dispatch: # manual trigger
+
+jobs:
+  test-deploy:
+    if: github.actor != 'dependabot[bot]' # ignore pull requests by github bot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Cache Miniforge and Conda env
+        id: cache-conda
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/miniforge3
+            /usr/share/miniconda
+          key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
+          restore-keys: |
+            conda-${{ runner.os }}-
+      - name: Aggressive cleanup
+        run: |
+          # Cleanup disk space (level between 0 and 14, more cleaning takes more time)
+          .github/common/resources/aggressive-cleanup.sh 1
+        shell: bash
+      - name: Install requirements (if cache missed)
+        if: steps.cache-conda.outputs.cache-hit != 'true'
+        run: |
+          .github/common/resources/install-requirements.sh
+        shell: bash
+      - name: Start minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          addons: 'metallb'
+          cpus: 4
+          memory: 8000m
+      - name: "Configure cluster labels, IP and DNS (host + CoreDNS)"
+        run: |
+          .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy"
+        shell: bash
+      - name: Deploy minio
+        run: |
+          # Minio for cloudnative pg - https://github.com/minio/minio/tree/master/helm/minio#installing-the-chart-toy-setup
+          helm repo add minio https://charts.min.io/
+          helm repo update minio
+          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=128Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
+        shell: bash
+      - name: Generate inventory
+        run: |
+          .github/common/resources/configure-inventory.sh
+          # --- Generate inventory
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
+        shell: bash
+      - name: Deploy the apps (check)
+        run: |
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml -e private_registry=true
+        shell: bash
+      - name: Deploy the apps (for real)
+        run: |
+          sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
+
+          # --- Use local cluster issuer instead of Let's Encrypt
+          .github/common/resources/configure-local-ca.sh iam:iam kube:default oauth2-proxy:iam
+          .github/common/resources/configure-minikube-deployment.sh
+
+          # --- Install applications and wait for their successful deployment
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
+        shell: bash
+      - name: Export Keycloak realm
+        if: always()
+        run: |
+          set -euo pipefail
+
+          # --- Extract configuration values ---
+          DOMAIN=$(yq e '.platform_domain_name' inventory/mycluster/host_vars/setup/main.yaml)
+          REALM_NAME=$(yq e '.keycloak.realm.name' inventory/mycluster/group_vars/all/generated_inventory_vars.yaml)
+
+          # Construct the external Keycloak URL
+          KEYCLOAK_URL="https://iam.$DOMAIN"
+
+          echo "🌐 Using Keycloak URL: $KEYCLOAK_URL"
+          echo "🧩 Realm name: $REALM_NAME"
+
+          # --- Get admin credentials from Kubernetes secret ---
+          ADMIN_USER=$(kubectl -n iam get secret keycloak-initial-admin -o jsonpath='{.data.username}' | base64 --decode)
+          ADMIN_PASSWORD=$(kubectl -n iam get secret keycloak-initial-admin -o jsonpath='{.data.password}' | base64 --decode)
+
+          # --- Obtain admin access token ---
+          echo "🔑 Getting admin token..."
+          TOKEN=$(wget -qO- --post-data "username=$ADMIN_USER&password=$ADMIN_PASSWORD&grant_type=password&client_id=admin-cli" \
+            --header="Content-Type: application/x-www-form-urlencoded" \
+            --no-check-certificate \
+            "$KEYCLOAK_URL/realms/master/protocol/openid-connect/token" | jq -r .access_token)
+
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "❌ Failed to obtain Keycloak token"
+            exit 1
+          fi
+
+          # --- Perform partial realm export ---
+          echo "📦 Exporting realm '$REALM_NAME'..."
+          wget -q -O realm-export.json \
+            --header="Authorization: Bearer $TOKEN" \
+            --header="Content-Type: application/json" \
+            --no-check-certificate \
+            --post-data "" \
+            "$KEYCLOAK_URL/admin/realms/$REALM_NAME/partial-export?exportClients=true&exportGroupsAndRoles=true"
+
+          echo "✅ Realm export completed:"
+          ls -lh realm-export.json
+
+          # --- Convert the JSON export to YAML ---
+          echo "🔄 Converting JSON export to YAML..."
+          pip install ruamel.yaml
+          .github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
+
+          echo "✅ Conversion completed:"
+          ls -lh realm-export.yaml
+        shell: bash
+      - name: Upload Keycloak realm export artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: keycloak-realm-export
+          path: |
+            realm-export.json
+            realm-export.yaml
+      - name: 🩺 Kubernetes failure diagnostics
+        if: failure()
+        run: |
+          .github/common/resources/minikube-diagnostics.sh
+        shell: bash

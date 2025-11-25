@@ -18,9 +18,17 @@ name: Publish Docker image
 on:
   pull_request: # pull requests
     types: [opened, synchronize, reopened]
+    paths:
+      - '.github/actions/**'
+      - '.github/common/resources/*.sh'
+      - '.github/common/resources/*.txt'
+      - '.github/workflows/publish-image.yml'
   push:
     branches:
       - develop # pushes on the 'develop' branch
+    paths:
+      - '.github/**'
+      - '!.github/workflows/test-deployment.yml'
     tags:
       - '**' # new git tags (including hierarchical tags like v1.0/beta)
   workflow_dispatch: # manual trigger
@@ -28,9 +36,6 @@ on:
       docker_tag:
         description: Tag the docker images as e.g. 'latest'
         required: false
-      version_name:
-        description: Version name for the release as e.g. 'v0.1'
-        required: true
 env:
   PYTHON_VERSION: 3.11
   DOCKER_REGISTRY: ghcr.io
@@ -43,8 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Set environment"
     outputs:
-      docker_tag: ${{ steps.set-env.outputs.docker_tag }}
       branch_name: ${{ steps.set-env.outputs.branch_name }}
+      docker_tag1: ${{ steps.set-env.outputs.docker_tag1 }}
+      docker_tag2: ${{ steps.set-env.outputs.docker_tag2 }}
     steps:
       - id: set-env
         name: "Set environment"
@@ -58,21 +64,22 @@ jobs:
             branch_name=${{ github.ref_name }}
           fi
 
-          # Determine the docker tag to set to new docker images.
+          # Determine the docker tags to set to new docker images.
           # For a pull request, use the branch name
           if [[ ${{ github.event_name }} == pull_request ]]; then
-            docker_tag="$branch_name"
-            version_name="$branch_name"
+            docker_tag1="$branch_name"
 
-          # For a push on develop or a tag, use the docker tag :latest
+          # For a push on develop or a tag, use the branch name and :latest
           elif [[ ${{ github.event_name }} == push ]]; then
-            docker_tag=latest
-            version_name=latest
+            docker_tag1="$branch_name"
+            docker_tag2=latest
 
-          # For a manual trigger, use the user-defined tag
+          # For a manual trigger, use the user-defined tag, or latest if empty
           elif [[ ${{ github.event_name }} == workflow_dispatch ]]; then
-            docker_tag=${{ github.event.inputs.docker_tag }}
-            version_name=${{ github.event.inputs.version_name }}
+            docker_tag1=${{ github.event.inputs.docker_tag }}
+            if [[ -z "$docker_tag1" ]]; then
+              docker_tag1=latest
+            fi
 
           else
             >&2 echo "Unknown trigger"
@@ -80,26 +87,31 @@ jobs:
           fi
 
           # Replace special characters by -
-          docker_tag=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag")
-          version_name=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$version_name")
+          docker_tag1=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag1")
+          docker_tag2=$(sed "s/[^a-zA-Z0-9]/-/g" <<< "$docker_tag2")
 
           # Save values
           echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
-          echo "docker_tag=$docker_tag" >> $GITHUB_OUTPUT
-          echo "version_name=$version_name" >> $GITHUB_OUTPUT
+          echo "docker_tag1=$docker_tag1" >> $GITHUB_OUTPUT
+          echo "docker_tag2=$docker_tag2" >> $GITHUB_OUTPUT
         shell: bash
 
   publish-docker-matrix:
     strategy:
       matrix:
-        image: [jupyter, dask-staging, dask-eopf]
+        # path: relative path on disk where to find resources and Dockerfile
+        # image: used for the name of the docker image to build
         include:
           - path: jupyter
             image: jupyter
           - path: dask-gateway
             image: dask-staging
           - path: dask-gateway
-            image: dask-eopf 
+            image: dask-eopf-mockup
+          - path: dask-gateway
+            image: dask-l0
+          - path: dask-gateway
+            image: dask-s1ard
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: "Docker image for ${{ matrix.image }}"
@@ -115,17 +127,103 @@ jobs:
         shell: bash
         run: |
           mkdir -p ./.github/${{ matrix.path }}/resources/
-          cp ./.github/common/resources/* ./.github/${{ matrix.path }}/resources/
+          cp ./.github/common/resources/*.* ./.github/${{ matrix.path }}/resources/
+
+      - name: Get latest run ID from rs-server
+        if: (matrix.image == 'dask-staging') || (matrix.image == 'jupyter')
+        env:
+          REPO_OWNER: ${{ github.repository_owner }}
+          RS_SERVER_PAT: ${{ secrets.RS_SERVER_PAT }}
+          WORKFLOW_FILE: "publish-binaries.yml"
+          CURRENT_BRANCH: ${{ needs.set-env.outputs.branch_name }}
+        run: |
+
+          # Other parameters depend on the docker image to build
+          set -x
+          if [[ ${{ matrix.image }} == "dask-staging" ]]; then
+            REPO_NAME="rs-server"
+            VAR_RUN_ID="rs_server_run_id"
+          elif [[ ${{ matrix.image }} == "jupyter" ]]; then
+            REPO_NAME="rs-client-libraries"
+            VAR_RUN_ID="rs_client_libraries_run_id"
+          fi
+          set +x
+
+          # Test to download from the current branch name, or develop
+          if [[ $CURRENT_BRANCH == develop ]]; then
+              BRANCHES="develop"
+          else
+              BRANCHES="$CURRENT_BRANCH develop"
+          fi
+          for BRANCH in $BRANCHES; do
+
+              # Fetch the latest run for the branch
+              URL="https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/workflows/$WORKFLOW_FILE/runs?branch=$BRANCH&status=completed&per_page=1"
+              echo "$URL"
+              RUNS=$(curl -s -H "Authorization: Bearer $RS_SERVER_PAT" "$URL")
+
+              # Extract the run ID
+              RUN_ID=$(echo "$RUNS" | jq -r '.workflow_runs[0].id')
+              if [[ -z "$RUN_ID" || "$RUN_ID" == null ]]; then
+                  echo "No workflow run found for branch $BRANCH in $REPO_OWNER/$REPO_NAME"
+              else
+                  echo "Latest run ID from $BRANCH: $RUN_ID"
+                  echo "$VAR_RUN_ID=$RUN_ID" >> $GITHUB_ENV
+                  exit 0
+              fi
+          done
+
+          # No branch found
+          exit 1
+
+      - name: Download rs-server-wheels
+        uses: actions/download-artifact@v4
+        if: matrix.image == 'dask-staging'
+        with:
+          path: ./.github/${{ matrix.path }}
+          pattern: rs_server_*-py3-none-any.whl
+          merge-multiple: true # to avoid having a directory named after filename
+          github-token: ${{ secrets.RS_SERVER_PAT }} # token with actions:read permissions on target repo
+          repository: RS-PYTHON/rs-server
+          run-id: ${{ env.rs_server_run_id }}
+
+      - name: Download rs-client-libraries-wheels
+        uses: actions/download-artifact@v4
+        if: matrix.image == 'jupyter'
+        with:
+          path: ./.github/${{ matrix.path }}
+          pattern: rs_client_libraries-*-py3-none-any.whl
+          merge-multiple: true
+          github-token: ${{ secrets.RS_SERVER_PAT }}
+          repository: RS-PYTHON/rs-client-libraries
+          run-id: ${{ env.rs_client_libraries_run_id }}
 
       - id: publish-docker
+        name: Publish docker
+        if: matrix.image != 'dask-eopf-mockup'
         uses: ./.github/actions/publish-docker
         with:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile
           build_context_path: ./.github/${{ matrix.path }}
           image_suffix: -${{ matrix.image }}
-          version_name: ${{ needs.set-env.outputs.docker_tag }}
+          version_name: ${{ needs.set-env.outputs.docker_tag1 }}
+          docker_tag: ${{ needs.set-env.outputs.docker_tag2 }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          docker_tag: ${{ needs.set-env.outputs.docker_tag }}
+          image2build: ${{ matrix.image }}
+          secrets: |
+            "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
+
+      - id: publish-docker-mock
+        name: Publish docker mock
+        if: matrix.image == 'dask-eopf-mockup'
+        uses: ./.github/actions/publish-docker
+        with:
+          dockerfile: ./.github/${{ matrix.path }}/Dockerfile.mockup
+          build_context_path: ./.github/${{ matrix.path }}
+          image_suffix: -${{ matrix.image }}
+          version_name: ${{ needs.set-env.outputs.docker_tag1 }}
+          docker_tag: ${{ needs.set-env.outputs.docker_tag2 }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           image2build: ${{ matrix.image }}
           secrets: |
             "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"

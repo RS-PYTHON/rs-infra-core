@@ -37,7 +37,7 @@ inputs:
   image2build:
     description: Name of the docker image to build
     required: false
-  secrets: 
+  secrets:
     description: List of secrets to expose to the build (e.g., key=string, GIT_AUTH_TOKEN=mytoken)
     required: false
 
@@ -100,15 +100,15 @@ runs:
         output: trivy-results-docker.sarif
         exit-code: 0
         #severity: HIGH,CRITICAL
+        skip-dirs: /opt/conda/pkgs/cache
+        skip-files: /opt/conda/lib/python3.11/site-packages/bokeh/server/static/js/compiler.js,/opt/conda/lib/python3.11/site-packages/prefect/server/ui/assets/index-CCNfsmcm.js.map
         timeout: '30m'
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
-      # TO BE REMOVED once the repository is public
-      continue-on-error: true
       with:
         sarif_file: trivy-results-docker.sarif
-        category: ${{ env.docker_image }}
+        category: ${{ github.repository }}${{ inputs.image_suffix }}
 
     - name: Display link to Trivy results
       # TO BE REMOVED once the repository is public

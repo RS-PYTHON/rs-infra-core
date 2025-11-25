@@ -16,9 +16,7 @@
   hosts: kube_control_plane[0]
   remote_user: cloud
   gather_facts: false
-  vars_files:
-    - "collections/kubespray/roles/kubespray-defaults/defaults/main/main.yml"
-  roles: 
+  roles:
     - role: "app-installer"
       vars:
         package_paths:

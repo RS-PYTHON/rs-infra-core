@@ -12,4 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-rs-server-staging==0.2a10
+# https://home.rs-python.eu/local-pypi is used for additional dependencies, see: https://github.com/RS-PYTHON/local-pypi
+--extra-index-url=https://home.rs-python.eu/local-pypi/
+${RS_SERVER_COMMON_WHEEL}
+${RS_SERVER_STAGING_WHEEL}

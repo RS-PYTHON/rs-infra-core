@@ -59,7 +59,7 @@ spec:
             name: psql-backup-obs
 
   instances: 3
-  
+
   enableSuperuserAccess: true
 
   postgresql:

@@ -19,49 +19,19 @@ config:
   clientSecret: "{{ oauth2_proxy_oidc_client_secret }}"
   cookieSecret: "{{ oauth2_proxy_cookieSecret }}"
   configFile: |-
-    email_domains=[ "*" ]
-    provider="keycloak"
+    provider="keycloak-oidc"
     provider_display_name="Keycloak"
-    login_url="https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/auth"
-    redeem_url="https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/token"
-    validate_url="https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/userinfo"
-    profile_url="https://iam.{{ platform_domain_name }}/realms/rspy/protocol/openid-connect/userinfo"
-    pass_authorization_header=true
-    pass_access_token=true
-    pass_user_headers=true
-    set_authorization_header=true
-    set_xauthrequest=true
-    cookie_refresh="1m"
-    cookie_expire="30m"
-    cookie_domains=".{{ platform_domain_name }}"
-    whitelist_domains=".{{ platform_domain_name }}"
+    redirect_url="https://oauth2-proxy.{{ platform_domain_name }}/oauth2/callback"
+    oidc_issuer_url="https://iam.{{ platform_domain_name }}/realms/rspy"
+    code_challenge_method="S256"
     scope="openid"
-
-extraArgs:
-  - --user-id-claim=oid
-  - --insecure-oidc-allow-unverified-email=true
-
-image:
-  repository: "quay.io/oauth2-proxy/oauth2-proxy"
-  # appVersion is used by default
-  tag: ""
-  pullPolicy: "IfNotPresent"
-
-service:
-  type: ClusterIP
-  portNumber: 80
-  appProtocol: http
-  annotations: {}
-
-## Create or use ServiceAccount
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  enabled: true
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fullname template
-  name:
-  automountServiceAccountToken: true
-  annotations: {}
+    whitelist_domains=".{{ platform_domain_name }}"
+    email_domains=[ "*" ]
+    cookie_domains=".{{ platform_domain_name }}"
+    insecure_oidc_skip_issuer_verification="false"
+    insecure_oidc_allow_unverified_email="true"
+    provider_ca_files="{{ oauth2_proxy_provider_ca_files }}"
+    reverse_proxy="true"
 
 ingress:
   enabled: true
@@ -76,145 +46,30 @@ ingress:
       hosts:
         - oauth2-proxy.{{ platform_domain_name }}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
 
-
-
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 0
-  timeoutSeconds: 1
-
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 0
-  timeoutSeconds: 5
-  periodSeconds: 10
-  successThreshold: 1
-
-# Configure Kubernetes security context for container
-# Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-securityContext:
-  enabled: true
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 2000
-  runAsGroup: 2000
-  seccompProfile:
-    type: RuntimeDefault
-
-deploymentAnnotations: {}
-podAnnotations: {}
-podLabels: {}
-replicaCount: 1
-revisionHistoryLimit: 10
-strategy: {}
-
-## PodDisruptionBudget settings
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-podDisruptionBudget:
-  enabled: true
-  minAvailable: 1
-
-# Configure Kubernetes security context for pod
-# Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-podSecurityContext: {}
-
-# whether to use http or https
-httpScheme: http
-
-initContainers:
-  # if the redis sub-chart is enabled, wait for it to be ready
-  # before starting the proxy
-  # creates a role binding to get, list, watch, the redis master pod
-  # if service account is enabled
-  waitForRedis:
-    enabled: true
-    image:
-      repository: "docker.io/bitnami/kubectl"
-      pullPolicy: "IfNotPresent"
-    # uses the kubernetes version of the cluster
-    # the chart is deployed on, if not set
-    kubectlVersion: ""
-    securityContext:
-      enabled: true
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
-      seccompProfile:
-        type: RuntimeDefault
-    timeout: 180
-    resources: {}
-      # limits:
-      #   cpu: 100m
-      #   memory: 300Mi
-      # requests:
-      #   cpu: 100m
-      #   memory: 300Mi
-
-# Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -B" for bcrypt encryption.
-# Alternatively supply an existing secret which contains the required information.
-htpasswdFile:
-  enabled: false
-  existingSecret: ""
-  entries: []
-  # One row for each user
-  # example:
-  # entries:
-  #  - testuser:$2y$05$gY6dgXqjuzFhwdhsiFe7seM9q9Tile4Y3E.CBpAZJffkeiLaC21Gy
-
-# Configure the session storage type, between cookie and redis
 sessionStorage:
-  # Can be one of the supported session storage cookie|redis
-  type: cookie
+  type: redis
   redis:
-    # Name of the Kubernetes secret containing the redis & redis sentinel password values (see also `sessionStorage.redis.passwordKey`)
-    existingSecret: ""
-    # Redis password value. Applicable for all Redis configurations. Taken from redis subchart secret if not set. `sessionStorage.redis.existingSecret` takes precedence
-    password: ""
-    # Key of the Kubernetes secret data containing the redis password value
-    passwordKey: "redis-password"
-    # Can be one of standalone|cluster|sentinel
     clientType: "standalone"
-    standalone:
-      # URL of redis standalone server for redis session storage (e.g. `redis://HOST[:PORT]`). Automatically generated if not set
-      connectionUrl: ""
-    cluster:
-      # List of Redis cluster connection URLs (e.g. `["redis://127.0.0.1:8000", "redis://127.0.0.1:8000"]`)
-      connectionUrls: []
-    sentinel:
-      # Name of the Kubernetes secret containing the redis sentinel password value (see also `sessionStorage.redis.sentinel.passwordKey`). Default: `sessionStorage.redis.existingSecret`
-      existingSecret: ""
-      # Redis sentinel password. Used only for sentinel connection; any redis node passwords need to use `sessionStorage.redis.password`
-      password: ""
-      # Key of the Kubernetes secret data containing the redis sentinel password value
-      passwordKey: "redis-sentinel-password"
-      # Redis sentinel master name
-      masterName: ""
-      # List of Redis sentinel connection URLs (e.g. `["redis://127.0.0.1:8000", "redis://127.0.0.1:8000"]`)
-      connectionUrls: []
-
-# Enables and configure the automatic deployment of the redis subchart
 redis:
-  # provision an instance of the redis sub-chart
-  enabled: false
-  # Redis specific helm chart settings, please see:
-  # https://github.com/bitnami/charts/tree/master/bitnami/redis#parameters
-  # redisPort: 6379
-  # cluster:
-  #   enabled: false
-  #   slaveCount: 1
+  enabled: true
+  replicas: 1
+  redis:
+    config:
+      min-replicas-to-write: 0
+  persistentVolume:
+    enabled: false
+  master:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/infra"
+                operator: Exists
 
 affinity:
   nodeAffinity:

@@ -12,10 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
 
 resources:
-  - ingress.yaml
-  - clusterroles.yaml
-  - rolebindings.yaml
+- ingress.yaml
+- clusterroles.yaml
+- rolebindings.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'

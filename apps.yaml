@@ -17,7 +17,5 @@
   hosts: localhost
   #remote_user: cloud
   gather_facts: false
-  vars_files:
-    - "collections/kubespray/roles/kubespray-defaults/defaults/main/main.yml"
-  roles: 
+  roles:
     - { role: "app-installer" }

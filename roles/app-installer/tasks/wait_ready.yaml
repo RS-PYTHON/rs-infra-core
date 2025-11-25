@@ -1,0 +1,108 @@
+# Copyright 2025 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: "{{ package_name }} - {{ app_name }} | Wait for {{ item.kind }} {{ item.metadata.name }} readiness (if asked)"
+  block:
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: "{{ native_wait_timeout | default(360) | int }}"
+      when: item.kind in ['Pod', 'Deployment', 'StatefulSet', 'DaemonSet']
+
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: "{{ custom_wait_timeout | default(180) | int }}"
+        wait_condition:
+          type: "{{ item.metadata.labels['wait-for-deployment'] }}"
+      when:
+        - item.kind in ['Certificate', 'Cluster', 'ClusterIssuer', 'Keycloak', 'KeycloakRealmImport']
+        - item.metadata.labels['wait-for-deployment'] is defined
+
+    - name: Wait using condition for ScheduledBackup
+      block:
+        - name: Get all Backup resources
+          kubernetes.core.k8s_info:
+            kind: Backup
+            api_version: "{{ item.apiVersion }}"
+            namespace: "{{ item.metadata.namespace | default('default', true) }}"
+            label_selectors:
+              - "cnpg.io/cluster=postgresql-cluster"
+          register: backup_info
+
+        - name: Set fact for the latest ScheduledBackup-created Backup
+          set_fact:
+            latest_backup: >-
+              {{
+                backup_info.resources
+                | selectattr('kind', 'equalto', 'Backup')
+                | selectattr('apiVersion', 'equalto', 'postgresql.cnpg.io/v1')
+                | selectattr('spec.cluster.name', 'equalto', 'postgresql-cluster')
+                | sort(attribute='metadata.creationTimestamp')
+                | last
+              }}
+
+        - name: Wait for backup to complete
+          kubernetes.core.k8s_info:
+            kind: Backup
+            api_version: postgresql.cnpg.io/v1
+            name: "{{ latest_backup.metadata.name }}"
+            namespace: "{{ latest_backup.metadata.namespace }}"
+          register: backup_status
+          until: backup_status.resources[0].status.phase == 'completed'
+          retries: 10
+          delay: 10
+      when:
+        - item.kind == 'ScheduledBackup'
+        - item.apiVersion == 'postgresql.cnpg.io/v1'
+
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        name: "{{ item.metadata.name }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
+        wait: true
+        wait_sleep: 1
+        wait_timeout: "{{ job_wait_timeout | default(180) | int }}"
+        wait_condition:
+          type: Complete
+      when:
+        - item.kind == 'Job'
+
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        name: "{{ item.metadata.name }}"
+        wait: true
+        wait_timeout: "{{ crd_wait_timeout | default(30) | int }}"
+        wait_sleep: 1
+        wait_condition:
+          type: Established
+      when: item.kind == 'CustomResourceDefinition'
+
+  when:
+    - not ansible_check_mode
+  delegate_to: bastion

@@ -15,103 +15,115 @@
 # Variables part
 
 variable "cluster_name" {
-    description = "cluster name"
-    type        = string
+  description = "cluster name"
+  type        = string
 }
 
 variable "region" {
-    description = "OVH region"
-    type        = string
+  description = "OVH region"
+  type        = string
 }
 
 variable "allowed_ip_list" {
-    description = "list of allowed ip"
-    type        = list(string)
+  description = "list of allowed ip"
+  type        = list(string)
 }
 
 variable "nodepool_infra_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "Number of desired nodes on nodepool infra"
+  type        = number
+  default     = 0
 }
 
-variable "nodepool_infra_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+variable "nodepool_rs_server_desired_nodes" {
+  description = "Number of desired nodes on nodepool rs server"
+  type        = number
+  default     = 0
 }
 
-variable "nodepool_processing_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
-}
-
-variable "nodepool_processing_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+variable "nodepool_rs_env_desired_nodes" {
+  description = "Number of desired nodes on nodepool rs env"
+  type        = number
+  default     = 0
 }
 
 variable "nodepool_access_csc_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+  description = "Number of desired nodes on nodepool access csc"
+  type        = number
+  default     = 0
+}
+
+variable "nodepool_prefect_flow_desired_nodes" {
+  description = "Number of desired nodes on nodepool prefect flow"
+  type        = number
+  default     = 0
+}
+
+variable "nodepool_dask_scheduler_desired_nodes" {
+  description = "Number of desired nodes on nodepool dask scheduler"
+  type        = number
+  default     = 0
+}
+
+variable "nodepool_dask_worker_on_demand_desired_nodes" {
+  description = "Number of desired nodes on nodepool dask worker on demand"
+  type        = number
+  default     = 0
+}
+
+variable "nodepool_infra_autoscale" {
+  description = "Enable autoscaling of nodepool infra"
+  type        = bool
+  default     = true
+}
+
+variable "nodepool_rs_server_autoscale" {
+  description = "Enable autoscaling of nodepool rs server"
+  type        = bool
+  default     = true
+}
+
+variable "nodepool_rs_env_autoscale" {
+  description = "Enable autoscaling of nodepool rs env"
+  type        = bool
+  default     = true
 }
 
 variable "nodepool_access_csc_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+  description = "Enable autoscaling of nodepool access csc"
+  type        = bool
+  default     = true
 }
 
-variable "nodepool_prefect_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
+variable "nodepool_prefect_flow_autoscale" {
+  description = "Enable autoscaling of nodepool prefect flow"
+  type        = bool
+  default     = true
 }
 
-variable "nodepool_prefect_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+variable "nodepool_dask_scheduler_autoscale" {
+  description = "Enable autoscaling of nodepool dask scheduler"
+  type        = bool
+  default     = true
 }
 
-variable "nodepool_processing_ondemand_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
-}
-
-variable "nodepool_processing_ondemand_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
-}
-
-variable "nodepool_processing_systematic_desired_nodes" {
-    description = "number of desired nodes on nodepool"
-    type        = number
-    default     = 0
-}
-
-variable "nodepool_processing_systematic_autoscale" {
-    description = "Enable autoscaling of nodepool"
-    type        = bool
-    default     = true
+variable "nodepool_dask_worker_on_demand_autoscale" {
+  description = "Enable autoscaling of nodepool dask worker on demand"
+  type        = bool
+  default     = true
 }
 
 variable "buckets" {
-    description = "bucket list"
-    type        = list(string)
+  description = "bucket list"
+  type        = list(string)
 }
 
 variable "buckets_region" {
-    description = "buckets region"
-    type        = string
+  description = "buckets region"
+  type        = string
 }
 
 variable "public_key" {
-    description = "public_key"
-    type = string
+  description = "public_key"
+  type        = string
 }

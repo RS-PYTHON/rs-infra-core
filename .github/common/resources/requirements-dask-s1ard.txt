@@ -1,0 +1,33 @@
+# Copyright 2025 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/94/packages/pypi/simple # orekit jcc
+# --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/67/packages/pypi/simple # sxgeo
+# --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/78/packages/pypi/simple # pyrugged
+# --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/52/packages/pypi/simple # asgard
+# --extra-index-url https://gitlab.eopf.copernicus.eu/api/v4/projects/14/packages/pypi/simple # eopf cpm
+--extra-index-url https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/api/v4/projects/114/packages/pypi/simple # s1-ard-core
+
+# s1 needs "eopf>=2.5.8" but we have errors with the latest versions. 
+# So we force this old version which is the same as in the uv.lock file at the root of the git repo.
+eopf==2.5.9
+
+# Install s1 v0.2.1.
+# WARNING: in case of version change, you should also update post-install-dask-s1ard.sh
+# if s1-ard-core/initialize_env.sh has changed.
+git+https://__token__:${GITLAB_EOPF_TOKEN}@gitlab.eopf.copernicus.eu/vincent.privat/s1-l12-rp@rspy
+
+# other python dependencies
+proj
+graphviz

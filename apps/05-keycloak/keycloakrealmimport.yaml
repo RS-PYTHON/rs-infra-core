@@ -17,6 +17,8 @@ kind: KeycloakRealmImport
 metadata:
   name: rspy
   namespace: iam
+  labels:
+    wait-for-deployment: Done
 spec:
   keycloakCRName: keycloak
   realm:
@@ -103,12 +105,7 @@ spec:
           clientRole: false
           attributes: {}
       client:
-        oauth2-proxy:
-          - name: uma_protection
-            composite: false
-            clientRole: true
-            containerId: d42bd2ed-759a-42b3-bbff-fef0df01361f
-            attributes: {}
+        oauth2-proxy: []
         realm-management:
           - name: view-users
             description: ${role_view-users}
@@ -381,6 +378,12 @@ spec:
             clientRole: true
             containerId: 76276cc7-1453-4e8d-8898-582fa5491c35
             attributes: {}
+        osam:
+          - name: uma_protection
+            composite: false
+            clientRole: true
+            containerId: d5061bd5-ba20-4eaf-b13d-065554104027
+            attributes: {}
         account:
           - name: view-consent
             description: ${role_view-consent}
@@ -588,6 +591,25 @@ spec:
             - uma_protection
         notBefore: 0
         groups: []
+      - createdTimestamp: 1748850693552
+        username: service-account-osam
+        enabled: true
+        totp: false
+        emailVerified: false
+        serviceAccountClientId: osam
+        disableableCredentialTypes: []
+        requiredActions: []
+        realmRoles:
+          - default-roles-rspy
+        clientRoles:
+          realm-management:
+            - view-users
+            - query-users
+            - manage-users
+          osam:
+            - uma_protection
+        notBefore: 0
+        groups: []
       - createdTimestamp: 1707491949122
         username: service-account-grafana
         enabled: true
@@ -641,21 +663,6 @@ spec:
         requiredActions: []
         clientRoles:
           neuvector:
-            - uma_protection
-        notBefore: 0
-        groups: []
-      - createdTimestamp: 1709647915497
-        username: service-account-oauth2-proxy
-        enabled: true
-        totp: false
-        emailVerified: false
-        serviceAccountClientId: oauth2-proxy
-        disableableCredentialTypes: []
-        requiredActions: []
-        realmRoles:
-          - default-roles-rspy
-        clientRoles:
-          oauth2-proxy:
             - uma_protection
         notBefore: 0
         groups: []
@@ -780,6 +787,95 @@ spec:
           - phone
           - offline_access
           - microprofile-jwt
+      - clientId: osam
+        name: osam
+        description: ""
+        rootUrl: https://iam.{{ platform_domain_name }}
+        adminUrl: https://iam.{{ platform_domain_name }}
+        baseUrl: ""
+        surrogateAuthRequired: false
+        enabled: true
+        alwaysDisplayInConsole: false
+        clientAuthenticatorType: client-secret
+        secret: "{{ osam_oidc_client_secret }}"
+        redirectUris:
+          - "*"
+        webOrigins:
+          - "*"
+        notBefore: 0
+        bearerOnly: false
+        consentRequired: false
+        standardFlowEnabled: true
+        implicitFlowEnabled: true
+        directAccessGrantsEnabled: true
+        serviceAccountsEnabled: true
+        authorizationServicesEnabled: true
+        publicClient: false
+        frontchannelLogout: true
+        protocol: openid-connect
+        attributes:
+          oidc.ciba.grant.enabled: "false"
+          client.secret.creation.time: "1748850693"
+          backchannel.logout.session.required: "true"
+          post.logout.redirect.uris: +
+          oauth2.device.authorization.grant.enabled: "true"
+          backchannel.logout.revoke.offline.tokens: "false"
+        authenticationFlowBindingOverrides: {}
+        fullScopeAllowed: true
+        nodeReRegistrationTimeout: -1
+        protocolMappers:
+          - name: Client IP Address
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: clientAddress
+              introspection.token.claim: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: clientAddress
+              jsonType.label: String
+          - name: Client Host
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: clientHost
+              introspection.token.claim: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: clientHost
+              jsonType.label: String
+          - name: Client ID
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: client_id
+              introspection.token.claim: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: client_id
+              jsonType.label: String
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - good-service
+          - email
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        authorizationSettings:
+          allowRemoteResourceManagement: true
+          policyEnforcementMode: ENFORCING
+          resources: []
+          policies: []
+          scopes: []
+          decisionStrategy: UNANIMOUS
       - clientId: apikeymanager
         name: ""
         description: ""
@@ -1068,8 +1164,8 @@ spec:
       - clientId: jupyterhub
         name: jupyterhub
         description: ""
-        rootUrl: https://processing.{{ platform_domain_name }}/jupyter
-        adminUrl: https://processing.{{ platform_domain_name }}/jupyter
+        rootUrl: https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
+        adminUrl: https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
         baseUrl: ""
         surrogateAuthRequired: false
         enabled: true
@@ -1078,9 +1174,9 @@ spec:
         secret: "{{ jupyterhub_oidc_client_secret }}"
         redirectUris:
           - ""
-          - https://processing.{{ platform_domain_name }}/jupyter/*
+          - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter/*
         webOrigins:
-          - https://processing.{{ platform_domain_name }}/jupyter
+          - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
         notBefore: 0
         bearerOnly: false
         consentRequired: false
@@ -1412,94 +1508,52 @@ spec:
         clientAuthenticatorType: client-secret
         secret: "{{ oauth2_proxy_oidc_client_secret }}"
         redirectUris:
-          - https://{{ platform_domain_name }}/*
-          - https://oauth2-proxy.{{ platform_domain_name }}
           - https://oauth2-proxy.{{ platform_domain_name }}/oauth2/callback
-        webOrigins: []
+        webOrigins:
+          - https://oauth2-proxy.{{ platform_domain_name }}
         notBefore: 0
         bearerOnly: false
         consentRequired: false
         standardFlowEnabled: true
         implicitFlowEnabled: false
-        directAccessGrantsEnabled: true
-        serviceAccountsEnabled: true
-        authorizationServicesEnabled: true
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: false
         publicClient: false
-        frontchannelLogout: false
+        frontchannelLogout: true
         protocol: openid-connect
         attributes:
-          client.secret.creation.time: "1709642694"
-          post.logout.redirect.uris: +
-          oauth2.device.authorization.grant.enabled: "true"
-          backchannel.logout.revoke.offline.tokens: "false"
-          use.refresh.tokens: "true"
           oidc.ciba.grant.enabled: "false"
+          client.secret.creation.time: "1754555401"
           backchannel.logout.session.required: "true"
-          client_credentials.use_refresh_token: "false"
-          acr.loa.map: "{}"
-          require.pushed.authorization.requests: "false"
-          tls.client.certificate.bound.access.tokens: "false"
+          oauth2.device.authorization.grant.enabled: "false"
           display.on.consent.screen: "false"
-          token.response.type.bearer.lower-case: "false"
+          backchannel.logout.revoke.offline.tokens: "false"
         authenticationFlowBindingOverrides: {}
         fullScopeAllowed: true
         nodeReRegistrationTimeout: -1
         protocolMappers:
-          - name: groups
+          - id: 7afcf99e-fbe5-421c-a037-c563d2237e41
+            name: aud-mapper-oauth2-proxy
             protocol: openid-connect
-            protocolMapper: oidc-group-membership-mapper
+            protocolMapper: oidc-audience-mapper
             consentRequired: false
             config:
-              full.path: "true"
-              introspection.token.claim: "true"
-              multivalued: "true"
-              userinfo.token.claim: "true"
+              included.client.audience: oauth2-proxy
               id.token.claim: "true"
               access.token.claim: "true"
-              claim.name: groups
-          - name: oauth2-proxy
-            protocol: openid-connect
-            protocolMapper: oidc-group-membership-mapper
-            consentRequired: false
-            config:
-              full.path: "true"
               introspection.token.claim: "true"
-              multivalued: "true"
-              userinfo.token.claim: "true"
-              id.token.claim: "true"
-              access.token.claim: "true"
-              claim.name: groups
-          - name: email
-            protocol: openid-connect
-            protocolMapper: oidc-usermodel-attribute-mapper
-            consentRequired: false
-            config:
-              introspection.token.claim: "true"
-              userinfo.token.claim: "true"
-              user.attribute: email
-              id.token.claim: "true"
-              access.token.claim: "true"
-              claim.name: email
-              jsonType.label: String
         defaultClientScopes:
-          - email
-        optionalClientScopes:
           - web-origins
           - acr
-          - address
-          - phone
-          - offline_access
           - profile
           - roles
           - good-service
+          - email
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
           - microprofile-jwt
-        authorizationSettings:
-          allowRemoteResourceManagement: true
-          policyEnforcementMode: ENFORCING
-          resources: []
-          policies: []
-          scopes: []
-          decisionStrategy: UNANIMOUS
       - clientId: prometheus
         name: Prometheus
         baseUrl: https://monitoring.{{ platform_domain_name }}/prometheus/
@@ -2144,7 +2198,19 @@ spec:
       contentSecurityPolicy: frame-src 'self'; frame-ancestors 'self'; object-src 'none';
       xXSSProtection: 1; mode=block
       strictTransportSecurity: max-age=31536000; includeSubDomains
-    smtpServer: {}
+    smtpServer:
+      auth: 'true'
+      envelopeFrom: ''
+      from: '{{ keycloak.smtp.from }}'
+      fromDisplayName: ''
+      host: '{{ keycloak.smtp.host }}'
+      password: '{{ keycloak.smtp.password }}'
+      port: '{{ keycloak.smtp.port }}'
+      replyTo: ''
+      replyToDisplayName: ''
+      ssl: '{{ keycloak.smtp.ssl }}'
+      starttls: '{{ keycloak.smtp.starttls }}'
+      user: '{{ keycloak.smtp.user }}'
     loginTheme: keycloak
     accountTheme: keycloak.v2
     adminTheme: keycloak.v2

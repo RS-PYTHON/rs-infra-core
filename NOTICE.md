@@ -20,16 +20,16 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - NGINX Ingress Controller :
   - Helm chart
-    - Version: v4.9.1
-    - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.9.1/LICENSE)
-    - Source: <https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.9.1/charts/ingress-nginx>
-    - Copyright: Copyright The ingress-nginx Authors. Authors and Contributors [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.9.1/OWNERS) and [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.9.1/OWNERS_ALIASES)
+    - Version: v4.12.1
+    - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.12.1/LICENSE)
+    - Source: <https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.12.1/charts/ingress-nginx>
+    - Copyright: Copyright The ingress-nginx Authors. Authors and Contributors [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.12.1/OWNERS) and [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.12.1/OWNERS_ALIASES)
   - Container image(s)
-    - registry.k8s.io/ingress-nginx/controller:v1.9.6
-      - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.9.6/LICENSE)
-    - docker.io/library/nginx:1.25.2-alpine
-      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.25.2/LICENSE)
-  
+    - registry.k8s.io/ingress-nginx/controller:v1.12.1
+      - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.12.1/LICENSE)
+    - docker.io/library/nginx:1.25.5-alpine
+      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.25.5/LICENSE)
+
 - Grafana Operator
   - Helm chart: *None*
     - Version: 1.1.0
@@ -43,14 +43,14 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - PostgreSQL
   - Helm chart:
-    - Version: 0.20.1
-    - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.20.1/LICENSE)
-    - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.20.1>
+    - Version: 0.26.0
+    - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.26.0/LICENSE)
+    - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.26.0>
     - Copyright: Copyright The CloudNativePG authors. [Authors and Contributors](https://github.com/cloudnative-pg/charts/graphs/contributors)
   - Container image(s)
-    - ghcr.io/cloudnative-pg/cloudnative-pg:1.22.1
-      - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.22.1/LICENSE)
-    - ghcr.io/cloudnative-pg/postgresql:16.1
+    - ghcr.io/cloudnative-pg/cloudnative-pg:1.27.0
+      - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.27.0/LICENSE)
+    - ghcr.io/cloudnative-pg/postgresql:17.5
       - License: [Apache License 2.0](https://github.com/cloudnative-pg/postgres-containers/blob/main/LICENSE)
 
 - Loki
@@ -88,7 +88,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
   - Container image(s): *None*
   - Version: 4.7.2
   - License: [GNU General Public License v2.0](https://github.com/wazuh/wazuh/blob/v4.7.2/LICENSE)
-  
+
 - Containerd
   - Helm chart: *None*
   - Container image(s): *None*
@@ -127,13 +127,13 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - oauth2-proxy
   - Helm chart:
-    - Version: 7.1.0
-    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-7.1.0/LICENSE)
-    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-7.1.0>
+    - Version: 8.2.1
+    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-8.2.1/LICENSE)
+    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-8.2.1>
     - Copyright: Copyright The oauth2-proxy Development Team. [Authors and Contributors](https://github.com/oauth2-proxy/manifests/graphs/contributors)
   - Container image(s)
-    - quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
-      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.6.0/LICENSE)
+    - quay.io/oauth2-proxy/oauth2-proxy:v7.12.0
+      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.12.0/LICENSE)
 
 - Prefect
   - Helm chart:

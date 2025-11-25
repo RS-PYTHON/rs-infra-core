@@ -13,6 +13,163 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a3] - 2025-10-23
+
+### Added
+
+- [PR#203](https://github.com/RS-PYTHON/rs-infra-core/pull/203) : Add remove application playbook and doc
+
+### Changed
+
+- [PR#205](https://github.com/RS-PYTHON/rs-infra-core/pull/205) : Update layer-cleanup.sh 
+- [PR#207](https://github.com/RS-PYTHON/rs-infra-core/pull/207) : feat: update inventory for cnpgstac
+- [PR#206](https://github.com/RS-PYTHON/rs-infra-core/pull/206) : update template for R3-64 on dask-worker-on-demand-rspython-ops
+- [RSPY-816](https://github.com/RS-PYTHON/rs-infra-core/pull/208) : Externalize inventory configuration script and improve CI/CD
+- [PR#210](https://github.com/RS-PYTHON/rs-infra-core/pull/210) : Increase timeout from 120s to 180s in CI/CD
+- [PR#211](https://github.com/RS-PYTHON/rs-infra-core/pull/211) : Externalize install-requirements.sh
+- [PR#212](https://github.com/RS-PYTHON/rs-infra-core/pull/212) : Fix docker image tags
+- [RSPY-795](https://github.com/RS-PYTHON/rs-infra-core/pull/213) : Multiple-prefect-instances
+
+## [1.0a2] - 2025-09-30
+
+### Added
+
+- [PR#183](https://github.com/RS-PYTHON/rs-infra-core/pull/183) : Update CloudNativePG
+- [PR#173](https://github.com/RS-PYTHON/rs-infra-core/pull/173) : Update OAuth2 Proxy (bye bye bitnami)
+- [PR#195](https://github.com/RS-PYTHON/rs-infra-core/pull/195) : Add S1 ARD processor
+
+### Changed
+
+- [PR#196](https://github.com/RS-PYTHON/rs-infra-core/pull/196) : Allow latest version of Ansible
+- Update inventory for prip stations
+
+### Fixed
+
+- [PR#193](https://github.com/RS-PYTHON/rs-infra-core/pull/193) : Add missing depedencies
+
+## [1.0a1] - 2025-08-29
+
+### Added
+
+- [RSPY-737](https://github.com/RS-PYTHON/rs-infra-core/pull/162) : Make s3l0 processing work
+- [RSPY-728](https://github.com/RS-PYTHON/rs-infra-core/pull/165) : Update oauth2 proxy
+- [RSPY-735](https://github.com/RS-PYTHON/rs-infra-core/pull/169) : Add rs_performance_indicator and add new general prefect workpool
+- [RSPY-766](https://github.com/RS-PYTHON/rs-infra-core/pull/174) : Add plotting python libraries in jupyter docker image
+- [PR#175](https://github.com/RS-PYTHON/rs-infra-core/pull/175) : Add more Python libraries to open and plot zarr files
+- [PR#177](https://github.com/RS-PYTHON/rs-infra-core/pull/177) : Install nbconvert in Jupyter image to convert notebooks to PDF files
+- [RSPY-737](https://github.com/RS-PYTHON/rs-infra-core/pull/176) : Update to S3L0 1.2.1
+- [PR#178](https://github.com/RS-PYTHON/rs-infra-core/pull/178) : Test real deployment in ci/cd
+- [PR#187](https://github.com/RS-PYTHON/rs-infra-core/pull/187) : Improve deployment tests 
+- [RSPY-729](https://github.com/RS-PYTHON/rs-infra-core/pull/170) : Use OVH private docker registry
+
+### Changed
+
+- [RSPY-667](https://github.com/RS-PYTHON/rs-infra-core/pull/172) : Define rs_server.full_domain variable
+- [PR#186](https://github.com/RS-PYTHON/rs-infra-core/pull/186) : Remove storage-class label, version is managed by OVH
+
+### Fixed
+
+- [PR#166](https://github.com/RS-PYTHON/rs-infra-core/pull/166) : Fix ds-anotify
+- [PR#167](https://github.com/RS-PYTHON/rs-infra-core/pull/167) : Add gitlab token for private repo
+- [PR#168](https://github.com/RS-PYTHON/rs-infra-core/pull/168) : Add missing node affinity and toleration
+- [PR#171](https://github.com/RS-PYTHON/rs-infra-core/pull/171) : Fix template name for node dask_scheduler
+- [PR#180](https://github.com/RS-PYTHON/rs-infra-core/pull/180) : Updated nodepoool in start/stop playbook 
+
+## [0.2] - 2025-08-04
+
+### Added
+
+- [PR#160](https://github.com/RS-PYTHON/rs-infra-core/pull/160) : add port in sample for grafana smtp configuration
+- [PR#161](https://github.com/RS-PYTHON/rs-infra-core/pull/161) : feat: update inventory for loki
+
+### Fixed
+
+- [PR#139](https://github.com/RS-PYTHON/rs-infra-core/pull/139) : Remove Kubernetes deployment code
+- [PR#142](https://github.com/RS-PYTHON/rs-infra-core/pull/142) : kustomize edit fix --vars on all apps
+- [PR#157](https://github.com/RS-PYTHON/rs-infra-core/pull/157) : Remove collections directory
+- [PR#158](https://github.com/RS-PYTHON/rs-infra-core/pull/158) : Restore kube_oidc configuration removed accidentally with kubespray
+- [PR#159](https://github.com/RS-PYTHON/rs-infra-core/pull/159) : Fix SARIF upload category
+
+## [0.2a15] - 2025-07-04
+
+### Added
+
+- [PR#148](https://github.com/RS-PYTHON/rs-infra-core/pull/148) : Install jq in jupyter
+- [RSPY-659](https://github.com/RS-PYTHON/rs-infra-core/pull/151) : Create dask staging cluster automatically
+- [RSPY-609](https://github.com/RS-PYTHON/rs-infra-core/pull/154) : Test latest L0 processor
+
+### Changed
+
+- [PR#149](https://github.com/RS-PYTHON/rs-infra-core/pull/149) : Optimisation on security scan on CI
+- [RSPY-697](https://github.com/RS-PYTHON/rs-infra-core/pull/146) : Update nodepools
+- [PR#152](https://github.com/RS-PYTHON/rs-infra-core/pull/152) : Optimisation on docker build CI
+
+### Fixed
+
+- [PR#150](https://github.com/RS-PYTHON/rs-infra-core/pull/150) : Fix typo in doc
+- [PR#153](https://github.com/RS-PYTHON/rs-infra-core/pull/153) : Fix indentation in doc
+
+## [0.2a14] - 2025-06-10
+
+### Added
+
+- [PR#136](https://github.com/RS-PYTHON/rs-infra-core/pull/136) : Add operational and dask-gateway rolebinding
+- [RSPY-672](https://github.com/RS-PYTHON/rs-infra-core/pull/135) : Split dpr processing flow
+- [PR#145](https://github.com/RS-PYTHON/rs-infra-core/pull/145) : Add Keycloak SMTP configuration
+- [RSPY-601-603](https://github.com/RS-PYTHON/rs-infra-core/pull/147) : Add osam service
+
+### Changed
+
+- [PR#141](https://github.com/RS-PYTHON/rs-infra-core/pull/141) : Enable CI/CD
+- [PR#144](https://github.com/RS-PYTHON/rs-infra-core/pull/144) : Update Python and conda
+
+### Fixed
+
+- [PR#138](https://github.com/RS-PYTHON/rs-infra-core/pull/138) : Fix pre-commit violations
+- [PR#140](https://github.com/RS-PYTHON/rs-infra-core/pull/140) : Fix links and typos
+- [PR#143](https://github.com/RS-PYTHON/rs-infra-core/pull/143) : Fix doc
+
+## [0.2a13] - 2025-05-15
+
+### Added
+
+- [PR#129](https://github.com/RS-PYTHON/rs-infra-core/pull/129) :  Trace requests headers and body with opentelemetry
+- [RSPY-652/653/654](https://github.com/RS-PYTHON/rs-infra-core/pull/132) : Add rs-dpr-service
+
+### Changed
+
+- [RSPY-664](https://github.com/RS-PYTHON/rs-infra-core/pull/125) : use smaller nodes for staging
+- [RSPY-594](https://github.com/RS-PYTHON/rs-infra-core/pull/127) : Use latest rs-server wheels when building the dask-staging image
+- [RSPY-594](https://github.com/RS-PYTHON/rs-infra-core/pull/130) : Build jupyter with latest rs-client-libraries wheel
+- [PR#131](https://github.com/RS-PYTHON/rs-infra-core/pull/131) : Remove old phase1 files
+- [PR#133](https://github.com/RS-PYTHON/rs-infra-core/pull/133) : Use custom pygeo projects
+
+### Fixed
+
+- [PR#124](https://github.com/RS-PYTHON/rs-infra-core/pull/124) : remove old ogc validation env var
+
+## [0.2a12] - 2025-04-14
+
+### Added
+
+- RSPY-236: Upgrade to Ubuntu 24.04.2
+- RSPY-644: [S3L0 demo] Use OpenTelemetry
+- New docker image `ghcr.io/rs-python/rs-infra-core-mockup`
+
+### Changed
+
+- Bump rs-server-staging version to `0.2a12`
+- RSPY-631: Update to latest stable version of Prefect 3 (3.2.13) and drop Prefect 2
+- Bump ingress-nginx to fix CVE-2025-1974
+
+### Fixed
+
+- Documentation outdated : bumped cots version
+- Typos in installation documentation
+- Typos in installation scripts
+- Changed executable to `/bin/bash` for several steps in ansible
+- Removed several special chars in the auto generated passwords that breaks YAML when it's the first caracter in the string
+
 ## [0.2a11] - 2025-03-12
 
 :rotating_light: **Breaking changes**

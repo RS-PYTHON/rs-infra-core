@@ -13,7 +13,6 @@
 # limitations under the License.
 
 ARG PYTHON_VERSION=3.13.9
-
 FROM ghcr.io/rs-python/rs-client-libraries_store:latest AS rs-client
 
 FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-5.4.2-py${PYTHON_VERSION}
@@ -28,16 +27,17 @@ USER root
 
 RUN adduser rspy
 
-ENV SHELL /bin/bash
-ENV HOME /home/rspy
+ENV SHELL=/bin/bash
+ENV HOME=/home/rspy
 
-COPY --from=rs-client /dist/whl/*.whl /opt/
+COPY ./*.whl /opt/
 COPY ./resources/layer-cleanup.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     apt install -y \
+    jq \
     vim \
     git \
     curl \
@@ -46,11 +46,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     libgtk-3-0 libasound2 libx11-xcb1 \
     xclip \
     graphviz \
-    python3-pydot && \
+    python3-pydot \
+    texlive-xetex texlive-fonts-recommended texlive-plain-generic && \
     layer-cleanup.sh
 
 # Install python dependencies
-RUN conda install --yes conda-forge::python=${PYTHON_VERSION} && \
+RUN conda update -n base -c conda-forge conda && \
+    conda install --yes conda-forge::python=${PYTHON_VERSION} && \
+    pip install --upgrade pip && \
     pip install \
     dask[complete]==${DASK_TAG} \
     distributed==${DASK_TAG} \
@@ -59,8 +62,23 @@ RUN conda install --yes conda-forge::python=${PYTHON_VERSION} && \
     prefect-dask==${PREFECT_DASK_TAG} \
     ipywidgets \
     dask-labextension \
+    nbconvert[webpdf] \
     s3fs \
-    boto3 && \
+    boto3 \
+    cftime \
+    zarr \
+    scipy \
+    xarray \
+    netCDF4 \
+    h5netcdf \
+    geopandas \
+    matplotlib \
+    nc-time-axis \
+    pooch \
+    fsspec \
+    cartopy \
+    seaborn \
+    stac-api-validator && \
     pip install /opt/*.whl && \
     conda clean --all --yes && \
     layer-cleanup.sh
@@ -86,6 +104,9 @@ COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_
 COPY resources/start-notebook.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/start-notebook.sh
 
+# Remove apt repository list and custom scripts
+RUN rm -f /etc/apt/sources.list /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+
 ENTRYPOINT ["start-notebook.sh"]
 
 EXPOSE 8888
@@ -93,6 +114,9 @@ EXPOSE 8888
 USER rspy
 
 WORKDIR "$HOME"
+
+# To be able to import notebooks/resources/ from python
+ENV PYTHONPATH="$HOME/notebooks"
 
 # Set labels based on the Open Containers Initiative (OCI):
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys

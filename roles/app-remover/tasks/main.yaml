@@ -1,0 +1,8 @@
+- name: Browse each package
+  include_tasks: remove_package.yaml
+  vars:
+    package_name: "{{ package_path | basename }}"
+  loop: "{{ package_paths }}"
+  loop_control:
+    loop_var: package_path
+  when: package is undefined or package == package_name

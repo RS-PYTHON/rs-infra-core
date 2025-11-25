@@ -15,13 +15,8 @@
 
 ### Terraform
 
-This project exploits Terraform to deploy the infrastructure on the Cloud Provider.  
+This project exploits Terraform to deploy the infrastructure on the Cloud Provider.
 The fully detailed documentation and configuration options are available on its page: [https://www.terraform.io/](https://www.terraform.io/)
-
-### Kubespray
-
-This project exploits Kubespray to deploy Kubernetes.  
-The fully detailed documentation and configuration options are available on its page: [https://kubespray.io/](https://kubespray.io/)
 
 ### HashiCorp Vault (optional)
 
@@ -29,7 +24,7 @@ This project can integrate credentials from a custom `HashiCorp Vault` instance,
 
 ### Openstack CLI
 
-This project exploits Openstack CLI to manage the state of the infrastructure on the Cloud Provider.  
+This project exploits Openstack CLI to manage the state of the infrastructure on the Cloud Provider.
 The fully detailled documentation and configuration options are available on its page: [https://docs.openstack.org/newton/user-guide/cli.html](https://docs.openstack.org/newton/user-guide/cli.html)
 
 ## Quickstart
@@ -59,18 +54,9 @@ conda create -y -n rspy python=3.11
 conda activate rspy
 
 # Install Ansible, Terraform, Openstackclient
-conda install conda-forge::ansible
-conda install conda-forge::terraform
-conda install conda-forge::python-openstackclient
-conda install conda-forge::passlib
-conda install conda-forge::boto3
+conda run conda install -y -c conda-forge "ansible<12" terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client python-kubernetes
 
-# Init Kubespray collection with remote
-git submodule update --init --remote
-
-ansible-galaxy collection install \
-    openstack.cloud \
-    amazon.aws
+conda run ansible-galaxy collection install kubernetes.core openstack.cloud amazon.aws
 ```
 
 ### 3. Copy the sample inventory
@@ -94,24 +80,37 @@ cp -rfp inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 - Credentials, domain name, the stash license, S3 endpoints in `inventory/mycluster/host_vars/setup/main.yaml`
 - Credentials in `roles/terraform/cluster/tasks/.env`
 - Credentials, domain name in `inventory/mycluster/openrc.sh`
-- Node groups, Network sizing, S3 buckets in `inventory/mycluster/cluster.tfvars`
+- Node groups, Network sizing, S3 buckets, public docker hub account (optionnal) in `inventory/mycluster/cluster.tfvars`
 - S3 backend for terraform in `inventory/mycluster/backend.tfvars`
 - Values for custom parameters in `inventory/mycluster/host_vars/setup/apps.yml`
 - Values for `all.hosts.setup.ansible_python_interpreter` and `all.hosts.localhost.ansible_python_interpreter` in `inventory/mycluster/hosts.yaml`
+
+### 5. Deploy the managed private docker registry (optionnal)
+
+You can opt-in to deploy a managed private docker registry. It can be used later to avoid pulling multiple time the docker images from the public docker hub (docker.io). It will deploy an a private harbor registry configured as a ([proxy cache](https://goharbor.io/docs/2.4.0/administration/configure-proxy-cache/)).
+
+```shellsession
+ansible-playbook registry.yaml \
+    -i inventory/mycluster/hosts.yaml
+```
+
+Note: if you want to use the managed private docker registry with the rest of the deployment, set the flag private_registry to true when calling the `apps.yaml` ansible playbooks.
+
+### 6. Generate the inventory
 
 ```shellsession
 ansible-playbook generate_inventory.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 5. Create and configure machines
+### 7. Create and configure machines
 
 ```shellsession
 ansible-playbook cluster.yaml \
     -i inventory/mycluster/hosts.yaml
 ```
 
-### 6. Deploy the apps
+### 8. Deploy the apps
 
 Connect on the bastion with ssh and go into the ~/rs-infra-core repository :
 
@@ -125,17 +124,25 @@ Deploy the rs-infra-core apps :
 ```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml
+    -e private_registry=true
 ```
+
+(Optional) : You can add a flag to enable of disable the usage of the managed private docker registry. By default it's disabled : `-e private_registry=false`
+
+(Optional) : You can change the default wait timeouts by adding one of these flags. Values are expressed in seconds:
+- `-e crd_wait_timeout=30` for `CustomResourceDefinition`
+- `-e job_wait_timeout=180` for `Job`
+- `-e custom_wait_timeout=180` for `Certificate`, `Cluster`, `ClusterIssuer`, `Keycloak` and `KeycloakRealmImport`
+- `-e native_wait_timeout=360` for `Pod`, `Deployment`, `StatefulSet` and `DaemonSet`
 
 !!! warning "Note: DNS configuration"
     At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (`kubectl -n ingress-nginx get svc ingress-nginx-controller`).
 
-(Optionnal) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
+(Optional) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
 
 (still on the bastion)
 
 ```shellsession
-
 cd ~ ;
 
 git clone https://github.com/RS-PYTHON/rs-infra-security.git ;
@@ -144,26 +151,30 @@ git clone https://github.com/RS-PYTHON/rs-workflow-env.git ;
 git clone https://github.com/RS-PYTHON/rs-server-deployment.git ;
 
 cd ~/rs-infra-core ;
-
 ```
 
 !!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
     See the [how-to/Wazuh-Server_Install](./how-to/Wazuh%20server%20install.md) and execute scripts **before** deploying rs-infra-security.
 
 ```shellsession
-
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-infra-security/apps/"]}' ;
+    -e '{"package_paths": ["~/rs-infra-security/apps/"]}'
+    -e private_registry=true ;
+```
 
+```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-infra-monitoring/apps/"]}' ;
+    -e '{"package_paths": ["~/rs-infra-monitoring/apps/"]}'
+    -e private_registry=true ;
+```
 
+```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-workflow-env/apps/"]}' ;
-
+    -e '{"package_paths": ["~/rs-workflow-env/apps/"]}'
+    -e private_registry=true ;
 ```
 
 !!! warning "Disclaimer: **After** Jupyterhub installation (rs-workflow-env)"
@@ -173,10 +184,11 @@ ansible-playbook apps.yaml \
 !!! warning "Disclaimer: **After** Prefect-Worker installation (rs-workflow-env)"
     See the [how-to/Prefect-Worker](./how-to/Prefect%20Worker.md) after deploying rs-workflow-env.
 
+```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
     -e '{"package_paths": ["~/rs-server-deployment/apps/"]}' ;
-
+    -e private_registry=true ;
 ```
 
 # Copyright and license

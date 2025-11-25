@@ -24,11 +24,12 @@
   shell: |
     set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/override.tfvars" \
       -target=ovh_cloud_project_kube_nodepool.nodepool_infra \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_processing \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_rs_server \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_rs_env \
       -target=ovh_cloud_project_kube_nodepool.nodepool_access_csc \
       -target=ovh_cloud_project_kube_nodepool.nodepool_prefect_flow \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_processing_ondemand \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_processing_systematic && \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_dask_scheduler \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand && \
       rm {{ inventory_dir }}/override.tfvars
   args:
     chdir: roles/terraform/cluster/tasks/

@@ -1,0 +1,105 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ghcr.io/rs-python/rs-testmeans_dpr-processor-mock:latest as dpr_mock
+
+FROM ghcr.io/dask/dask-gateway:2024.1.0
+
+ARG IMAGE2BUILD
+ARG DASK_TAG=2024.5.2
+ARG DASK_GATEWAY_TAG=2024.1.0
+ARG PREFECT_TAG=3.2.13
+ARG PREFECT_DASK_TAG=0.3.3
+
+USER root
+
+COPY ./resources/layer-cleanup.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/layer-cleanup.sh
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y libexpat1 wget git && \
+    layer-cleanup.sh
+
+############################################
+# Install the DPR mockup (=fake processor) #
+############################################
+
+# Copy the src folder from the dpr_mock image
+COPY --from=dpr_mock /src /src
+WORKDIR /src/DPR
+
+# Export the poetry dependencies into a requirements.txt file then install it with pip
+RUN \
+    pip install -U pip && \
+    pip install --no-cache-dir poetry pip-autoremove && \
+    poetry self add poetry-plugin-export && \
+    poetry export --without-hashes --format=requirements.txt > requirements.txt && \
+    pip-autoremove -y poetry && \
+    pip install -r requirements.txt && \
+    rm -f requirements.txt
+
+##################
+# End DPR mockup #
+##################
+
+# Download and install dask-gateway-server requirements
+RUN wget -P /opt/ "https://raw.githubusercontent.com/dask/dask-gateway/refs/tags/${DASK_GATEWAY_TAG}/dask-gateway-server/Dockerfile.requirements.txt" && \
+    sed -i "s|\(^\s*dask-gateway-server\)|# \1|g" /opt/Dockerfile.requirements.txt && \
+    pip install --no-cache-dir -r /opt/Dockerfile.requirements.txt && \
+    layer-cleanup.sh
+
+# Install whatever
+RUN --mount=type=secret,id=GITLAB_EOPF_TOKEN \
+    rm /opt/Dockerfile.requirements.txt && \
+    layer-cleanup.sh
+
+# Install Dask with correct version
+RUN pip install \
+        dask[complete]==${DASK_TAG} \
+        distributed==${DASK_TAG} \
+        dask-gateway==${DASK_GATEWAY_TAG} \
+        dask-gateway-server[kubernetes]==${DASK_GATEWAY_TAG} \
+        bokeh">=3.1.0" \
+        jupyter-server-proxy && \
+    pip install \
+        prefect[aws]==${PREFECT_TAG} \
+        prefect-dask==${PREFECT_DASK_TAG} && \
+    layer-cleanup.sh
+
+# Install and auto configure opentelemetry
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-instrumentation-aws-lambda opentelemetry-test-utils && \
+    opentelemetry-bootstrap -a install && \
+    layer-cleanup.sh
+
+RUN apt update && apt install -y python3-pydot graphviz && layer-cleanup.sh
+
+# Remove apt repository list and custom scripts
+RUN rm -f /etc/apt/sources.list /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+
+# Add a default user
+RUN useradd -m user
+
+# Give USERNAME rights to write in /src
+RUN chown -R user /src
+
+USER user
+WORKDIR /home/user
+
+# Set labels based on the Open Containers Initiative (OCI):
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+#
+LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
+LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-dask-eopf-mockup"
+LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/dask-gateway/Dockerfile.mockup"

@@ -15,9 +15,12 @@
 # Platform domain name
 platform_domain_name: rspy.example.com
 
+# Cluster issuer (letsencrypt-prod, letsencrypt-staging, local-ca-issuer)
+cluster_issuer: letsencrypt-prod
+
 # S3 credential to be reused accross apps
 s3:
   endpoint: https://s3.gra.io.cloud.ovh.net
   region: gra
-  access_key: AK
-  secret_key: SK
+  access_key: s3_access_key
+  secret_key: s3_secret_key
