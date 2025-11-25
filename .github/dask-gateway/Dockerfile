@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This Dockerfiles installs a DPR processor in the dask-gateway image for cluster mode.
+
 FROM ghcr.io/rs-python/dask/dask-gateway:2024.1.0-python3.12.9
 
 ARG IMAGE2BUILD
-ARG DASK_TAG=2025.3.0
+ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
 ARG PREFECT_TAG=3.2.13
 ARG PREFECT_DASK_TAG=0.3.3
@@ -80,6 +82,6 @@ WORKDIR /home/user
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
-# ghcr.io/rs-python/rs-infra-core-dask-staging or ghcr.io/rs-python/rs-infra-core-dask-eopf
+# ghcr.io/rs-python/dask/staging or ghcr.io/rs-python/dask/l0 or ghcr.io/rs-python/dask/s1ard
 LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-${IMAGE2BUILD}"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/dask-gateway/Dockerfile"
