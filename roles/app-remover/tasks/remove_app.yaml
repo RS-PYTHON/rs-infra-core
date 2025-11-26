@@ -20,12 +20,12 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Fail if no kustomization file found"
       fail:
-        msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/COPRS/infrastructure/blob/release/0.3.0/doc/how-to/Add%20an%20application.md"
+        msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/RS-PYTHON/rs-infra-core/blob/develop/docs/installation.md"
       when: not kustomization_file.stat.exists
 
-    - name: "{{ package_name }} - {{ app_name }} | Include vars from kustomization.yaml"
+    - name: "{{ package_name }} - {{ app_name }} | Include vars from {{ kustomization_file.stat.path }}"
       include_vars:
-        file: "{{ app_dir }}/kustomization.yaml"
+        file: "{{ kustomization_file.stat.path }}"
         name: kustomization
       delegate_to: bastion
 
@@ -47,6 +47,7 @@
         suffix: "k8s_resources_{{ app_name }}"
       register: resources_dir
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Template and send resources to remote"
       template:
@@ -56,6 +57,7 @@
       when:
         - item not in ['.helm_repository_config.yaml', 'resources.txt']
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Copy subdirectories to remote"
       copy:
@@ -65,6 +67,7 @@
       when:
         - item.state == 'directory'
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Pull charts from private repositories"
       shell: |
@@ -81,6 +84,7 @@
         - kustomization.helmCharts is defined
         - item.0.repo == item.1.name
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Create temporary manifest file"
       tempfile:
@@ -130,6 +134,12 @@
     - name: "{{ package_name }} - {{ app_name }} | reset facts"
       set_fact:
         resources: []
+        jobs:
+          resources: []
+        pods:
+          resources: []
+        deployments:
+          resources: []
       delegate_to: bastion
 
     - name: "{{ package_name }} - {{ app_name }} | Delete resources.txt"
