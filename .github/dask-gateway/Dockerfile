@@ -74,8 +74,8 @@ RUN [ -f /opt/post-install-${IMAGE2BUILD}.sh ] && /opt/post-install-${IMAGE2BUIL
 
 RUN apt autoremove -y gcc && layer-cleanup.sh
 
-# Remove apt repository list and custom scripts
-RUN rm -f /etc/apt/sources.list /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+# Remove custom scripts
+RUN rm -f /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
 
 # Add a default user
 RUN useradd -m user

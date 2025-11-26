@@ -31,11 +31,11 @@ ENV SHELL=/bin/bash
 ENV HOME=/home/rspy
 
 COPY ./*.whl /opt/
-COPY ./resources/layer-cleanup.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/layer-cleanup.sh
+COPY ./resources/layer-cleanup.sh ./resources/restore-apt.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
 
 # Install system dependencies
-RUN DEBIAN_FRONTEND=noninteractive apt update && \
+RUN DEBIAN_FRONTEND=noninteractive restore-apt.sh && apt update && \
     apt install -y \
     jq \
     vim \
@@ -104,8 +104,8 @@ COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_
 COPY resources/start-notebook.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/start-notebook.sh
 
-# Remove apt repository list and custom scripts
-RUN rm -f /etc/apt/sources.list /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+# Remove custom scripts
+RUN rm -f /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
 
 ENTRYPOINT ["start-notebook.sh"]
 
