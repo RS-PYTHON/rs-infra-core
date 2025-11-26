@@ -149,6 +149,10 @@ jobs:
           path: |
             realm-export.json
             realm-export.yaml
+      - name: Undeploy Keycloak (for real)
+        run: |
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook remove_apps.yaml -i inventory/mycluster/hosts.yaml -e '{"app": "'keycloak'", "force_delete": true}'
+        shell: bash
       - name: 🩺 Kubernetes failure diagnostics
         if: failure()
         run: |
