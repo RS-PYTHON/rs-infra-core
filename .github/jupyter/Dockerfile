@@ -28,7 +28,10 @@ USER root
 COPY ./resources/layer-cleanup.sh ./resources/restore-apt.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
 
-RUN restore-apt.sh && apt update && adduser rspy && layer-cleanup.sh
+RUN restore-apt.sh && apt update && \
+    apt install -y adduser && \
+    adduser rspy && \
+    layer-cleanup.sh
 
 ENV SHELL=/bin/bash
 ENV HOME=/home/rspy
