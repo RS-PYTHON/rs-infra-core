@@ -25,14 +25,15 @@ ARG PREFECT_DASK_TAG=0.3.3
 
 USER root
 
-RUN adduser rspy
+COPY ./resources/layer-cleanup.sh ./resources/restore-apt.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+
+RUN restore-apt.sh && apt update && adduser rspy && layer-cleanup.sh
 
 ENV SHELL=/bin/bash
 ENV HOME=/home/rspy
 
 COPY ./*.whl /opt/
-COPY ./resources/layer-cleanup.sh ./resources/restore-apt.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
 
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive restore-apt.sh && apt update && \
