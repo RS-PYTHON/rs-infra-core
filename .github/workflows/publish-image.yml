@@ -37,7 +37,6 @@ on:
         description: Tag the docker images as e.g. 'latest'
         required: false
 env:
-  PYTHON_VERSION: 3.11
   DOCKER_REGISTRY: ghcr.io
 
 jobs:

@@ -15,6 +15,8 @@
 
 set -euo pipefail
 
+PYTHON_VERSION=3.13.9
+
 # Install miniforge
 mkdir -p ~/miniforge3
 wget -q "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" -O ~/miniforge3/miniforge.sh
@@ -27,7 +29,7 @@ conda update -n base -c defaults conda
 
 # Create conda env with python
 # conda update -n base -c defaults conda
-conda create -y -n rspy python=3.11
+conda create -y -n rspy python=$PYTHON_VERSION
 
 # Install Ansible, Terraform, Openstackclient
 conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 "kubernetes-helm<4" kubernetes-client python-kubernetes "bcrypt<5"

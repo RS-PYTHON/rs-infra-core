@@ -17,7 +17,7 @@ set -euo pipefail
 set -x
 
 # This is a workaround for https://gitlab.eopf.copernicus.eu/S1/s1-ard-core/-/issues/10
-chmod -R a+w /usr/local/lib/python3.11/site-packages/pyproj/proj_dir/share/proj
+chmod -R a+w /usr/local/lib/python3.*/site-packages/pyproj/proj_dir/share/proj
 
 # Same as s1-ard-core/initialize_env.sh
 S1_ARD_PATH=$(python -c "import s1_ard_core;print(s1_ard_core.__path__[0])")
