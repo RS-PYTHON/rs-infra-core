@@ -100,11 +100,11 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Preview resources to be deleted"
       shell: |
-        echo -e "\033[1;31m============================================================\033[0m"
-        echo -e "\033[1;31m   WARNING: You are about to delete Kubernetes resources:\033[0m"
-        echo -e "\033[1;31m   app.kubernetes.io/instance={{ app_name }}\033[0m"
-        echo -e "\033[1;31m============================================================\033[0m"
-        kubectl get -f {{ tmp_manifest.path }} -l app.kubernetes.io/instance={{ app_name }}
+        echo "============================================================"
+        echo "   WARNING: You are about to delete Kubernetes resources:"
+        echo "   app.kubernetes.io/instance={{ app_name }}"
+        echo "============================================================"
+        cat {{ tmp_manifest.path }} | yq '.kind + "/" + .metadata.name'
       register: preview
       delegate_to: bastion
 
