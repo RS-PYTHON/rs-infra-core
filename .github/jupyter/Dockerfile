@@ -47,7 +47,7 @@ RUN DEBIAN_FRONTEND=noninteractive restore-apt.sh && apt update && \
     curl \
     unzip \
     tzdata \
-    libgtk-3-0 libasound2 libx11-xcb1 \
+    libgtk-3-0 libasound2t64 libx11-xcb1 \
     xclip \
     graphviz \
     python3-pydot \
