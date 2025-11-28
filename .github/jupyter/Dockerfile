@@ -25,7 +25,7 @@ FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-5.4.2-py${PYTHON_VERSIO
 ARG PYTHON_VERSION=3.13.9
 ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
-ARG PREFECT_TAG=3.2.13
+ARG PREFECT_TAG=3.6.4
 
 USER root
 
