@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# Target Docker image name:
+# ghcr.io/rs-python/rs-infra-core-jupyter
+#
+
 ARG PYTHON_VERSION=3.13.9
 FROM ghcr.io/rs-python/rs-client-libraries_store:latest AS rs-client
 
@@ -124,5 +129,4 @@ ENV PYTHONPATH="$HOME/notebooks"
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
-LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-jupyter"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/jupyter/Dockerfile"
