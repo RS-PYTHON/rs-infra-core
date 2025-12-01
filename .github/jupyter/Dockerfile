@@ -95,6 +95,20 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     layer-cleanup.sh
 
+
+
+
+# TEMP FOR DEBUGGING
+RUN curl -L -o /tmp/firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
+RUN ls -al /tmp
+RUN ls -al /tmp/firefox.tar.xz
+RUN tar -xf /tmp/firefox.tar.xz -C /opt/
+RUN ln -s /opt/firefox/firefox /usr/bin/firefox
+RUN rm /tmp/firefox.tar.xz
+
+
+
+
 # Install last version of firefox for automated tests
 RUN curl -L -o /tmp/firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && \
     tar -xf /tmp/firefox.tar.xz -C /opt/ && \
