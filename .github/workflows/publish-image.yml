@@ -103,14 +103,6 @@ jobs:
         include:
           - path: jupyter
             image: jupyter
-          - path: dask-gateway
-            image: dask-staging
-          - path: dask-gateway
-            image: dask-eopf-mockup
-          - path: dask-gateway
-            image: dask-l0
-          - path: dask-gateway
-            image: dask-s1ard
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: "Docker image for ${{ matrix.image }}"
@@ -129,7 +121,7 @@ jobs:
           cp ./.github/common/resources/*.* ./.github/${{ matrix.path }}/resources/
 
       - name: Get latest run ID from rs-server
-        if: (matrix.image == 'dask-staging') || (matrix.image == 'jupyter')
+        if: matrix.image == 'jupyter'
         env:
           REPO_OWNER: ${{ github.repository_owner }}
           RS_SERVER_PAT: ${{ secrets.RS_SERVER_PAT }}
@@ -139,10 +131,7 @@ jobs:
 
           # Other parameters depend on the docker image to build
           set -x
-          if [[ ${{ matrix.image }} == "dask-staging" ]]; then
-            REPO_NAME="rs-server"
-            VAR_RUN_ID="rs_server_run_id"
-          elif [[ ${{ matrix.image }} == "jupyter" ]]; then
+          if [[ ${{ matrix.image }} == "jupyter" ]]; then
             REPO_NAME="rs-client-libraries"
             VAR_RUN_ID="rs_client_libraries_run_id"
           fi
@@ -175,17 +164,6 @@ jobs:
           # No branch found
           exit 1
 
-      - name: Download rs-server-wheels
-        uses: actions/download-artifact@v4
-        if: matrix.image == 'dask-staging'
-        with:
-          path: ./.github/${{ matrix.path }}
-          pattern: rs_server_*-py3-none-any.whl
-          merge-multiple: true # to avoid having a directory named after filename
-          github-token: ${{ secrets.RS_SERVER_PAT }} # token with actions:read permissions on target repo
-          repository: RS-PYTHON/rs-server
-          run-id: ${{ env.rs_server_run_id }}
-
       - name: Download rs-client-libraries-wheels
         uses: actions/download-artifact@v4
         if: matrix.image == 'jupyter'
@@ -199,25 +177,10 @@ jobs:
 
       - id: publish-docker
         name: Publish docker
-        if: matrix.image != 'dask-eopf-mockup'
+        if: matrix.image == 'jupyter'
         uses: ./.github/actions/publish-docker
         with:
           dockerfile: ./.github/${{ matrix.path }}/Dockerfile
-          build_context_path: ./.github/${{ matrix.path }}
-          image_suffix: -${{ matrix.image }}
-          version_name: ${{ needs.set-env.outputs.docker_tag1 }}
-          docker_tag: ${{ needs.set-env.outputs.docker_tag2 }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          image2build: ${{ matrix.image }}
-          secrets: |
-            "GITLAB_EOPF_TOKEN=${{ secrets.GITLAB_EOPF_TOKEN }}"
-
-      - id: publish-docker-mock
-        name: Publish docker mock
-        if: matrix.image == 'dask-eopf-mockup'
-        uses: ./.github/actions/publish-docker
-        with:
-          dockerfile: ./.github/${{ matrix.path }}/Dockerfile.mockup
           build_context_path: ./.github/${{ matrix.path }}
           image_suffix: -${{ matrix.image }}
           version_name: ${{ needs.set-env.outputs.docker_tag1 }}
