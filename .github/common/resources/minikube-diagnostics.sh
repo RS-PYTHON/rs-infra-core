@@ -29,11 +29,11 @@ kubectl top nodes || echo "metrics-server not available"
 kubectl top pods -A || echo "metrics-server not available"
 
 echo ""
-echo "=== 🧩 Pods ==="
+echo "=== 📦 Pods ==="
 kubectl get pods -A -o wide
 
 echo ""
-echo "=== 🧩 Services ==="
+echo "=== 🌐 Services ==="
 kubectl get svc -A
 
 echo ""
@@ -41,12 +41,20 @@ echo "=== 🧱 Deployments ==="
 kubectl get deployments -A
 
 echo ""
-echo "=== 🧱 ReplicaSets ==="
+echo "=== ⚙️ ReplicaSets ==="
 kubectl get rs -A
 
 echo ""
 echo "=== 🔑 Secrets ==="
 kubectl get secrets -A
+
+echo ""
+echo "=== 🪪 Service Accounts ==="
+kubectl get sa -A
+
+echo ""
+echo "=== 🧩 Custom Resource Definitions ==="
+kubectl get crd -A
 
 echo ""
 echo "=== ⚠️ Events (sorted by time) ==="
