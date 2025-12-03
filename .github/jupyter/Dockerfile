@@ -18,9 +18,11 @@
 #
 
 ARG PYTHON_VERSION=3.13.9
+ARG JUPYTER_HUB_VERSION=5.4.2
+
 FROM ghcr.io/rs-python/rs-client-libraries_store:latest AS rs-client
 
-FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-5.4.2-py${PYTHON_VERSION}
+FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-${JUPYTER_HUB_VERSION}-py${PYTHON_VERSION}
 
 ARG PYTHON_VERSION=3.13.9
 ARG DASK_TAG=2024.5.2
