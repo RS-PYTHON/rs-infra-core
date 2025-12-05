@@ -40,8 +40,6 @@ jobs:
             ~/miniforge3
             /usr/share/miniconda
           key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
-          restore-keys: |
-            conda-${{ runner.os }}-
       - name: Aggressive cleanup
         run: |
           # Cleanup disk space (level between 0 and 14, more cleaning takes more time)
@@ -49,9 +47,9 @@ jobs:
         shell: bash
       - name: Install requirements (if cache missed)
         if: steps.cache-conda.outputs.cache-hit != 'true'
-        run: |
-          .github/common/resources/install-requirements.sh
-        shell: bash
+        run: .github/common/resources/install-requirements.sh
+      - name: Check requirements versions
+        run: .github/common/resources/check-installed-versions.sh
       - name: Start minikube
         uses: medyagh/setup-minikube@latest
         with:
@@ -149,6 +147,10 @@ jobs:
           path: |
             realm-export.json
             realm-export.yaml
+      - name: Undeploy Keycloak (for real)
+        run: |
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook remove_apps.yaml -i inventory/mycluster/hosts.yaml -e '{"app": "'keycloak'", "force_delete": true}'
+        shell: bash
       - name: 🩺 Kubernetes failure diagnostics
         if: failure()
         run: |

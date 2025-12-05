@@ -130,6 +130,11 @@
       register: result
       delegate_to: bastion
       check_mode: false
+      retries: 5
+      delay: 15
+      until: >
+        (result.rc == 0) or
+        (result.stderr is search('500|502|503|Service Unavailable|timeout|timed out|deadline exceeded|Client.Timeout'))
 
     - name: "{{ package_name }} - {{ app_name }} | reset facts"
       set_fact:
@@ -161,9 +166,23 @@
           }}
       delegate_to: bastion
 
-    - name: "{{ package_name }} - {{ app_name }} | Collect deployed resources and write them into resources.txt"
+    - name: "{{ package_name }} - {{ app_name }} | Collect detailed deployed resources and write them into resources_full.json"
       copy:
         content: "{{ resources }}"
+        dest: "{{ resources_dir.path }}/resources_full.json"
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Extract resources summary"
+      shell:
+        cat {{ resources_dir.path }}/resources_full.json \
+          | jq -r '.[].items[] | .kind + "." + .apiVersion + "@" + .metadata.name'
+          | sed -e 's|[./]v[^/@]*@|/|g'
+      register: resources_summary
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Write resources.txt"
+      copy:
+        content: "{{ resources_summary.stdout | default('') }}"
         dest: "{{ app_dir }}/resources.txt"
       delegate_to: bastion
 

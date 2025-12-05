@@ -29,13 +29,32 @@ kubectl top nodes || echo "metrics-server not available"
 kubectl top pods -A || echo "metrics-server not available"
 
 echo ""
-echo "=== 🧩 Pod summary ==="
+echo "=== 📦 Pods ==="
 kubectl get pods -A -o wide
 
 echo ""
-echo "=== 🧱 Deployments and ReplicaSets ==="
+echo "=== 🌐 Services ==="
+kubectl get svc -A
+
+echo ""
+echo "=== 🧱 Deployments ==="
 kubectl get deployments -A
+
+echo ""
+echo "=== ⚙️ ReplicaSets ==="
 kubectl get rs -A
+
+echo ""
+echo "=== 🔑 Secrets ==="
+kubectl get secrets -A
+
+echo ""
+echo "=== 🪪 Service Accounts ==="
+kubectl get sa -A
+
+echo ""
+echo "=== 🧩 Custom Resource Definitions ==="
+kubectl get crd -A
 
 echo ""
 echo "=== ⚠️ Events (sorted by time) ==="
@@ -47,9 +66,15 @@ kubectl get pods -A -o custom-columns=NAMESPACE:.metadata.namespace,POD:.metadat
 
 echo ""
 echo "=== 📄 Failed or Pending pod logs (last 30 lines) ==="
-kubectl get pods -A \
---field-selector=status.phase!=Running \
--o jsonpath='{range .items[*]}{.metadata.namespace}{" "}{.metadata.name}{"\n"}{end}' |
+kubectl get pods -A -o json \
+| jq -r '
+    .items[]
+    | select(
+        .status.phase != "Running"
+        or ([.status.containerStatuses[]?.restartCount] | add // 0) > 0
+      )
+    | "\(.metadata.namespace) \(.metadata.name)"
+' |
 while read -r ns pod; do
 if [[ "$pod" =~ (create|patch) ]]; then
     echo "--- Skipping ephemeral pod $ns/$pod ---"
@@ -57,12 +82,13 @@ if [[ "$pod" =~ (create|patch) ]]; then
 fi
 
 echo ""
-echo "--- Logs for $ns/$pod ---"
-if ! kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null; then
+echo "--- Logs for $ns/$pod (current) ---"
+kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null || \
     echo "⚠️ No current logs available, trying previous logs..."
-    kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=30 2>/dev/null || \
-        echo "⚠️ No logs available (pod may have terminated)"
-fi
+echo ""
+echo "--- Logs for $ns/$pod (previous) ---"
+kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=30 2>/dev/null || \
+    echo "⚠️ No previous logs available"
 done
 
 echo ""

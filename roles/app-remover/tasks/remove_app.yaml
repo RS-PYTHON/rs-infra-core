@@ -1,5 +1,17 @@
 - name: Remove app
   block:
+    - name: "{{ package_name }} - {{ app_name }} | Detect if running in GitHub Actions"
+      set_fact:
+        in_github_actions: "{{ lookup('env', 'GITHUB_ACTIONS') | default('false') == 'true' }}"
+
+    - name: "{{ package_name }} - Security guard | Prevent force_delete outside GitHub Actions"
+      fail:
+        msg: >
+          force_delete=true is only allowed in GitHub Actions (GITHUB_ACTIONS environment variable missing).
+      when:
+        - force_delete | default(false)
+        - not in_github_actions
+
     - name: "{{ package_name }} - {{ app_name }} | Check whether kustomization.yaml file exists"
       stat:
         path: "{{ app_dir }}/kustomization.yaml"
@@ -8,12 +20,12 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Fail if no kustomization file found"
       fail:
-        msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/COPRS/infrastructure/blob/release/0.3.0/doc/how-to/Add%20an%20application.md"
+        msg: "No kustomization.yaml file found in {{ app_dir }}. Documentation available at https://github.com/RS-PYTHON/rs-infra-core/blob/develop/docs/installation.md"
       when: not kustomization_file.stat.exists
 
-    - name: "{{ package_name }} - {{ app_name }} | Include vars from kustomization.yaml"
+    - name: "{{ package_name }} - {{ app_name }} | Include vars from {{ kustomization_file.stat.path }}"
       include_vars:
-        file: "{{ app_dir }}/kustomization.yaml"
+        file: "{{ kustomization_file.stat.path }}"
         name: kustomization
       delegate_to: bastion
 
@@ -35,6 +47,7 @@
         suffix: "k8s_resources_{{ app_name }}"
       register: resources_dir
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Template and send resources to remote"
       template:
@@ -44,6 +57,7 @@
       when:
         - item not in ['.helm_repository_config.yaml', 'resources.txt']
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Copy subdirectories to remote"
       copy:
@@ -53,6 +67,7 @@
       when:
         - item.state == 'directory'
       delegate_to: bastion
+      check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Pull charts from private repositories"
       shell: |
@@ -69,19 +84,62 @@
         - kustomization.helmCharts is defined
         - item.0.repo == item.1.name
       delegate_to: bastion
+      check_mode: false
+
+    - name: "{{ package_name }} - {{ app_name }} | Create temporary manifest file"
+      tempfile:
+        state: file
+        suffix: ".yaml"
+      register: tmp_manifest
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Render manifests once"
+      shell: |
+        kustomize build --enable-helm {{ resources_dir.path }} > {{ tmp_manifest.path }}
+      delegate_to: bastion
+
+    - name: "{{ package_name }} - {{ app_name }} | Preview resources to be deleted"
+      shell: |
+        echo "============================================================"
+        echo "   WARNING: You are about to delete Kubernetes resources:"
+        echo "   app.kubernetes.io/instance={{ app_name }}"
+        echo "============================================================"
+        cat {{ tmp_manifest.path }} | yq '.kind + "/" + .metadata.name'
+      register: preview
+      delegate_to: bastion
+
+    - debug:
+        msg: "{{ preview.stdout_lines }}"
+
+    - name: "{{ package_name }} - {{ app_name }} | Ask for confirmation"
+      pause:
+        prompt: "⚠️ To CONFIRM deletion, type EXACTLY 'YES': "
+      register: confirmation
+      when: not force_delete | default(false)
+
+    - name: "{{ package_name }} - {{ app_name }} | Abort if not confirmed"
+      fail:
+        msg: "Operation cancelled by user."
+      when:
+        - not force_delete | default(false)
+        - confirmation.user_input != "YES"
 
     - name: "{{ package_name }} - {{ app_name }} | Remove resources"
       shell: |
-        kustomize build \
-        --enable-helm {{ resources_dir.path }} \
-        | kubectl delete -f - \
-        -l app.kubernetes.io/instance={{ app_name }}
+        kubectl delete -f {{ tmp_manifest.path }} -l app.kubernetes.io/instance={{ app_name }}
       register: result
       delegate_to: bastion
+      when: force_delete | default(false) or confirmation.user_input == "YES"
 
     - name: "{{ package_name }} - {{ app_name }} | reset facts"
       set_fact:
         resources: []
+        jobs:
+          resources: []
+        pods:
+          resources: []
+        deployments:
+          resources: []
       delegate_to: bastion
 
     - name: "{{ package_name }} - {{ app_name }} | Delete resources.txt"
@@ -91,6 +149,12 @@
       delegate_to: bastion
 
   always:
+    - name: "{{ package_name }} - {{ app_name }} | Remove temporary manifest file"
+      file:
+        path: "{{ tmp_manifest.path }}"
+        state: absent
+      delegate_to: bastion
+
     - name: "{{ package_name }} - {{ app_name }} | Remove resources tmp dir"
       file:
         path: "{{ resources_dir.path }}"
@@ -103,7 +167,7 @@
     - name: "{{ package_name }} - {{ app_name }} | Warn about not deleted tmp folder"
       debug:
         msg:
-          - "DEBUG: the temporary folder containing the k8s resources has been kept tfor debugging purpose"
+          - "DEBUG: the temporary folder containing the k8s resources has been kept for debugging purpose"
           - "{{ resources_dir.path }}"
           - "DO NOT FORGET TO DELETE IT WHEN YOU ARE DONE"
       when:
