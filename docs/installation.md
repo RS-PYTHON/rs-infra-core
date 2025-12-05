@@ -49,8 +49,8 @@ rm -f ~/miniforge3/miniforge.sh
 ~/miniforge3/bin/conda init bash
 ~/miniforge3/bin/conda init zsh
 
-# Create conda env with python=3.11 and activate it
-conda create -y -n rspy python=3.11
+# Create conda env with python=3.<change_with_version> and activate it
+conda create -y -n rspy python=3.xx.y
 conda activate rspy
 
 # Install Ansible, Terraform, Openstackclient

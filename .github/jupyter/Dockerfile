@@ -12,26 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-4.1.5
+#
+# Target Docker image name:
+# ghcr.io/rs-python/rs-infra-core-jupyter
+#
 
+ARG PYTHON_VERSION=3.13.9
+ARG JUPYTER_HUB_VERSION=5.4.2
+
+FROM ghcr.io/rs-python/rs-client-libraries_store:latest AS rs-client
+
+FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-${JUPYTER_HUB_VERSION}-py${PYTHON_VERSION}
+
+ARG PYTHON_VERSION=3.13.9
 ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
-ARG PREFECT_TAG=3.2.13
-ARG PYTHON_TAG="3.11.7"
+ARG PREFECT_TAG=3.6.4
 
 USER root
 
-RUN adduser rspy
+COPY ./resources/layer-cleanup.sh ./resources/restore-apt.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+
+RUN restore-apt.sh && apt update && \
+    apt install -y adduser && \
+    adduser rspy && \
+    layer-cleanup.sh
 
 ENV SHELL=/bin/bash
 ENV HOME=/home/rspy
 
 COPY ./*.whl /opt/
-COPY ./resources/layer-cleanup.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/layer-cleanup.sh
 
 # Install system dependencies
-RUN DEBIAN_FRONTEND=noninteractive apt update && \
+RUN DEBIAN_FRONTEND=noninteractive restore-apt.sh && apt update && \
     apt install -y \
     jq \
     vim \
@@ -39,22 +53,23 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     curl \
     unzip \
     tzdata \
-    libgtk-3-0 libasound2 libx11-xcb1 \
+    libgtk-3-0 libasound2t64 libx11-xcb1 \
     xclip \
     graphviz \
     python3-pydot \
-    texlive-xetex texlive-fonts-recommended texlive-plain-generic && \
+    texlive-xetex texlive-fonts-recommended texlive-plain-generic \
+    xz-utils && \
     layer-cleanup.sh
 
 # Install python dependencies
 RUN conda update -n base -c conda-forge conda && \
-    conda install --yes conda-forge::python=${PYTHON_TAG} && \
+    conda install --yes conda-forge::python=${PYTHON_VERSION} && \
     pip install --upgrade pip && \
     pip install \
     dask[complete]==${DASK_TAG} \
     distributed==${DASK_TAG} \
     dask-gateway==${DASK_GATEWAY_TAG} \
-    prefect[dask,aws]==${PREFECT_TAG} \
+    prefect[aws]==${PREFECT_TAG} \
     ipywidgets \
     dask-labextension \
     nbconvert[webpdf] \
@@ -99,8 +114,8 @@ COPY --chown=rspy:rspy ./resources/jupyter_server_config.py /tmp/jupyter_server_
 COPY resources/start-notebook.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/start-notebook.sh
 
-# Remove apt repository list and custom scripts
-RUN rm -f /etc/apt/sources.list /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
+# Remove custom scripts
+RUN rm -f /usr/local/bin/layer-cleanup.sh /usr/local/bin/restore-apt.sh
 
 ENTRYPOINT ["start-notebook.sh"]
 
@@ -117,5 +132,4 @@ ENV PYTHONPATH="$HOME/notebooks"
 # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
 #
 LABEL org.opencontainers.image.source="https://github.com/RS-PYTHON/rs-infra-core"
-LABEL org.opencontainers.image.ref.name="ghcr.io/rs-python/rs-infra-core-jupyter"
 LABEL dockerfile.url="https://github.com/RS-PYTHON/rs-infra-core/blob/develop/.github/jupyter/Dockerfile"
