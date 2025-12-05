@@ -82,12 +82,13 @@ if [[ "$pod" =~ (create|patch) ]]; then
 fi
 
 echo ""
-echo "--- Logs for $ns/$pod ---"
-if ! kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null; then
+echo "--- Logs for $ns/$pod (current) ---"
+kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null || \
     echo "⚠️ No current logs available, trying previous logs..."
-    kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=30 2>/dev/null || \
-        echo "⚠️ No logs available (pod may have terminated)"
-fi
+echo ""
+echo "--- Logs for $ns/$pod (previous) ---"
+kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=30 2>/dev/null || \
+    echo "⚠️ No previous logs available"
 done
 
 echo ""
