@@ -9,8 +9,9 @@ fi
 
 # --- Directories
 RESOURCES_DIR=".github/common/resources/test"
-APP_CLUSTER_ISSUER="apps/02-cluster-issuer"
-APP_OAUTH2_PROXY="apps/oauth2-proxy"
+APPS="${APPS_DIR:-apps}"
+APP_CLUSTER_ISSUER="$APPS/02-cluster-issuer"
+APP_OAUTH2_PROXY="$APPS/oauth2-proxy"
 
 # --- Generate a local CA
 echo "Generating local CA..."
@@ -64,8 +65,8 @@ echo "Adding local CA trust to oauth2-proxy..."
 sed 's!<ns>!iam!g' \
   "$RESOURCES_DIR/local-ca-configmap.yaml" \
   > "$APP_OAUTH2_PROXY/local-ca-configmap.yaml"
-echo -e "resources:\n- local-ca-configmap.yaml\n" | tee -a $APP_OAUTH2_PROXY/kustomization.yaml > /dev/null
-cat <<'EOF' | tee -a $APP_OAUTH2_PROXY/values.yaml > /dev/null
+echo -e "resources:\n- local-ca-configmap.yaml\n" | tee -a "$APP_OAUTH2_PROXY/kustomization.yaml" > /dev/null
+cat <<'EOF' | tee -a "$APP_OAUTH2_PROXY/values.yaml" > /dev/null
 extraVolumes:
   - name: local-ca
     configMap:

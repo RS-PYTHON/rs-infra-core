@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-APPS=apps
+APPS="${APPS_DIR:-apps}"
 
 # Lower the CPU and memory requests
 sed -i -e 's!cpu: 300m!cpu: 10m!g' -e 's!memory: 400Mi!memory: 50Mi!g' "${APPS}/03-keycloak-operator/deployment.yaml"
