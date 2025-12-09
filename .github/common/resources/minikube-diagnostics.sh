@@ -65,7 +65,7 @@ echo "=== 🔬 Pods resource requests/limits ==="
 kubectl get pods -A -o custom-columns=NAMESPACE:.metadata.namespace,POD:.metadata.name,CPU_REQ:.spec.containers[*].resources.requests.cpu,CPU_LIM:.spec.containers[*].resources.limits.cpu,MEM_REQ:.spec.containers[*].resources.requests.memory,MEM_LIM:.spec.containers[*].resources.limits.memory
 
 echo ""
-echo "=== 📄 Failed or Pending pod logs (last 30 lines) ==="
+echo "=== 📄 Failed or Pending pod logs (last 50 lines) ==="
 kubectl get pods -A -o json \
 | jq -r '
     .items[]
@@ -83,11 +83,11 @@ fi
 
 echo ""
 echo "--- Logs for $ns/$pod (current) ---"
-kubectl logs -n "$ns" "$pod" --all-containers --tail=30 2>/dev/null || \
+kubectl logs -n "$ns" "$pod" --all-containers --tail=50 2>/dev/null || \
     echo "⚠️ No current logs available, trying previous logs..."
 echo ""
 echo "--- Logs for $ns/$pod (previous) ---"
-kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=30 2>/dev/null || \
+kubectl logs -n "$ns" "$pod" --all-containers --previous --tail=50 2>/dev/null || \
     echo "⚠️ No previous logs available"
 done
 
