@@ -20,3 +20,5 @@ conda run -n rspy ansible --version
 conda run -n rspy kustomize version
 conda run -n rspy helm version
 conda run -n rspy kubectl version --client
+
+yq --version

@@ -111,7 +111,7 @@ jobs:
     outputs:
       docker_image: ${{ steps.publish-docker.outputs.docker_image}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Copy common requirements
         id: copy_common_req
