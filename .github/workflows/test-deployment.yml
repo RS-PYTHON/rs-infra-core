@@ -32,21 +32,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      - name: Cache Miniforge and Conda env
-        id: cache-conda
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/miniforge3
-            /usr/share/miniconda
-          key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
       - name: Aggressive cleanup
         run: |
           # Cleanup disk space (level between 0 and 14, more cleaning takes more time)
           .github/common/resources/aggressive-cleanup.sh 1
         shell: bash
-      - name: Install requirements (if cache missed)
-        if: steps.cache-conda.outputs.cache-hit != 'true'
+      - name: Install requirements
         run: .github/common/resources/install-requirements.sh
       - name: Check requirements versions
         run: .github/common/resources/check-installed-versions.sh
