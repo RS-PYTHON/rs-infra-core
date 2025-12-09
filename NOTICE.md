@@ -142,8 +142,8 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - Source: <https://github.com/PrefectHQ/prefect-helm/tree/2024.5.2224951>
     - Copyright: Copyright The Prefect Development Team. [Authors and Contributors](https://github.com/PrefectHQ/prefect-helm/graphs/contributors)
   - Container image(s)
-    - prefecthq/prefect:3.6.4-python3.13-kubernetes
-      - License: [Apache License 2.0](https://github.com/PrefectHQ/prefect/blob/3.6.4/LICENSE)
+    - prefecthq/prefect:3.6.5-python3.13-kubernetes
+      - License: [Apache License 2.0](https://github.com/PrefectHQ/prefect/blob/3.6.5/LICENSE)
 
 - kube-prometheus-stack
   - Helm chart:
