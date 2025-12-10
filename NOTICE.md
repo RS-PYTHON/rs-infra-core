@@ -10,13 +10,13 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - Cert manager :
   - Helm chart
-    - Version: v1.19.1
-    - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.19.1/LICENSE)
-    - Source: <https://github.com/cert-manager/cert-manager/tree/v1.19.1/deploy/charts/cert-manager>
+    - Version: v1.19.2
+    - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.19.2/LICENSE)
+    - Source: <https://github.com/cert-manager/cert-manager/tree/v1.19.2/deploy/charts/cert-manager>
     - Copyright: Copyright The cert-manager Authors. [Authors and Contributors](https://github.com/cert-manager/cert-manager/blob/v1.6.1/deploy/charts/cert-manager/OWNERS)
   - Container image(s)
-    - quay.io/jetstack/cert-manager-cainjector:v1.19.1
-      - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.19.1/LICENSE)
+    - quay.io/jetstack/cert-manager-cainjector:v1.19.2
+      - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.19.2/LICENSE)
 
 - NGINX Ingress Controller :
   - Helm chart
