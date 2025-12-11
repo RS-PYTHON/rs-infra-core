@@ -41,16 +41,16 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - grafana/grafana:10.0.3
       - License: [GNU Affero General Public License v3.0](https://github.com/grafana/grafana/blob/v10.0.3/LICENSE)
 
-- PostgreSQL
+- CloudNativePG
   - Helm chart:
-    - Version: 0.26.0
-    - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.26.0/LICENSE)
-    - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.26.0>
+    - Version: 0.27.0
+    - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.27.0/LICENSE)
+    - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.27.0>
     - Copyright: Copyright The CloudNativePG authors. [Authors and Contributors](https://github.com/cloudnative-pg/charts/graphs/contributors)
   - Container image(s)
-    - ghcr.io/cloudnative-pg/cloudnative-pg:1.27.0
-      - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.27.0/LICENSE)
-    - ghcr.io/cloudnative-pg/postgresql:17.5
+    - ghcr.io/cloudnative-pg/cloudnative-pg:1.27.2
+      - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.27.2/LICENSE)
+    - ghcr.io/cloudnative-pg/postgresql:18.1
       - License: [Apache License 2.0](https://github.com/cloudnative-pg/postgres-containers/blob/main/LICENSE)
 
 - Loki
