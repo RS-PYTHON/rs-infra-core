@@ -142,8 +142,5 @@ jobs:
         run: |
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook remove_apps.yaml -i inventory/mycluster/hosts.yaml -e '{"app": "'keycloak'", "force_delete": true}'
         shell: bash
-      - name: 🩺 Kubernetes failure diagnostics
-        if: failure()
-        run: |
-          .github/common/resources/minikube-diagnostics.sh
-        shell: bash
+      - name: 🩺 Kubernetes diagnostics
+        run: .github/common/resources/minikube-diagnostics.sh
