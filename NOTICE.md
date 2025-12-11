@@ -89,12 +89,6 @@ Below are all the FOSS (Free and open-source software) used and their respective
   - Version: 4.7.2
   - License: [GNU General Public License v2.0](https://github.com/wazuh/wazuh/blob/v4.7.2/LICENSE)
 
-- Containerd
-  - Helm chart: *None*
-  - Container image(s): *None*
-  - Version: 1.4.9-1
-  - License: [Apache License 2.0](https://github.com/containerd/containerd/blob/v1.4.9/LICENSE)
-
 - Jupyter
   - Helm chart:
     - Version: 4.3.1
@@ -164,16 +158,6 @@ Below are all the FOSS (Free and open-source software) used and their respective
       - License: [Apache License 2.0](https://github.com/prometheus/prometheus/blob/v2.51.1/LICENSE)
     - quay.io/prometheus/node-exporter:v1.7.0
       - License: [Apache License 2.0](https://github.com/prometheus/node_exporter/blob/v1.7.0/LICENSE)
-
-- Promtail
-  - Helm chart:
-    - Version: 6.15.5
-    - Licence: [Apache License 2.0](https://github.com/grafana/helm-charts/blob/promtail-6.15.5/LICENSE)
-    - Source: <https://github.com/grafana/helm-charts/tree/promtail-6.15.5/charts/promtail>
-    - Copyright: Copyright The Grafana Development Team. [Authors and Contributors](https://github.com/grafana/helm-charts/graphs/contributors)
-  - Container image(s)
-    - docker.io/grafana/promtail:2.9.3
-      - License: [GNU Affero General Public License v3.0](https://github.com/grafana/loki/blob/v2.9.3/LICENSE)
 
 ## Licenses
 
