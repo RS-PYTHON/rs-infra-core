@@ -12,15 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+header:
+  license:
+    spdx-id: Apache-2.0
+    copyright-owner: Airbus, CS Group
+    copyright-year: '2023-2025'
 
-namespace: database
+  paths-ignore:
+    - '**/*.cfg'
+    - '**/*.csv'
+    - '**/*.env'
+    - '**/*.json'
+    - '**/*.md'
+    - '**/*.template'
+    - '**/*.tfvars'
+    - '**/Dockerfile*'
+    - '**/.gitignore'
+    - '.gitmodules'
+    - '.safety-project.ini'
+    - '.trivyignore'
+    - 'LICENSE'
+    - 'NOTICE'
 
-resources:
-- database.yaml
-- grafanadatasource.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
+  comment: on-failure

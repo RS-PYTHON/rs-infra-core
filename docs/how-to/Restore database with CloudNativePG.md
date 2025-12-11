@@ -8,7 +8,7 @@ From the YAML below, edit the fields:
 And apply it with `kubectl -n database apply -f <input_file.yaml>`.
 
 ```YAML
-# Copyright 2024 CS Group
+# Copyright 2023-2025 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

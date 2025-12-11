@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2023-2025 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +13,15 @@
 # limitations under the License.
 
 terraform {
+  required_version = ">= 1.0"
   required_providers {
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
     ovh = {
       source  = "ovh/ovh"
-      version = "1.4.0"
+      version = "1.6.0"
     }
   }
 }
