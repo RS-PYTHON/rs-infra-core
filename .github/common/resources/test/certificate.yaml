@@ -27,5 +27,5 @@ spec:
   commonName: <sd>.rspy.example.com
   dnsNames:
     - <sd>.rspy.example.com
-  duration: 24h
+  duration: 242h  # To avoid ingress-nginx warning
   renewBefore: 12h
