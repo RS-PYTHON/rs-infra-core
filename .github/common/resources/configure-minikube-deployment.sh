@@ -19,3 +19,6 @@ APPS="${APPS_DIR:-apps}"
 
 # Lower the CPU and memory requests
 sed -i -e 's!cpu: 300m!cpu: 10m!g' -e 's!memory: 400Mi!memory: 50Mi!g' "${APPS}/03-keycloak-operator/deployment.yaml"
+
+# Allow retrieving of oidc tokens for all clients with login+password to ease tests
+sed -i 's!directAccessGrantsEnabled: false!directAccessGrantsEnabled: true!g' "${APPS}/05-keycloak/keycloakrealmimport.yaml"

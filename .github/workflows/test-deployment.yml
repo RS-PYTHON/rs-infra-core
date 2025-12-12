@@ -92,6 +92,9 @@ jobs:
           # Construct the external Keycloak URL
           KEYCLOAK_URL="https://iam.$DOMAIN"
 
+          echo "DOMAIN=$DOMAIN" >> $GITHUB_ENV
+          echo "KEYCLOAK_URL=$KEYCLOAK_URL" >> $GITHUB_ENV
+
           echo "🌐 Using Keycloak URL: $KEYCLOAK_URL"
           echo "🧩 Realm name: $REALM_NAME"
 
@@ -105,6 +108,7 @@ jobs:
             --header="Content-Type: application/x-www-form-urlencoded" \
             --no-check-certificate \
             "$KEYCLOAK_URL/realms/master/protocol/openid-connect/token" | jq -r .access_token)
+          echo "ADMIN_TOKEN=$TOKEN" >> $GITHUB_ENV
 
           if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
             echo "❌ Failed to obtain Keycloak token"
@@ -138,6 +142,8 @@ jobs:
           path: |
             realm-export.json
             realm-export.yaml
+      - name: Test oauth2-proxy
+        run: .github/common/resources/test/test-oauth2-proxy.sh
       - name: Undeploy Keycloak (for real)
         run: |
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook remove_apps.yaml -i inventory/mycluster/hosts.yaml -e '{"app": "'keycloak'", "force_delete": true}'
