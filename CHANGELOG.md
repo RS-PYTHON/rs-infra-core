@@ -13,6 +13,62 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a5] - 2025-12-??
+
+### Added
+
+- [PR#236](https://github.com/RS-PYTHON/rs-infra-core/pull/236) : Add explicit confirmation before removing applications
+- [PR#246](https://github.com/RS-PYTHON/rs-infra-core/pull/246) : Allow to define APPS_DIR outside of github action scripts
+
+### Changed
+
+- [RSPY-648](https://github.com/RS-PYTHON/rs-infra-core/pull/235) : Upgrade to python 3.13
+- [RSPY-625](https://github.com/RS-PYTHON/rs-infra-core/pull/247) : Update to prefect 3.6.5
+- [RSPY-801](https://github.com/RS-PYTHON/rs-infra-core/pull/201) : Update to oauth2-proxy 9.0.1 / 7.13.0
+- [RSPY-856](https://github.com/RS-PYTHON/rs-infra-core/pull/182) : Update to cert-manager 1.19.1
+- [RSPY-856](https://github.com/RS-PYTHON/rs-infra-core/pull/252) : Update to cert-manager 1.19.2
+- [PR#233](https://github.com/RS-PYTHON/rs-infra-core/pull/233) : Retry pulling helm chart in case of http 50x error
+- [PR#234](https://github.com/RS-PYTHON/rs-infra-core/pull/234) : Retry pulling helm chart in case of timeouts
+- [PR#237](https://github.com/RS-PYTHON/rs-infra-core/pull/237) : Copied changes from install_app to remove_app
+- [PR#239](https://github.com/RS-PYTHON/rs-infra-core/pull/239) : Improve k8s diagnostics script
+- [PR#240](https://github.com/RS-PYTHON/rs-infra-core/pull/240) : Improve CICD robustness
+- [PR#241](https://github.com/RS-PYTHON/rs-infra-core/pull/241) : Log more info in K8S diagnostics
+- [PR#244](https://github.com/RS-PYTHON/rs-infra-core/pull/244) : Improve k8s diagnostics script
+- [PR#248](https://github.com/RS-PYTHON/rs-infra-core/pull/248) : Log yq version
+- [PR#249](https://github.com/RS-PYTHON/rs-infra-core/pull/249) : Log last 50 lines of logs to get more stack traces
+- [PR#251](https://github.com/RS-PYTHON/rs-infra-core/pull/251) : Increase log retrieval from 50 to 100 lines
+- [PR#254](https://github.com/RS-PYTHON/rs-infra-core/pull/254) : Minor cleanup/improvements
+- [PR#255](https://github.com/RS-PYTHON/rs-infra-core/pull/255) : Always print kubernetes diagnostics
+
+### Fixed
+
+- [PR#238](https://github.com/RS-PYTHON/rs-infra-core/pull/238) : Fixes for install_app and remove_app
+- [PR#242](https://github.com/RS-PYTHON/rs-infra-core/pull/242) : Revert to kubernetes-client 1.33.0 to avoid kustomize 5.8.0
+- [PR#243](https://github.com/RS-PYTHON/rs-infra-core/pull/243) : Really remove Kustomize 5.8.0
+- [PR#250](https://github.com/RS-PYTHON/rs-infra-core/pull/250) : Remove cache, does not work
+- [PR#256](https://github.com/RS-PYTHON/rs-infra-core/pull/256) : Fix copyrights
+
+## [1.0a4] - 2025-11-19
+
+### Added
+
+- [PR#217](https://github.com/RS-PYTHON/rs-infra-core/pull/217) : Add minikube failure diagnostics script
+
+### Changed
+
+- [PR#218](https://github.com/RS-PYTHON/rs-infra-core/pull/218) : CICD: Lower the replica count of Prefect workers to 1
+- [PR#219](https://github.com/RS-PYTHON/rs-infra-core/pull/219) : CICD: Lower the resources allocated to staging dask cluster
+- [PR#220](https://github.com/RS-PYTHON/rs-infra-core/pull/220) : Cache Miniforge and Conda env to speedup cicd
+- [PR#224](https://github.com/RS-PYTHON/rs-infra-core/pull/224) : Add aggressive cleanup script to free Github runner disk space
+- [PR#225](https://github.com/RS-PYTHON/rs-infra-core/pull/225) : Fix catalog database username
+- [PR#226](https://github.com/RS-PYTHON/rs-infra-core/pull/226) : Lower the keycloak-operator CPU and memory requests
+- [PR#227](https://github.com/RS-PYTHON/rs-infra-core/pull/227) : Allow to configure wait timeouts
+- [PR#228](https://github.com/RS-PYTHON/rs-infra-core/pull/228) : Remove '*' for allowed special characters in random passwords
+- [PR#229](https://github.com/RS-PYTHON/rs-infra-core/pull/229) : Logs of previous pod if needed
+- [PR#231](https://github.com/RS-PYTHON/rs-infra-core/pull/231) : fix: force helm version
+- [PR#232](https://github.com/RS-PYTHON/rs-infra-core/pull/232) : Fix bcrypt version < 5.0.0
+- [RSPY-795](https://github.com/RS-PYTHON/rs-infra-core/pull/215) : Isolate jupyterhub
+
 ## [1.0a3] - 2025-10-23
 
 ### Added
@@ -21,7 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
-- [PR#205](https://github.com/RS-PYTHON/rs-infra-core/pull/205) : Update layer-cleanup.sh 
+- [PR#205](https://github.com/RS-PYTHON/rs-infra-core/pull/205) : Update layer-cleanup.sh
 - [PR#207](https://github.com/RS-PYTHON/rs-infra-core/pull/207) : feat: update inventory for cnpgstac
 - [PR#206](https://github.com/RS-PYTHON/rs-infra-core/pull/206) : update template for R3-64 on dask-worker-on-demand-rspython-ops
 - [RSPY-816](https://github.com/RS-PYTHON/rs-infra-core/pull/208) : Externalize inventory configuration script and improve CI/CD
@@ -59,7 +115,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PR#177](https://github.com/RS-PYTHON/rs-infra-core/pull/177) : Install nbconvert in Jupyter image to convert notebooks to PDF files
 - [RSPY-737](https://github.com/RS-PYTHON/rs-infra-core/pull/176) : Update to S3L0 1.2.1
 - [PR#178](https://github.com/RS-PYTHON/rs-infra-core/pull/178) : Test real deployment in ci/cd
-- [PR#187](https://github.com/RS-PYTHON/rs-infra-core/pull/187) : Improve deployment tests 
+- [PR#187](https://github.com/RS-PYTHON/rs-infra-core/pull/187) : Improve deployment tests
 - [RSPY-729](https://github.com/RS-PYTHON/rs-infra-core/pull/170) : Use OVH private docker registry
 
 ### Changed
@@ -73,7 +129,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PR#167](https://github.com/RS-PYTHON/rs-infra-core/pull/167) : Add gitlab token for private repo
 - [PR#168](https://github.com/RS-PYTHON/rs-infra-core/pull/168) : Add missing node affinity and toleration
 - [PR#171](https://github.com/RS-PYTHON/rs-infra-core/pull/171) : Fix template name for node dask_scheduler
-- [PR#180](https://github.com/RS-PYTHON/rs-infra-core/pull/180) : Updated nodepoool in start/stop playbook 
+- [PR#180](https://github.com/RS-PYTHON/rs-infra-core/pull/180) : Updated nodepoool in start/stop playbook
 
 ## [0.2] - 2025-08-04
 
