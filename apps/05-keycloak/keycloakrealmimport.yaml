@@ -2115,6 +2115,30 @@ spec:
               access.token.claim: "true"
               claim.name: middle_name
               jsonType.label: String
+          - name: monthly-product-download-limit
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              introspection.token.claim: "true"
+              userinfo.token.claim: "true"
+              user.attribute: monthly-product-download-limit
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: monthly-product-download-limit
+              jsonType.label: String
+          - name: monthly-product-download-limit-gb
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              introspection.token.claim: "true"
+              userinfo.token.claim: "true"
+              user.attribute: monthly-product-download-limit-gb
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: monthly-product-download-limit-gb
+              jsonType.label: String
       - name: roles
         description: OpenID Connect scope for add user roles to the access token
         protocol: openid-connect
