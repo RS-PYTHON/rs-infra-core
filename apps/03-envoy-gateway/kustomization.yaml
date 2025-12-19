@@ -12,20 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+namespace: envoy-gateway
 
 resources:
-- ns-dask-gateway.yaml
-- ns-database.yaml
-- ns-iam.yaml
-- ns-infra.yaml
-- ns-ingress-nginx.yaml
-- ns-envoy-gateway-system.yaml
-- ns-envoy-gateway.yaml
-- ns-logging.yaml
-- ns-monitoring.yaml
-- ns-networking.yaml
-- ns-processing.yaml
-- ns-security.yaml
+- gateway.yaml
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
