@@ -180,6 +180,54 @@ rs_server_prip_station: |
       # -- PRIP station URL
       url: http://mockup-prip-s2b.processing.svc.cluster.local:8080/Products
 
+rs_server_edrs_stations: |
+  pedc:
+    service:
+      # -- EDRS PEDC service name
+      name: edrs
+      # -- EDRS PEDC station URL
+      url: mockup-station-edrs-headless.processing.svc.cluster.local
+      # -- EDRS PEDC station port
+      port: 21
+    # -- EDRS PEDC domain
+    domain: mockup-station-edrs-headless.processing.svc.cluster.local
+    authentication:
+      # -- EDRS PEDC authentication type
+      auth_type: ftp
+      # -- EDRS PEDC authentication username
+      username: test
+      # -- EDRS PEDC authentication password
+      password: test
+      # -- EDRS PEDC CA certificate path
+      ca_crt: /certs/ca.crt
+      # -- EDRS PEDC client certificate path
+      client_crt: /certs/tls.crt
+      # -- EDRS PEDC client key path
+      client_key: /certs/tls.key
+  bedc:
+    service:
+      # -- EDRS BEDC service name
+      name: edrs
+      # -- EDRS BEDC station URL
+      url: mockup-station-edrs-headless.processing.svc.cluster.local
+      # -- EDRS BEDC station port
+      port: 21
+    # -- EDRS BEDC domain
+    domain: mockup-station-edrs-headless.processing.svc.cluster.local
+    authentication:
+      # -- EDRS BEDC authentication type
+      auth_type: ftp
+      # -- EDRS BEDC authentication username
+      username: test
+      # -- EDRS BEDC authentication password
+      password: test
+      # -- EDRS BEDC CA certificate path
+      ca_crt: /certs/ca.crt
+      # -- EDRS BEDC client certificate path
+      client_crt: /certs/tls.crt
+      # -- EDRS BEDC client key path
+      client_key: /certs/tls.key
+
 rs_server_catalog:
   database:
     host: cnpgstac-rw.database.svc.cluster.local
@@ -469,6 +517,55 @@ rs_server_station_secrets:
         auth_type: s3
         access_key: example_s3_access_key
         secret_key: example_s3_secret_key
+    pedc:
+      service:
+        name: edrs
+        url: mockup-station-edrs-headless.processing.svc.cluster.local
+        port: 21
+      domain: mockup-station-edrs-headless.processing.svc.cluster.local
+      authentication:
+        auth_type: ftp
+        username: 'test'
+        password: 'test'
+        ca_crt: |-
+          -----BEGIN CERTIFICATE-----
+          MIID...
+          -----END CERTIFICATE-----
+
+        client_crt: |-
+          -----BEGIN CERTIFICATE-----
+          MIID...
+          -----END CERTIFICATE-----
+
+        client_key: |-
+          -----BEGIN RSA PRIVATE KEY-----
+          MIID...
+          -----END RSA PRIVATE KEY-----
+
+    bedc:
+      service:
+        name: edrs
+        url: mockup-station-edrs-headless.processing.svc.cluster.local
+        port: 21
+      domain: mockup-station-edrs-headless.processing.svc.cluster.local
+      authentication:
+        auth_type: ftp
+        username: 'test'
+        password: 'test'
+        ca_crt: |-
+          -----BEGIN CERTIFICATE-----
+          MIID...
+          -----END CERTIFICATE-----
+
+        client_crt: |-
+          -----BEGIN CERTIFICATE-----
+          MIID...
+          -----END CERTIFICATE-----
+
+        client_key: |-
+          -----BEGIN RSA PRIVATE KEY-----
+          MIID...
+          -----END RSA PRIVATE KEY-----
 
 rs_station_mockup:
   adgs:
