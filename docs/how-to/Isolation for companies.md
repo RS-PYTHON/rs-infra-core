@@ -137,10 +137,6 @@ Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-playgr
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: playground-ns
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
 
 resources:
 - networkpolicy-block.yaml
