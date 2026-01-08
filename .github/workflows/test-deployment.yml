@@ -51,12 +51,8 @@ jobs:
         run: |
           .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy"
         shell: bash
-      - name: Deploy minio
-        run: |
-          # Minio for cloudnative pg - https://github.com/minio/minio/tree/master/helm/minio#installing-the-chart-toy-setup
-          helm repo add minio https://charts.min.io/
-          helm repo update minio
-          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=128Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
+      - name: Deploy rustfs
+        run: .github/common/resources/deploy-rustfs.sh
         shell: bash
       - name: Generate inventory
         run: |

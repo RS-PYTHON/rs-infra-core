@@ -37,8 +37,12 @@ echo "=== 🌐 Services ==="
 kubectl get svc -A
 
 echo ""
-echo "=== 🔗 Endpoints ==="
-kubectl get endpoints -A
+echo "=== 🔀 Ingresses ==="
+kubectl get ingresses -A
+
+echo ""
+echo "=== 🔗 EndpointSlices ==="
+kubectl get endpointslices -A
 
 echo ""
 echo "=== 🧱 Deployments ==="
