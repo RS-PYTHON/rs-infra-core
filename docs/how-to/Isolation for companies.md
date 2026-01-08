@@ -19,6 +19,9 @@ Do not forget to update the file `kustomization.yaml` to include the new file.
 
 Create a new folder `~/rs-infra-core/apps/00-networkpolicies-playground` and add the files described in the next steps.
 
+*Note:* The app's must be named like `[0-9]{2}-networkpol*`. Example : [https://regex101.com/r/wEo0NM/1](https://regex101.com/r/wEo0NM/1)
+
+
 ### networkpolicy-block.yaml
 
 Add the file `~/rs-infra-core/apps/00-networkpolicies-playground/networkpolicy-block.yaml` with the following content :
@@ -146,6 +149,8 @@ resources:
 - networkpolicy-jupyter.yaml
 ```
 
+*Note:* For the **networkpolicies** app, we **MUST NOT** include the usual label part in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
+
 ## Prefect isolation
 
 ### Update the inventory
@@ -172,7 +177,7 @@ To :
 ```YAML
 prefect3server:
   ops:
-    name: prefect
+    name: prefect-copernicus
     namespace: processing
     subDomain: processing
     allowedRoles: "role:RS-JUPYTER-USER"
