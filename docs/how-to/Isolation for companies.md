@@ -271,14 +271,11 @@ sed 's#prefect3worker.eopf.namespace#prefect3worker.eopfplayground.namespace#g' 
 
 ### Update the inventory
 
-Edit the inventory file (~/rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml) to add the new clientid and jupyterhub instance. In this example it's under `jupyterhub_oidc_client_secret` and `jupyterhub.playground`.
+Edit the inventory file (~/rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml) to add the new jupyterhub instance. In this example it's under `jupyterhub.playground`.
 
 From :
 
 ```YAML
-[...]
-jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-[...]
 jupyterhub:
   ops:
     name: jupyterhub
@@ -308,10 +305,6 @@ jupyterhub:
 To :
 
 ```YAML
-[...]
-jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-jupyterhubplayground_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-[...]
 jupyterhub:
   ops:
     name: jupyterhub
@@ -361,60 +354,22 @@ jupyterhub:
         trace_body: false
 ```
 
-### Update the realm
+### Update the jupyterhub client in Keycloak
 
-Execute the following commands :
+Add a new `Valid redirect URIs` :
 
-```Bash
-export TEMPLATE_JUPYTER="jupyterhub"
-export NEW_JUPYTER="jupyterplayground"
+- Go to `Clients`
+- Select `jupyterhub`
+- Scroll down on the `Settings` tab to reach `Valid redirect URIs`
+- Add the new jupyterhub public url, in our e.g. `https://playground.example.com/jupyter/*`
 
-yq -i '
-.spec.realm.clients += (
-  .spec.realm.clients[]
-  | select(.clientId == env(TEMPLATE_JUPYTER))
-  | .clientId = env(NEW_JUPYTER)
-  | .name = env(NEW_JUPYTER)
-  | .adminUrl = "https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"
-  | .rootUrl = "https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"
-  | .secret = "{{ " + env(NEW_JUPYTER) + "_oidc_client_secret }}"
-  | .redirectUris = ["https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter/*"]
-  | .webOrigins = ["https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"]
-)
-| .spec.realm.users += (
-  .spec.realm.users[]
-  | select(.serviceAccountClientId == env(TEMPLATE_JUPYTER))
-  | .username = "service-account-" + env(NEW_JUPYTER)
-  | .serviceAccountClientId = env(NEW_JUPYTER)
-  | .clientRoles = (.clientRoles + { (env(NEW_JUPYTER)): .clientRoles[env(TEMPLATE_JUPYTER)] })
-  | del(.clientRoles[env(TEMPLATE_JUPYTER)])
-)
-| .spec.realm.roles.client[env(NEW_JUPYTER)] = (
-  .spec.realm.roles.client[env(TEMPLATE_JUPYTER)]
-  | map(select(.name == "uma_protection") | del(.containerId))
-)
-' ~/rs-infra-core/apps/05-keycloak/keycloakrealmimport.yaml
-```
+*Note:* the subdomain playground is set at `jupyterhub.playground.subDomain`
 
 ### Duplicate the app jupyterhub
 
 #### Deplicate the folder
 
 Duplicate `~/rs-workflow-env/apps/jupyterhub` to `~/rs-workflow-env/apps/jupyterhub-playground`.
-
-#### Replace the client id and secret
-
-Edit the values in the file `~/rs-workflow-env/apps/jupyterhub-playground/values.yaml`:
-
-- changing `hub.config.GenericOAuthenticator.client_id` value from `jupyterhub` to `jupyterhubplayground`
-- changing `client_secret` value from `jupyterhub_oidc_client_secret` to `jupyterhubplayground_oidc_client_secret`
-
-For e.g. with sed :
-
-```Bash
-sed 's#client_id: jupyterhub#client_id: jupyterhubplayground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#jupyterhub_oidc_client_secret#jupyterhubplayground_oidc_client_secret#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-```
 
 ### Update the values
 
