@@ -44,19 +44,15 @@ jobs:
       - name: Start minikube
         uses: medyagh/setup-minikube@latest
         with:
-          addons: 'metallb'
+          addons: 'metallb,metrics-server'
           cpus: 4
           memory: 8000m
       - name: "Configure cluster labels, IP and DNS (host + CoreDNS)"
         run: |
           .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy"
         shell: bash
-      - name: Deploy minio
-        run: |
-          # Minio for cloudnative pg - https://github.com/minio/minio/tree/master/helm/minio#installing-the-chart-toy-setup
-          helm repo add minio https://charts.min.io/
-          helm repo update minio
-          helm install minio minio/minio --namespace minio --set mode=standalone --set replicas=1 --set persistence.enabled=false --set resources.requests.memory=128Mi --set rootUser=s3_access_key,rootPassword=s3_secret_key --set buckets[0].name=rs-cluster-psql,buckets[1].name=rs-cluster-velero --create-namespace --wait
+      - name: Deploy seaweedfs
+        run: .github/common/resources/deploy-seaweedfs.sh rs-cluster-psql,rs-cluster-velero
         shell: bash
       - name: Generate inventory
         run: |
@@ -66,10 +62,12 @@ jobs:
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
       - name: Deploy the apps (check)
+        id: deploy_check
         run: |
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml -e private_registry=true
         shell: bash
       - name: Deploy the apps (for real)
+        id: deploy_real
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
 
@@ -81,7 +79,7 @@ jobs:
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
       - name: Export Keycloak realm
-        if: always()
+        if: always() && steps.deploy_check.outcome == 'success'
         run: |
           set -euo pipefail
 

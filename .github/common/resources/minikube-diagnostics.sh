@@ -37,8 +37,12 @@ echo "=== 🌐 Services ==="
 kubectl get svc -A
 
 echo ""
-echo "=== 🔗 Endpoints ==="
-kubectl get endpoints -A
+echo "=== 🔀 Ingresses ==="
+kubectl get ingresses -A
+
+echo ""
+echo "=== 🔗 EndpointSlices ==="
+kubectl get endpointslices -A
 
 echo ""
 echo "=== 🧱 Deployments ==="
@@ -61,6 +65,14 @@ echo "=== 🧩 Custom Resource Definitions ==="
 kubectl get crd -A
 
 echo ""
+echo "=== 🗄️ StorageClasses ==="
+kubectl get storageclass
+
+echo ""
+echo "=== 📀 PersistentVolumeClaims ==="
+kubectl get pvc -A
+
+echo ""
 echo "=== ⚠️ Events (sorted by time) ==="
 kubectl get events -A --sort-by=.metadata.creationTimestamp | tail -n 50
 
@@ -69,12 +81,23 @@ echo "=== 🔬 Pods resource requests/limits ==="
 kubectl get pods -A -o custom-columns=NAMESPACE:.metadata.namespace,POD:.metadata.name,CPU_REQ:.spec.containers[*].resources.requests.cpu,CPU_LIM:.spec.containers[*].resources.limits.cpu,MEM_REQ:.spec.containers[*].resources.requests.memory,MEM_LIM:.spec.containers[*].resources.limits.memory
 
 echo ""
-echo "=== 📄 Failed or Pending pod logs (last 100 lines) ==="
+echo "=== 📄 Failed, Pending or Running-not-Ready pod logs (last 100 lines) ==="
 kubectl get pods -A -o json \
 | jq -r '
     .items[]
     | select(
+        # Pods not running
         .status.phase != "Running"
+
+        # OR running but not Ready
+        or (
+          .status.phase == "Running"
+          and (
+            [.status.conditions[]? | select(.type=="Ready") | .status][0] != "True"
+          )
+        )
+
+        # OR containers restarted
         or ([.status.containerStatuses[]?.restartCount] | add // 0) > 0
       )
     | "\(.metadata.namespace) \(.metadata.name)"
