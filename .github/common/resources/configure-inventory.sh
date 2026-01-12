@@ -21,7 +21,7 @@ mv inventory/mycluster/openrc.sh.template inventory/mycluster/openrc.sh
 sed -i 's!<changeme_with_full_path>/miniforge3/envs/rspy!/usr/share/miniconda/envs/rspy!g' inventory/mycluster/hosts.yaml
 # --- Use seaweedfs as S3 provider and local CA issuer instead of Let's Encrypt
 sed -i \
-    -e 's!https://s3.gra.io.cloud.ovh.net!http://seaweedfs-s3.seaweedfs.svc.cluster.local:8333!'\
+    -e 's!https://s3.gra.io.cloud.ovh.net!http://seaweedfs-s3.seaweedfs.svc.cluster.local:9000!'\
     -e 's!letsencrypt-prod!local-ca-issuer!g'\
     inventory/mycluster/host_vars/setup/main.yaml
 # --- Configure minikube storage class provisioner, ingress-nginx LoadBalancer to retrieve fixed IP address from metalLB, oauth2-proxy to trust local-ca
