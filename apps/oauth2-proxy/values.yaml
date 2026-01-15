@@ -54,7 +54,7 @@ sessionStorage:
   type: redis
   redis:
     clientType: "standalone"
-redis:
+redis-ha:
   enabled: true
   replicas: 1
   redis:
