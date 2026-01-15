@@ -17,7 +17,7 @@ terraform {
   required_providers {
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.6"
+      version = "~> 3.8.0"
     }
     ovh = {
       source  = "ovh/ovh"
