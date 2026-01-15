@@ -117,6 +117,7 @@
             select(.kind == "DaemonSet") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "Job") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "CronJob") |= .spec.jobTemplate.spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
+            select(.kind == "Grafana") |= .spec.deployment.spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}] |
             select(.kind == "ReplicaSet") |= .spec.template.spec.imagePullSecrets += [{"name": "harbor-pull-secret"}]' - \
         {% endif %} \
         | kubectl apply -f - \
