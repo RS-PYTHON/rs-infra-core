@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Airbus, CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,5 +39,5 @@ repos:
   rev: v1.2.0
   hooks:
   - id: addlicense
-    files: \.(py|sh|yml|yaml)$
-    args: [ "-c", "Airbus, CS Group", "-l", "apache", "-y", "2023-2025" ]
+    files: \.(py|sh|svg|xml|yml|yaml)$
+    args: [ "-c", "Airbus, CS Group", "-l", "apache", "-y", "2023-2026" ]
