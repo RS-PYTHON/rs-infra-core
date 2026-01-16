@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2023-2025 Airbus, CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -174,7 +174,7 @@ def main(inpath, outpath):
     yaml.width = 130
     yaml.preserve_quotes = False
 
-    license_header = """# Copyright 2023-2025 Airbus, CS Group
+    license_header = """# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
