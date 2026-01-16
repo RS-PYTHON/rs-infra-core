@@ -20,15 +20,15 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - NGINX Ingress Controller :
   - Helm chart
-    - Version: v4.12.1
-    - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.12.1/LICENSE)
-    - Source: <https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.12.1/charts/ingress-nginx>
-    - Copyright: Copyright The ingress-nginx Authors. Authors and Contributors [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.12.1/OWNERS) and [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.12.1/OWNERS_ALIASES)
+    - Version: v4.14.1
+    - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.1/LICENSE)
+    - Source: <https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.14.1/charts/ingress-nginx>
+    - Copyright: Copyright The ingress-nginx Authors. Authors and Contributors [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.1/OWNERS) and [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.1/OWNERS_ALIASES)
   - Container image(s)
-    - registry.k8s.io/ingress-nginx/controller:v1.12.1
-      - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.12.1/LICENSE)
-    - docker.io/library/nginx:1.25.5-alpine
-      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.25.5/LICENSE)
+    - registry.k8s.io/ingress-nginx/controller:v1.14.1
+      - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.14.1/LICENSE)
+    - docker.io/library/nginx:1.27.1-alpine
+      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.27.1/LICENSE)
 
 - Grafana Operator
   - Helm chart: *None*
