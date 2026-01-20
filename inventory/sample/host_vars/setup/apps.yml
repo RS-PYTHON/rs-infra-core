@@ -214,21 +214,6 @@ rs_server_station_secrets:
         client_id: client_id
         client_secret: client_secret
         authorization: null
-    ins:
-      service:
-        name: cadip
-        url: http://mockup-station-cadip-ins.processing.svc.cluster.local:8080
-      domain: mockup-station-cadip-ins.processing.svc.cluster.local
-      authentication:
-        auth_type: oauth2
-        token_url: http://mockup-station-cadip-ins.processing.svc.cluster.local:8080/oauth2/token
-        grant_type: password
-        scope: null
-        username: test
-        password: test
-        client_id: client_id
-        client_secret: client_secret
-        authorization: null
     mps:
       service:
         name: cadip
@@ -289,6 +274,21 @@ rs_server_station_secrets:
         client_id: client_id
         client_secret: client_secret
         authorization: null
+    ssc:
+      service:
+        name: cadip
+        url: http://mockup-station-cadip-ins.processing.svc.cluster.local:8080
+      domain: mockup-station-cadip-ins.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-station-cadip-ins.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: null
     lta:
       service:
         name: lta
@@ -319,6 +319,21 @@ rs_server_station_secrets:
         client_id: client_id
         client_secret: client_secret
         authorization: Basic test
+    s1c:
+      service:
+        name: prip
+        url: http://mockup-prip-s1c.processing.svc.cluster.local:8080
+      domain: mockup-prip-s1c.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s1c.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
     s2b:
       service:
         name: prip
@@ -327,6 +342,51 @@ rs_server_station_secrets:
       authentication:
         auth_type: oauth2
         token_url: http://mockup-prip-s2b.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    s2c:
+      service:
+        name: prip
+        url: http://mockup-prip-s2c.processing.svc.cluster.local:8080
+      domain: mockup-prip-s2c.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s2c.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    s3a:
+      service:
+        name: prip
+        url: http://mockup-prip-s3a.processing.svc.cluster.local:8080
+      domain: mockup-prip-s3a.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s3a.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
+    s3b:
+      service:
+        name: prip
+        url: http://mockup-prip-s3b.processing.svc.cluster.local:8080
+      domain: mockup-prip-s3b.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s3b.processing.svc.cluster.local:8080/oauth2/token
         grant_type: password
         scope: null
         username: test
