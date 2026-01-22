@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-PYTHON_VERSION=3.13.9
+PYTHON_VERSION=3.13.11
 
 # Install miniforge
 mkdir -p ~/miniforge3

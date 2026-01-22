@@ -17,17 +17,17 @@
 # ghcr.io/rs-python/rs-infra-core-jupyter
 #
 
-ARG PYTHON_VERSION=3.13.9
-ARG JUPYTER_HUB_VERSION=5.4.2
+ARG PYTHON_VERSION=3.13.11
+ARG JUPYTER_HUB_VERSION=5.4.3
 
 FROM ghcr.io/rs-python/rs-client-libraries_store:latest AS rs-client
 
 FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-${JUPYTER_HUB_VERSION}-py${PYTHON_VERSION}
 
-ARG PYTHON_VERSION=3.13.9
+ARG PYTHON_VERSION=3.13.11
 ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
-ARG PREFECT_TAG=3.6.5
+ARG PREFECT_TAG=3.6.12
 
 USER root
 

@@ -91,17 +91,17 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - Jupyter
   - Helm chart:
-    - Version: 4.3.1
-    - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.1/LICENSE)
-    - Source: <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/4.3.1>
+    - Version: 4.3.2
+    - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.2/LICENSE)
+    - Source: <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/4.3.2>
     - Copyright: Copyright (c) Jupyter Development Team. [Authors and Contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors)
   - Container image(s)
     - ghcr.io/rs-python/rs-infra-core-jupyter:latest
       - License: [Apache License 2.0](https://github.com/RS-PYTHON/rs-infra-core/blob/develop/LICENSE)
-    - quay.io/jupyterhub/k8s-image-awaiter:4.3.1
-      - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.1/LICENSE)
-    - quay.io/jupyterhub/k8s-hub:4.3.1
-      - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.1/LICENSE)
+    - quay.io/jupyterhub/k8s-image-awaiter:4.3.2
+      - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.2/LICENSE)
+    - quay.io/jupyterhub/k8s-hub:4.3.2
+      - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.2/LICENSE)
 
 - Neuvector
   - Helm chart:
@@ -136,8 +136,8 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - Source: <https://github.com/PrefectHQ/prefect-helm/tree/2024.5.2224951>
     - Copyright: Copyright The Prefect Development Team. [Authors and Contributors](https://github.com/PrefectHQ/prefect-helm/graphs/contributors)
   - Container image(s)
-    - prefecthq/prefect:3.6.5-python3.13-kubernetes
-      - License: [Apache License 2.0](https://github.com/PrefectHQ/prefect/blob/3.6.5/LICENSE)
+    - prefecthq/prefect:3.6.12-python3.13-kubernetes
+      - License: [Apache License 2.0](https://github.com/PrefectHQ/prefect/blob/3.6.12/LICENSE)
 
 - kube-prometheus-stack
   - Helm chart:
