@@ -27,7 +27,7 @@ FROM ghcr.io/rs-python/quay.io/jupyter/base-notebook:hub-${JUPYTER_HUB_VERSION}-
 ARG PYTHON_VERSION=3.13.11
 ARG DASK_TAG=2024.5.2
 ARG DASK_GATEWAY_TAG=2024.1.0
-ARG PREFECT_TAG=3.6.12
+ARG PREFECT_AWS_TAG=0.7.4
 
 USER root
 
@@ -69,7 +69,7 @@ RUN conda update -n base -c conda-forge conda && \
     dask[complete]==${DASK_TAG} \
     distributed==${DASK_TAG} \
     dask-gateway==${DASK_GATEWAY_TAG} \
-    prefect[aws]==${PREFECT_TAG} \
+    prefect[aws]==${PREFECT_AWS_TAG} \
     ipywidgets \
     dask-labextension \
     nbconvert[webpdf] \
