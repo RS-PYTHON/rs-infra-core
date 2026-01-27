@@ -2,6 +2,95 @@
 
 To be able to isolate between companies, we will create a namespace per company and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
 
+## Create the Network Policies for the processing namespace
+
+Create a new folder `~/rs-infra-core/apps/00-networkpolicies-processing` and add the files described in the next steps.
+
+*Note:* The app's must be named like `[0-9]{2}-networkpol*`. Example : [https://regex101.com/r/wEo0NM/1](https://regex101.com/r/wEo0NM/1)
+
+
+### networkpolicy-block.yaml
+
+Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-block.yaml` with the following content :
+
+```YAML
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: prefect-copernicus-server
+  policyTypes:
+  - Ingress
+```
+
+It is the default "block all" policy for ingress traffic for prefect server pod.
+
+### networkpolicy-ingress.yaml
+
+Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-ingress.yaml` with the following content :
+
+```YAML
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-nginx-prefect
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: prefect-copernicus-server
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 4200
+```
+
+### networkpolicy-intra.yaml
+
+Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-intra.yaml` with the following content :
+
+```YAML
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: prefect-copernicus-server
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+```
+It is the policy to allow all ingress traffic within the same namespace.
+
+### kustomization.yaml
+
+Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-processing/kustomization.yaml` with the following content :
+
+```YAML
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: playground-ns
+
+resources:
+- networkpolicy-block.yaml
+- networkpolicy-ingress.yaml
+- networkpolicy-intra.yaml
+```
+
+*Note:* For the **networkpolicies** app, we **MUST NOT** include the usual label part in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
+
 ## Create a namespace for the company
 
 Add the new namespace for the company in `~/rs-infra-core/apps/00-namespaces`. For e.g. if the new namespace is `playground-ns` :
@@ -15,7 +104,7 @@ metadata:
 
 Do not forget to update the file `kustomization.yaml` to include the new file.
 
-## Create the Network Policies
+## Create the Network Policies for the playground namespace
 
 Create a new folder `~/rs-infra-core/apps/00-networkpolicies-playground` and add the files described in the next steps.
 
@@ -402,6 +491,7 @@ sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~
 
 Deploy the new apps like any other apps:
 - `~/rs-infra-core/apps/00-namespaces`
+- `~/rs-infra-core/apps/00-networkpolicies-processing`
 - `~/rs-infra-core/apps/00-networkpolicies-playground`
 - `~/rs-workflow-env/apps/01-prefect3-db-playground`
 - `~/rs-workflow-env/apps/prefect3-server-playground`
