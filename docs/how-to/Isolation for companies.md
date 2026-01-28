@@ -81,7 +81,7 @@ Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-proces
 ```YAML
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: playground-ns
+namespace: processing
 
 resources:
 - networkpolicy-block.yaml
