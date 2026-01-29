@@ -106,7 +106,9 @@ keycloak:
 
 prefect3server:
   ops:
-    name: prefect
+    # Note "-server" is automatically appended at the end of the name's value during the dpeloyment
+    # so "prefect-copernicus" will be deployed as "prefect-copernicus-server"
+    name: prefect-copernicus
     namespace: processing
     subDomain: processing
     allowedRoles: "role:RS-JUPYTER-USER"
