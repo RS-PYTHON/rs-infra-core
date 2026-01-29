@@ -2,6 +2,95 @@
 
 To be able to isolate between companies, we will create a namespace per company and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
 
+## Create the Network Policies for the processing namespace
+
+Create a new folder `~/rs-infra-core/apps/00-networkpolicies-processing` and add the files described in the next steps.
+
+*Note:* The app's must be named like `[0-9]{2}-networkpol*`. Example : [https://regex101.com/r/wEo0NM/1](https://regex101.com/r/wEo0NM/1)
+
+
+### networkpolicy-block.yaml
+
+Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-block.yaml` with the following content :
+
+```YAML
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: prefect-copernicus-server
+  policyTypes:
+  - Ingress
+```
+
+It is the default "block all" policy for ingress traffic for prefect server pod.
+
+### networkpolicy-ingress.yaml
+
+Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-ingress.yaml` with the following content :
+
+```YAML
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-nginx-prefect
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: prefect-copernicus-server
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 4200
+```
+
+### networkpolicy-intra.yaml
+
+Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-intra.yaml` with the following content :
+
+```YAML
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: prefect-copernicus-server
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+```
+It is the policy to allow all ingress traffic within the same namespace.
+
+### kustomization.yaml
+
+Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-processing/kustomization.yaml` with the following content :
+
+```YAML
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: processing
+
+resources:
+- networkpolicy-block.yaml
+- networkpolicy-ingress.yaml
+- networkpolicy-intra.yaml
+```
+
+*Note:* For the **networkpolicies** app, we **MUST NOT** include the usual label part in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
+
 ## Create a namespace for the company
 
 Add the new namespace for the company in `~/rs-infra-core/apps/00-namespaces`. For e.g. if the new namespace is `playground-ns` :
@@ -15,9 +104,12 @@ metadata:
 
 Do not forget to update the file `kustomization.yaml` to include the new file.
 
-## Create the Network Policies
+## Create the Network Policies for the playground namespace
 
 Create a new folder `~/rs-infra-core/apps/00-networkpolicies-playground` and add the files described in the next steps.
+
+*Note:* The app's must be named like `[0-9]{2}-networkpol*`. Example : [https://regex101.com/r/wEo0NM/1](https://regex101.com/r/wEo0NM/1)
+
 
 ### networkpolicy-block.yaml
 
@@ -137,10 +229,6 @@ Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-playgr
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: playground-ns
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
 
 resources:
 - networkpolicy-block.yaml
@@ -149,6 +237,8 @@ resources:
 - networkpolicy-intra.yaml
 - networkpolicy-jupyter.yaml
 ```
+
+*Note:* For the **networkpolicies** app, we **MUST NOT** include the usual label part in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
 
 ## Prefect isolation
 
@@ -161,7 +251,7 @@ From :
 ```YAML
 prefect3server:
   ops:
-    name: prefect
+    name: prefect-copernicus
     namespace: processing
     subDomain: processing
     allowedRoles: "role:RS-JUPYTER-USER"
@@ -176,7 +266,7 @@ To :
 ```YAML
 prefect3server:
   ops:
-    name: prefect
+    name: prefect-copernicus
     namespace: processing
     subDomain: processing
     allowedRoles: "role:RS-JUPYTER-USER"
@@ -270,14 +360,11 @@ sed 's#prefect3worker.eopf.namespace#prefect3worker.eopfplayground.namespace#g' 
 
 ### Update the inventory
 
-Edit the inventory file (~/rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml) to add the new clientid and jupyterhub instance. In this example it's under `jupyterhub_oidc_client_secret` and `jupyterhub.playground`.
+Edit the inventory file (~/rs-infra-core/inventory/mycluster/host_vars/setup/apps.yml) to add the new jupyterhub instance. In this example it's under `jupyterhub.playground`.
 
 From :
 
 ```YAML
-[...]
-jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-[...]
 jupyterhub:
   ops:
     name: jupyterhub
@@ -307,10 +394,6 @@ jupyterhub:
 To :
 
 ```YAML
-[...]
-jupyterhub_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-jupyterhubplayground_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
-[...]
 jupyterhub:
   ops:
     name: jupyterhub
@@ -360,60 +443,22 @@ jupyterhub:
         trace_body: false
 ```
 
-### Update the realm
+### Update the jupyterhub client in Keycloak
 
-Execute the following commands :
+Add a new `Valid redirect URIs` :
 
-```Bash
-export TEMPLATE_JUPYTER="jupyterhub"
-export NEW_JUPYTER="jupyterplayground"
+- Go to `Clients`
+- Select `jupyterhub`
+- Scroll down on the `Settings` tab to reach `Valid redirect URIs`
+- Add the new jupyterhub public url, in our e.g. `https://playground.example.com/jupyter/*`
 
-yq -i '
-.spec.realm.clients += (
-  .spec.realm.clients[]
-  | select(.clientId == env(TEMPLATE_JUPYTER))
-  | .clientId = env(NEW_JUPYTER)
-  | .name = env(NEW_JUPYTER)
-  | .adminUrl = "https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"
-  | .rootUrl = "https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"
-  | .secret = "{{ " + env(NEW_JUPYTER) + "_oidc_client_secret }}"
-  | .redirectUris = ["https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter/*"]
-  | .webOrigins = ["https://{{ " + env(TEMPLATE_JUPYTER) + ".playground.subDomain }}.{{ " + env(platform_domain_name) + " }}/jupyter"]
-)
-| .spec.realm.users += (
-  .spec.realm.users[]
-  | select(.serviceAccountClientId == env(TEMPLATE_JUPYTER))
-  | .username = "service-account-" + env(NEW_JUPYTER)
-  | .serviceAccountClientId = env(NEW_JUPYTER)
-  | .clientRoles = (.clientRoles + { (env(NEW_JUPYTER)): .clientRoles[env(TEMPLATE_JUPYTER)] })
-  | del(.clientRoles[env(TEMPLATE_JUPYTER)])
-)
-| .spec.realm.roles.client[env(NEW_JUPYTER)] = (
-  .spec.realm.roles.client[env(TEMPLATE_JUPYTER)]
-  | map(select(.name == "uma_protection") | del(.containerId))
-)
-' ~/rs-infra-core/apps/05-keycloak/keycloakrealmimport.yaml
-```
+*Note:* the subdomain playground is set at `jupyterhub.playground.subDomain`
 
 ### Duplicate the app jupyterhub
 
 #### Deplicate the folder
 
 Duplicate `~/rs-workflow-env/apps/jupyterhub` to `~/rs-workflow-env/apps/jupyterhub-playground`.
-
-#### Replace the client id and secret
-
-Edit the values in the file `~/rs-workflow-env/apps/jupyterhub-playground/values.yaml`:
-
-- changing `hub.config.GenericOAuthenticator.client_id` value from `jupyterhub` to `jupyterhubplayground`
-- changing `client_secret` value from `jupyterhub_oidc_client_secret` to `jupyterhubplayground_oidc_client_secret`
-
-For e.g. with sed :
-
-```Bash
-sed 's#client_id: jupyterhub#client_id: jupyterhubplayground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#jupyterhub_oidc_client_secret#jupyterhubplayground_oidc_client_secret#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-```
 
 ### Update the values
 
@@ -432,11 +477,12 @@ sed 's#jupyterhub.ops#jupyterhub.playground#g' -i ~/rs-workflow-env/apps/jupyter
 sed 's#jupyterhub.ops#jupyterhub.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/secret.yaml
 ```
 
-#### Replace the prefect worker variables
+#### Replace the prefect server and worker variables
 
 For e.g. with sed :
 
 ```Bash
+sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.eopf.name#prefect3worker.eopfplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.general.name#prefect3worker.generalplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
@@ -446,6 +492,7 @@ sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~
 
 Deploy the new apps like any other apps:
 - `~/rs-infra-core/apps/00-namespaces`
+- `~/rs-infra-core/apps/00-networkpolicies-processing`
 - `~/rs-infra-core/apps/00-networkpolicies-playground`
 - `~/rs-workflow-env/apps/01-prefect3-db-playground`
 - `~/rs-workflow-env/apps/prefect3-server-playground`

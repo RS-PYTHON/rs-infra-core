@@ -94,7 +94,7 @@
       check_mode: false
 
     - name: "{{ package_name }} - {{ app_name }} | Deploy resources"
-      shell: |
+      shell: >
         kustomize build --enable-helm {{ resources_dir.path }} \
         | yq eval 'select(.metadata.annotations."helm.sh/hook" != "test" and .metadata.annotations."helm.sh/hook" != "test-success")' - \
         {% if private_registry | bool %} \
@@ -127,7 +127,11 @@
         --server-side \
         --force-conflicts \
         -o yaml \
-        -l app.kubernetes.io/instance={{ app_name }}
+        {% if not app_name.startswith('networkpol') %} \
+          -l app.kubernetes.io/instance={{ app_name }}
+        {% endif %}
+      tags:
+        - cleanup
       register: result
       delegate_to: bastion
       check_mode: false
