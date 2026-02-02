@@ -13,6 +13,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a6] - 2026-02-02
+
+### Added
+
+- [PR#259](https://github.com/RS-PYTHON/rs-infra-core/pull/259) : keycloak-limit-attributes
+- [PR#260](https://github.com/RS-PYTHON/rs-infra-core/pull/260) : Companies isolation
+
+### Changed
+
+- [PR#262](https://github.com/RS-PYTHON/rs-infra-core/pull/262) : Replace minio by seaweedfs
+- [PR#275](https://github.com/RS-PYTHON/rs-infra-core/pull/275) : Update to oauth2-proxy helm chart 10.1.2
+- [PR#276](https://github.com/RS-PYTHON/rs-infra-core/pull/276) : Update to terraform-provider-random 3.8.1
+- [PR#163](https://github.com/RS-PYTHON/rs-infra-core/pull/163) : Decoupled Dask architecture
+- [PR#270](https://github.com/RS-PYTHON/rs-infra-core/pull/270) : Update Copyright 2026
+- [PR#269](https://github.com/RS-PYTHON/rs-infra-core/pull/269) : Update to ingress-nginx 1.14.1
+- [PR#271](https://github.com/RS-PYTHON/rs-infra-core/pull/271) : Update to Python 3.13.11/Jupyter 5.4.3/Prefect 3.6.12
+- [PR#277](https://github.com/RS-PYTHON/rs-infra-core/pull/277) : Update to cert-manager 1.19.3
+- [PR#267](https://github.com/RS-PYTHON/rs-infra-core/pull/267) : Moved station configuration to rs-server-deployment
+
+### Fixed
+
+- [PR#263](https://github.com/RS-PYTHON/rs-infra-core/pull/263) : Fix Grafana deployment with private repository
+
 ## [1.0a5] - 2025-12-23
 
 ### Added
