@@ -257,6 +257,8 @@ prefect3server:
     allowedRoles: "role:RS-JUPYTER-USER"
     database:
       host: postgresql-cluster-rw.database.svc.cluster.local
+      # Database name must be only composed of lowercase alphanumerics characters
+      name: prefectcopernicus
       username: prefect
       password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
 ```
@@ -272,6 +274,8 @@ prefect3server:
     allowedRoles: "role:RS-JUPYTER-USER"
     database:
       host: postgresql-cluster-rw.database.svc.cluster.local
+      # Database name must be only composed of lowercase alphanumerics characters
+      name: prefectcopernicus
       username: prefect
       password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
   # New prefect instance below
@@ -282,6 +286,8 @@ prefect3server:
     allowedRoles: "role:toto,role:titi"
     database:
       host: postgresql-cluster-rw.database.svc.cluster.local
+      # Database name must be only composed of lowercase alphanumerics characters
+      name: prefectplayground
       username: prefect-playground
       password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
 ```
