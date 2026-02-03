@@ -3,12 +3,12 @@
 This software is distributed under the Apache Software License (ASL) v2.0, see LICENSE file or <http://www.apache.org/licenses/LICENSE-2.0> for details.
 
 - Please be advised that:
-  - The Grafana and Loki software are used with the AGPL License.
-  - The Ansible and Wazuh software are used with the GPL License.
+  - The Grafana software is used with the AGPL License.
+  - The Ansible software is used with the GPL License.
 
 Below are all the FOSS (Free and open-source software) used and their respective licenses:
 
-- Cert manager :
+- Cert manager
   - Helm chart
     - Version: v1.19.3
     - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.19.3/LICENSE)
@@ -18,7 +18,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - quay.io/jetstack/cert-manager-cainjector:v1.19.3
       - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.19.3/LICENSE)
 
-- NGINX Ingress Controller :
+- NGINX Ingress Controller
   - Helm chart
     - Version: v4.14.1
     - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.1/LICENSE)
@@ -28,21 +28,19 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - registry.k8s.io/ingress-nginx/controller:v1.14.1
       - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.14.1/LICENSE)
     - docker.io/library/nginx:1.27.1-alpine
-      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.27.1/LICENSE)
+      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.27.0/LICENSE)
 
 - Grafana Operator
-  - Helm chart: *None*
-    - Version: 1.1.0
-    - License: [Apache License 2.0](https://github.com/COPRS/infrastructure/blob/1.1.0-rc3/LICENSE)
+  - Custom Resource Definitions
+    - Version: 5.18.0
+    - License: [Apache License 2.0](https://github.com/grafana/grafana-operator/blob/master/LICENSE)
+    - Source: <https://github.com/grafana/grafana-operator/blob/v5.18.0/deploy/kustomize/base/crds.yaml>
     - Copyright: Copyright the Grafana Authors. [Authors and Contributors](https://github.com/grafana/grafana/graphs/contributors)
-  - Container image(s)
-    - ghcr.io/grafana/grafana-operator:v5.9.0
-      - License: [Apache License 2.0](https://github.com/grafana/grafana-operator/blob/v5.9.0/LICENSE)
-    - grafana/grafana:10.0.3
-      - License: [GNU Affero General Public License v3.0](https://github.com/grafana/grafana/blob/v10.0.3/LICENSE)
+  - Helm chart: *None*
+  - Container image(s): *None*
 
-- PostgreSQL
-  - Helm chart:
+- CloudNativePG
+  - Helm chart
     - Version: 0.26.0
     - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.26.0/LICENSE)
     - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.26.0>
@@ -53,16 +51,6 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - ghcr.io/cloudnative-pg/postgresql:17.5
       - License: [Apache License 2.0](https://github.com/cloudnative-pg/postgres-containers/blob/main/LICENSE)
 
-- Loki
-  - Helm chart:
-    - Version: 0.79.0
-    - Licence: [Apache License 2.0](https://github.com/grafana/helm-charts/blob/loki-distributed-0.79.0/LICENSE)
-    - Source: <https://github.com/grafana/helm-charts/tree/loki-distributed-0.79.0/charts/loki-distributed>
-    - Copyright: Copyright The Loki Authors. [Authors and Contributors](https://github.com/grafana/helm-charts/graphs/contributors)
-  - Container image(s)
-    - docker.io/grafana/loki:2.9.6
-      - License: [GNU Affero General Public License v3.0](https://github.com/grafana/loki/blob/v2.9.6/LICENSE)
-
 - Keycloak
   - Helm chart: *None*
   - Container image(s)
@@ -71,56 +59,8 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - quay.io/keycloak/keycloak-operator:23.0.6
       - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/23.0.6/LICENSE.txt)
 
-- CoreDNS
-  - Helm chart: *None*
-  - Container image(s)
-    - registry.k8s.io/coredns/coredns:v1.10.1
-      - License: [Apache License 2.0](https://github.com/coredns/coredns/blob/v1.10.1/LICENSE)
-
-- Kubernetes
-  - Helm chart: *None*
-  - Container image(s): *None*
-  - Version: v1.27.7
-  - License: [Apache License 2.0](https://github.com/kubernetes/kubernetes/blob/v1.27.7/LICENSE)
-
-- Wazuh
-  - Helm chart: *None*
-  - Container image(s): *None*
-  - Version: 4.7.2
-  - License: [GNU General Public License v2.0](https://github.com/wazuh/wazuh/blob/v4.7.2/LICENSE)
-
-- Jupyter
-  - Helm chart:
-    - Version: 4.3.2
-    - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.2/LICENSE)
-    - Source: <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/4.3.2>
-    - Copyright: Copyright (c) Jupyter Development Team. [Authors and Contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors)
-  - Container image(s)
-    - ghcr.io/rs-python/rs-infra-core-jupyter:latest
-      - License: [Apache License 2.0](https://github.com/RS-PYTHON/rs-infra-core/blob/develop/LICENSE)
-    - quay.io/jupyterhub/k8s-image-awaiter:4.3.2
-      - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.2/LICENSE)
-    - quay.io/jupyterhub/k8s-hub:4.3.2
-      - Licence: [Apache License 2.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/4.3.2/LICENSE)
-
-- Neuvector
-  - Helm chart:
-    - Version: 2.7.3
-    - Licence: [Apache License 2.0](https://github.com/neuvector/neuvector-helm/blob/2.7.3/LICENSE)
-    - Source: <https://github.com/neuvector/neuvector-helm/tree/2.7.3>
-    - Copyright: Copyright The Neuvector Development Team. [Authors and Contributors](https://github.com/neuvector/neuvector-helm/graphs/contributors)
-  - Container image(s)
-    - docker.io/neuvector/scanner:latest
-      - License: [Apache License 2.0](https://github.com/neuvector/scanner/blob/main/LICENSE)
-    - docker.io/neuvector/enforcer:5.3.2
-      - Licence: [Apache License 2.0](https://github.com/neuvector/manager/blob/v5.3.2/LICENSE)
-    - docker.io/neuvector/manager:5.3.2
-      - Licence: [Apache License 2.0](https://github.com/neuvector/manager/blob/v5.3.2/LICENSE)
-    - docker.io/neuvector/prometheus-exporter:latest
-      - Licence: [Apache License 2.0](https://github.com/neuvector/prometheus-exporter/blob/master/LICENSE)
-
 - oauth2-proxy
-  - Helm chart:
+  - Helm chart
     - Version: 10.1.2
     - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-10.1.2/LICENSE)
     - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-10.1.2>
@@ -129,35 +69,24 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - quay.io/oauth2-proxy/oauth2-proxy:v7.13.0
       - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.13.0/LICENSE)
 
-- Prefect
-  - Helm chart:
-    - Version: 7.1.0
-    - Licence: [Apache License 2.0](https://github.com/PrefectHQ/prefect-helm/blob/2024.5.2224951/LICENSE)
-    - Source: <https://github.com/PrefectHQ/prefect-helm/tree/2024.5.2224951>
-    - Copyright: Copyright The Prefect Development Team. [Authors and Contributors](https://github.com/PrefectHQ/prefect-helm/graphs/contributors)
-  - Container image(s)
-    - prefecthq/prefect:3.6.12-python3.13-kubernetes
-      - License: [Apache License 2.0](https://github.com/PrefectHQ/prefect/blob/3.6.12/LICENSE)
-
 - kube-prometheus-stack
-  - Helm chart:
+  - Custom Resource Definitions
     - Version: 58.0.0
     - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-58.0.0/LICENSE)
-    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-58.0.0>
+    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds>
     - Copyright: Copyright The Prometheus community Development Team. [Authors and Contributors](https://github.com/prometheus-community/helm-charts/graphs/contributors)
+  - Helm chart: *None*
+  - Container image(s) *None*
+
+- velero
+  - Helm chart
+    - Version: 7.1.0
+    - Licence: [Apache License 2.0](https://github.com/vmware-tanzu/helm-charts/blob/velero-7.1.0/LICENSE)
+    - Source: <https://github.com/vmware-tanzu/helm-charts/tree/velero-7.1.0/charts/velero>
+    - Copyright: Copyright The VMware-Tanzu/velero Development Team. [Authors and Contributors](https://github.com/vmware-tanzu/helm-charts/graphs/contributors)
   - Container image(s)
-    - quay.io/prometheus-operator/prometheus-config-reloader:v0.73.0
-      - License: [Apache License 2.0](https://github.com/prometheus-operator/prometheus-operator/blob/v0.73.0/LICENSE)
-    - quay.io/prometheus/alertmanager:v0.27.0
-      - License: [Apache License 2.0](https://github.com/prometheus/alertmanager/blob/v0.27.0/LICENSE)
-    - quay.io/prometheus-operator/prometheus-operator:v0.73.0
-      - License: [Apache License 2.0](https://github.com/prometheus-operator/prometheus-operator/blob/v0.73.0/LICENSE)
-    - registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0
-      - License: [Apache License 2.0](https://github.com/kubernetes/kube-state-metrics/blob/v2.12.0/LICENSE)
-    - quay.io/prometheus/prometheus:v2.51.1
-      - License: [Apache License 2.0](https://github.com/prometheus/prometheus/blob/v2.51.1/LICENSE)
-    - quay.io/prometheus/node-exporter:v1.7.0
-      - License: [Apache License 2.0](https://github.com/prometheus/node_exporter/blob/v1.7.0/LICENSE)
+    - docker.io/velero/velero:v1.14.0
+      - License: [Apache License 2.0](https://github.com/vmware-tanzu/velero/blob/v1.14.0/LICENSE)
 
 ## Licenses
 
@@ -1410,37 +1339,6 @@ modification, are permitted provided that the following conditions are met:
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
    and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-### BSD 3-Clause "New" or "Revised" License
-
-BSD 3-Clause License
-
-Copyright (c) [year], [fullname]
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
