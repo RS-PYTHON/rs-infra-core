@@ -50,6 +50,8 @@ Below are all the FOSS (Free and open-source software) used and their respective
       - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.27.0/LICENSE)
     - ghcr.io/cloudnative-pg/postgresql:17.5
       - License: [Apache License 2.0](https://github.com/cloudnative-pg/postgres-containers/blob/main/LICENSE)
+    - ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.6.0
+      - License: [Apache License 2.0](https://github.com/cloudnative-pg/plugin-barman-cloud/blob/v0.6.0/LICENSE)
 
 - Keycloak
   - Helm chart: *None*
@@ -87,6 +89,19 @@ Below are all the FOSS (Free and open-source software) used and their respective
   - Container image(s)
     - docker.io/velero/velero:v1.14.0
       - License: [Apache License 2.0](https://github.com/vmware-tanzu/velero/blob/v1.14.0/LICENSE)
+
+- Busybox
+  - Helm chart: *None*
+  - Container image(s)
+    - busybox:latest
+      - License: [Apache License 2.0](https://github.com/docker-library/busybox/blob/master/LICENSE)
+
+- Pause
+  - Helm chart: *None*
+  - Container image(s)
+    - gcr.io/google-containers/pause:latest
+      - License: [Apache License 2.0](https://github.com/kubernetes/kubernetes/blob/master/LICENSE)
+      - Source: <https://github.com/kubernetes/kubernetes/tree/master/build/pause>
 
 ## Licenses
 
