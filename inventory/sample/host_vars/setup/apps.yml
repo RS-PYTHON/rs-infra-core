@@ -133,6 +133,14 @@ prefect3worker:
     namespace: processing
     number: 2
 
+rs_performance_indicator:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: performance
+    password: test
+    username: test
+    secret: pi-database-password
+
 rs_server:
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
@@ -142,20 +150,15 @@ rs_server:
     secret: pygeoapi-database-password
   full_domain: "{{ platform_domain_name }}"
 
-rs_performance_indicator:
-  database:
-    host: postgresql-cluster-rw.database.svc.cluster.local
-    name: performance
-    password: test
-    username: test
-    secret: pi-database-password
-
 rs_server_catalog:
   database:
     host: cnpgstac-rw.database.svc.cluster.local
     name: catalog
     password: password
     username: catalog
+    cluster:
+      instances: 3
+      
 
 rs_server_staging:
   # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token

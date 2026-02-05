@@ -12,21 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-namespace: database
 
+resources:
+- https://raw.githubusercontent.com/cloudnative-pg/plugin-barman-cloud/refs/tags/v0.11.0/config/crd/bases/barmancloud.cnpg.io_objectstores.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
 - includeSelectors: true
-  includeTemplates: true
   pairs:
     app.kubernetes.io/instance: '{{ app_name }}'
-    wait-for-deployment: Ready
-
-helmCharts:
-- name: plugin-barman-cloud
-  namespace: database
-  releaseName: '{{ app_name }}'
-  repo: https://cloudnative-pg.io/charts/
-  valuesFile: values.yaml
-  version: 0.5.0

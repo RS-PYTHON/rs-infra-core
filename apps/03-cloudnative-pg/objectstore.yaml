@@ -15,7 +15,7 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: ovh-gra
+  name: postgresql
 spec:
   configuration:
     destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
