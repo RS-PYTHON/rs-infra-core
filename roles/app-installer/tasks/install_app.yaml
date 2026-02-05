@@ -213,12 +213,16 @@
     - name: "{{ package_name }} - {{ app_name }} | Show resources"
       debug:
         var: resources
-      when: resources | length > 0
+      when:
+        - resources is defined
+        - resources | length > 0
 
     - name: "{{ package_name }} - {{ app_name }} | Show jobs status"
       debug:
         var: jobs.resources
-      when: jobs.resources | length > 0
+      when:
+        - jobs is defined
+        - jobs.resources | default([]) | length > 0
 
     - name: "{{ package_name }} - {{ app_name }} | Get pods of each failed job"
       kubernetes.core.k8s_info:
@@ -227,7 +231,9 @@
           - "job-name={{ item.metadata.name }}"
       loop: "{{ jobs.resources }}"
       register: job_pods
-      when: jobs.resources | length > 0
+      when:
+        - jobs is defined
+        - jobs.resources | default([]) | length > 0
       delegate_to: bastion
 
     - name: "{{ package_name }} - {{ app_name }} | Get logs of pods from failed jobs"
@@ -236,7 +242,9 @@
         namespace: "{{ item.metadata.namespace }}"
         all_containers: true
       loop: "{{ job_pods.results | map(attribute='resources') | flatten }}"
-      when: (job_pods.results | map(attribute='resources') | flatten | length) > 0
+      when:
+        - job_pods is defined
+        - (job_pods.results | default([]) | map(attribute='resources') | flatten | length) > 0
       ignore_errors: true
       register: job_logs
       delegate_to: bastion
@@ -244,12 +252,16 @@
     - name: "{{ package_name }} - {{ app_name }} | Show jobs logs"
       debug:
         var: job_logs
-      when: jobs.resources | length > 0
+      when:
+        - jobs is defined
+        - jobs.resources | default([]) | length > 0
 
     - name: "{{ package_name }} - {{ app_name }} | Show pods status"
       debug:
         var: pods.resources
-      when: pods.resources | length > 0
+      when:
+        - pods is defined
+        - pods.resources | default([]) | length > 0
 
     - name: "{{ package_name }} - {{ app_name }} | Get logs of each pod"
       kubernetes.core.k8s_log:
@@ -257,7 +269,9 @@
         namespace: "{{ item.metadata.namespace }}"
         all_containers: true
       loop: "{{ pods.resources }}"
-      when: pods.resources | length > 0
+      when:
+        - pods is defined
+        - pods.resources | default([]) | length > 0
       ignore_errors: true
       register: pod_logs
       delegate_to: bastion
@@ -265,12 +279,16 @@
     - name: "{{ package_name }} - {{ app_name }} | Show pods logs"
       debug:
         var: pod_logs
-      when: pods.resources | length > 0
+      when:
+        - pods is defined
+        - pods.resources | default([]) | length > 0
 
     - name: "{{ package_name }} - {{ app_name }} | Show deployments status"
       debug:
         var: deployments.resources
-      when: deployments.resources | length > 0
+      when:
+        - deployments is defined
+        - deployments.resources | default([]) | length > 0
 
     - name: "{{ package_name }} - {{ app_name }} | Get logs of each deployment"
       kubernetes.core.k8s_log:
@@ -278,7 +296,9 @@
         namespace: "{{ item.metadata.namespace }}"
         all_containers: true
       loop: "{{ deployments.resources }}"
-      when: deployments.resources | length > 0
+      when:
+        - deployments is defined
+        - deployments.resources | default([]) | length > 0
       ignore_errors: true
       register: deployment_logs
       delegate_to: bastion
@@ -286,7 +306,9 @@
     - name: "{{ package_name }} - {{ app_name }} | Show deployments logs"
       debug:
         var: deployment_logs
-      when: deployments.resources | length > 0
+      when:
+        - deployments is defined
+        - deployments.resources | default([]) | length > 0
 
     - name: Retrieve Kubernetes events
       shell: |
