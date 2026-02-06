@@ -28,5 +28,4 @@ helmCharts:
   namespace: database
   releaseName: '{{ app_name }}'
   repo: https://cloudnative-pg.io/charts/
-  valuesFile: values.yaml
   version: 0.5.0
