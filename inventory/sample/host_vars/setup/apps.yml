@@ -133,6 +133,14 @@ prefect3worker:
     namespace: processing
     number: 2
 
+rs_s3quotamonitoring:
+  database:
+    host: postgresql-cluster-rw.database.svc.cluster.local
+    name: s3_quota
+    password: password
+    secret: s3quotamonitoring-database-password
+    username: postgresuserquotamonitoring
+
 rs_performance_indicator:
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
