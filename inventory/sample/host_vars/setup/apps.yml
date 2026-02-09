@@ -152,7 +152,7 @@ rs_server:
 
 rs_server_catalog:
   database:
-    host: cnpgstac-rw.database.svc.cluster.local
+    host: pgstac-cluster-rw.database.svc.cluster.local
     name: catalog
     password: password
     username: catalog
