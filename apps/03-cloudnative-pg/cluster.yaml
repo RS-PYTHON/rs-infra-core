@@ -28,7 +28,7 @@ spec:
   - name: barman-cloud.cloudnative-pg.io
     isWALArchiver: true
     parameters:
-      barmanObjectName: ovh-gra
+      barmanObjectName: postgresql
 
   postgresql:
     parameters:
