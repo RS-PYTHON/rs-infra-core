@@ -157,7 +157,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
   name          = "prefect-flow-${var.cluster_name}"
   flavor_name   = "b3-16"
   desired_nodes = var.nodepool_prefect_flow_desired_nodes
-  min_nodes     = 0
+  min_nodes     = var.nodepool_prefect_flow_min_nodes
   max_nodes     = 5
   autoscale     = var.nodepool_prefect_flow_autoscale
   template {
@@ -187,7 +187,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_scheduler" {
   flavor_name   = "r3-64"
   desired_nodes = var.nodepool_dask_scheduler_desired_nodes
   min_nodes     = 0
-  max_nodes     = 1
+  max_nodes     = var.nodepool_dask_scheduler_max_nodes
   autoscale     = var.nodepool_dask_scheduler_autoscale
   template {
     metadata {
