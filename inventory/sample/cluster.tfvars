@@ -24,9 +24,9 @@ nodepool_prefect_flow_autoscale = true
 nodepool_dask_scheduler_autoscale = true
 nodepool_dask_worker_on_demand_autoscale = true
 
-nodepool_prefect_flow_min_nodes = 1
+nodepool_prefect_flow_min_nodes = 0
 
-nodepool_dask_scheduler_max_nodes = 2
+nodepool_dask_scheduler_max_nodes = 1
 
 # Bucket vars
 buckets = ["loki", "tempo", "psql", "velero"]
