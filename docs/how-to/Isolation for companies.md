@@ -544,6 +544,178 @@ sed 's#prefect3worker.general.name#prefect3worker.generalplayground.name#g' -i ~
 sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 ```
 
+## Dask-gateway isolation
+
+### Duplicate the app dask-gateway
+
+#### Deplicate the folder
+
+Duplicate `~/rs-workflow-env/apps/dask-gateway` to `~/rs-workflow-env/apps/dask-gateway-playground`.
+
+### Update the values
+
+#### Replace `jupyterhub.ops` by `jupyterhub.playground`
+
+Replace `jupyterhub.ops` by `jupyterhub.playground` in the following files :
+- `~/rs-workflow-env/apps/dask-gateway-playground/values.yaml`
+
+For e.g. with sed :
+
+```Bash
+sed 's#jupyterhub.ops#jupyterhub.playground#g' -i ~/rs-workflow-env/apps/dask-gateway-playground/values.yaml
+```
+
+#### Replace the namespace
+
+TODO in kustomize and in values.yaml
+
+```YAML
+gateway:
+  replicas: 1
+  prefix: /
+  loglevel: INFO
+  image:
+    name: ghcr.io/dask/dask-gateway-server
+    tag: "2024.1.0"
+    pullPolicy:
+  auth:
+    type: jupyterhub
+    jupyterhub:
+      apiToken: {{ jupyterhub.playground.services.daskgateway.apitoken }}
+      apiUrl: {{ jupyterhub.playground.services.daskgateway.apiurl }}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/rs_env"
+              operator: Exists
+  tolerations:
+    - key: role
+      value: rs_env
+      effect: NoSchedule
+  extraConfig:
+    clusteroptions: |
+        from dask_gateway_server.options import Options, Integer, Float, String, Mapping
+
+        def option_handler(options):
+            return {
+                "worker_cores": options.worker_cores,
+                "worker_memory": "%fG" % options.worker_memory,
+                "scheduler_core_limit": options.scheduler_core_limit,
+                "scheduler_memory_limit": "%fG" % options.scheduler_memory_limit,
+                "image": options.image,
+                "namespace": options.namespace,
+                "cluster_max_cores": options.cluster_max_cores,
+                "cluster_max_memory": options.cluster_max_memory,
+                "cluster_max_workers": options.cluster_max_workers,
+                "cluster_name": options.cluster_name,
+                "scheduler_extra_container_config": options.scheduler_extra_container_config,
+                "scheduler_extra_pod_annotations": options.scheduler_extra_pod_annotations,
+                "scheduler_extra_pod_config": options.scheduler_extra_pod_config,
+                "scheduler_extra_pod_labels": options.scheduler_extra_pod_labels,
+                "environment": options.environment,
+                "worker_extra_pod_config": options.worker_extra_pod_config,
+                "worker_extra_container_config": options.worker_extra_container_config,
+            }
+
+        c.Backend.cluster_options = Options(
+            Float("worker_cores", 1, min=1, max=8, label="Worker Cores"),
+            Float("worker_memory", 4, min=1, max=64, label="Worker Memory (GiB)"),
+            Float("scheduler_core_limit", 1, min=1, max=2, label="Scheduler Max Cores"),
+            Float("scheduler_memory_limit", 2, min=1, max=64, label="Scheduler Max Memory (GiB)"),
+            String("image", default="ghcr.io/rs-python/rs-infra-core-dask-gateway:latest", label="Image"),
+            String("namespace", default="dask-gateway", label="Namespace"),
+            Float("cluster_max_cores", 4, min=1, max=80, label="Cluster max cores"),
+            Float("cluster_max_memory", default=17179869184, min=1073741824, max=343597383680, label="Cluster max memory"),
+            Integer("cluster_max_workers", 5, min=1, max=20, label="Cluster max workers"),
+            String("cluster_name", default="MyDaskCluster", label="Cluster Name"),
+            Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15}, "imagePullPolicy": "Always"}, label="scheduler_extra_container_config"),
+            Mapping("scheduler_extra_pod_annotations", default={"usage":"unknown","access":"internal"}, label="Scheduler_extra_pod_annotations"),
+            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Scheduler_extra_pod_config"),
+            Mapping("scheduler_extra_pod_labels", default={"user":"unknown","team":"unknown","cluster_name":"MyDaskCluster"}, label="Scheduler_extra_pod_labels"),
+            Mapping("environment", default={"S3_ENDPOINT":"{{ s3.endpoint }}","S3_REGION":"{{ s3.region }}","TEMPO_ENDPOINT":"http://alloy.monitoring.svc.cluster.local:4317", "OTEL_PYTHON_REQUESTS_TRACE_HEADERS":"0", "OTEL_PYTHON_REQUESTS_TRACE_BODY":"0"}, label="Environment variables"),
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name": "obs"}}]}, label="Worker_extra_container_config"),
+            handler=option_handler,
+        )
+
+  backend:
+    image:
+      name: ghcr.io/dask/dask-gateway
+      tag: "2024.1.0"
+      pullPolicy:
+    imagePullSecrets:
+      - name: ghcr-k8s
+    namespace: dask-gateway
+    scheduler:
+      extraPodConfig:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: "node-role.kubernetes.io/rs_env"
+                    operator: Exists
+        tolerations:
+          - key: role
+            value: rs_env
+            effect: NoSchedule
+    worker:
+      extraPodConfig:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: "node-role.kubernetes.io/rs_env"
+                    operator: Exists
+        tolerations:
+          - key: role
+            value: rs_env
+            effect: NoSchedule
+
+controller:
+  enabled: true
+  image:
+    name: ghcr.io/dask/dask-gateway-server
+    tag: "2024.1.0"
+    pullPolicy:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/rs_env"
+              operator: Exists
+  tolerations:
+    - key: role
+      value: rs_env
+      effect: NoSchedule
+
+traefik:
+  replicas: 1
+  image:
+    name: traefik
+    tag: "2.10.6"
+    pullPolicy:
+  loglevel: WARN
+  service:
+    type: ClusterIP
+  dashboard: false
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/rs_env"
+              operator: Exists
+  tolerations:
+    - key: role
+      value: rs_env
+      effect: NoSchedule
+```
+
 ## Deploy the apps
 
 Deploy the new apps like any other apps:
