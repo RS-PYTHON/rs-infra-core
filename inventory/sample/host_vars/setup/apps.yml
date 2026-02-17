@@ -520,7 +520,7 @@ rs_station_mockup:
       bucketName: rspython-ops-catalog-playground
       bucketPath: stations/PRIP/
 
-rs_osam:
+rs_server_osam:
   provider:
     secret:
       # Create a new API key or re-use the one you used to set up the ovh managed k8s
