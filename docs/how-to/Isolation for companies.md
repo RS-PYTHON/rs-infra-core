@@ -1,6 +1,6 @@
 # Isolation for companies
 
-To be able to isolate between companies, we will create a namespace per company and leverage the `NetworkPolicy.networking.k8s.io` from Kubernetes.
+To be able to isolate between companies, we will create a namespace per company and leverage natives features from Kubernetes such as `NetworkPolicy` (<https://kubernetes.io/docs/concepts/services-networking/network-policies/>), `LimitRange` (<https://kubernetes.io/docs/concepts/policy/limit-range/>) and and `ResourceQuota` (<https://kubernetes.io/docs/concepts/policy/resource-quotas/>).
 
 ## Create the Network Policies for the processing namespace
 
@@ -103,6 +103,56 @@ metadata:
 ```
 
 Do not forget to update the file `kustomization.yaml` to include the new file.
+
+## Create the Resource Quota and the Limit Range for the playground namespace
+
+Create a new folder `~/rs-infra-core/apps/00-policies-playground` and add the files described in the next steps.
+
+### limitrange.yaml
+
+```YAML
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-cpu
+spec:
+  limits:
+  - max:
+      memory: 60Gi
+      cpu: "16"
+    type: Container
+  - default:
+      memory: 128Mi
+      cpu: 100m
+    type: Container
+```
+
+### resourcequota.yaml
+
+```YAML
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu
+spec:
+  hard:
+    limits.cpu: "48"
+    limits.memory: 100Gi
+```
+
+### kustomization.yaml
+
+Add the file `~/rs-infra-core/apps/00-policies-playground/kustomization.yaml` with the following content :
+
+```YAML
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: playground-ns
+
+resources:
+- resourcequota.yaml
+- limitrange.yaml
+```
 
 ## Create the Network Policies for the playground namespace
 
@@ -500,6 +550,7 @@ Deploy the new apps like any other apps:
 - `~/rs-infra-core/apps/00-namespaces`
 - `~/rs-infra-core/apps/00-networkpolicies-processing`
 - `~/rs-infra-core/apps/00-networkpolicies-playground`
+- `~/rs-infra-core/apps/00-policies-playground`
 - `~/rs-workflow-env/apps/01-prefect3-db-playground`
 - `~/rs-workflow-env/apps/prefect3-server-playground`
 - `~/rs-workflow-env/apps/prefect3-worker-staging-playground`
