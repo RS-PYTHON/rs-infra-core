@@ -82,6 +82,10 @@ Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-proces
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: processing
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
 
 resources:
 - networkpolicy-block.yaml
@@ -120,8 +124,7 @@ spec:
   - max:
       memory: 60Gi
       cpu: "16"
-    type: Container
-  - default:
+    default:
       memory: 128Mi
       cpu: 100m
     type: Container
@@ -571,13 +574,6 @@ TODO in kustomize and in values.yaml
 
 ```YAML
 gateway:
-  replicas: 1
-  prefix: /
-  loglevel: INFO
-  image:
-    name: ghcr.io/dask/dask-gateway-server
-    tag: "2024.1.0"
-    pullPolicy:
   auth:
     type: jupyterhub
     jupyterhub:
@@ -605,7 +601,6 @@ gateway:
                 "scheduler_core_limit": options.scheduler_core_limit,
                 "scheduler_memory_limit": "%fG" % options.scheduler_memory_limit,
                 "image": options.image,
-                "namespace": options.namespace,
                 "cluster_max_cores": options.cluster_max_cores,
                 "cluster_max_memory": options.cluster_max_memory,
                 "cluster_max_workers": options.cluster_max_workers,
@@ -625,7 +620,6 @@ gateway:
             Float("scheduler_core_limit", 1, min=1, max=2, label="Scheduler Max Cores"),
             Float("scheduler_memory_limit", 2, min=1, max=64, label="Scheduler Max Memory (GiB)"),
             String("image", default="ghcr.io/rs-python/rs-infra-core-dask-gateway:latest", label="Image"),
-            String("namespace", default="dask-gateway", label="Namespace"),
             Float("cluster_max_cores", 4, min=1, max=80, label="Cluster max cores"),
             Float("cluster_max_memory", default=17179869184, min=1073741824, max=343597383680, label="Cluster max memory"),
             Integer("cluster_max_workers", 5, min=1, max=20, label="Cluster max workers"),
@@ -641,13 +635,7 @@ gateway:
         )
 
   backend:
-    image:
-      name: ghcr.io/dask/dask-gateway
-      tag: "2024.1.0"
-      pullPolicy:
-    imagePullSecrets:
-      - name: ghcr-k8s
-    namespace: dask-gateway
+    namespace: playground
     scheduler:
       extraPodConfig:
         affinity:
@@ -676,11 +664,6 @@ gateway:
             effect: NoSchedule
 
 controller:
-  enabled: true
-  image:
-    name: ghcr.io/dask/dask-gateway-server
-    tag: "2024.1.0"
-    pullPolicy:
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -694,15 +677,8 @@ controller:
       effect: NoSchedule
 
 traefik:
-  replicas: 1
-  image:
-    name: traefik
-    tag: "2.10.6"
-    pullPolicy:
-  loglevel: WARN
   service:
     type: ClusterIP
-  dashboard: false
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
