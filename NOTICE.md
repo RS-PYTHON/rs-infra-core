@@ -68,8 +68,18 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-10.1.2>
     - Copyright: Copyright The oauth2-proxy Development Team. [Authors and Contributors](https://github.com/oauth2-proxy/manifests/graphs/contributors)
   - Container image(s)
-    - quay.io/oauth2-proxy/oauth2-proxy:v7.13.0
-      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.13.0/LICENSE)
+    - quay.io/oauth2-proxy/oauth2-proxy:v7.12.0
+      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.12.0/LICENSE)
+
+- Prefect
+  - Helm chart:
+    - Version: 7.1.0
+    - Licence: [Apache License 2.0](https://github.com/PrefectHQ/prefect-helm/blob/2026.1.2224951/LICENSE)
+    - Source: <https://github.com/PrefectHQ/prefect-helm/tree/2026.1.2224951>
+    - Copyright: Copyright The Prefect Development Team. [Authors and Contributors](https://github.com/PrefectHQ/prefect-helm/graphs/contributors)
+  - Container image(s)
+    - prefecthq/prefect:3.6.5-python3.13-kubernetes
+      - License: [Apache License 2.0](https://github.com/PrefectHQ/prefect/blob/3.6.5/LICENSE)
 
 - kube-prometheus-stack
   - Custom Resource Definitions
