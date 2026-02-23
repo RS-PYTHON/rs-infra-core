@@ -43,7 +43,7 @@ helm repo update seaweedfs
 kubectl create namespace seaweedfs
 kubectl apply -f "${TEST_DIR}/seaweedfs-s3-secret.yaml"
 helm install seaweedfs seaweedfs/seaweedfs --namespace seaweedfs --wait --timeout=180s \
-  --version 4.0.412 \
+  --version 4.0.413 \
   --set master.affinity="" \
   --set filer.affinity="" \
   --set volume.affinity="" \
