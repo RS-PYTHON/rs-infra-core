@@ -556,11 +556,11 @@ wazuh:
   server:
     kibanaserver:
       username: "kibanaserver"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
+      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=24) }}"
       secret: dashboard-cred
     admin:
       username: "admin"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
+      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=24) }}"
       secret: indexer-cred
     api:
       username: "wazuh-wui"
