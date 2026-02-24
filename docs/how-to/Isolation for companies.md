@@ -251,6 +251,25 @@ spec:
     ports:
     - protocol: TCP
       port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-nginx-dask
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: dask-gateway
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
 ```
 
 It is the policy to allow traffic from the nginx ingress-controller to the prefect and jupyter services.
