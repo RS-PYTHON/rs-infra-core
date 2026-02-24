@@ -62,11 +62,11 @@ kubectl get sa -A
 
 echo ""
 echo "=== 🪪 Cluster Roles ==="
-kubectl get cr -A
+kubectl get clusterroles -A
 
 echo ""
 echo "=== 🪪 Cluster Role Bindings ==="
-kubectl get crb -A
+kubectl get clusterrolebindings -A
 
 echo ""
 echo "=== 🧩 Custom Resource Definitions ==="
