@@ -63,13 +63,13 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - oauth2-proxy
   - Helm chart
-    - Version: 10.1.4
-    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-10.1.4/LICENSE)
-    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-10.1.4>
+    - Version: 10.1.5
+    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-10.1.5/LICENSE)
+    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-10.1.5>
     - Copyright: Copyright The oauth2-proxy Development Team. [Authors and Contributors](https://github.com/oauth2-proxy/manifests/graphs/contributors)
   - Container image(s)
-    - quay.io/oauth2-proxy/oauth2-proxy:v7.14.2
-      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.14.2/LICENSE)
+    - quay.io/oauth2-proxy/oauth2-proxy:v7.14.3
+      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.14.3/LICENSE)
 
 - kube-prometheus-stack
   - Custom Resource Definitions
