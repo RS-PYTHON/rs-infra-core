@@ -61,6 +61,14 @@ echo "=== 🪪 Service Accounts ==="
 kubectl get sa -A
 
 echo ""
+echo "=== 🪪 Cluster Roles ==="
+kubectl get clusterroles -A
+
+echo ""
+echo "=== 🪪 Cluster Role Bindings ==="
+kubectl get clusterrolebindings -A
+
+echo ""
 echo "=== 🧩 Custom Resource Definitions ==="
 kubectl get crd -A
 
