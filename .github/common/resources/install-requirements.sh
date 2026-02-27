@@ -34,7 +34,13 @@ conda create -y -n rspy python=$PYTHON_VERSION
 # Install Ansible, Terraform, Openstackclient
 # DO NOT INSTALL THESE VERSIONS:
 # - kubernetes-helm 4.0 - see https://github.com/kubernetes-sigs/kustomize/issues/6013
-# - kustomize 5.8.0 - see https://github.com/kubernetes-sigs/kustomize/issues/6014 - https://github.com/kubernetes-sigs/kustomize/issues/6027 - https://github.com/kubernetes-sigs/kustomize/issues/6031
+# - kustomize 5.8.0 / 5.8.1 - see:
+#   - https://github.com/kubernetes-sigs/kustomize/issues/6014
+#   - https://github.com/kubernetes-sigs/kustomize/issues/6027
+#   - https://github.com/kubernetes-sigs/kustomize/issues/6031
+#   - https://github.com/kubernetes-sigs/kustomize/issues/6058
+#   - https://github.com/kubernetes-sigs/kustomize/issues/6077
+#   - https://github.com/kubernetes-sigs/kustomize/issues/6079
 conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 "kubernetes-helm<4" kubernetes-client python-kubernetes "bcrypt<5" "kustomize<5.8.0"
 
 conda run -n rspy ansible-galaxy collection install openstack.cloud amazon.aws kubernetes.core community.general

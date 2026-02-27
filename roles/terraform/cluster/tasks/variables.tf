@@ -113,6 +113,18 @@ variable "nodepool_dask_worker_on_demand_autoscale" {
   default     = true
 }
 
+variable "nodepool_prefect_flow_min_nodes" {
+  description = "Number of minimal nodes on nodepool prefect flow"
+  type        = number
+  default     = 0
+}
+
+variable "nodepool_dask_scheduler_max_nodes" {
+  description = "Number of maximum nodes on nodepool dask scheduler"
+  type        = number
+  default     = 1
+}
+
 variable "buckets" {
   description = "bucket list"
   type        = list(string)
