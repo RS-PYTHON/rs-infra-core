@@ -13,6 +13,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a7] - 2026-03-02
+
+### Added
+
+- [RSPY-915](https://github.com/RS-PYTHON/rs-infra-core/pull/258) : cloudnative
+- [PR#284](https://github.com/RS-PYTHON/rs-infra-core/pull/284) : creation database for s3quotamonitoring
+- [PR#286](https://github.com/RS-PYTHON/rs-infra-core/pull/286) : Configuration for min prefect_flow node and max nod scheduler node
+
+### Changed
+
+- [PR#281](https://github.com/RS-PYTHON/rs-infra-core/pull/281) : Split NOTICE.md per infra repository
+- [PR#279](https://github.com/RS-PYTHON/rs-infra-core/pull/279) : Update to ingress-nginx 1.14.3
+- [PR#283](https://github.com/RS-PYTHON/rs-infra-core/pull/283) : Add robustness in ansible rescue step
+- [PR#282](https://github.com/RS-PYTHON/rs-infra-core/pull/282) : Update to SeaweedFS 4.12
+- [PR#291](https://github.com/RS-PYTHON/rs-infra-core/pull/291) : Update to seaweedfs 4.13
+- [PR#287](https://github.com/RS-PYTHON/rs-infra-core/pull/287) : rs-server-osam
+- [PR#290](https://github.com/RS-PYTHON/rs-infra-core/pull/290) : Update to oauth2-proxy 10.1.4 / 7.14.2
+- [PR#292](https://github.com/RS-PYTHON/rs-infra-core/pull/292) : Use OCI Registry for cert-manager
+- [PR#295](https://github.com/RS-PYTHON/rs-infra-core/pull/295) : Lower the length of hashed passwords to 24 characters
+- [PR#294](https://github.com/RS-PYTHON/rs-infra-core/pull/294) : Update to cert-manager 1.19.4
+- [PR#297](https://github.com/RS-PYTHON/rs-infra-core/pull/297) : CI: Trigger downstream deployments
+- [PR#293](https://github.com/RS-PYTHON/rs-infra-core/pull/293) : feat: add cluster roles / bindings for k8s diagnostics
+
 ## [1.0a6] - 2026-02-02
 
 ### Added
