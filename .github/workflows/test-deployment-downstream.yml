@@ -18,6 +18,8 @@ name: Test downstream deployments
 on:
   pull_request: # pull requests
     types: [opened, synchronize, reopened]
+    branches:
+      - '!feat/prepare-new-release'
   push:
     branches:
       - develop # pushes on the 'develop' branch
