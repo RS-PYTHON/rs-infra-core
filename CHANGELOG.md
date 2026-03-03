@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PR#294](https://github.com/RS-PYTHON/rs-infra-core/pull/294) : Update to cert-manager 1.19.4
 - [PR#297](https://github.com/RS-PYTHON/rs-infra-core/pull/297) : CI: Trigger downstream deployments
 - [PR#293](https://github.com/RS-PYTHON/rs-infra-core/pull/293) : feat: add cluster roles / bindings for k8s diagnostics
+- [RSPY-876](https://github.com/RS-PYTHON/rs-infra-core/pull/300) : Move JupyterHub image to rs-workflow-env
+
 
 ## [1.0a6] - 2026-02-02
 
