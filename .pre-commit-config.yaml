@@ -40,4 +40,4 @@ repos:
   hooks:
   - id: addlicense
     files: \.(py|sh|svg|xml|yml|yaml)$
-    args: [ "-c", "Airbus, CS Group", "-l", "apache", "-y", "2023-2026" ]
+    args: ["-c", "Airbus, CS Group", "-l", "apache", "-y", "2023-2026"]
