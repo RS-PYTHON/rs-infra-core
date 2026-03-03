@@ -14,19 +14,19 @@
 
 
 resources:
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/backuprepositories.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/backups.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/backupstoragelocations.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/datadownloads.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/datauploads.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/deletebackuprequests.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/downloadrequests.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/podvolumebackups.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/podvolumerestores.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/restores.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/schedules.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/serverstatusrequests.yaml
-- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-7.1.0/charts/velero/crds/volumesnapshotlocations.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/backuprepositories.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/backups.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/backupstoragelocations.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/datadownloads.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/datauploads.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/deletebackuprequests.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/downloadrequests.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/podvolumebackups.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/podvolumerestores.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/restores.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/schedules.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/serverstatusrequests.yaml
+- https://raw.githubusercontent.com/vmware-tanzu/helm-charts/refs/tags/velero-11.4.0/charts/velero/crds/volumesnapshotlocations.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
