@@ -4,12 +4,7 @@
 
 You can only restore a whole cluster with CloudNativePG, not just one database.
 
-## PostgreSQL cluster (non pgstac)
-
-From the YAML below, edit the fields:
-
-- `{{ postgresql.bucket }}`
-- `{{ s3.endpoint }}`
+## Restore postgresql cluster (non pgstac) without specific backup target
 
 And apply it with `kubectl -n database apply -f <input_file.yaml>`.
 
@@ -31,42 +26,29 @@ And apply it with `kubectl -n database apply -f <input_file.yaml>`.
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: psql-restore
+  name: postgresql-cluster-recovery
 spec:
-  backup:
-    barmanObjectStore:
-      destinationPath: s3://{{ postgresql.bucket }}/recovered-postgresql-cluster/
-      endpointURL: {{ s3.endpoint }}
-      serverName: "recoveredCluster"
-      s3Credentials:
-        accessKeyId:
-          key: AK
-          name: psql-backup-obs
-        secretAccessKey:
-          key: SK
-          name: psql-backup-obs
-    retentionPolicy: "10d"
-
-  bootstrap:
-    recovery:
-      source: clusterBackup
-
-  externalClusters:
-    - name: clusterBackup
-      barmanObjectStore:
-        destinationPath: s3://{{ postgresql.bucket }}/postgresql-cluster/
-        endpointURL: {{ s3.endpoint }}
-        s3Credentials:
-          accessKeyId:
-            key: AK
-            name: psql-backup-obs
-          secretAccessKey:
-            key: SK
-            name: psql-backup-obs
-
   instances: 3
 
   enableSuperuserAccess: true
+
+  bootstrap:
+    recovery:
+      source: postgresql-cluster
+
+  externalClusters:
+    - name: postgresql-cluster
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: postgresql
+          serverName: postgresql-cluster
+
+  plugins:
+  - name: barman-cloud.cloudnative-pg.io
+    isWALArchiver: true
+    parameters:
+      barmanObjectName: postgresql
 
   postgresql:
     parameters:
@@ -91,17 +73,17 @@ spec:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
-  monitoring:
-    enablePodMonitor: true
 ```
 
 It will create a new CloudNativePG cluster **from** the backup defined from the field `spec.externalClusters.barmanObjectStore.destinationPath`.
 
 And backup the **new** cluster in the path defined from the field `spec.backup.barmanObjectStore.destinationPath`.
 
-## pgstac cluster
+## Restore pgstac cluster with a specific backup target
 
-Use this manifest to create a new pgstac cluster named `pgstac-cluster-recovery` that will bootstrap from an existing backup of the pgstac cluster named `pgstac-cluster`, using the `barmanObject` named `pgstac`.
+Use this manifest to create a new pgstac cluster named `pgstac-cluster-recovery` that will bootstrap from an existing backup of the pgstac cluster named `pgstac-cluster`, using the `ObjectStore` named `pgstac`.
+
+It restores all the databases and roles.
 
 You need to change the value of `backupID` according to your backup. You can retrieve that ID from the backup Kubernetes object you want to restore, for e.g. :
 
@@ -130,9 +112,6 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: pgstac-cluster-recovery
-  labels:
-    app.kubernetes.io/instance: '{{ app_name }}'
-    wait-for-deployment: Ready
 spec:
   instances: 1
 
