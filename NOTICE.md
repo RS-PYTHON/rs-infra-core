@@ -73,22 +73,22 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - kube-prometheus-stack
   - Custom Resource Definitions
-    - Version: 58.0.0
-    - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-58.0.0/LICENSE)
-    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds>
+    - Version: 82.4.2
+    - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-82.4.2/LICENSE)
+    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-82.4.2/charts/kube-prometheus-stack/charts/crds>
     - Copyright: Copyright The Prometheus community Development Team. [Authors and Contributors](https://github.com/prometheus-community/helm-charts/graphs/contributors)
   - Helm chart: *None*
   - Container image(s) *None*
 
 - velero
   - Helm chart
-    - Version: 7.1.0
-    - Licence: [Apache License 2.0](https://github.com/vmware-tanzu/helm-charts/blob/velero-7.1.0/LICENSE)
-    - Source: <https://github.com/vmware-tanzu/helm-charts/tree/velero-7.1.0/charts/velero>
+    - Version: 11.4.0
+    - Licence: [Apache License 2.0](https://github.com/vmware-tanzu/helm-charts/blob/velero-11.4.0/LICENSE)
+    - Source: <https://github.com/vmware-tanzu/helm-charts/tree/velero-11.4.0/charts/velero>
     - Copyright: Copyright The VMware-Tanzu/velero Development Team. [Authors and Contributors](https://github.com/vmware-tanzu/helm-charts/graphs/contributors)
   - Container image(s)
-    - docker.io/velero/velero:v1.14.0
-      - License: [Apache License 2.0](https://github.com/vmware-tanzu/velero/blob/v1.14.0/LICENSE)
+    - docker.io/velero/velero:v1.17.2
+      - License: [Apache License 2.0](https://github.com/vmware-tanzu/velero/blob/v1.17.2/LICENSE)
 
 - Busybox
   - Helm chart: *None*
