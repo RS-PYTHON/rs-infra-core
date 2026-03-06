@@ -6,8 +6,6 @@ You can only restore a whole cluster with CloudNativePG, not just one database.
 
 ## Restore postgresql cluster (non pgstac) without specific backup target
 
-And apply it with `kubectl -n database apply -f <input_file.yaml>`.
-
 ```YAML
 # Copyright 2023-2026 Airbus, CS Group
 #
@@ -75,9 +73,7 @@ spec:
               operator: Exists
 ```
 
-It will create a new CloudNativePG cluster **from** the backup defined from the field `spec.externalClusters.barmanObjectStore.destinationPath`.
-
-And backup the **new** cluster in the path defined from the field `spec.backup.barmanObjectStore.destinationPath`.
+And apply it with `kubectl -n database apply -f <input_file.yaml>`.
 
 ## Restore pgstac cluster with a specific backup target
 
