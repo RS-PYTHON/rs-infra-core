@@ -73,9 +73,9 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - kube-prometheus-stack
   - Custom Resource Definitions
-    - Version: 82.4.2
-    - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-82.4.2/LICENSE)
-    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-82.4.2/charts/kube-prometheus-stack/charts/crds>
+    - Version: 58.0.0
+    - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-58.0.0/LICENSE)
+    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds>
     - Copyright: Copyright The Prometheus community Development Team. [Authors and Contributors](https://github.com/prometheus-community/helm-charts/graphs/contributors)
   - Helm chart: *None*
   - Container image(s) *None*
