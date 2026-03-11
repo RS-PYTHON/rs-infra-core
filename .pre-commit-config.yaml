@@ -33,7 +33,6 @@ repos:
     -   id: helmlint
     -   id: tflint
     -   id: shellcheck
-      #        exclude: ^apps-security/
 
 - repo: https://github.com/google/addlicense
   rev: v1.2.0

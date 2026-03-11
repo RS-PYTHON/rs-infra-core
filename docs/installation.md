@@ -138,29 +138,18 @@ ansible-playbook apps.yaml \
 !!! warning "Note: DNS configuration"
     At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (`kubectl -n ingress-nginx get svc ingress-nginx-controller`).
 
-(Optional) : Deploy the rs-infra-security, rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
+(Optional) : Deploy the rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
 
 (still on the bastion)
 
 ```shellsession
 cd ~ ;
 
-git clone https://github.com/RS-PYTHON/rs-infra-security.git ;
 git clone https://github.com/RS-PYTHON/rs-infra-monitoring.git ;
 git clone https://github.com/RS-PYTHON/rs-workflow-env.git ;
 git clone https://github.com/RS-PYTHON/rs-server-deployment.git ;
 
 cd ~/rs-infra-core ;
-```
-
-!!! warning "Disclaimer: **Before** Wazuh Server installation (rs-infra-security)"
-    See the [how-to/Wazuh-Server_Install](./how-to/Wazuh%20server%20install.md) and execute scripts **before** deploying rs-infra-security.
-
-```shellsession
-ansible-playbook apps.yaml \
-    -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-infra-security/apps/"]}'
-    -e private_registry=true ;
 ```
 
 ```shellsession
