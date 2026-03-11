@@ -87,8 +87,6 @@ You need to change the value of `backupID` according to your backup. You can ret
 kubectl -n database get backup backup-pgstac-cluster-20260225110000 -o=jsonpath='{.status.backupId}'`
 ```
 
-Manifest :
-
 ```YAML
 # Copyright 2023-2026 Airbus, CS Group
 #
@@ -164,3 +162,5 @@ spec:
         key: role
         value: rs_server
 ```
+
+And apply it with `kubectl -n database apply -f <input_file.yaml>`.
