@@ -260,30 +260,6 @@ spec:
             clientRole: true
             containerId: 1cf697e7-974a-48a6-bd82-720253c4053c
             attributes: {}
-        neuvector:
-          - name: admin
-            description: Neuvector Admin Role
-            composite: false
-            clientRole: true
-            containerId: 6c0f0f10-3f6b-490a-beba-fbb0fd4d9a6f
-            attributes: {}
-          - name: uma_protection
-            composite: false
-            clientRole: true
-            containerId: 6c0f0f10-3f6b-490a-beba-fbb0fd4d9a6f
-            attributes: {}
-          - name: reader
-            description: "Neuvector Reader Role "
-            composite: false
-            clientRole: true
-            containerId: 6c0f0f10-3f6b-490a-beba-fbb0fd4d9a6f
-            attributes: {}
-          - name: access-authorized
-            description: Only users with this role may access the client
-            composite: false
-            clientRole: true
-            containerId: 6c0f0f10-3f6b-490a-beba-fbb0fd4d9a6f
-            attributes: {}
         jupyterhub:
           - name: uma_protection
             composite: false
@@ -321,7 +297,6 @@ spec:
             clientRole: true
             containerId: 4bdcb3d5-b27c-49ef-80da-47bea574417f
             attributes: {}
-        wazuh-saml: []
         kubectl:
           - name: uma_protection
             composite: false
@@ -442,13 +417,6 @@ spec:
             containerId: febbc52e-63de-4652-8a42-80f677f8c7e4
             attributes: {}
     groups:
-      - name: Wazuh-admins
-        path: /Wazuh-admins
-        subGroups: []
-        attributes: {}
-        realmRoles:
-          - admin
-        clientRoles: {}
       - name: admin
         path: /admin
         subGroups: []
@@ -510,8 +478,6 @@ spec:
         attributes: {}
         realmRoles: []
         clientRoles:
-          neuvector:
-            - access-authorized
           kubectl:
             - security
       - name: ssh
@@ -653,19 +619,6 @@ spec:
         notBefore: 0
         groups:
           - /default
-      - createdTimestamp: 1722844259386
-        username: service-account-neuvector
-        enabled: true
-        totp: false
-        emailVerified: false
-        serviceAccountClientId: neuvector
-        disableableCredentialTypes: []
-        requiredActions: []
-        clientRoles:
-          neuvector:
-            - uma_protection
-        notBefore: 0
-        groups: []
       - createdTimestamp: 1707491949268
         username: service-account-prometheus
         enabled: true
@@ -1369,133 +1322,6 @@ spec:
           policies: []
           scopes: []
           decisionStrategy: UNANIMOUS
-      - clientId: neuvector
-        name: Neuvector
-        description: ""
-        rootUrl: https://neuvector.{{ platform_domain_name }}
-        adminUrl: ""
-        baseUrl: ""
-        surrogateAuthRequired: false
-        enabled: true
-        alwaysDisplayInConsole: false
-        clientAuthenticatorType: client-secret
-        secret: "{{ neuvector_oidc_client_secret }}"
-        redirectUris:
-          - /openId_auth
-        webOrigins:
-          - ""
-        notBefore: 0
-        bearerOnly: false
-        consentRequired: false
-        standardFlowEnabled: true
-        implicitFlowEnabled: false
-        directAccessGrantsEnabled: true
-        serviceAccountsEnabled: true
-        authorizationServicesEnabled: true
-        publicClient: false
-        frontchannelLogout: true
-        protocol: openid-connect
-        attributes:
-          oidc.ciba.grant.enabled: "false"
-          client.secret.creation.time: "1722843516"
-          backchannel.logout.session.required: "true"
-          post.logout.redirect.uris: +
-          display.on.consent.screen: "false"
-          oauth2.device.authorization.grant.enabled: "false"
-          backchannel.logout.revoke.offline.tokens: "false"
-        authenticationFlowBindingOverrides: {}
-        fullScopeAllowed: true
-        nodeReRegistrationTimeout: -1
-        protocolMappers:
-          - name: Client ID
-            protocol: openid-connect
-            protocolMapper: oidc-usersessionmodel-note-mapper
-            consentRequired: false
-            config:
-              user.session.note: client_id
-              introspection.token.claim: "true"
-              userinfo.token.claim: "true"
-              id.token.claim: "true"
-              access.token.claim: "true"
-              claim.name: client_id
-              jsonType.label: String
-          - name: Client Host
-            protocol: openid-connect
-            protocolMapper: oidc-usersessionmodel-note-mapper
-            consentRequired: false
-            config:
-              user.session.note: clientHost
-              introspection.token.claim: "true"
-              userinfo.token.claim: "true"
-              id.token.claim: "true"
-              access.token.claim: "true"
-              claim.name: clientHost
-              jsonType.label: String
-          - name: client roles
-            protocol: openid-connect
-            protocolMapper: oidc-usermodel-client-role-mapper
-            consentRequired: false
-            config:
-              introspection.token.claim: "true"
-              multivalued: "true"
-              userinfo.token.claim: "true"
-              user.attribute: foo
-              id.token.claim: "false"
-              access.token.claim: "true"
-              claim.name: resource_access.${client_id}.roles
-              jsonType.label: String
-              usermodel.clientRoleMapping.clientId: neuvector
-          - name: Client IP Address
-            protocol: openid-connect
-            protocolMapper: oidc-usersessionmodel-note-mapper
-            consentRequired: false
-            config:
-              user.session.note: clientAddress
-              introspection.token.claim: "true"
-              userinfo.token.claim: "true"
-              id.token.claim: "true"
-              access.token.claim: "true"
-              claim.name: clientAddress
-              jsonType.label: String
-          - name: neuvector-mapper
-            protocol: openid-connect
-            protocolMapper: oidc-usermodel-client-role-mapper
-            consentRequired: false
-            config:
-              introspection.token.claim: "true"
-              multivalued: "true"
-              userinfo.token.claim: "true"
-              id.token.claim: "true"
-              access.token.claim: "true"
-              claim.name: resource_access.${client_id}.roles
-              jsonType.label: String
-              usermodel.clientRoleMapping.clientId: neuvector
-          - name: neuvector-group
-            protocol: openid-connect
-            protocolMapper: oidc-group-membership-mapper
-            consentRequired: false
-            config:
-              full.path: "false"
-              introspection.token.claim: "false"
-              multivalued: "true"
-              userinfo.token.claim: "true"
-              id.token.claim: "false"
-              access.token.claim: "false"
-              claim.name: groups
-        defaultClientScopes:
-          - acr
-          - profile
-          - roles
-          - good-service
-          - email
-        optionalClientScopes: []
-        authorizationSettings:
-          allowRemoteResourceManagement: true
-          policyEnforcementMode: ENFORCING
-          resources: []
-          policies: []
-          scopes: []
-          decisionStrategy: UNANIMOUS
       - clientId: oauth2-proxy
         name: oauth2-proxy
         description: ""
@@ -1713,58 +1539,6 @@ spec:
           - phone
           - offline_access
           - microprofile-jwt
-      - clientId: wazuh-saml
-        name: Wazuh SSO
-        description: ""
-        rootUrl: ""
-        adminUrl: ""
-        baseUrl: ""
-        surrogateAuthRequired: false
-        enabled: true
-        alwaysDisplayInConsole: false
-        clientAuthenticatorType: client-secret
-        redirectUris:
-          - https://wazuh.{{ platform_domain_name }}/*
-        webOrigins: []
-        notBefore: 0
-        bearerOnly: false
-        consentRequired: false
-        standardFlowEnabled: true
-        implicitFlowEnabled: false
-        directAccessGrantsEnabled: true
-        serviceAccountsEnabled: false
-        publicClient: true
-        frontchannelLogout: true
-        protocol: saml
-        attributes:
-          saml.assertion.signature: "true"
-          saml.force.post.binding: "true"
-          saml.encrypt: "false"
-          saml_assertion_consumer_url_post: https://wazuh.{{ platform_domain_name }}/_opendistro/_security/saml/acs/idpinitiated
-          saml.server.signature: "true"
-          saml_idp_initiated_sso_url_name: wazuh-dashboard
-          saml.server.signature.keyinfo.ext: "false"
-          saml.signing.certificate: ""
-          saml.artifact.binding.identifier: ""
-          saml.artifact.binding: "false"
-          saml_single_logout_service_url_redirect: https://wazuh.{{ platform_domain_name }}
-          saml.signature.algorithm: RSA_SHA256
-          saml_force_name_id_format: "false"
-          saml.client.signature: "false"
-          saml.authnstatement: "true"
-          display.on.consent.screen: "false"
-          saml_name_id_format: username
-          saml.signing.private.key: ""
-          saml.allow.ecp.flow: "false"
-          saml_signature_canonicalization_method: http://www.w3.org/2001/10/xml-exc-c14n#
-          saml.onetimeuse.condition: "false"
-          saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer: KEY_ID
-        authenticationFlowBindingOverrides: {}
-        fullScopeAllowed: true
-        nodeReRegistrationTimeout: -1
-        defaultClientScopes:
-          - role_list
-        optionalClientScopes: []
     clientScopes:
       - name: acr
         description: OpenID Connect scope for add acr (authentication context class
@@ -1877,14 +1651,6 @@ spec:
               single: "false"
               attribute.nameformat: Basic
               attribute.name: Role
-          - name: wazuhRoleKey
-            protocol: saml
-            protocolMapper: saml-role-list-mapper
-            consentRequired: false
-            config:
-              single: "true"
-              attribute.nameformat: Basic
-              attribute.name: Roles
       - name: microprofile-jwt
         description: Microprofile - JWT built-in scope
         protocol: openid-connect
