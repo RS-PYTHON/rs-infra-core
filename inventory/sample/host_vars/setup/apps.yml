@@ -103,6 +103,9 @@ keycloak:
     user: test@example.com
     ssl: true
     starttls: false
+  adminCliRealm:
+    client_id: admin-cli-realm
+    secret_id: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 
 prefect3server:
   ops:
