@@ -104,6 +104,33 @@ metadata:
 
 Do not forget to update the file `kustomization.yaml` to include the new file.
 
+## Create the private registry secret for the playground namespace
+
+Add the new namespace for the company in `~/rs-infra-core/apps/00-secret-private-registry/secrets.yaml`. For e.g. if the new namespace is `playground-ns` :
+
+```YAML
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-pull-secret
+  labels:
+    app.kubernetes.io/instance: '{{ app_name }}'
+  namespace: playground-ns
+type: kubernetes.io/dockerconfigjson
+stringData:
+  .dockerconfigjson: >
+    {
+      "auths": {
+        "{{ registry.harbor_url | default('harbor.example.com') }}": {
+          "username": "{{ registry.harbor_user | default('default-user') }}",
+          "password": "{{ registry.harbor_pass | default('default-pass') }}",
+          "auth": "{{ (registry.harbor_user | default('default-user') + ':' + registry.harbor_pass | default('default-pass')) | b64encode }}"
+        }
+      }
+    }
+```
+
 ## Create the Network Policies for the playground namespace
 
 Create a new folder `~/rs-infra-core/apps/00-networkpolicies-playground` and add the files described in the next steps.
@@ -498,6 +525,7 @@ sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~
 
 Deploy the new apps like any other apps:
 - `~/rs-infra-core/apps/00-namespaces`
+- `~/rs-infra-core/apps/00-secret-private-registry`
 - `~/rs-infra-core/apps/00-networkpolicies-processing`
 - `~/rs-infra-core/apps/00-networkpolicies-playground`
 - `~/rs-workflow-env/apps/01-prefect3-db-playground`
