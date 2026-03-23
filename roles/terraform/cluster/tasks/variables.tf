@@ -119,10 +119,22 @@ variable "nodepool_prefect_flow_min_nodes" {
   default     = 0
 }
 
+variable "nodepool_access_csc_max_nodes" {
+  description = "Number of desired nodes on nodepool access csc"
+  type        = number
+  default     = 5
+}
+
 variable "nodepool_dask_scheduler_max_nodes" {
   description = "Number of maximum nodes on nodepool dask scheduler"
   type        = number
   default     = 1
+}
+
+variable "nodepool_dask_worker_on_demand_max_nodes" {
+  description = "Number of max nodes on nodepool dask worker on demand"
+  type        = number
+  default     = 8
 }
 
 variable "buckets" {

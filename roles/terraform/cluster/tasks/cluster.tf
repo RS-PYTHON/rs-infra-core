@@ -129,7 +129,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
   flavor_name   = "b3-8"
   desired_nodes = var.nodepool_access_csc_desired_nodes
   min_nodes     = 0
-  max_nodes     = 5
+  max_nodes     = var.nodepool_access_csc_max_nodes
   autoscale     = var.nodepool_access_csc_autoscale
   template {
     metadata {
@@ -216,7 +216,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
   flavor_name   = "r3-64"
   desired_nodes = var.nodepool_dask_worker_on_demand_desired_nodes
   min_nodes     = 0
-  max_nodes     = 8
+  max_nodes     = var.nodepool_dask_worker_on_demand_max_nodes
   autoscale     = var.nodepool_dask_worker_on_demand_autoscale
   template {
     metadata {
