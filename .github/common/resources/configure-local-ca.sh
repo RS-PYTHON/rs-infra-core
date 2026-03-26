@@ -27,33 +27,41 @@ APPS="${APPS_DIR:-apps}"
 APP_CLUSTER_ISSUER="$APPS/02-cluster-issuer"
 APP_OAUTH2_PROXY="$APPS/oauth2-proxy"
 
-# --- Generate a local CA
-echo "Generating local CA..."
-openssl req -x509 -newkey rsa:4096 -days 1 -nodes \
-  -keyout local-ca.key -out local-ca.crt \
-  -subj "/CN=local CA/O=rspy/OU=dev" 2> /dev/null
+INIT_CA=false
+if [[ ! -f "${APP_CLUSTER_ISSUER}/local-ca-issuer.yaml" ]]; then
+  INIT_CA=true
+fi
 
-# --- Create local-ca-configmap.yaml
-echo "Creating ConfigMap..."
-while IFS= read -r line || [ -n "$line" ]; do
-  printf '    %s\n' "$line" >> "$RESOURCES_DIR/local-ca-configmap.yaml"
-done < local-ca.crt
+# --- Generate CA issuer files if not previously done
+if ${INIT_CA}; then
+  # --- Generate a local CA
+  echo "Generating local CA..."
+  openssl req -x509 -newkey rsa:4096 -days 1 -nodes \
+    -keyout local-ca.key -out local-ca.crt \
+    -subj "/CN=local CA/O=rspy/OU=dev" 2> /dev/null
 
-# --- Create local-ca-secret.yaml with inlined base64 data
-echo "Creating Secret..."
-sed -i \
-  -e "s!<crt>!$(base64 -w0 local-ca.crt)!g" \
-  -e "s!<key>!$(base64 -w0 local-ca.key)!g" \
-  "$RESOURCES_DIR/local-ca-secret.yaml"
+  # --- Create local-ca-configmap.yaml
+  echo "Creating ConfigMap..."
+  while IFS= read -r line || [ -n "$line" ]; do
+    printf '    %s\n' "${line}" >> "${RESOURCES_DIR}/local-ca-configmap.yaml"
+  done < local-ca.crt
 
-# --- Cleanup
-rm -f local-ca.crt local-ca.key
+  # --- Create local-ca-secret.yaml with inlined base64 data
+  echo "Creating Secret..."
+  sed -i \
+    -e "s!<crt>!$(base64 -w0 local-ca.crt)!g" \
+    -e "s!<key>!$(base64 -w0 local-ca.key)!g" \
+    "${RESOURCES_DIR}/local-ca-secret.yaml"
 
-# --- Copy CA issuer files
-echo "Copying issuer files..."
-cp "$RESOURCES_DIR/local-ca-secret.yaml" \
-   "$RESOURCES_DIR/local-ca-issuer.yaml" \
-   "$APP_CLUSTER_ISSUER/"
+  # --- Cleanup
+  rm -f local-ca.crt local-ca.key
+
+  # --- Copy CA issuer files
+  echo "Copying issuer files..."
+  cp "${RESOURCES_DIR}/local-ca-secret.yaml" \
+    "${RESOURCES_DIR}/local-ca-issuer.yaml" \
+    "${APP_CLUSTER_ISSUER}/"
+fi
 
 # --- Handle all <sd>:<ns> pairs
 CERT_FILES=""
@@ -72,15 +80,31 @@ done
 
 # --- Update kustomization.yaml
 echo "Updating kustomization.yaml..."
-sed -i "/- clusterIssuer.yaml/a\- local-ca-secret.yaml\\n- local-ca-issuer.yaml$CERT_FILES" "$APP_CLUSTER_ISSUER/kustomization.yaml"
 
-# --- Trust local CA in oauth2-proxy
-echo "Adding local CA trust to oauth2-proxy..."
-sed 's!<ns>!iam!g' \
-  "$RESOURCES_DIR/local-ca-configmap.yaml" \
-  > "$APP_OAUTH2_PROXY/local-ca-configmap.yaml"
-echo -e "resources:\n- local-ca-configmap.yaml\n" | tee -a "$APP_OAUTH2_PROXY/kustomization.yaml" > /dev/null
-cat <<'EOF' | tee -a "$APP_OAUTH2_PROXY/values.yaml" > /dev/null
+add_if_missing() {
+  if ! grep -qxF -- "$1" "${APP_CLUSTER_ISSUER}/kustomization.yaml"; then
+    sed -i "/- clusterIssuer.yaml/a\\
+$1
+" "${APP_CLUSTER_ISSUER}/kustomization.yaml"
+  fi
+}
+
+add_if_missing "- local-ca-secret.yaml"
+add_if_missing "- local-ca-issuer.yaml"
+
+for arg in "$@"; do
+  sd="${arg%%:*}"
+  add_if_missing "- certificate-${sd}.yaml"
+done
+
+# --- Trust local CA in oauth2-proxy if not already done
+if ${INIT_CA}; then
+  echo "Adding local CA trust to oauth2-proxy..."
+  sed 's!<ns>!iam!g' \
+    "${RESOURCES_DIR}/local-ca-configmap.yaml" \
+    > "${APP_OAUTH2_PROXY}/local-ca-configmap.yaml"
+  echo -e "resources:\n- local-ca-configmap.yaml\n" | tee -a "${APP_OAUTH2_PROXY}/kustomization.yaml" > /dev/null
+  cat <<'EOF' | tee -a "${APP_OAUTH2_PROXY}/values.yaml" > /dev/null
 extraVolumes:
   - name: local-ca
     configMap:
@@ -90,5 +114,6 @@ extraVolumeMounts:
     mountPath: /etc/ssl/certs/local-ca
     readOnly: true
 EOF
+fi
 
 echo "✅ Done!"
