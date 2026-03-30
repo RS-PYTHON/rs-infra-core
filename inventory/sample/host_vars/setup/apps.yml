@@ -537,47 +537,6 @@ rs_server_osam:
       # Aka projet id from web console https://www.ovh.com/manager/#/public-cloud/pci/projects/<project_id>/
       ovh_service: ""
 
-neuvector:
-  core:
-    admin:
-      Fullname: "admin"
-      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
-    exporter:
-      Fullname: "exporter"
-      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
-    secops:
-      Fullname: "rspysecopsadm"
-      Password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
-    secret: neuvector-init
-  exporter:
-    host: neuvector-svc-controller-api.svc.cluster.local
-    CTRL_USERNAME: exporter
-    CTRL_PASSWORD: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
-    secret: exporter
-
-wazuh:
-  server:
-    kibanaserver:
-      username: "kibanaserver"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=24) }}"
-      secret: dashboard-cred
-    admin:
-      username: "admin"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=24) }}"
-      secret: indexer-cred
-    api:
-      username: "wazuh-wui"
-      password: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_special=1, min_numeric=1, override_special='.+?-', length=30) }}"
-      secret: wazuh-api-cred
-    clusterkey:
-      key: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=32) }}"
-      secret: wazuh-cluster-key
-  agents:
-    authd:
-      authdpass: "{{ lookup('community.general.random_string', min_lower=1, min_upper=1, min_numeric=1, special=false, length=14) }}"
-      secret: wazuh-authd-pass
-  exchange_key: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits') }}"
-
 rspy:
   tmp_bucket: "{{ cluster_name }}-temp"
   catalog_bucket: "{{ cluster_name }}-catalog"
