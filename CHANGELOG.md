@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - [RSPY-867](https://github.com/RS-PYTHON/rs-infra-core/pull/304) : Restore pgstac database
 - [RSPY-900](https://github.com/RS-PYTHON/rs-infra-core/pull/288) : Decouple and update Dask versions
+- [RSPY-691](https://github.com/RS-PYTHON/rs-infra-core/pull/307) : Remove security from infra repo
 
 ### Changed
 
