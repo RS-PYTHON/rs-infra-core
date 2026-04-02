@@ -13,6 +13,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a8] - 2026-03-30
+
+### Added
+
+- [RSPY-867](https://github.com/RS-PYTHON/rs-infra-core/pull/304) : Restore pgstac database
+- [RSPY-900](https://github.com/RS-PYTHON/rs-infra-core/pull/288) : Decouple and update Dask versions
+- [RSPY-691](https://github.com/RS-PYTHON/rs-infra-core/pull/307) : Remove security from infra repo
+
+### Changed
+
+- [PR#284](https://github.com/RS-PYTHON/rs-infra-core/pull/184) : Update to velero 1.17.2
+- [PR#284](https://github.com/RS-PYTHON/rs-infra-core/pull/301) : Update to Python 3.13.12 / Prefect 3.6.20
+- [RSPY-691](https://github.com/RS-PYTHON/rs-infra-core/pull/306) : Allow configure-ca script to be called several times
+- [PR#284](https://github.com/RS-PYTHON/rs-infra-core/pull/305) : Add parameter for max node with dask_worker and access_csc
+
+### Fixed
+
+- [PR#303](https://github.com/RS-PYTHON/rs-infra-core/pull/303) : Add secret for the private registry in the isolated namespace
+
+### Removed
+
+- [PR#307](https://github.com/RS-PYTHON/rs-infra-core/pull/307) : Feat/remove security from infra repo
+
 ## [1.0a7] - 2026-03-02
 
 ### Added
