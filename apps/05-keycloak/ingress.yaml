@@ -19,6 +19,8 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
     cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
 spec:
   ingressClassName: nginx
@@ -37,3 +39,33 @@ spec:
   - hosts:
     - iam.{{ platform_domain_name }}
     secretName: iam-{{ platform_domain_name | replace(".", "-") }}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-admin
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: admin.iam.{{ platform_domain_name }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak-service
+            port:
+              number: 8080
+  tls:
+  - hosts:
+    - admin.iam.{{ platform_domain_name }}
+    secretName: admin-iam-{{ platform_domain_name | replace(".", "-") }}

@@ -16,12 +16,21 @@
 namespace: iam
 
 resources:
-- deployment.yaml
-- rbac.yaml
-- service.yaml
+- https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/refs/tags/26.5.7/kubernetes/kubernetes.yml
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
 - includeSelectors: true
   pairs:
     app.kubernetes.io/instance: '{{ app_name }}'
+
+### TODO
+### Patch deployment for node affinity
+#affinity:
+#  nodeAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      nodeSelectorTerms:
+#        - matchExpressions:
+#          - key: "node-role.kubernetes.io/infra"
+#            operator: Exists

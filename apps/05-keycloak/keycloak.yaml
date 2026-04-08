@@ -29,8 +29,8 @@ spec:
       name: {{ keycloak.database.secret }}
       key: username
   hostname:
-    hostname: iam.{{ platform_domain_name }}
-    adminUrl: https://iam.{{ platform_domain_name }}
+    hostname: https://iam.{{ platform_domain_name }}
+    admin: https://admin.iam.{{ platform_domain_name }}
   http:
     httpEnabled: true
     httpPort: 8080
