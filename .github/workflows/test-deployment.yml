@@ -49,7 +49,7 @@ jobs:
           memory: 8000m
       - name: "Configure cluster labels, IP and DNS (host + CoreDNS)"
         run: |
-          .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy"
+          .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy admin.iam"
         shell: bash
       - name: Deploy seaweedfs
         run: .github/common/resources/deploy-seaweedfs.sh rs-cluster-psql,rs-cluster-velero
@@ -72,7 +72,7 @@ jobs:
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
 
           # --- Use local cluster issuer instead of Let's Encrypt
-          .github/common/resources/configure-local-ca.sh iam:iam kube:default oauth2-proxy:iam
+          .github/common/resources/configure-local-ca.sh iam:iam kube:default oauth2-proxy:iam admin.iam:iam
           .github/common/resources/configure-minikube-deployment.sh
 
           # --- Install applications and wait for their successful deployment
