@@ -152,6 +152,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: playground-ns
 
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
+
 resources:
 - resourcequota.yaml
 - limitrange.yaml
