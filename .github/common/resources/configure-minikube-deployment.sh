@@ -18,7 +18,18 @@ set -euo pipefail
 APPS="${APPS_DIR:-apps}"
 
 # Lower the CPU and memory requests
-sed -i -e 's!cpu: 300m!cpu: 10m!g' -e 's!memory: 400Mi!memory: 50Mi!g' "${APPS}/03-keycloak-operator/deployment.yaml"
+# sed -i -e 's!cpu: 300m!cpu: 10m!g' -e 's!memory: 400Mi!memory: 50Mi!g' "${APPS}/03-keycloak-operator/deployment.yaml"
+echo '
+      containers:
+      - name: keycloak-operator
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "50Mi"
+          limits:
+            cpu: "300m"
+            memory: "450Mi"
+' >> "${APPS}/03-keycloak-operator/operator-node-affinity-patch.yaml
 
 # Allow retrieving of oidc tokens for all clients with login+password to ease tests
 sed -i 's!directAccessGrantsEnabled: false!directAccessGrantsEnabled: true!g' "${APPS}/05-keycloak/keycloakrealmimport.yaml"
