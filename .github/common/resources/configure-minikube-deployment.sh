@@ -29,7 +29,7 @@ echo '
           limits:
             cpu: "300m"
             memory: "450Mi"
-' >> "${APPS}/03-keycloak-operator/operator-node-affinity-patch.yaml
+' >> "${APPS}/03-keycloak-operator/operator-node-affinity-patch.yaml"
 
 # Allow retrieving of oidc tokens for all clients with login+password to ease tests
 sed -i 's!directAccessGrantsEnabled: false!directAccessGrantsEnabled: true!g' "${APPS}/05-keycloak/keycloakrealmimport.yaml"
