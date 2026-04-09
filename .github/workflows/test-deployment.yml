@@ -76,7 +76,7 @@ jobs:
           .github/common/resources/configure-minikube-deployment.sh
 
           # --- Install applications and wait for their successful deployment
-          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e custom_wait_timeout=240
         shell: bash
       - name: Export Keycloak realm
         if: always() && steps.deploy_check.outcome == 'success'
