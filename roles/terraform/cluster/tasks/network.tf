@@ -83,3 +83,18 @@ resource "openstack_networking_secgroup_rule_v2" "allow_https" {
   remote_ip_prefix  = "0.0.0.0/0" # Open to the public
   security_group_id = openstack_networking_secgroup_v2.kubernetes_sg.id
 }
+
+# Share network for manila csi (rwx volume)
+resource "openstack_sharedfilesystem_sharenetwork_v2" "sharenetwork" {
+  name              = "mks-manila-csi-${var.cluster_name}"
+  region            = var.region
+  neutron_net_id    = openstack_networking_network_v2.private_net.id
+  neutron_subnet_id = openstack_networking_subnet_v2.private_subnet.id
+}
+
+# Output part
+
+output "sharenetwork_id" {
+  value     = openstack_sharedfilesystem_sharenetwork_v2.sharenetwork.id
+  sensitive = false
+}
