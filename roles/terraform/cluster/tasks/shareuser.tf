@@ -12,13 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# manila user (rwx volume)
 
-resources:
-- sc-retain.yaml
-- sc-manifa-nfs.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
+resource "ovh_cloud_project_user" "manila" {
+  description = "manila-${var.cluster_name}"
+  role_names = ["network_operator", "volume_operator"]
+}
+
+# Output part
+
+output "manila_username" {
+  value     = ovh_cloud_project_user.manila.username
+  sensitive = false
+}
+
+output "manila_password" {
+  value     = ovh_cloud_project_user.manila.password
+  sensitive = true
+}

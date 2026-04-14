@@ -71,6 +71,45 @@
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
 
+- name: Get manila username from terraform output
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw manila_username
+  register: manila_username
+  args:
+    chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
+
+- name: Get manila password from terraform output
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw manila_password
+  register: manila_password
+  args:
+    chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
+
+- name: Get share network id from terraform output
+  shell: |
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform output -raw sharenetwork_id
+  register: sharenetwork_id
+  args:
+    chdir: roles/terraform/cluster/tasks/
+    executable: /bin/bash
+
+- name: Configure share network and manila credentials
+  set_fact:
+    manila_username: "{{ manila_username.stdout }}"
+    manila_password: "{{ manila_password.stdout }}"
+    sharenetwork_id: "{{ sharenetwork_id.stdout }}"
+
+- name: Write share network and manila credentials to sharenetwork.yaml
+  copy:
+    dest: "{{ inventory_dir }}/host_vars/setup/sharenetwork.yaml"
+    content: |
+      sharenetwork:
+        manila_username: "{{ manila_username }}"
+        manila_password: "{{ manila_password }}"
+        sharenetwork_id: "{{ sharenetwork_id }}"
+    
 - name: Set ansible private key
   delegate_to: "{{ bastion_ip.stdout }}"
   set_fact:
