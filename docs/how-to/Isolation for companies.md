@@ -19,7 +19,7 @@ kind: NetworkPolicy
 metadata:
   name: default-deny-ingress
 spec:
-  podSelector: 
+  podSelector:
     matchLabels:
       app.kubernetes.io/name: prefect-copernicus-server
   policyTypes:
@@ -63,7 +63,7 @@ kind: NetworkPolicy
 metadata:
   name: allow-same-namespace
 spec:
-  podSelector: 
+  podSelector:
     matchLabels:
       app.kubernetes.io/name: prefect-copernicus-server
   policyTypes:
