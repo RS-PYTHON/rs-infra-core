@@ -95,6 +95,21 @@
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash
 
+- name: Get projectName (=OS_TENANT_NAME) from openrc
+  shell: |
+    set -o allexport
+    source {{ inventory_dir }}/openrc.sh
+    set +o allexport
+    echo "$OS_TENANT_NAME"
+  args:
+    executable: /bin/bash
+  register: osprojectname
+  changed_when: false
+
+- name: Save projectName as Ansible fact
+  set_fact:
+    osprojectname: "{{ osprojectname.stdout }}"
+
 - name: Configure share network and manila credentials
   set_fact:
     manila_username: "{{ manila_username.stdout }}"
@@ -109,6 +124,7 @@
         manila_username: "{{ manila_username }}"
         manila_password: "{{ manila_password }}"
         sharenetwork_id: "{{ sharenetwork_id }}"
+        osprojectname: "{{ osprojectname }}"
     
 - name: Set ansible private key
   delegate_to: "{{ bastion_ip.stdout }}"
