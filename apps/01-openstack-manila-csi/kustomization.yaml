@@ -22,6 +22,9 @@ helmCharts:
   valuesFile: values.yaml
   version: 2.35.0
 
+resources:
+- secret.yaml
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
