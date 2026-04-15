@@ -16,46 +16,23 @@ name: Check code quality
 
 on:
   push:
-    branches:
-      - develop # pushes on the 'develop' branch
-    tags:
-      - '**' # new git tags (including hierarchical tags like v1.0/beta)
+    branches: [develop, main] # pushes on the 'develop' or 'main' branches
+    tags: ['**'] # new git tags (including hierarchical tags like v1.0/beta)
   pull_request:
     types: [opened, synchronize, reopened]
-    # run this worflow only for code/test related changes (avoid it for documentation)
-    paths: ['**.py', '**.sh', '**.yaml', '**.yml']
   workflow_dispatch:
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
+  check-code-quality:
+    name: _
+    uses: RS-PYTHON/actions/.github/workflows/reusable-check-quality.yml@develop
+    with:
+        caller-repository: ${{ github.repository }}
+        caller-ref: ${{ github.ref }}
+        caller-ref_name: ${{ github.ref_name }}
+    secrets:
+      SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     permissions:
-      pull-requests: read
-    outputs:
-      code: ${{ steps.filter.outputs.code }}
-    steps:
-      - uses: actions/checkout@v6
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            code: ['**.py', '**.yaml', '**.yml']
-
-  check-license:
-    runs-on: ubuntu-latest
-    name: Check copyright license headers
-    needs: changes
-    permissions:
-      contents: write
-      pull-requests: write
-    if: ${{ needs.changes.outputs.code == 'true' }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: check License Header
-        uses: apache/skywalking-eyes/header@main
-        with:
-          log: debug
-          mode: check
+      contents: write # for apache/skywalking-eyes/header
+      pull-requests: write # for apache/skywalking-eyes/header and phwt/sonarqube-quality-gate-action

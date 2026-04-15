@@ -42,9 +42,9 @@ for key in options.keys():
     print(f"{key}: {options[key]}")
 
 # NOTE: use one of the following images:
-# - ghcr.io/rs-python/rs-infra-core-dask-staging
-# - ghcr.io/rs-python/rs-infra-core-dask-l0
-# - ghcr.io/rs-python/rs-infra-core-dask-s1ard
+# - ghcr.io/rs-python/dask/staging
+# - ghcr.io/rs-python/dask/l0
+# - ghcr.io/rs-python/dask/s1ard
 # - ...
 
 cluster = gateway.new_cluster(
@@ -157,8 +157,8 @@ for key in options.keys():
     print(f"{key}: {options[key]}")
 
 # NOTE: use one of the following images and cluster names:
-# - ghcr.io/rs-python/rs-infra-core-dask-l0 cluster_name:dask-l0
-# - ghcr.io/rs-python/rs-infra-core-dask-s1ard cluster_name:dask-s1ard
+# - ghcr.io/rs-python/dask/l0 cluster_name:dask-l0
+# - ghcr.io/rs-python/dask/s1ard cluster_name:dask-s1ard
 # - ...
 
 cluster = gateway.new_cluster(
