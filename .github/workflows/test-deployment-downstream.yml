@@ -21,8 +21,7 @@ on:
     branches:
       - '!feat/prepare-new-release'
   push:
-    branches:
-      - develop # pushes on the 'develop' branch
+    branches: [develop, main] # pushes on the 'develop' or 'main' branches
   workflow_dispatch: # manual trigger
 
 jobs:
