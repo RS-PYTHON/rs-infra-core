@@ -608,6 +608,26 @@ sed 's#prefect3worker.monitoring.name#prefect3worker.monitoringplayground.name#g
 
 Duplicate `~/rs-workflow-env/apps/dask-gateway` to `~/rs-workflow-env/apps/dask-gateway-playground`.
 
+#### Shared volume (ReadWriteMany)
+
+We need to create a big shared volume in the namespace that will be shared between the dask scheduler and workers. It is required by some processors.
+
+Create the new manifest `~/rs-workflow-env/apps/dask-gateway-playground/sharedvolume.yaml` with the following content :
+
+ ```YAML
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rspython-ops_ads_01
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Ti
+  storageClassName: csi-manila-nfs
+ ```
+
 ### Update the values
 
 #### Replace `jupyterhub.ops` by `jupyterhub.playground`
@@ -759,3 +779,4 @@ Deploy the new apps like any other apps:
 - `~/rs-workflow-env/apps/prefect3-worker-sandbox-playground`
 - `~/rs-workflow-env/apps/prefect3-worker-integrated-playground`
 - `~/rs-workflow-env/apps/jupyterhub-playground`
+- `~/rs-workflow-env/apps/dask-gateway-playground`

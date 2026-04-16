@@ -1,4 +1,5 @@
 # Global vars
+## TO DO : use var from inventory instead
 cluster_name = "rs-cluster"
 region = "GRA11"
 allowed_ip_list = ["5.6.7.8", "1.2.3.4"]

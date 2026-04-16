@@ -15,6 +15,9 @@
 # Platform domain name
 platform_domain_name: rspy.example.com
 
+# Cluster name
+cluster_name: rs-cluster
+
 # Cluster issuer (letsencrypt-prod, letsencrypt-staging, local-ca-issuer)
 cluster_issuer: letsencrypt-prod
 
