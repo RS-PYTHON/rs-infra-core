@@ -38,11 +38,11 @@ sed -i \
     -e 's!provider_ca_files: ""!provider_ca_files: "/etc/ssl/certs/local-ca/tls.crt"!g'\
     inventory/mycluster/host_vars/setup/apps.yml
 
-yq '
+{ yq '
   .sharenetwork = {
     "manila_username": "manila_username",
     "manila_password": "manila_password",
     "sharenetwork_id": "123456",
     "osprojectname": "123456"
   }
-' /dev/null > inventory/mycluster/host_vars/setup/sharenetwork.yaml
+' /dev/null; echo; } > inventory/mycluster/host_vars/setup/sharenetwork.yaml
