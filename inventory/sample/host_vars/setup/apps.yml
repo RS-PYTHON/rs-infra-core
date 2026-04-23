@@ -77,18 +77,12 @@ postgresql:
   instances: 3
 
 keycloak:
-  image: quay.io/keycloak/keycloak:23.0.6
-  operator:
-    image: quay.io/keycloak/keycloak-operator:23.0.6
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
     name: keycloak
     username: keycloak
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     secret: keycloak-database-password
-  serviceMonitor:
-    interval: 30s
-    scrapeTimeout: 10s
   replicaCount: 1
   proxy:
     mode: edge
@@ -448,54 +442,11 @@ rs_server_station_secrets:
         auth_type: s3
         access_key: example_s3_access_key
         secret_key: example_s3_secret_key
-    pedc:
+    creodias:
       service:
-        name: edrs
-        url: mockup-station-edrs-headless.processing.svc.cluster.local
-        port: 21
-      domain: mockup-station-edrs-headless.processing.svc.cluster.local
-      authentication:
-        auth_type: ftp
-        username: 'test'
-        password: 'test'
-        ca_crt: |-
-          -----BEGIN CERTIFICATE-----
-          MIID...
-          -----END CERTIFICATE-----
-
-        client_crt: |-
-          -----BEGIN CERTIFICATE-----
-          MIID...
-          -----END CERTIFICATE-----
-
-        client_key: |-
-          -----BEGIN RSA PRIVATE KEY-----
-          MIID...
-          -----END RSA PRIVATE KEY-----
-    bedc:
-      service:
-        name: edrs
-        url: mockup-station-edrs-headless.processing.svc.cluster.local
-        port: 21
-      domain: mockup-station-edrs-headless.processing.svc.cluster.local
-      authentication:
-        auth_type: ftp
-        username: 'test'
-        password: 'test'
-        ca_crt: |-
-          -----BEGIN CERTIFICATE-----
-          MIID...
-          -----END CERTIFICATE-----
-
-        client_crt: |-
-          -----BEGIN CERTIFICATE-----
-          MIID...
-          -----END CERTIFICATE-----
-
-        client_key: |-
-          -----BEGIN RSA PRIVATE KEY-----
-          MIID...
-          -----END RSA PRIVATE KEY-----
+        name: odata
+        url: https://datahub.creodias.eu/odata/v1/Assets
+      domain: datahub.creodias.eu
 
 rs_station_mockup:
   adgs:
