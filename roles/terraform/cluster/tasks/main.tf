@@ -45,9 +45,7 @@ provider "openstack" {
   alias       = "ovh"
 }
 
-provider "ovh" {
-  alias = "ovh"
-}
+provider "ovh" {}
 
 provider "aws" {
   region = var.buckets_region

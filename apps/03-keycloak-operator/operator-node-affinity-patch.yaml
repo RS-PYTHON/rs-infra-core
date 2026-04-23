@@ -12,16 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: keycloak
+  name: keycloak-operator
 spec:
-  endpoints:
-  - interval: {{ keycloak.serviceMonitor.interval}}
-    path: /metrics
-    port: http
-    scrapeTimeout: {{ keycloak.serviceMonitor.scrapeTimeout }}
-  selector:
-    matchLabels:
-      app: keycloak
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/infra
+                operator: Exists

@@ -91,7 +91,7 @@ keycloak:
     scrapeTimeout: 10s
   replicaCount: 1
   proxy:
-    mode: passthrough
+    mode: edge
   logLevel: info
   realm:
     name: rspy

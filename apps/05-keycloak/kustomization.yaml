@@ -18,7 +18,6 @@ namespace: iam
 resources:
 - keycloak.yaml
 - ingress.yaml
-- servicemonitor.yaml
 - secret.yaml
 - keycloakrealmimport.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
