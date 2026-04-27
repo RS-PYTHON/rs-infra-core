@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a9] - 2026-04-27
+
+### Added
+
+- [RSPY-995](https://github.com/RS-PYTHON/rs-infra-core/pull/313) : Run check-code-quality CI
+- [RSPY-1046](https://github.com/RS-PYTHON/rs-infra-core/pull/314) : Add Sentinel-1D
+
+### Changed
+
+- [RSPY-688](https://github.com/RS-PYTHON/rs-infra-core/pull/310) : Upgrade keycloak to 26.5.7
+
 ## [1.0a8] - 2026-03-30
 
 ### Added
