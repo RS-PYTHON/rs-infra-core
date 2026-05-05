@@ -77,18 +77,12 @@ postgresql:
   instances: 3
 
 keycloak:
-  image: quay.io/keycloak/keycloak:23.0.6
-  operator:
-    image: quay.io/keycloak/keycloak-operator:23.0.6
   database:
     host: postgresql-cluster-rw.database.svc.cluster.local
     name: keycloak
     username: keycloak
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     secret: keycloak-database-password
-  serviceMonitor:
-    interval: 30s
-    scrapeTimeout: 10s
   replicaCount: 1
   proxy:
     mode: edge
@@ -463,6 +457,11 @@ rs_server_station_secrets:
         auth_type: s3
         access_key: example_s3_access_key
         secret_key: example_s3_secret_key
+    creodias:
+      service:
+        name: odata
+        url: https://datahub.creodias.eu/odata/v1/Assets
+      domain: datahub.creodias.eu
 
 rs_station_mockup:
   adgs:
@@ -534,12 +533,10 @@ jupyterhub:
     name: jupyterhub
     namespace: processing
     subDomain: processing
-    allowedGroups: |
+    allowedGroups:
       - RS-JUPYTER-USER
-
-    adminGroups: |
+    adminGroups:
       - RS-ADMIN
-
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
