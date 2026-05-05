@@ -373,6 +373,21 @@ rs_server_station_secrets:
         client_id: client_id
         client_secret: client_secret
         authorization: Basic test
+    s1d:
+      service:
+        name: prip
+        url: http://mockup-prip-s1d.processing.svc.cluster.local:8080
+      domain: mockup-prip-s1d.processing.svc.cluster.local
+      authentication:
+        auth_type: oauth2
+        token_url: http://mockup-prip-s1d.processing.svc.cluster.local:8080/oauth2/token
+        grant_type: password
+        scope: null
+        username: test
+        password: test
+        client_id: client_id
+        client_secret: client_secret
+        authorization: Basic test
     s2b:
       service:
         name: prip
