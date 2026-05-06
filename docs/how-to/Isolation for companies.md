@@ -8,7 +8,6 @@ Create a new folder `~/rs-infra-core/apps/00-networkpolicies-processing` and add
 
 *Note:* The app's must be named like `[0-9]{2}-networkpol*`. Example : [https://regex101.com/r/wEo0NM/1](https://regex101.com/r/wEo0NM/1)
 
-
 ### networkpolicy-block.yaml
 
 Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-block.yaml` with the following content :
@@ -480,12 +479,10 @@ jupyterhub:
     name: jupyterhub
     namespace: processing
     subDomain: processing
-    allowedGroups: |
+    allowedGroups:
       - RS-JUPYTER-USER
-
-    adminGroups: |
+    adminGroups:
       - RS-ADMIN
-
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
@@ -509,12 +506,10 @@ jupyterhub:
     name: jupyterhub
     namespace: processing
     subDomain: processing
-    allowedGroups: |
+    allowedGroups:
       - RS-JUPYTER-USER
-
-    adminGroups: |
+    adminGroups:
       - RS-ADMIN
-
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
@@ -532,12 +527,10 @@ jupyterhub:
     name: jupyterhub
     namespace: playground
     subDomain: playground
-    allowedGroups: |
+    allowedGroups:
       - RS-JUPYTER-USER
-
-    adminGroups: |
+    adminGroups:
       - RS-ADMIN
-
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
@@ -610,13 +603,13 @@ Duplicate `~/rs-workflow-env/apps/dask-gateway` to `~/rs-workflow-env/apps/dask-
 
 We need to create a big shared volume in the namespace that will be shared between the dask scheduler and workers. It is required by some processors.
 
-Create the new manifest `~/rs-workflow-env/apps/dask-gateway-playground/sharedvolume.yaml` with the following content :
+Edit the new manifest `~/rs-workflow-env/apps/dask-gateway-playground/sharedvolume.yaml` with the following content :
 
  ```YAML
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: rspython-ops_ads_01
+  name: rspython-ops-playground-01
 spec:
   accessModes:
     - ReadWriteMany
@@ -630,7 +623,8 @@ spec:
 
 #### Replace `jupyterhub.ops` by `jupyterhub.playground`
 
-Replace `jupyterhub.ops` by `jupyterhub.playground` in the following files :
+Replace `jupyterhub.ops` by `jupyterhub.playground` in the following file :
+
 - `~/rs-workflow-env/apps/dask-gateway-playground/values.yaml`
 
 For e.g. with sed :
@@ -641,7 +635,93 @@ sed 's#jupyterhub.ops#jupyterhub.playground#g' -i ~/rs-workflow-env/apps/dask-ga
 
 #### Replace the namespace
 
-TODO in kustomize and in values.yaml
+##### kustomization.yaml
+
+Replace `namespace: dask-gateway` by `namespace: playground` in the following file :
+
+- `~/rs-workflow-env/apps/dask-gateway-playground/kustomization.yaml`
+
+For e.g. with sed :
+
+```Bash
+sed 's#namespace: dask-gateway#namespace: playground#g' -i ~/rs-workflow-env/apps/dask-gateway-playground/kustomization.yaml
+```
+
+##### values.yaml
+
+We need to disable to ability to change the namespace for the user, so the dask clusters will spawn in the same namespace as the dask gateway. That way, the dask clusters will only spawn in the company's namespace.
+
+From the original yaml manifest, we did the following changes :
+
+1. Update the jupyterhub `apiToken` and `apiUrl` to use the playground values instead of the ops values.
+
+    From :
+
+    ```YAML
+    gateway:
+      auth:
+        type: jupyterhub
+        jupyterhub:
+          apiToken: {{ jupyterhub.ops.services.daskgateway.apitoken }}
+          apiUrl: {{ jupyterhub.ops.services.daskgateway.apiurl }}
+    ```
+
+    To :
+
+    ```YAML
+    gateway:
+      auth:
+        type: jupyterhub
+        jupyterhub:
+          apiToken: {{ jupyterhub.playground.services.daskgateway.apitoken }}
+          apiUrl: {{ jupyterhub.playground.services.daskgateway.apiurl }}
+    ```
+
+2. **Remove** in the `option_handler`:
+
+    ```YAML
+                    "namespace": options.namespace,
+    ```
+
+3. **Remove** in the `c.Backend.cluster_options`:
+
+    ```YAML
+                String("namespace", default="dask-gateway", label="Namespace"),
+    ```
+
+4. Update the namespace:
+
+    From :
+
+    ```YAML
+        namespace: dask-gateway
+    ```
+
+    To :
+
+    ```YAML
+        namespace: playground
+    ```
+
+5. Add the `volume` and `volumeMounts` to the dask scheduler and worker workers:
+
+    From :
+    ```YAML
+            Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15}, "imagePullPolicy":"Always"}, label="scheduler_extra_container_config"),
+            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Scheduler_extra_pod_config"),
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name":"obs"}}]}, label="Worker_extra_container_config"),
+    ```
+
+    To :
+    ```YAML
+            Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15},"imagePullPolicy":"Always","volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="scheduler_extra_container_config"),
+            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Scheduler_extra_pod_config")
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name":"obs"}}],"volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="Worker_extra_container_config"),
+    ```
+
+**The result to put inside `~/rs-workflow-env/apps/dask-gateway-playground/values.yaml` is the following manifest**:
 
 ```YAML
 gateway:
@@ -695,17 +775,18 @@ gateway:
             Float("cluster_max_memory", default=17179869184, min=1073741824, max=343597383680, label="Cluster max memory"),
             Integer("cluster_max_workers", 5, min=1, max=20, label="Cluster max workers"),
             String("cluster_name", default="MyDaskCluster", label="Cluster Name"),
-            Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15}, "imagePullPolicy": "Always"}, label="scheduler_extra_container_config"),
+            Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15},"imagePullPolicy":"Always","volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="scheduler_extra_container_config"),
             Mapping("scheduler_extra_pod_annotations", default={"usage":"unknown","access":"internal"}, label="Scheduler_extra_pod_annotations"),
-            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Scheduler_extra_pod_config"),
+            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Scheduler_extra_pod_config")
             Mapping("scheduler_extra_pod_labels", default={"user":"unknown","team":"unknown","cluster_name":"MyDaskCluster"}, label="Scheduler_extra_pod_labels"),
             Mapping("environment", default={"S3_ENDPOINT":"{{ s3.endpoint }}","S3_REGION":"{{ s3.region }}","TEMPO_ENDPOINT":"http://alloy.monitoring.svc.cluster.local:4317", "OTEL_PYTHON_REQUESTS_TRACE_HEADERS":"0", "OTEL_PYTHON_REQUESTS_TRACE_BODY":"0"}, label="Environment variables"),
-            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}]}, label="Worker_extra_pod_config"),
-            Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name": "obs"}}]}, label="Worker_extra_container_config"),
-            handler=option_handler,
+            Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Worker_extra_pod_config"),
+            Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name":"obs"}}],"volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="Worker_extra_container_config"),
         )
 
   backend:
+    imagePullSecrets:
+    - name: ghcr-k8s
     namespace: playground
     scheduler:
       extraPodConfig:
@@ -748,6 +829,8 @@ controller:
       effect: NoSchedule
 
 traefik:
+  additionalArguments:
+    - --providers.kubernetescrd.allowcrossnamespace=false
   service:
     type: ClusterIP
   affinity:
