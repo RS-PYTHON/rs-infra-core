@@ -623,9 +623,10 @@ spec:
 
 #### Replace `jupyterhub.ops` by `jupyterhub.playground`
 
-Replace `jupyterhub.ops` by `jupyterhub.playground` in the following file :
+Replace `jupyterhub.ops` by `jupyterhub.playground` in the following files :
 
 - `~/rs-workflow-env/apps/dask-gateway-playground/values.yaml`
+- `~/rs-workflow-env/apps/dask-gateway-playground/ingress.yaml`
 
 For e.g. with sed :
 
@@ -716,7 +717,7 @@ From the original yaml manifest, we did the following changes :
     To :
     ```YAML
             Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15},"imagePullPolicy":"Always","volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="scheduler_extra_container_config"),
-            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Scheduler_extra_pod_config")
+            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Scheduler_extra_pod_config"),
             Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Worker_extra_pod_config"),
             Mapping("worker_extra_container_config", default={"envFrom":[{"secretRef":{"name":"obs"}}],"volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="Worker_extra_container_config"),
     ```
@@ -777,7 +778,7 @@ gateway:
             String("cluster_name", default="MyDaskCluster", label="Cluster Name"),
             Mapping("scheduler_extra_container_config", default={"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/api/health","port":8788,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":15},"imagePullPolicy":"Always","volumeMounts":[{"name":"rspython-ops-playground-01","mountPath":"/mnt/share/playground-01","readOnly":False}]}, label="scheduler_extra_container_config"),
             Mapping("scheduler_extra_pod_annotations", default={"usage":"unknown","access":"internal"}, label="Scheduler_extra_pod_annotations"),
-            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Scheduler_extra_pod_config")
+            Mapping("scheduler_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Scheduler_extra_pod_config"),
             Mapping("scheduler_extra_pod_labels", default={"user":"unknown","team":"unknown","cluster_name":"MyDaskCluster"}, label="Scheduler_extra_pod_labels"),
             Mapping("environment", default={"S3_ENDPOINT":"{{ s3.endpoint }}","S3_REGION":"{{ s3.region }}","TEMPO_ENDPOINT":"http://alloy.monitoring.svc.cluster.local:4317", "OTEL_PYTHON_REQUESTS_TRACE_HEADERS":"0", "OTEL_PYTHON_REQUESTS_TRACE_BODY":"0"}, label="Environment variables"),
             Mapping("worker_extra_pod_config", default={"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"node-role.kubernetes.io/access_csc","operator":"Exists"}]}]}}},"tolerations":[{"key":"role","operator":"Equal","value":"access_csc","effect":"NoSchedule"}],"volumes":[{"name":"rspython-ops-playground-01","persistentVolumeClaim":{"claimName":"rspython-ops-playground-01"}}]}, label="Worker_extra_pod_config"),
