@@ -603,9 +603,21 @@ Duplicate `~/rs-workflow-env/apps/dask-gateway` to `~/rs-workflow-env/apps/dask-
 
 We need to create a big shared volume in the namespace that will be shared between the dask scheduler and workers. It is required by some processors.
 
+To verify your Kubernetes cluster is able to create a `ReadWriteMany` volume, check if the storage class `csi-manila-nfs` exists in your Kubernetes cluster :
+
+```Bash
+kubectl get storageclasses csi-manila-nfs
+```
+
+If it's not the case, please follow the procedure to manually enable this feature : [Enable ReadWriteMany Volume](./Enable%20ReadWriteMany%20Volume.md).
+
+### Update the values
+
+#### Change the name of the shared volume
+
 Edit the new manifest `~/rs-workflow-env/apps/dask-gateway-playground/sharedvolume.yaml` with the following content :
 
- ```YAML
+```YAML
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -617,9 +629,9 @@ spec:
     requests:
       storage: 3Ti
   storageClassName: csi-manila-nfs
- ```
+```
 
-### Update the values
+Note: the namming convention is `<cluster-name>-<user-group>-<id>`. Another valid value for the name could be `rs-dev-cluster-cs-01`.
 
 #### Replace `jupyterhub.ops` by `jupyterhub.playground`
 
