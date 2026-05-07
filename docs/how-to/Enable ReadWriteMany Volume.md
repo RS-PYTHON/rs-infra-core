@@ -156,3 +156,5 @@ ansible-playbook apps.yaml \
 ### Create a shared volume
 
 Take as example this file [RS-PYTHON/rs-workflow-env/apps/dask-gateway/sharedvolume.yaml](https://github.com/RS-PYTHON/rs-workflow-env/blob/feat-rspy994/create-rwx-volume/apps/dask-gateway/sharedvolume.yaml).
+
+The creation is a bit slow, it can take several minutes.
