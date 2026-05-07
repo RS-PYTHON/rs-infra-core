@@ -176,7 +176,7 @@ ansible-playbook apps.yaml \
 ```shellsession
 ansible-playbook apps.yaml \
     -i inventory/mycluster/hosts.yaml \
-    -e '{"package_paths": ["~/rs-server-deployment/apps/"]}' ;
+    -e '{"package_paths": ["~/rs-server-deployment/apps/"]}'
     -e private_registry=true ;
 ```
 
