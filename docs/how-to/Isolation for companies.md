@@ -371,10 +371,10 @@ Edit the values of the prefect server by changing `prefect3server.ops` to `prefe
 sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
 ```
 
-And changing `prefect3worker.eopf` to `prefect3worker.eopfplayground`. For e.g. with sed :
+And changing `prefect3worker.integrated` to `prefect3worker.integratedplayground`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3worker.eopf#prefect3worker.eopfplayground#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
+sed 's#prefect3worker.integrated#prefect3worker.integratedplayground#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
 ```
 
 ***Repeat for every new workpools.***
@@ -384,7 +384,7 @@ sed 's#prefect3worker.eopf#prefect3worker.eopfplayground#g' -i ~/rs-workflow-env
 Change the namespace in the file `~/rs-workflow-env/apps/prefect3-worker-eopf-playground/kustomization.yaml`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3worker.eopf.namespace#prefect3worker.eopfplayground.namespace#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/kustomization.yaml
+sed 's#prefect3worker.integrated.namespace#prefect3worker.integratedplayground.namespace#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/kustomization.yaml
 ```
 
 ***Repeat for every new workpools.***
@@ -461,6 +461,8 @@ jupyterhub:
     adminGroups: |
       - RS-ADMIN
 
+      - RS-ADMIN
+
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
@@ -516,7 +518,7 @@ For e.g. with sed :
 
 ```Bash
 sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#prefect3worker.eopf.name#prefect3worker.eopfplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
+sed 's#prefect3worker.integrated.name#prefect3worker.integratedplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.general.name#prefect3worker.generalplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 ```

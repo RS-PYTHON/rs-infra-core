@@ -117,16 +117,16 @@ prefect3server:
       password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
 
 prefect3worker:
-  staging:
-    name: staging-prefect-pool
+  monitoring:
+    name: monitoring-k8s-pool
     namespace: processing
     number: 2
-  eopf:
-    name: eopf-prefect-pool
+  integrated:
+    name: processing-integrated-k8s-pool
     namespace: processing
     number: 2
-  general:
-    name: general-prefect-pool
+  sandbox:
+    name: processing-sandbox-k8s-pool
     namespace: processing
     number: 2
 
