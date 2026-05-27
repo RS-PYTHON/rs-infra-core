@@ -125,7 +125,7 @@ jobs:
 
           # --- Convert the JSON export to YAML ---
           echo "🔄 Converting JSON export to YAML..."
-          pip install ruamel.yaml
+          pip install --only-binary=:all: ruamel.yaml==0.19.1
           .github/common/resources/convert-export-realm.py realm-export.json realm-export.yaml
 
           echo "✅ Conversion completed:"
