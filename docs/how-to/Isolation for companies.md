@@ -519,8 +519,8 @@ For e.g. with sed :
 ```Bash
 sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 sed 's#prefect3worker.integrated.name#prefect3worker.integratedplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#prefect3worker.general.name#prefect3worker.generalplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
+sed 's#prefect3worker.sandbox.name#prefect3worker.sandboxplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
+sed 's#prefect3worker.monitoring.name#prefect3worker.monitoringplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 ```
 
 ## Deploy the apps
