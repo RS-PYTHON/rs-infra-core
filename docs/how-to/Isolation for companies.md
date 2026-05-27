@@ -355,36 +355,36 @@ Change the namespace in the file `~/rs-workflow-env/apps/prefect3-server-playgro
 sed 's#prefect3server.ops.namespace#prefect3server.playground.namespace#g' -i ~/rs-workflow-env/apps/prefect3-server-playground/kustomization.yaml
 ```
 
-### Duplicate the workpools prefect3-worker-eopf, prefect3-worker-general, prefect3-worker-staging
+### Duplicate the workpools prefect3-worker-integrated, prefect3-worker-sandbox, prefect3-worker-monitoring
 
 #### Deplicate the folders
 
-Duplicate `~/rs-workflow-env/apps/prefect3-worker-eopf` to `~/rs-workflow-env/apps/prefect3-worker-eopf-playground`.
-Duplicate `~/rs-workflow-env/apps/prefect3-worker-general` to `~/rs-workflow-env/apps/prefect3-worker-general-playground`.
-Duplicate `~/rs-workflow-env/apps/prefect3-worker-staging` to `~/rs-workflow-env/apps/prefect3-worker-staging-playground`.
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-integrated` to `~/rs-workflow-env/apps/prefect3-worker-integrated-playground`.
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-sandbox` to `~/rs-workflow-env/apps/prefect3-worker-sandbox-playground`.
+Duplicate `~/rs-workflow-env/apps/prefect3-worker-monitoring` to `~/rs-workflow-env/apps/prefect3-worker-monitoring-playground`.
 
 #### Replace the name
 
-Edit the values of the prefect server by changing `prefect3server.ops` to `prefect3server.playground` in the file `~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml`. For e.g. with sed :
+Edit the values of the prefect server by changing `prefect3server.ops` to `prefect3server.playground` in the file `~/rs-workflow-env/apps/prefect3-worker-integrated-playground/values.yaml`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
+sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/prefect3-worker-integrated-playground/values.yaml
 ```
 
-And changing `prefect3worker.eopf` to `prefect3worker.eopfplayground`. For e.g. with sed :
+And changing `prefect3worker.integrated` to `prefect3worker.integratedplayground`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3worker.eopf#prefect3worker.eopfplayground#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/values.yaml
+sed 's#prefect3worker.integrated#prefect3worker.integratedplayground#g' -i ~/rs-workflow-env/apps/prefect3-worker-integrated-playground/values.yaml
 ```
 
 ***Repeat for every new workpools.***
 
 #### Replace the namespace
 
-Change the namespace in the file `~/rs-workflow-env/apps/prefect3-worker-eopf-playground/kustomization.yaml`. For e.g. with sed :
+Change the namespace in the file `~/rs-workflow-env/apps/prefect3-worker-integrated-playground/kustomization.yaml`. For e.g. with sed :
 
 ```Bash
-sed 's#prefect3worker.eopf.namespace#prefect3worker.eopfplayground.namespace#g' -i ~/rs-workflow-env/apps/prefect3-worker-eopf-playground/kustomization.yaml
+sed 's#prefect3worker.integrated.namespace#prefect3worker.integratedplayground.namespace#g' -i ~/rs-workflow-env/apps/prefect3-worker-integrated-playground/kustomization.yaml
 ```
 
 ***Repeat for every new workpools.***
@@ -461,6 +461,8 @@ jupyterhub:
     adminGroups: |
       - RS-ADMIN
 
+      - RS-ADMIN
+
     jupyterhub_crypt_key: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
     services:
       daskgateway:
@@ -516,9 +518,9 @@ For e.g. with sed :
 
 ```Bash
 sed 's#prefect3server.ops#prefect3server.playground#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#prefect3worker.eopf.name#prefect3worker.eopfplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#prefect3worker.general.name#prefect3worker.generalplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
-sed 's#prefect3worker.staging.name#prefect3worker.stagingplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
+sed 's#prefect3worker.integrated.name#prefect3worker.integratedplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
+sed 's#prefect3worker.sandbox.name#prefect3worker.sandboxplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
+sed 's#prefect3worker.monitoring.name#prefect3worker.monitoringplayground.name#g' -i ~/rs-workflow-env/apps/jupyterhub-playground/values.yaml
 ```
 
 ## Deploy the apps
@@ -530,7 +532,7 @@ Deploy the new apps like any other apps:
 - `~/rs-infra-core/apps/00-networkpolicies-playground`
 - `~/rs-workflow-env/apps/01-prefect3-db-playground`
 - `~/rs-workflow-env/apps/prefect3-server-playground`
-- `~/rs-workflow-env/apps/prefect3-worker-staging-playground`
-- `~/rs-workflow-env/apps/prefect3-worker-general-playground`
-- `~/rs-workflow-env/apps/prefect3-worker-eopf-playground`
+- `~/rs-workflow-env/apps/prefect3-worker-monitoring-playground`
+- `~/rs-workflow-env/apps/prefect3-worker-sandbox-playground`
+- `~/rs-workflow-env/apps/prefect3-worker-integrated-playground`
 - `~/rs-workflow-env/apps/jupyterhub-playground`
