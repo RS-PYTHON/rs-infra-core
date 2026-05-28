@@ -16,7 +16,7 @@
 
 resource "ovh_cloud_project_user" "manila" {
   description = "manila-${var.cluster_name}"
-  role_names = ["network_operator", "share_operator"]
+  role_names  = ["network_operator", "share_operator"]
 }
 
 # Output part

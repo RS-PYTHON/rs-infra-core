@@ -33,7 +33,7 @@ You need a separate OpenStack user to manage Manila resources. This user can be 
 
 The roles needed are :
 
-* share operator 
+* share operator
 * network operator
 
 The first to be able to ‘share’ the target network and ‘network operator’ to be able to display the desired network.

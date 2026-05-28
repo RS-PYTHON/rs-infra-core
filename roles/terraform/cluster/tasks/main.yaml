@@ -125,7 +125,7 @@
         manila_password: "{{ manila_password }}"
         sharenetwork_id: "{{ sharenetwork_id }}"
         osprojectname: "{{ osprojectname }}"
-    
+
 - name: Set ansible private key
   delegate_to: "{{ bastion_ip.stdout }}"
   set_fact:
