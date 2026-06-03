@@ -13,6 +13,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a10] - 2026-06-03
+
+### Added
+
+- [RSPY-994](https://github.com/RS-PYTHON/rs-infra-core/pull/312) : feat: add rwx volume (part 1)
+
+### Changed
+
+- [PR#317](https://github.com/RS-PYTHON/rs-infra-core/pull/317) : Update workpool names
+- [PR#319](https://github.com/RS-PYTHON/rs-infra-core/pull/319) : Update to seaweedfs 4.29
+- [PR#318](https://github.com/RS-PYTHON/rs-infra-core/pull/318) : Add version and binary only in CI
+
 ## [1.0a9] - 2026-04-27
 
 ### Added
