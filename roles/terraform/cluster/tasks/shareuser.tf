@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Platform domain name
-platform_domain_name: rspy.example.com
+# manila user (rwx volume)
 
-# Cluster name
-cluster_name: rs-cluster
+resource "ovh_cloud_project_user" "manila" {
+  description = "manila-${var.cluster_name}"
+  role_names  = ["network_operator", "share_operator"]
+}
 
-# Cluster issuer (letsencrypt-prod, letsencrypt-staging, local-ca-issuer)
-cluster_issuer: letsencrypt-prod
+# Output part
 
-# S3 credential to be reused accross apps
-s3:
-  endpoint: https://s3.gra.io.cloud.ovh.net
-  region: gra
-  access_key: s3_access_key
-  secret_key: s3_secret_key
+output "manila_username" {
+  value     = ovh_cloud_project_user.manila.username
+  sensitive = false
+}
+
+output "manila_password" {
+  value     = ovh_cloud_project_user.manila.password
+  sensitive = true
+}

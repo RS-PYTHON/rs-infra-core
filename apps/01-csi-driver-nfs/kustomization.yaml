@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Platform domain name
-platform_domain_name: rspy.example.com
+namespace: kube-system
 
-# Cluster name
-cluster_name: rs-cluster
+helmCharts:
+- name: csi-driver-nfs
+  namespace: kube-system
+  releaseName: '{{ app_name }}'
+  repo: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+  version: v4.13.1
 
-# Cluster issuer (letsencrypt-prod, letsencrypt-staging, local-ca-issuer)
-cluster_issuer: letsencrypt-prod
-
-# S3 credential to be reused accross apps
-s3:
-  endpoint: https://s3.gra.io.cloud.ovh.net
-  region: gra
-  access_key: s3_access_key
-  secret_key: s3_secret_key
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
