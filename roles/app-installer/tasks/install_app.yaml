@@ -187,7 +187,7 @@
 
     - name: "{{ package_name }} - {{ app_name }} | Write resources.txt"
       copy:
-        content: "{{ resources_summary.stdout | default('') }}"
+        content: "{{ resources_summary.stdout | default('') }}\n"
         dest: "{{ app_dir }}/resources.txt"
       delegate_to: bastion
 
