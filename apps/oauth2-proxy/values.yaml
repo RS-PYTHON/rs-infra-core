@@ -62,7 +62,7 @@ redis-ha:
       min-replicas-to-write: 0
   persistentVolume:
     enabled: false
-  additionalAffinities:  
+  additionalAffinities:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
