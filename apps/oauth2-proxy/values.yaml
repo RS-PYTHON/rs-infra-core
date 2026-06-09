@@ -62,14 +62,13 @@ redis-ha:
       min-replicas-to-write: 0
   persistentVolume:
     enabled: false
-  master:
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-              - key: "node-role.kubernetes.io/infra"
-                operator: Exists
+  additionalAffinities:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/infra"
+              operator: Exists
 
 affinity:
   nodeAffinity:
