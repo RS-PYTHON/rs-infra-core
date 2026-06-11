@@ -335,6 +335,7 @@ spec:
             containerId: ec1c9caf-9bfa-435f-92c6-6c28beb477ca
             attributes: {}
         admin-cli: []
+        admin-cli-realm: []
         prometheus:
           - name: uma_protection
             composite: false
@@ -540,6 +541,30 @@ spec:
     webAuthnPolicyPasswordlessAcceptableAaguids: []
     webAuthnPolicyPasswordlessExtraOrigins: []
     users:
+      - username: service-account-admin-cli-realm
+        emailVerified: false
+        enabled: true
+        createdTimestamp: 1773316856020
+        totp: false
+        serviceAccountClientId: admin-cli-realm
+        disableableCredentialTypes: []
+        requiredActions: []
+        realmRoles:
+            - default-roles-rspypatched
+        clientRoles:
+            realm-management:
+                - view-realm
+                - manage-realm
+                - create-client
+                - view-clients
+                - query-realms
+                - manage-clients
+                - query-groups
+                - realm-admin
+                - query-clients
+                - query-users
+        notBefore: 0
+        groups: []
       - createdTimestamp: 1709127066809
         username: service-account-apikeymanager
         enabled: true
