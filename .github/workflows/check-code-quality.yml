@@ -25,7 +25,7 @@ on:
 jobs:
   check-code-quality:
     name: _
-    uses: RS-PYTHON/actions/.github/workflows/reusable-check-quality.yml@50dc78e9b1143c87d9ec860edaa54f045cf0c4e5
+    uses: RS-PYTHON/actions/.github/workflows/reusable-check-quality.yml@develop
     with:
         caller-repository: ${{ github.repository }}
         caller-ref: ${{ github.ref }}
