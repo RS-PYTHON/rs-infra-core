@@ -196,7 +196,24 @@ cluster = gateway.new_cluster(
            "value": "dask_worker_on_demand",
            "effect": "NoSchedule"
          }
+       ],
+       "volumes": [
+         {
+           "name": "rspython-ops-ads-01",
+           "persistentVolumeClaim": {
+             "claimName": "rspython-ops-ads-01"
+          }
+         }
        ]
+    },
+    worker_extra_container_config={
+       "volumeMounts": [
+         {
+           "name": "rspython-ops-ads-01",
+           "mountPath": "/mnt/share/ads-01",
+           "readOnly": False
+          }
+        ]
     },
     scheduler_extra_pod_config={
        "affinity": {
@@ -222,7 +239,24 @@ cluster = gateway.new_cluster(
            "value": "dask_scheduler",
            "effect": "NoSchedule"
          }
+       ],
+       "volumes": [
+         {
+           "name": "rspython-ops-ads-01",
+           "persistentVolumeClaim": {
+             "claimName": "rspython-ops-ads-01"
+          }
+         }
        ]
+    },
+    scheduler_extra_container_config={
+       "volumeMounts": [
+         {
+           "name": "rspython-ops-ads-01",
+           "mountPath": "/mnt/share/ads-01",
+           "readOnly": False
+          }
+        ]
     }
 )
 
