@@ -82,7 +82,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: processing
 labels:
-- includeSelectors: true
+- includeSelectors: false
   pairs:
     app.kubernetes.io/instance: '{{ app_name }}'
 
@@ -92,7 +92,7 @@ resources:
 - networkpolicy-intra.yaml
 ```
 
-*Note:* For the **networkpolicies** app, we **MUST NOT** include the usual label part in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
+*Note:* For the **networkpolicies** app, we **MUST** set `includeSelectors` to `false` in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
 
 ## Create a namespace for the company
 
@@ -332,6 +332,10 @@ Last but not least, add the file `~/rs-infra-core/apps/00-networkpolicies-playgr
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: playground-ns
+labels:
+- includeSelectors: false
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
 
 resources:
 - networkpolicy-block.yaml
@@ -341,7 +345,7 @@ resources:
 - networkpolicy-jupyter.yaml
 ```
 
-*Note:* For the **networkpolicies** app, we **MUST NOT** include the usual label part in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
+*Note:* For the **networkpolicies** app, we **MUST** set `includeSelectors` to `false` in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
 
 ## Prefect isolation
 
