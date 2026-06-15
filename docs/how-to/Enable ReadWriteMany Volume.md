@@ -58,22 +58,51 @@ Note: the following command are in GRA11, adapt to your region.
 
 ```Bash
 # List private networks attached to your MKS cluster
-openstack --os-region-name GRA11 network list
+openstack --os-region-name <REGION> network list
+```
 
-# Retrieve the network ID
-openstack --os-region-name GRA11 network show -c id -f value <PRIVATE_NETWORK_NAME>
+Example output:
 
-# Retrieve the subnet ID linked to this network
-openstack --os-region-name GRA11 subnet show -c id -f value <PRIVATE_SUBNET_NAME>
+```Bash
++--------------------------------------+-----------------------+-----------------------------------------------------------------------------+
+| ID                                   | Name                  | Subnets                                                                     |
++--------------------------------------+-----------------------+-----------------------------------------------------------------------------+
+| a1c5d9e7-2f14-4b3a-98d2-6cbb9f4a7e12 | private-net-cluster-1 | 5e2a71c9-0d3f-4c77-a62e-9b14d7f028ab                                        |
+| 9b7f2d44-5cfa-41d0-8e1c-3a6d88b7c3e1 | Ext-Net-Baremetal     | f2d9c8a3-7b4c-4631-82a0-1f5e3b7d9a42, 8a71d0f6-99b4-4e6a-b82e-4c3f7a1b5d09  |
+| e3b8a921-6d4c-45ff-b7a3-b0c2d8e6f913 | private-net-cluster-3 | 6f91b3c7-2e88-48e5-9c31-a7d9e4f2b6c0                                        |
+| 4d2f7c88-11a5-43d9-a9f3-5d8b6c7e2a4f | Ext-Net               | 2c9b5a73-3f90-4f24-8e31-9c7d52a6b4fa, 1a74e9c2-5d2f-4b68-98e3-4b8c9d1f2e6a, |
+|                                      |                       | c0d5e7f8-9a1b-4d92-a7c3-3d6b8e1f5a2c, e9f0a1b2-3c4d-47fa-b8a3-6e2d1c9f4b55  |
+| 7c9a2e11-88d4-4c0f-b3e8-2f6a5d9c1b77 | private-net-cluster-1 | b3a9c5d7-4e21-47f8-9b63-7a8c2d5e1f90                                        |
++--------------------------------------+-----------------------+-----------------------------------------------------------------------------+
+```
+
+# Retrieve the private network ID and the private subnet ID
+
+```Bash
+openstack --os-region-name <REGION> network show -c id -c subnets <PRIVATE_NETWORK_NAME>
+```
+
+Example output:
+
+```Bash
++---------+--------------------------------------+
+| Field   | Value                                |
++---------+--------------------------------------+
+| id      | 7c9a2e11-88d4-4c0f-b3e8-2f6a5d9c1b77 |
+| subnets | b3a9c5d7-4e21-47f8-9b63-7a8c2d5e1f90 |
++---------+--------------------------------------+
+```
 
 # Create the Manila share network
-openstack --os-region-name GRA11 share network create \
+
+```Bash
+openstack --os-region-name <REGION> share network create \
   --name mks-manila-csi-ops \
   --neutron-net-id <PRIVATE_NETWORK_ID> \
   --neutron-subnet-id <PRIVATE_SUBNET_ID>
 ```
 
-Example output :
+Example output:
 
 ```Bash
 +-----------------------------------+----------------------------------------------------------+
@@ -92,8 +121,8 @@ Example output :
 |                                   | created_at = 2025-10-04T14:12:25.126327                  |
 |                                   | updated_at = None                                        |
 |                                   | segmentation_id = None                                   |
-|                                   | neutron_net_id = <PRIVATE_NETWORK_NAME>                  |
-|                                   | neutron_subnet_id = <PRIVATE_SUBNET_NAME>                |
+|                                   | neutron_net_id = 7c9a2e11-88d4-4c0f-b3e8-2f6a5d9c1b77    |
+|                                   | neutron_subnet_id = b3a9c5d7-4e21-47f8-9b63-7a8c2d5e1f90 |
 |                                   | ip_version = None                                        |
 |                                   | cidr = None                                              |
 |                                   | network_type = None                                      |
