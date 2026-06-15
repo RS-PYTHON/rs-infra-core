@@ -15,7 +15,7 @@
 ---
 - name: Start cluster
   shell: |
-    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars" \
+    set -o allexport; source {{ inventory_dir }}/.env; source {{ inventory_dir }}/openrc.sh; set +o allexport; terraform apply -parallelism=2 -auto-approve -var-file="{{ inventory_dir }}/cluster.tfvars" \
       -target=ovh_cloud_project_kube_nodepool.nodepool_infra \
       -target=ovh_cloud_project_kube_nodepool.nodepool_rs_server \
       -target=ovh_cloud_project_kube_nodepool.nodepool_rs_env \

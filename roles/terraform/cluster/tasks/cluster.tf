@@ -63,6 +63,10 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_infra" {
       taints        = []
     }
   }
+  timeouts {
+    create = "30m"
+    update = "30m"
+  }
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_rs_server" {
@@ -91,6 +95,13 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_rs_server" {
         }
       ]
     }
+  }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
   }
 }
 
@@ -121,6 +132,13 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_rs_env" {
       ]
     }
   }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
+  }
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
@@ -149,6 +167,13 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_access_csc" {
         }
       ]
     }
+  }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
   }
 }
 
@@ -179,6 +204,13 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_prefect_flow" {
       ]
     }
   }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
+  }
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_scheduler" {
@@ -208,6 +240,13 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_scheduler" {
       ]
     }
   }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
+  }
 }
 
 resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
@@ -236,6 +275,13 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
         }
       ]
     }
+  }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
   }
 }
 
