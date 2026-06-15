@@ -18,9 +18,13 @@ name: Test Ansible playbook deployment
 on:
   pull_request: # pull requests
     types: [opened, synchronize, reopened]
+    paths-ignore:
+      - 'docs/**'
   push:
     branches: [develop, main] # pushes on the 'develop' or 'main' branches
     tags: ['**'] # new git tags (including hierarchical tags like v1.0/beta)
+    paths-ignore:
+      - 'docs/**'
   workflow_dispatch: # manual trigger
 
 jobs:

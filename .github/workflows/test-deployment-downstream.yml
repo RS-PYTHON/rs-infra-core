@@ -20,8 +20,12 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - '!feat/prepare-new-release'
+    paths-ignore:
+      - 'docs/**'
   push:
     branches: [develop, main] # pushes on the 'develop' or 'main' branches
+    paths-ignore:
+      - 'docs/**'
   workflow_dispatch: # manual trigger
 
 jobs:
