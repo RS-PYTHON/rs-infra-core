@@ -63,6 +63,9 @@ jobs:
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook registry.yaml -i inventory/mycluster/hosts.yaml -e ci_mode=true
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook generate_inventory.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
+      - name: Delete specific apps
+        run: |
+          .github/common/resources/remove-apps.sh
       - name: Deploy the apps (check)
         id: deploy_check
         run: |
