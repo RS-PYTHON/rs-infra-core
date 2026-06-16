@@ -15,8 +15,8 @@
 
 #
 # cleanup_levels.sh
-# Progressive cleanup script controlled by a "level" parameter (0..14).
-# Level 0 = no changes. Level 14 = run all cleanup stages.
+# Progressive cleanup script controlled by a "level" parameter (0..15).
+# Level 0 = no changes. Level 15 = run all cleanup stages.
 #
 # WARNING: These commands remove files and packages. Review and adapt before running.
 # Run as root or with sudo.
@@ -24,23 +24,23 @@
 set -euo pipefail
 
 # Default level (if not provided) -> full cleanup
-REQUESTED="${1:-14}"
+REQUESTED="${1:-15}"
 
 # Normalize "all" or similar inputs
 if [[ "$REQUESTED" == "all" ]]; then
-  LEVEL=14
+  LEVEL=15
 else
   # ensure integer
   if ! [[ "$REQUESTED" =~ ^[0-9]+$ ]]; then
-    echo "Invalid level: $REQUESTED. Provide an integer between 0 and 14, or 'all'." >&2
+    echo "Invalid level: $REQUESTED. Provide an integer between 0 and 15, or 'all'." >&2
     exit 2
   fi
   LEVEL="$REQUESTED"
 fi
 
-# clamp between 0 and 14
+# clamp between 0 and 15
 if [ "$LEVEL" -lt 0 ]; then LEVEL=0; fi
-if [ "$LEVEL" -gt 14 ]; then LEVEL=14; fi
+if [ "$LEVEL" -gt 15 ]; then LEVEL=15; fi
 
 LOG="cleanup_runner_files.log"
 echo "=== Cleanup run at $(date) (requested level: $REQUESTED, executing level: $LEVEL) ===" | tee -a "$LOG"
@@ -88,7 +88,7 @@ run_action() {
   echo "" | tee -a "$LOG"
 }
 
-# Ordered actions (1 .. 14). These correspond to the cleanup stages.
+# Ordered actions (1 .. 15). These correspond to the cleanup stages.
 # Adjust the commands to your environment. Commands are intentionally explicit.
 # For destructive commands (rm -rf) verify paths before using in production.
 
@@ -104,26 +104,28 @@ actions=(
   # 5
   "Remove PowerShell (/usr/local/share/powershell)|sudo rm -rf /usr/local/share/powershell || true"
   # 6
-  "Remove Haskell (ghcup) (/usr/local/.ghcup)|sudo rm -rf /usr/local/.ghcup || true"
+  "Remove Haskell (ghcup ghc) (/usr/local/.ghcup /opt/ghc)|sudo rm -rf /usr/local/.ghcup /opt/ghc || true"
   # 7
-  "Remove .NET SDKs (/usr/share/dotnet)|sudo rm -rf /usr/share/dotnet || true"
+  "Remove boost (/usr/local/share/boost)|sudo rm -rf /usr/local/share/boost || true"
   # 8
-  "Remove Android SDKs (/usr/local/lib/android)|sudo rm -rf /usr/local/lib/android || true"
+  "Remove .NET SDKs (/usr/share/dotnet)|sudo rm -rf /usr/share/dotnet || true"
   # 9
-  "Remove Julia installations (/usr/local/julia*)|sudo rm -rf /usr/local/julia* || true"
+  "Remove Android SDKs (/usr/local/lib/android)|sudo rm -rf /usr/local/lib/android || true"
   #10
-  "Remove CodeQL and hosted toolcache (/opt/hostedtoolcache)|sudo rm -rf /opt/hostedtoolcache || true"
+  "Remove Julia installations (/usr/local/julia*)|sudo rm -rf /usr/local/julia* || true"
   #11
-  "Docker system prune (docker system prune -af)|docker system prune -af || true"
+  "Remove CodeQL and hosted toolcache (/opt/hostedtoolcache)|sudo rm -rf /opt/hostedtoolcache || true"
   #12
-  "Docker builder prune (docker builder prune -af)|docker builder prune -af || true"
+  "Docker system prune (docker system prune -af)|docker system prune -af || true"
   #13
-  "Remove Azure CLI (/opt/az)|sudo rm -rf /opt/az || true"
+  "Docker builder prune (docker builder prune -af)|docker builder prune -af || true"
   #14
+  "Remove Azure CLI (/opt/az $AGENT_TOOLSDIRECTORY)|sudo rm -rf /opt/az $AGENT_TOOLSDIRECTORY || true"
+  #15
   "Final autoremove and cache cleanup (apt-get and caches)|sudo apt-get autoremove -y || true; sudo apt-get clean -y || true; sudo rm -rf /root/.cache /home/*/.cache || true"
 )
 
-TOTAL_ACTIONS=${#actions[@]}  # should be 14
+TOTAL_ACTIONS=${#actions[@]}  # should be 15
 echo "Prepared $TOTAL_ACTIONS actions. Will execute first $LEVEL action(s)." | tee -a "$LOG"
 
 # Show initial df
