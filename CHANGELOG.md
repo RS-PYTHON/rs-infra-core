@@ -13,6 +13,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a11] - 2026-06-19
+
+### Added
+
+- [PR#328](https://github.com/RS-PYTHON/rs-infra-core/pull/328) : feat: remove specific apps for OVH on the CI deployment
+- [PR#329](https://github.com/RS-PYTHON/rs-infra-core/pull/329) : feat: add new level for the cleanup script
+
+### Changed
+
+- [PR#320](https://github.com/RS-PYTHON/rs-infra-core/pull/320) : Update to oauth2-proxy 10.6.0 / 7.15.2
+- [RSPY-1025](https://github.com/RS-PYTHON/rs-infra-core/pull/311) : Update SVG diagram to new S1-ARD processor version
+
+### Fixed
+
+- [PR#323](https://github.com/RS-PYTHON/rs-infra-core/pull/323) : fix: oauth2-proxy affinity
+- [PR#324](https://github.com/RS-PYTHON/rs-infra-core/pull/324) : fix: Update keycloakrealmimport.yaml
+- [PR#325](https://github.com/RS-PYTHON/rs-infra-core/pull/325) : docs: update kustomization part with networpolicies and labels
+- [PR#326](https://github.com/RS-PYTHON/rs-infra-core/pull/326) : docs: update share network command
+- [PR#327](https://github.com/RS-PYTHON/rs-infra-core/pull/327) : fix: cluster start on monday morning on OVH
+
 ## [1.0a10] - 2026-06-03
 
 ### Added
