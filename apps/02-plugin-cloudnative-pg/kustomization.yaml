@@ -28,4 +28,4 @@ helmCharts:
   namespace: database
   releaseName: '{{ app_name }}'
   repo: https://cloudnative-pg.io/charts/
-  version: 0.5.0
+  version: 0.7.0
