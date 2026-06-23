@@ -50,6 +50,12 @@ ingress:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
     nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
 
+resources:
+  limits:
+    memory: 24Mi
+  requests:
+    memory: 6Mi
+
 sessionStorage:
   type: redis
   redis:

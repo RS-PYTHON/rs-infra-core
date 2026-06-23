@@ -31,7 +31,12 @@ spec:
       #hostIPC: true
       containers:
       - name: pause
-        image: gcr.io/google-containers/pause:latest
+        image: registry.k8s.io/pause:latest
+        resources:
+          limits:
+            memory: 8Mi
+          requests:
+            memory: 256Ki
       initContainers:
       - name: sysctl-init
         image: busybox:latest

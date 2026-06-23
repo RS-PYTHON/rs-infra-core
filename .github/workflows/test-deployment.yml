@@ -49,6 +49,7 @@ jobs:
           addons: 'metallb,metrics-server'
           cpus: 4
           memory: 8000m
+          container-runtime: containerd
       - name: "Configure cluster labels, IP and DNS (host + CoreDNS)"
         run: |
           .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra=" "iam kube oauth2-proxy admin.iam"

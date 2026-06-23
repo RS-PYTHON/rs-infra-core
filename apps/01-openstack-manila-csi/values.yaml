@@ -30,8 +30,44 @@ controllerplugin:
         - matchExpressions:
           - key: node-role.kubernetes.io/infra
             operator: Exists
+  nodeplugin:
+    resources:
+      limits:
+        memory: 24Mi
+      requests:
+        memory: 6Mi
+  provisioner:
+    resources:
+      limits:
+        memory: 48Mi
+      requests:
+        memory: 10Mi
+  resizer:
+    resources:
+      limits:
+        memory: 32Mi
+      requests:
+        memory: 8Mi
+  snapshotter:
+    resources:
+      limits:
+        memory: 32Mi
+      requests:
+        memory: 10Mi
 
 nodeplugin:
+  nodeplugin:
+    resources:
+      limits:
+        memory: 24Mi
+      requests:
+        memory: 6Mi
+  registrar:
+    resources:
+      limits:
+        memory: 12Mi
+      requests:
+        memory: 3Mi
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
