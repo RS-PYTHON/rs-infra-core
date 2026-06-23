@@ -29,8 +29,8 @@ prometheus:
 resources:
   limits:
     memory: 48Mi
-    limits:
-     memory: 24Mi
+  requests:
+    memory: 24Mi
 
 startupapicheck:
   enabled: false
