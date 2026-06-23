@@ -14,6 +14,11 @@
 
 controller:
   annotations: {{ ingress.annotations }}
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      memory: 84Mi
   service:
     type: LoadBalancer
 #    nodePorts:

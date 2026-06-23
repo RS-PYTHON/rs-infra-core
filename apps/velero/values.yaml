@@ -41,6 +41,12 @@ metrics:
     autodetect: false
     enabled: true
 
+resources:
+  requests:
+    memory: 28Mi
+  limits:
+    memory: 256Mi
+
 upgradeCRDs: false
 
 cleanUpCRDs: false

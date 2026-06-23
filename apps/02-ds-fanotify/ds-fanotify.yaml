@@ -32,6 +32,11 @@ spec:
       containers:
       - name: pause
         image: gcr.io/google-containers/pause:latest
+        resources:
+          limits:
+            memory: 1Mi
+          requests:
+            memory: 256Ki
       initContainers:
       - name: sysctl-init
         image: busybox:latest

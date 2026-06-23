@@ -25,8 +25,16 @@ prometheus:
   servicemonitor:
     # Create a ServiceMonitor to add cert-manager to Prometheus.
     enabled: true
+
+resources:
+  limits:
+    memory: 48Mi
+    limits:
+     memory: 24Mi
+
 startupapicheck:
   enabled: false
+
 webhook:
   livenessProbe:
     initialDelaySeconds: 10
@@ -37,6 +45,11 @@ webhook:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
+  resources:
+    limits:
+     memory: 24Mi
+    requests:
+     memory: 10Mi
 
 cainjector:
   enabled: true
@@ -47,6 +60,11 @@ cainjector:
           - matchExpressions:
             - key: "node-role.kubernetes.io/infra"
               operator: Exists
+  resources:
+    limits:
+     memory: 84Mi
+    requests:
+     memory: 40Mi
 
 affinity:
   nodeAffinity:
