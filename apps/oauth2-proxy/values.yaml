@@ -32,6 +32,7 @@ config:
     insecure_oidc_allow_unverified_email="true"
     provider_ca_files="{{ oauth2_proxy_provider_ca_files }}"
     reverse_proxy="true"
+    skip_jwt_bearer_tokens="true"
 
 ingress:
   enabled: true
