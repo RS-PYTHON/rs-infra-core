@@ -140,7 +140,7 @@ jobs:
           ls -lh realm-export.yaml
         shell: bash
       - name: Upload Keycloak realm export artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: keycloak-realm-export
           path: |
