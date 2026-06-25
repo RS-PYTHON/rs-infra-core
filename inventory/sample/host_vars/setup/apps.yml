@@ -27,6 +27,7 @@ osam_oidc_client_secret: "{{ lookup('password', '/dev/null length=64 chars=ascii
 oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters') | b64encode }}"
 neuvector_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 rsserver_cookieSecret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
+prefect_api_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 oauth2_proxy_provider_ca_files: ""
 
 apikeymanager:
