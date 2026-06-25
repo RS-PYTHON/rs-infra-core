@@ -297,6 +297,7 @@ spec:
             clientRole: true
             containerId: 4bdcb3d5-b27c-49ef-80da-47bea574417f
             attributes: {}
+        prefect-api: []
         kubectl:
           - name: uma_protection
             composite: false
@@ -644,6 +645,19 @@ spec:
         notBefore: 0
         groups:
           - /default
+      - createdTimestamp: 1781780953734
+        username: service-account-prefect-api
+        emailVerified: false
+        enabled: true
+        totp: false
+        serviceAccountClientId: prefect-api
+        disableableCredentialTypes: []
+        requiredActions: []
+        realmRoles:
+            - RS-JUPYTER-USER
+            - default-roles-rspy
+        notBefore: 0
+        groups: []
       - createdTimestamp: 1707491949268
         username: service-account-prometheus
         enabled: true
@@ -1383,8 +1397,7 @@ spec:
         fullScopeAllowed: true
         nodeReRegistrationTimeout: -1
         protocolMappers:
-          - id: 7afcf99e-fbe5-421c-a037-c563d2237e41
-            name: aud-mapper-oauth2-proxy
+          - name: aud-mapper-oauth2-proxy
             protocol: openid-connect
             protocolMapper: oidc-audience-mapper
             consentRequired: false
@@ -1399,6 +1412,57 @@ spec:
           - profile
           - roles
           - good-service
+          - email
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+      - clientId: prefect-api
+        name: "prefect-api"
+        description: ""
+        rootUrl: https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/api
+        adminUrl: ""
+        baseUrl: https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/api/
+        surrogateAuthRequired: false
+        enabled: true
+        alwaysDisplayInConsole: false
+        clientAuthenticatorType: client-secret
+        secret: "{{ prefect_api_oidc_client_secret }}"
+        redirectUris:
+            - "/*"
+        webOrigins:
+            - "/*"
+        notBefore: 0
+        bearerOnly: false
+        consentRequired: false
+        standardFlowEnabled: false
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        publicClient: false
+        frontchannelLogout: true
+        protocol: openid-connect
+        attributes:
+          realm_client: "false"
+          oidc.ciba.grant.enabled: "false"
+          client.secret.creation.time: "1781780953"
+          backchannel.logout.session.required: "true"
+          standard.token.exchange.enabled: "false"
+          oauth2.device.authorization.grant.enabled: "false"
+          backchannel.logout.revoke.offline.tokens: "false"
+          dpop.bound.access.tokens: "false"
+        authenticationFlowBindingOverrides: {}
+        fullScopeAllowed: true
+        nodeReRegistrationTimeout: -1
+        defaultClientScopes:
+          - service_account
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - audience-mapper
           - email
         optionalClientScopes:
           - address
@@ -1817,6 +1881,26 @@ spec:
         attributes:
           consent.screen.text: ${offlineAccessScopeConsentText}
           display.on.consent.screen: "true"
+      - name: audience-mapper
+        description: "Audience mapper for prefect-api client with oauth2-proxy client"
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "false"
+          display.on.consent.screen: "true"
+          gui.order: ""
+          consent.screen.text: ""
+          include.in.openid.provider.metadata: "true"
+        protocolMappers:
+          - name: audience-oauth2-proxy
+            protocol: openid-connect
+            protocolMapper: oidc-audience-mapper
+            consentRequired: false
+            config:
+              included.client.audience: oauth2-proxy
+              id.token.claim: "false"
+              lightweight.claim: "false"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
       - name: profile
         description: "OpenID Connect built-in scope: profile"
         protocol: openid-connect
