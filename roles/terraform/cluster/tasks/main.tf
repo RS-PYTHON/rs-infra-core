@@ -28,7 +28,7 @@ terraform {
 
     ovh = {
       source  = "ovh/ovh"
-      version = "1.4.0"
+      version = "2.11.0"
     }
   }
   backend "s3" {
