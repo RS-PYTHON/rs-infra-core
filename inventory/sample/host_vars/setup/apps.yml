@@ -52,8 +52,9 @@ grafana:
   # The name must be the plugin ID
   # Leave [] if you don't want to install any plugins
   custom_plugins: []
-    # - name: ""
-    #   url: ""
+    # - name: example
+    #   version: 1.2.3
+    #   url: https://example.com/example.zip
   smtp:
     enabled: "true"
     from_address: test@example.com
