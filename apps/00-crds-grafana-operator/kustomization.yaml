@@ -16,7 +16,7 @@ namePrefix: grafana-operator-
 
 
 resources:
-- https://github.com/grafana/grafana-operator/releases/download/v5.18.0/crds.yaml
+- https://github.com/grafana/grafana-operator/releases/download/v5.24.0/crds.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
