@@ -13,6 +13,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a12] - 2026-07-21
+
+### Changed
+
+- update NOTICE.md file
+- [PR#331](https://github.com/RS-PYTHON/rs-infra-core/pull/331) : upgrade cloudnativepg, barman and harden node anti affinity
+- [PR#332](https://github.com/RS-PYTHON/rs-infra-core/pull/332) : add memory request and limit
+- [PR#333](https://github.com/RS-PYTHON/rs-infra-core/pull/333) : update github action
+- [PR#334](https://github.com/RS-PYTHON/rs-infra-core/pull/334) : prefect-api-client
+- [RSPY-927](https://github.com/RS-PYTHON/rs-infra-core/pull/335) : upgade monitoring stack
+- [PR#328](https://github.com/RS-PYTHON/rs-infra-core/pull/322) : Fix precommit issue on generated resource.txt
+
 ## [1.0a11] - 2026-06-19
 
 ### Added
