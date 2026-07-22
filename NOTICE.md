@@ -32,34 +32,36 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - Grafana Operator
   - Custom Resource Definitions
-    - Version: 5.18.0
+    - Version: 5.24.0
     - License: [Apache License 2.0](https://github.com/grafana/grafana-operator/blob/master/LICENSE)
-    - Source: <https://github.com/grafana/grafana-operator/blob/v5.18.0/deploy/kustomize/base/crds.yaml>
+    - Source: <https://github.com/grafana/grafana-operator/blob/v5.24.0/deploy/kustomize/base/crds.yaml>
     - Copyright: Copyright the Grafana Authors. [Authors and Contributors](https://github.com/grafana/grafana/graphs/contributors)
   - Helm chart: *None*
   - Container image(s): *None*
 
 - CloudNativePG
   - Helm chart
-    - Version: 0.26.0
-    - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.26.0/LICENSE)
-    - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.26.0>
+    - Version: 0.28.3
+    - Licence: [Apache License 2.0](https://github.com/cloudnative-pg/charts/blob/cloudnative-pg-v0.28.3/LICENSE)
+    - Source: <https://github.com/cloudnative-pg/charts/tree/cloudnative-pg-v0.28.3>
     - Copyright: Copyright The CloudNativePG authors. [Authors and Contributors](https://github.com/cloudnative-pg/charts/graphs/contributors)
   - Container image(s)
-    - ghcr.io/cloudnative-pg/cloudnative-pg:1.27.0
-      - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.27.0/LICENSE)
+    - ghcr.io/cloudnative-pg/cloudnative-pg:1.29.1
+      - License: [Apache License 2.0](https://github.com/cloudnative-pg/cloudnative-pg/blob/v1.29.1/LICENSE)
     - ghcr.io/cloudnative-pg/postgresql:17.5
       - License: [Apache License 2.0](https://github.com/cloudnative-pg/postgres-containers/blob/main/LICENSE)
-    - ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.6.0
-      - License: [Apache License 2.0](https://github.com/cloudnative-pg/plugin-barman-cloud/blob/v0.6.0/LICENSE)
+    - ghcr.io/cloudnative-pg/postgis:18.4-3.6.3-202606151254-standard-trixie
+      - License: [Apache License 2.0](https://github.com/cloudnative-pg/postgis-containers/blob/main/LICENSE)
+    - ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.13.0
+      - License: [Apache License 2.0](https://github.com/cloudnative-pg/plugin-barman-cloud/blob/v0.13.0/LICENSE)
 
 - Keycloak
   - Helm chart: *None*
   - Container image(s)
-    - quay.io/keycloak/keycloak:23.0.6
-      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/23.0.6/LICENSE.txt)
-    - quay.io/keycloak/keycloak-operator:23.0.6
-      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/23.0.6/LICENSE.txt)
+    - quay.io/keycloak/keycloak:26.5.7
+      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/26.5.7/LICENSE.txt)
+    - quay.io/keycloak/keycloak-operator:26.5.7
+      - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/26.5.7/LICENSE.txt)
 
 - oauth2-proxy
   - Helm chart
@@ -73,9 +75,9 @@ Below are all the FOSS (Free and open-source software) used and their respective
 
 - kube-prometheus-stack
   - Custom Resource Definitions
-    - Version: 58.0.0
-    - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-58.0.0/LICENSE)
-    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-58.0.0/charts/kube-prometheus-stack/charts/crds>
+    - Version: 87.12.0
+    - Licence: [Apache License 2.0](https://github.com/prometheus-community/helm-charts/blob/kube-prometheus-stack-87.12.0/LICENSE)
+    - Source: <https://github.com/prometheus-community/helm-charts/tree/kube-prometheus-stack-87.12.0/charts/kube-prometheus-stack/charts/crds>
     - Copyright: Copyright The Prometheus community Development Team. [Authors and Contributors](https://github.com/prometheus-community/helm-charts/graphs/contributors)
   - Helm chart: *None*
   - Container image(s) *None*
@@ -99,7 +101,10 @@ Below are all the FOSS (Free and open-source software) used and their respective
 - Pause
   - Helm chart: *None*
   - Container image(s)
-    - gcr.io/google-containers/pause:latest
+    - registry.k8s.io/pause:latest
+      - License: [Apache License 2.0](https://github.com/kubernetes/kubernetes/blob/master/LICENSE)
+      - Source: <https://github.com/kubernetes/kubernetes/tree/master/build/pause>
+    - registry.k8s.io/pause:3.10
       - License: [Apache License 2.0](https://github.com/kubernetes/kubernetes/blob/master/LICENSE)
       - Source: <https://github.com/kubernetes/kubernetes/tree/master/build/pause>
 
