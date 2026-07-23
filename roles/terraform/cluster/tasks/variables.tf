@@ -72,6 +72,12 @@ variable "nodepool_dask_worker_on_demand_desired_nodes" {
   default     = 0
 }
 
+variable "nodepool_big_dask_worker_on_demand_desired_nodes" {
+  description = "Number of desired nodes on nodepool big dask worker on demand"
+  type        = number
+  default     = 0
+}
+
 variable "nodepool_infra_autoscale" {
   description = "Enable autoscaling of nodepool infra"
   type        = bool
@@ -114,6 +120,12 @@ variable "nodepool_dask_worker_on_demand_autoscale" {
   default     = true
 }
 
+variable "nodepool_big_dask_worker_on_demand_autoscale" {
+  description = "Enable autoscaling of nodepool big dask worker on demand"
+  type        = bool
+  default     = true
+}
+
 variable "nodepool_prefect_flow_min_nodes" {
   description = "Number of minimal nodes on nodepool prefect flow"
   type        = number
@@ -136,6 +148,12 @@ variable "nodepool_dask_worker_on_demand_max_nodes" {
   description = "Number of max nodes on nodepool dask worker on demand"
   type        = number
   default     = 8
+}
+
+variable "nodepool_big_dask_worker_on_demand_max_nodes" {
+  description = "Number of max nodes on nodepool big dask worker on demand"
+  type        = number
+  default     = 2
 }
 
 variable "buckets" {

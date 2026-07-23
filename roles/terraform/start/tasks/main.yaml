@@ -22,7 +22,8 @@
       -target=ovh_cloud_project_kube_nodepool.nodepool_access_csc \
       -target=ovh_cloud_project_kube_nodepool.nodepool_prefect_flow \
       -target=ovh_cloud_project_kube_nodepool.nodepool_dask_scheduler \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand
+      -target=ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_big_dask_worker_on_demand
   args:
     chdir: roles/terraform/cluster/tasks/
     executable: /bin/bash

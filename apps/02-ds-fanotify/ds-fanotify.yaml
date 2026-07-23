@@ -72,3 +72,6 @@ spec:
         - key: role
           value: dask_worker_on_demand
           effect: NoSchedule
+        - key: role
+          value: big_dask_worker_on_demand
+          effect: NoSchedule
