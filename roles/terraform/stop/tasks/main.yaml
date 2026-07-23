@@ -29,7 +29,8 @@
       -target=ovh_cloud_project_kube_nodepool.nodepool_access_csc \
       -target=ovh_cloud_project_kube_nodepool.nodepool_prefect_flow \
       -target=ovh_cloud_project_kube_nodepool.nodepool_dask_scheduler \
-      -target=ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand && \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand \
+      -target=ovh_cloud_project_kube_nodepool.nodepool_bigdask_worker_on_demand && \
       rm {{ inventory_dir }}/override.tfvars
   args:
     chdir: roles/terraform/cluster/tasks/

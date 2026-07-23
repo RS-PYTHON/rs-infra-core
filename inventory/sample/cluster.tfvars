@@ -16,6 +16,7 @@ nodepool_access_csc_desired_nodes = 1
 nodepool_prefect_flow_desired_nodes = 0
 nodepool_dask_scheduler_desired_nodes = 0
 nodepool_dask_worker_on_demand_desired_nodes = 0
+nodepool_big_dask_worker_on_demand_desired_nodes = 0
 
 nodepool_infra_autoscale = true
 nodepool_rs_server_autoscale = true
@@ -24,6 +25,7 @@ nodepool_access_csc_autoscale = true
 nodepool_prefect_flow_autoscale = true
 nodepool_dask_scheduler_autoscale = true
 nodepool_dask_worker_on_demand_autoscale = true
+nodepool_big_dask_worker_on_demand_autoscale = true
 
 nodepool_prefect_flow_min_nodes = 0
 

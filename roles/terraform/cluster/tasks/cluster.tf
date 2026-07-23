@@ -38,7 +38,8 @@ resource "ovh_cloud_project_kube_iprestrictions" "bastion_only" {
     ovh_cloud_project_kube_nodepool.nodepool_access_csc,
     ovh_cloud_project_kube_nodepool.nodepool_prefect_flow,
     ovh_cloud_project_kube_nodepool.nodepool_dask_scheduler,
-    ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand
+    ovh_cloud_project_kube_nodepool.nodepool_dask_worker_on_demand,
+    ovh_cloud_project_kube_nodepool.nodepool_big_dask_worker_on_demand
   ]
 }
 
@@ -272,6 +273,42 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
           effect = "NoSchedule"
           key    = "role"
           value  = "dask_worker_on_demand"
+        }
+      ]
+    }
+  }
+  depends_on = [
+    ovh_cloud_project_kube_nodepool.nodepool_infra
+  ]
+  timeouts {
+    create = "30m"
+    update = "30m"
+  }
+}
+
+resource "ovh_cloud_project_kube_nodepool" "nodepool_big_dask_worker_on_demand" {
+  kube_id       = ovh_cloud_project_kube.cluster.id
+  name          = "big-dask-worker-on-demand-${var.cluster_name}"
+  flavor_name   = "r3-128"
+  desired_nodes = var.nodepool_big_dask_worker_on_demand_desired_nodes
+  min_nodes     = 0
+  max_nodes     = var.nodepool_big_dask_worker_on_demand_max_nodes
+  autoscale     = var.nodepool_big_dask_worker_on_demand_autoscale
+  template {
+    metadata {
+      annotations = {}
+      labels = {
+        "node-role.kubernetes.io/big_dask_worker_on_demand" = ""
+      }
+      finalizers = []
+    }
+    spec {
+      unschedulable = false
+      taints = [
+        {
+          effect = "NoSchedule"
+          key    = "role"
+          value  = "big_dask_worker_on_demand"
         }
       ]
     }
