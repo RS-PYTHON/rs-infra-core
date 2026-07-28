@@ -30,7 +30,6 @@ spec:
       key: username
   hostname:
     hostname: https://iam.{{ platform_domain_name }}
-    admin: https://admin.iam.{{ platform_domain_name }}
   http:
     httpEnabled: true
     httpPort: 8080
