@@ -12,17 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+namespace: envoy-gateway
 
 helmCharts:
-- name: cert-manager
-  namespace: kube-system
+- name: gateway-helm
+  namespace: envoy-gateway
   releaseName: '{{ app_name }}'
-  repo: oci://quay.io/jetstack/charts
+  repo: oci://docker.io/envoyproxy
   valuesFile: values.yaml
-  version: v1.21.0
+  version: v1.8.3
+  includeCRDs: false
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
 - includeSelectors: true
   pairs:
     app.kubernetes.io/instance: '{{ app_name }}'
+
+resources:
+  - gateway.yaml
+  - gatewayclass.yaml
+  - proxy.yaml
+  - route.yaml

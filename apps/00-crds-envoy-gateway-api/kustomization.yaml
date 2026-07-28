@@ -12,14 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 helmCharts:
-- name: cert-manager
-  namespace: kube-system
+- name: gateway-crds-helm
   releaseName: '{{ app_name }}'
-  repo: oci://quay.io/jetstack/charts
+  repo: oci://docker.io/envoyproxy
   valuesFile: values.yaml
-  version: v1.21.0
+  version: v1.8.3
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
