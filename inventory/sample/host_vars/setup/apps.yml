@@ -195,9 +195,6 @@ rs_server_catalog:
     - unpublished
 
 rs_server_staging:
-  # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
-  # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
-  jupyterhub_token: <REPLACE_WITH_TOKEN_GENERATED_FROM_JUPYTER>
   dask:
     # See how to calculate the following numbers
     # https://github.com/RS-PYTHON/rs-infra-core/blob/develop/docs/how-to/Dask-gateway.md#create-a-dask-cluster-for-staging-with-options-option-3
@@ -544,6 +541,8 @@ jupyterhub:
       daskgateway:
         apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
         apiurl: http://hub.processing.svc.cluster.local:8081/api
+      daskstaging:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
       metrics:
         apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
       # -- OpenTelemetry
