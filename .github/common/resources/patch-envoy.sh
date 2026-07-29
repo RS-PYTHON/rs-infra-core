@@ -17,4 +17,4 @@ set -euo pipefail
 
 APPS="${APPS_DIR:-apps}"
 
-yq -i 'del(.global)' "${APPS}/envoy/values.yaml"
+yq -i 'del(.global)' "${APPS}/03-envoy-gateway/values.yaml"
