@@ -41,7 +41,7 @@ remove_script() {
 
     SCRIPTS=("${tmp[@]}")
 
-    unset SCRIPT_ARGS["$script"] || true
+    unset "SCRIPT_ARGS[$script]" || true
 }
 
 parse() {
