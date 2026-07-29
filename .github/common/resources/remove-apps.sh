@@ -20,4 +20,5 @@ APPS="${APPS_DIR:-apps}"
 # Remove specific apps for OVH that can't run on the CI
 rm -rf \
   "${APPS}/01-csi-driver-nfs" \
-  "${APPS}/01-openstack-manila-csi"
+  "${APPS}/01-openstack-manila-csi" \
+  "${APPS}/03-envoy-gateway"
