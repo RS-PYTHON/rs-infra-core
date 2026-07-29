@@ -15,6 +15,10 @@
 
 set -euo pipefail
 
+echo "=== 🧭 DEBUG ==="
+kubectl -n envoy-gateway get svc envoy-external-gateway -oyaml
+kubectl -n ingress-nginx get svc ingress-nginx-controller -oyaml
+
 echo "=== 🧭 Cluster info ==="
 kubectl cluster-info || true
 kubectl get nodes -o wide || true

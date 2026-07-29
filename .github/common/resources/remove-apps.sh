@@ -17,7 +17,15 @@ set -euo pipefail
 
 APPS="${APPS_DIR:-apps}"
 
-# Remove specific apps for OVH that can't run on the CI
-rm -rf \
-  "${APPS}/01-csi-driver-nfs" \
-  "${APPS}/01-openstack-manila-csi"
+# Default exclusions
+REMOVE_APPS=(
+  "01-csi-driver-nfs"
+  "01-openstack-manila-csi"
+)
+
+# Additional exclusions passed as arguments
+REMOVE_APPS+=("$@")
+
+for app in "${REMOVE_APPS[@]}"; do
+  rm -rf "${APPS}/${app}"
+done
