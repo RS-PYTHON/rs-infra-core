@@ -18,6 +18,8 @@ set -euo pipefail
 echo "=== 🧭 DEBUG ==="
 kubectl -n envoy-gateway get svc envoy-external-gateway -oyaml
 kubectl -n ingress-nginx get svc ingress-nginx-controller -oyaml
+kubectl -n metallb-system get deploy controller -oyaml
+kubectl logs -n metallb-system deploy/controller
 
 echo "=== 🧭 Cluster info ==="
 kubectl cluster-info || true
