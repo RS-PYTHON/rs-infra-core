@@ -66,7 +66,7 @@ jobs:
         shell: bash
       - name: Run wrapper script
         run: |
-          .github/common/resources/wrapper.sh
+          .github/common/resources/wrapper.sh - .github/common/resources/patch-envoy.sh
       - name: Deploy the apps (check)
         id: deploy_check
         run: |
