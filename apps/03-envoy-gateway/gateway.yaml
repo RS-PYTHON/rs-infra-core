@@ -20,6 +20,9 @@ metadata:
     cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
 spec:
   gatewayClassName: envoy-gateway
+#  infrastructure:
+#    annotations:
+#      metallb.universe.tf/address-pool: envoy
   listeners:
     - name: http
       protocol: HTTP

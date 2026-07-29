@@ -22,3 +22,5 @@ spec:
     kubernetes:
       envoyService:
         name: envoy-external-gateway
+        annotations:
+          metallb.io/address-pool: envoy
