@@ -26,7 +26,7 @@ deployment:
                   operator: Exists
 
 global:
-  imageRegistry: "o9dsp2na.c1.gra9.container-registry.ovh.net/proxycache"
+  imageRegistry: "{{ registry.harbor_host }}/proxycache"
   images:
     envoyProxy:
       # we need to put twice te repository because of this bug
