@@ -20,13 +20,56 @@ DRY_RUN=false
 declare -a SCRIPTS=()
 declare -A SCRIPT_ARGS=()
 
+usage() {
+cat <<EOF
+Usage:
+    $(basename "$0") [OPTIONS] [OPERATIONS]
+
+OPTIONS
+    --dry-run      Print commands without executing them
+    -h, --help     Show this help
+
+OPERATIONS
+    + <script> [arg1 arg2 ...]
+
+        Add or override a script.
+
+    - <script>
+
+        Remove a script from the execution list.
+
+EXAMPLES
+
+    Execute default scripts:
+        $(basename "$0")
+
+    Dry-run:
+        $(basename "$0") --dry-run
+
+    Remove a default script:
+        $(basename "$0") \\
+            - .github/common/resources/install-cert-manager.sh
+
+    Add a script:
+        $(basename "$0") \\
+            + .github/common/resources/install-cert-manager.sh
+
+    Add a script with arguments:
+        $(basename "$0") \\
+            + .github/common/resources/configure-cluster.sh \\
+                "node-role.kubernetes.io/infra=" \\
+                "iam kube oauth2-proxy admin.iam"
+EOF
+}
+
 add_script() {
     local script="$1"
     shift
 
-    SCRIPTS+=("$script")
+    # Replace existing definition if already present
+    remove_script "$script" 2>/dev/null || true
 
-    # Store arguments separated by newlines to preserve spaces
+    SCRIPTS+=("$script")
     SCRIPT_ARGS["$script"]="$(printf '%s\n' "$@")"
 }
 
@@ -52,6 +95,11 @@ parse() {
                 shift
                 ;;
 
+            -h|--help)
+                usage
+                exit 0
+                ;;
+
             +)
                 shift
 
@@ -60,14 +108,14 @@ parse() {
                     exit 1
                 }
 
-                script="$1"
+                local script="$1"
                 shift
 
-                args=()
+                local args=()
 
                 while [[ $# -gt 0 ]]; do
                     case "$1" in
-                        +|-|--dry-run)
+                        +|-|--dry-run|-h|--help)
                             break
                             ;;
                         *)
@@ -103,7 +151,7 @@ parse() {
 run() {
     for script in "${SCRIPTS[@]}"; do
 
-        declare -a argv=()
+        local argv=()
 
         while IFS= read -r arg; do
             [[ -n "$arg" ]] && argv+=("$arg")
@@ -120,5 +168,19 @@ run() {
     done
 }
 
-parse "$@"
+###############################################################################
+# Default scripts
+###############################################################################
+
+add_script ".github/common/resources/remove-apps.sh"
+add_script ".github/common/resources/patch-envoy.sh"
+
+###############################################################################
+# Main
+###############################################################################
+
+if [[ $# -gt 0 ]]; then
+    parse "$@"
+fi
+
 run
