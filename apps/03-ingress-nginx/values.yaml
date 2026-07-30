@@ -21,8 +21,6 @@ controller:
       memory: 84Mi
   service:
     type: LoadBalancer
-    annotations:
-      metallb.universe.tf/address-pool: nginx
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
