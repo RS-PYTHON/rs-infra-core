@@ -27,5 +27,5 @@ REMOVE_APPS=(
 REMOVE_APPS+=("$@")
 
 for app in "${REMOVE_APPS[@]}"; do
-  rm -rf "${APPS}/${app}"
+  rm -rf "${APPS:?APPS is not set}/${app:?app is not set}"
 done
