@@ -23,4 +23,4 @@ spec:
       envoyService:
         name: envoy-external-gateway
         annotations:
-          metallb.io/address-pool: envoy
+          metallb.universe.tf/address-pool: envoy

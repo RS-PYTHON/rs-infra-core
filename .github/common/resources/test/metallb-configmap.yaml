@@ -23,8 +23,8 @@ data:
     - name: nginx
       protocol: layer2
       addresses:
-      - 192.168.49.240-192.168.49.240
+      - 192.168.49.240-192.168.49.244
     - name: envoy
       protocol: layer2
       addresses:
-      - 192.168.49.241-192.168.49.241
+      - 192.168.49.245-192.168.49.249

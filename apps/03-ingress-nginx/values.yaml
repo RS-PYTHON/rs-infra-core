@@ -22,7 +22,7 @@ controller:
   service:
     type: LoadBalancer
     annotations:
-      metallb.io/address-pool: nginx
+      metallb.universe.tf/address-pool: nginx
 #    nodePorts:
 #      # -- Node port allocated for the external HTTP listener. If left empty, the service controller allocates one from the configured node port range.
 #      http: "32080"
