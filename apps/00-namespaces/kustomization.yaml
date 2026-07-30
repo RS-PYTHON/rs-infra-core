@@ -15,6 +15,7 @@
 resources:
 - ns-dask-gateway.yaml
 - ns-database.yaml
+- ns-envoy-gateway.yaml
 - ns-iam.yaml
 - ns-infra.yaml
 - ns-ingress-nginx.yaml

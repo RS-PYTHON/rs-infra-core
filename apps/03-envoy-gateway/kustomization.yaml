@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,19 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -euo pipefail
+namespace: envoy-gateway
 
-APPS="${APPS_DIR:-apps}"
+helmCharts:
+- name: gateway-helm
+  namespace: envoy-gateway
+  releaseName: '{{ app_name }}'
+  repo: oci://docker.io/envoyproxy
+  valuesFile: values.yaml
+  version: v1.8.3
+  includeCRDs: false
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
 
-# Default exclusions
-REMOVE_APPS=(
-  "01-csi-driver-nfs"
-  "01-openstack-manila-csi"
-)
-
-# Additional exclusions passed as arguments
-REMOVE_APPS+=("$@")
-
-for app in "${REMOVE_APPS[@]}"; do
-  rm -rf "${APPS:?APPS is not set}/${app:?app is not set}"
-done
+resources:
+  - gateway.yaml
+  - gatewayclass.yaml
+  - proxy.yaml
+  - route.yaml

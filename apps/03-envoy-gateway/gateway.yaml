@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,19 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -euo pipefail
-
-APPS="${APPS_DIR:-apps}"
-
-# Default exclusions
-REMOVE_APPS=(
-  "01-csi-driver-nfs"
-  "01-openstack-manila-csi"
-)
-
-# Additional exclusions passed as arguments
-REMOVE_APPS+=("$@")
-
-for app in "${REMOVE_APPS[@]}"; do
-  rm -rf "${APPS:?APPS is not set}/${app:?app is not set}"
-done
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: envoy
+  annotations:
+    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
+spec:
+  gatewayClassName: envoy-gateway
+#  infrastructure:
+#    annotations:
+#      metallb.universe.tf/address-pool: envoy
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+  allowedListeners:
+    namespaces:
+      from: All

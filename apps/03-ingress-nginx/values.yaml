@@ -21,15 +21,10 @@ controller:
       memory: 84Mi
   service:
     type: LoadBalancer
-#    nodePorts:
-#      # -- Node port allocated for the external HTTP listener. If left empty, the service controller allocates one from the configured node port range.
-#      http: "32080"
-#      # -- Node port allocated for the external HTTPS listener. If left empty, the service controller allocates one from the configured node port range.
-#      https: "32443"
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/infra
-            operator: Exists
+          - matchExpressions:
+              - key: node-role.kubernetes.io/infra
+                operator: Exists

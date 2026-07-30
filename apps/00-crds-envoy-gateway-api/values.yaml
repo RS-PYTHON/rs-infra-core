@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,19 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -euo pipefail
-
-APPS="${APPS_DIR:-apps}"
-
-# Default exclusions
-REMOVE_APPS=(
-  "01-csi-driver-nfs"
-  "01-openstack-manila-csi"
-)
-
-# Additional exclusions passed as arguments
-REMOVE_APPS+=("$@")
-
-for app in "${REMOVE_APPS[@]}"; do
-  rm -rf "${APPS:?APPS is not set}/${app:?app is not set}"
-done
+crds:
+  gatewayAPI:
+    enabled: true
+    channel: standard   # Available options: standard, experimental
+  envoyGateway:
+    enabled: true

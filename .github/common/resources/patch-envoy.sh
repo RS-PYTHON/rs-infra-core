@@ -17,15 +17,5 @@ set -euo pipefail
 
 APPS="${APPS_DIR:-apps}"
 
-# Default exclusions
-REMOVE_APPS=(
-  "01-csi-driver-nfs"
-  "01-openstack-manila-csi"
-)
-
-# Additional exclusions passed as arguments
-REMOVE_APPS+=("$@")
-
-for app in "${REMOVE_APPS[@]}"; do
-  rm -rf "${APPS:?APPS is not set}/${app:?app is not set}"
-done
+yq -i 'del(.global)' "${APPS}/03-envoy-gateway/values.yaml"
+yq -i '.spec.provider.kubernetes.envoyService.annotations."metallb.universe.tf/address-pool" = "envoy"' "${APPS}/03-envoy-gateway/proxy.yaml"

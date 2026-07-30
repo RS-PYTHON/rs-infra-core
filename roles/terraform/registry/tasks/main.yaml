@@ -209,5 +209,6 @@
     content: |
       registry:
         harbor_url: "{{ harbor_url }}"
+        harbor_host: "{{ harbor_url | replace('https://', '') | replace('http://', '') }}"
         harbor_user: "{{ harbor_user }}"
         harbor_pass: "{{ harbor_pass }}"

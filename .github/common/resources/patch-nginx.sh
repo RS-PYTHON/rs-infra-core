@@ -17,15 +17,16 @@ set -euo pipefail
 
 APPS="${APPS_DIR:-apps}"
 
-# Default exclusions
-REMOVE_APPS=(
-  "01-csi-driver-nfs"
-  "01-openstack-manila-csi"
-)
+# protect jinja templating
+sed -i \
+  's|{{ ingress.annotations }}|"__HELM_PLACEHOLDER_INGRESS_ANNOTATIONS__"|' \
+  "${APPS}/03-ingress-nginx/values.yaml"
 
-# Additional exclusions passed as arguments
-REMOVE_APPS+=("$@")
+yq -i \
+  '.controller.service.annotations."metallb.universe.tf/address-pool" = "nginx"' \
+  "${APPS}/03-ingress-nginx/values.yaml"
 
-for app in "${REMOVE_APPS[@]}"; do
-  rm -rf "${APPS:?APPS is not set}/${app:?app is not set}"
-done
+# restore jinja templating
+sed -i \
+  's|"__HELM_PLACEHOLDER_INGRESS_ANNOTATIONS__"|{{ ingress.annotations }}|' \
+  "${APPS}/03-ingress-nginx/values.yaml"
