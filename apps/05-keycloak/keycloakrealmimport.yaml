@@ -80,6 +80,20 @@ spec:
           composite: false
           clientRole: false
           attributes: {}
+        {% for station_name, station in rs_server_station_secrets.stations.items() %}
+        - name: rs_{{ station.service.name }}_{{ station_name }}_read
+          description: ""
+          composite: false
+          clientRole: false
+          attributes: {}
+        {% if station.service.name in ['cadip', 'auxip', 'lta'] %}
+        - name: rs_processes_staging_download_{{ station_name }}
+          description: ""
+          composite: false
+          clientRole: false
+          attributes: {}
+        {% endif %}
+        {% endfor %}
         - name: default-roles-rspy
           description: ${role_default-roles}
           composite: false
