@@ -174,6 +174,7 @@ run() {
 
 add_script ".github/common/resources/remove-apps.sh"
 add_script ".github/common/resources/patch-envoy.sh"
+add_script ".github/common/resources/patch-nginx.sh"
 
 ###############################################################################
 # Main

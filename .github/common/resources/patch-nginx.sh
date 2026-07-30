@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: EnvoyProxy
-metadata:
-  name: envoy
-spec:
-  provider:
-    type: Kubernetes
-    kubernetes:
-      envoyService:
-        name: envoy-external-gateway
+set -euo pipefail
+
+APPS="${APPS_DIR:-apps}"
+
+yq -i '.controller.service.annotations."metallb.universe.tf/address-pool" = "nginx"' "${APPS}/03-ingress-nginx/values.yaml"
