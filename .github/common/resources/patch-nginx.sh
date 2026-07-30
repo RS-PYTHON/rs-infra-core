@@ -17,4 +17,16 @@ set -euo pipefail
 
 APPS="${APPS_DIR:-apps}"
 
-yq -i '.controller.service.annotations."metallb.universe.tf/address-pool" = "nginx"' "${APPS}/03-ingress-nginx/values.yaml"
+# protect jinja templating
+sed -i \
+  's|{{ ingress.annotations }}|"__HELM_PLACEHOLDER_INGRESS_ANNOTATIONS__"|' \
+  "${APPS}/03-ingress-nginx/values.yaml"
+
+yq -i \
+  '.controller.service.annotations."metallb.universe.tf/address-pool" = "nginx"' \
+  "${APPS}/03-ingress-nginx/values.yaml"
+
+# restore jinja templating
+sed -i \
+  's|"__HELM_PLACEHOLDER_INGRESS_ANNOTATIONS__"|{{ ingress.annotations }}|' \
+  "${APPS}/03-ingress-nginx/values.yaml"

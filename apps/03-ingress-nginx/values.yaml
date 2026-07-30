@@ -13,7 +13,7 @@
 # limitations under the License.
 
 controller:
-  annotations: {? {ingress.annotations: ''} : ''}
+  annotations: {{ ingress.annotations }}
   resources:
     limits:
       memory: 256Mi
@@ -21,11 +21,8 @@ controller:
       memory: 84Mi
   service:
     type: LoadBalancer
-    #    nodePorts:
-    #      # -- Node port allocated for the external HTTP listener. If left empty, the service controller allocates one from the configured node port range.
-    #      http: "32080"
-    #      # -- Node port allocated for the external HTTPS listener. If left empty, the service controller allocates one from the configured node port range.
-    #      https: "32443"
+    annotations:
+      metallb.universe.tf/address-pool: nginx
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
