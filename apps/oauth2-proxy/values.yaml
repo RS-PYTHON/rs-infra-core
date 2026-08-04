@@ -39,7 +39,7 @@ gatewayapi:
   hostnames:
     - oauth2-proxy.{{ platform_domain_name }}
   gatewayRef: #use this option as parentRefs instead
-    - name: oauth2-proxy
+      name: oauth2-proxy
       kind: ListenerSet
       namespace: iam
 
