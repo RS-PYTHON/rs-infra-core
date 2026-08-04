@@ -34,22 +34,14 @@ config:
     reverse_proxy="true"
     skip_jwt_bearer_tokens="true"
 
-ingress:
+gatewayapi:
   enabled: true
-  className: nginx
-  path: /
-  pathType: Prefix
-  hosts:
+  hostnames:
     - oauth2-proxy.{{ platform_domain_name }}
-  labels: {}
-  tls:
-    - secretName: oauth2-proxy-{{ platform_domain_name | replace(".", "-") }}
-      hosts:
-        - oauth2-proxy.{{ platform_domain_name }}
-  annotations:
-    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
-    nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+  gatewayRef: #use this option as parentRefs instead
+    - name: oauth2-proxy
+      kind: ListenerSet
+      namespace: iam
 
 resources:
   limits:
