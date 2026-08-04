@@ -80,20 +80,78 @@ spec:
           composite: false
           clientRole: false
           attributes: {}
-        {% for station_name, station in rs_server_station_secrets.stations.items() %}
-        - name: rs_{{ station.service.name }}_{{ station_name }}_read
-          description: ""
+        - name: rs_cadip_all_read
+          description: "Read-only access to all CADIP stations."
           composite: false
           clientRole: false
           attributes: {}
-        {% if station.service.name in ['cadip', 'auxip', 'lta'] %}
+        - name: rs_prip_all_read
+          description: "Read-only access to all the PRIP"
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_processes_staging_read
+          description: "A user assigned to this role is authorized to READ staging process/job metadata."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_processes_staging_execute
+          description: "A user assigned to this role is authorized to EXECUTE staging jobs."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_processes_staging_dismiss
+          description: "A user assigned to this role is authorized to DISMISS (cancel) running staging jobs."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_processes_staging_download_all
+          description: "Autorisation to download from all stations."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_osam_update
+          description: "A user assigned to this role is authorized to call OSAM endpoints."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_auxip_landing_page
+          description: "Access to AUXIP landing page."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_cadip_landing_page
+          description: "Access to CADIP landing page."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_prip_landing_page
+          description: "Access to PRIP landing page."
+          composite: false
+          clientRole: false
+          attributes: {}
+        - name: rs_all_landing_page
+          description: "Access to all landing pages."
+          composite: false
+          clientRole: false
+          attributes: {}
+{% set stations = rs_server_station_secrets.stations | from_yaml %}
+{% for station_name, details in stations | items %}
+{% if details.service.name in ['cadip', 'auxip', 'prip', 'lta'] %}
+        - name: rs_{{ details.service.name }}_{{ station_name }}_read
+          description: "READ data from the {{ details.service.name }} station {{ station_name }}"
+          composite: false
+          clientRole: false
+          attributes: {}
+{% endif %}
+{% if details.service.name in ['cadip', 'auxip', 'lta'] %}
         - name: rs_processes_staging_download_{{ station_name }}
-          description: ""
+          description: "Download from the {{ details.service.name }} station {{ station_name }}"
           composite: false
           clientRole: false
           attributes: {}
-        {% endif %}
-        {% endfor %}
+{% endif %}
+{% endfor %}
         - name: default-roles-rspy
           description: ${role_default-roles}
           composite: false
