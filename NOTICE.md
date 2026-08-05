@@ -63,7 +63,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - quay.io/keycloak/keycloak-operator:26.5.7
       - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/26.5.7/LICENSE.txt)
 
-- oauth2-proxy
+- Oauth2-proxy
   - Helm chart
     - Version: 10.6.0
     - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-10.6.0/LICENSE)
@@ -82,7 +82,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
   - Helm chart: *None*
   - Container image(s) *None*
 
-- velero
+- Velero
   - Helm chart
     - Version: 11.4.0
     - Licence: [Apache License 2.0](https://github.com/vmware-tanzu/helm-charts/blob/velero-11.4.0/LICENSE)
@@ -107,6 +107,18 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - registry.k8s.io/pause:3.10
       - License: [Apache License 2.0](https://github.com/kubernetes/kubernetes/blob/master/LICENSE)
       - Source: <https://github.com/kubernetes/kubernetes/tree/master/build/pause>
+
+- Envoy
+  - Helm chart
+    - Version: v1.8.3
+    - Licence: [Apache License 2.0](https://github.com/envoyproxy/gateway/blob/v1.8.3/LICENSE)
+    - Source: <https://github.com/envoyproxy/gateway/tree/v1.8.3/charts>
+    - Copyright: Copyright The Envoy Proxy Development Team. [Authors and Contributors](https://github.com/envoyproxy/gateway/graphs/contributors?all=1)
+  - Container image(s)
+    - envoyproxy/envoy:distroless-v1.38.3
+      - License: [Apache License 2.0](https://github.com/envoyproxy/envoy/blob/v1.38.3/LICENSE)
+    - envoyproxy/gateway:v1.8.3
+      - License: [Apache License 2.0](https://github.com/envoyproxy/gateway/blob/v1.8.3/LICENSE)
 
 ## Licenses
 
