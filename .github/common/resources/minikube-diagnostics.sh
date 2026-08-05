@@ -33,7 +33,7 @@ kubectl get listenersets -A -oyaml
 
 echo ""
 echo "=== 🧭 Certificates ==="
-kubectl get certificates -A -oyaml
+kubectl get certificates -A
 kubectl get certificates -A -oyaml
 
 echo ""
