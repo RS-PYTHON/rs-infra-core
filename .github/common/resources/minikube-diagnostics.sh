@@ -15,26 +15,20 @@
 
 set -euo pipefail
 
-
-echo "=== 🧭 GatewayAPI debug ==="
 echo "=== 🧭 Gateways ==="
 kubectl get gateway -A
-kubectl get gateway -A -oyaml
 
 echo ""
 echo "=== 🧭 HTTPRoutes === "
 kubectl get httproutes -A
-kubectl get httproutes -A -oyaml
 
 echo ""
 echo "=== 🧭 ListenerSets ==="
 kubectl get listenersets -A
-kubectl get listenersets -A -oyaml
 
 echo ""
 echo "=== 🧭 Certificates ==="
 kubectl get certificates -A
-kubectl get certificates -A -oyaml
 
 echo ""
 echo "=== 🧭 Cluster info ==="
