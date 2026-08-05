@@ -12,27 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
 metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
-  name: kube-apiserver
+  name: kube-api
 spec:
-  ingressClassName: nginx
-  rules:
-  - host: kube.{{ platform_domain_name }}
-    http:
-      paths:
-      - backend:
-          service:
-            name: kubernetes
-            port:
-              number: 443
-        path: /
-        pathType: Prefix
-  tls:
-  - hosts:
-    - kube.{{ platform_domain_name }}
-    secretName: kube-{{ platform_domain_name | replace(".", "-") }}
+  targetRefs:
+  - group: ""
+    kind: Service
+    name: kubernetes
+  validation:
+    hostname: kubernetes.default.svc
+    caCertificateRefs:
+    - group: ""
+      kind: ConfigMap
+      name: kube-root-ca.crt

@@ -18,7 +18,7 @@ metadata:
   name: keycloak
 spec:
   hostnames:
-    - iam.dev-rspy-ovh.esa-copernicus.eu
+    - iam.{{ platform_domain_name }}
   parentRefs:
     - name: keycloak
       kind: ListenerSet
