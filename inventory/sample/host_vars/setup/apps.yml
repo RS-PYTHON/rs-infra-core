@@ -47,6 +47,9 @@ certmanager:
       email: user@example.com
 
 grafana:
+  admin:
+    user: admin
+    password: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
   # Configure here additional plugins to install in Grafana
   # The url must point to a ZIP filed, not necessarily signed
   # The name must be the plugin ID
