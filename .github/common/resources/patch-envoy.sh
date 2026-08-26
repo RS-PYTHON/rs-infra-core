@@ -18,4 +18,4 @@ set -euo pipefail
 APPS="${APPS_DIR:-apps}"
 
 yq -i 'del(.global)' "${APPS}/03-envoy-gateway/values.yaml"
-yq -i '.spec.provider.kubernetes.envoyService.annotations."metallb.universe.tf/address-pool" = "envoy"' "${APPS}/03-envoy-gateway/proxy.yaml"
+#yq -i '.spec.provider.kubernetes.envoyService.annotations."metallb.universe.tf/address-pool" = "envoy"' "${APPS}/03-envoy-gateway/proxy.yaml"

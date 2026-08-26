@@ -12,30 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
 metadata:
-  name: keycloak
+  name: oauth2-proxy
+  namespace: iam
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
     cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
 spec:
-  ingressClassName: nginx
-  rules:
-  - host: iam.{{ platform_domain_name }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: keycloak-service
-            port:
-              number: 8080
-  tls:
-  - hosts:
-    - iam.{{ platform_domain_name }}
-    secretName: iam-{{ platform_domain_name | replace(".", "-") }}
+  parentRef:
+    name: envoy
+    namespace: envoy-gateway
+    group: gateway.networking.k8s.io
+    kind: Gateway
+  listeners:
+  - name: https
+    hostname: oauth2-proxy.{{ platform_domain_name }}
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: oauth2-proxy-{{ platform_domain_name | replace(".", "-") }}
+        kind: Secret

@@ -12,19 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-controller:
-  annotations: {{ ingress.annotations }}
-  resources:
-    limits:
-      memory: 256Mi
-    requests:
-      memory: 84Mi
-  service:
-    type: LoadBalancer
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: node-role.kubernetes.io/infra
-                operator: Exists
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: keycloak
+spec:
+  hostnames:
+    - iam.{{ platform_domain_name }}
+  parentRefs:
+    - name: keycloak
+      kind: ListenerSet
+      namespace: iam
+  rules:
+    - backendRefs:
+        - name: keycloak-service
+          port: 8080
+          kind: Service

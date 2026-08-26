@@ -15,6 +15,22 @@
 
 set -euo pipefail
 
+echo "=== 🧭 Gateways ==="
+kubectl get gateway -A
+
+echo ""
+echo "=== 🧭 HTTPRoutes === "
+kubectl get httproutes -A
+
+echo ""
+echo "=== 🧭 ListenerSets ==="
+kubectl get listenersets -A
+
+echo ""
+echo "=== 🧭 Certificates ==="
+kubectl get certificates -A
+
+echo ""
 echo "=== 🧭 Cluster info ==="
 kubectl cluster-info || true
 kubectl get nodes -o wide || true

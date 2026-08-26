@@ -12,17 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-namespace: iam
-
-resources:
-- keycloak.yaml
-- httproute.yaml
-- secret.yaml
-- keycloakrealmimport.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: kube-api
+  namespace: default
+spec:
+  targetRefs:
+  - group: ""
+    kind: Service
+    name: kubernetes
+  validation:
+    hostname: kubernetes.default.svc
+    caCertificateRefs:
+    - group: ""
+      kind: ConfigMap
+      name: kube-root-ca.crt
