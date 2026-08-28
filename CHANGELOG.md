@@ -13,6 +13,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a13] - 2026-08-28
+
+### Added
+
+- [RSPY-1060](https://github.com/RS-PYTHON/rs-infra-core/pull/336) : Update dask-gateway and staging to dask 2026.7.0
+- [RSPY-856](https://github.com/RS-PYTHON/rs-infra-core/pull/344) : Use gateway api
+- [RSPY-651](https://github.com/RS-PYTHON/rs-infra-core/pull/342) : Automatic realm roles from inventory
+- [RSPY-856](https://github.com/RS-PYTHON/rs-infra-core/pull/341) : Add gateway API with envoy
+
+### Changed
+
+- [PR#349](https://github.com/RS-PYTHON/rs-infra-core/pull/349) : Update to seaweedfs 4.43
+- [PR#346](https://github.com/RS-PYTHON/rs-infra-core/pull/346) : Update to cert-manager 1.21.1
+- [PR#343](https://github.com/RS-PYTHON/rs-infra-core/pull/343) : Update to oauth2-proxy 10.7.0 / 7.15.3
+
+### Fixed
+
+- [RSPY-1062](https://github.com/RS-PYTHON/rs-infra-core/pull/340) : Remove admin sub domain
+- [RSPY-996](https://github.com/RS-PYTHON/rs-infra-core/pull/339) : Jupyterhub token for staging
+- [PR#334](https://github.com/RS-PYTHON/rs-infra-core/pull/338) : Add the new nodepool for big dask worker
+
 ## [1.0a12] - 2026-07-21
 
 ### Changed
