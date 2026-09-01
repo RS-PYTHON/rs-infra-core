@@ -18,7 +18,6 @@ resources:
 - kube-api.yaml
 - root.yaml
 - monitoring.yaml
-- stac-browsers.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
