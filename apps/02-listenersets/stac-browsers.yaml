@@ -33,7 +33,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: stac-browser-auxip.{{ platform_domain_name | replace(".", "-") }}
+      - name: stac-browser-auxip-{{ platform_domain_name | replace(".", "-") }}
         kind: Secret
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -57,7 +57,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: stac-browser-cadip.{{ platform_domain_name | replace(".", "-") }}
+      - name: stac-browser-cadip-{{ platform_domain_name | replace(".", "-") }}
         kind: Secret
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -81,7 +81,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: stac-browser-catalog.{{ platform_domain_name | replace(".", "-") }}
+      - name: stac-browser-catalog-{{ platform_domain_name | replace(".", "-") }}
         kind: Secret
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -105,5 +105,5 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: stac-browser-prip.{{ platform_domain_name | replace(".", "-") }}
+      - name: stac-browser-prip-{{ platform_domain_name | replace(".", "-") }}
         kind: Secret
