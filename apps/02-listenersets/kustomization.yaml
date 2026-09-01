@@ -16,7 +16,7 @@ resources:
 - keycloak.yaml
 - oauth2-proxy.yaml
 - kube-api.yaml
-- processing.yaml
+- root.yaml
 - monitoring.yaml
 - stac-browsers.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
