@@ -33,5 +33,5 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: monitoring.{{ platform_domain_name | replace(".", "-") }}
+      - name: monitoring-{{ platform_domain_name | replace(".", "-") }}
         kind: Secret
