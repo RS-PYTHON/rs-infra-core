@@ -12,26 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: gateway.networking.k8s.io/v1
-kind: ListenerSet
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
 metadata:
-  name: monitoring
-  namespace: monitoring
-  annotations:
-    cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
+  name: kube-api
+  namespace: default
 spec:
-  parentRef:
-    name: envoy
-    namespace: envoy-gateway
-    group: gateway.networking.k8s.io
-    kind: Gateway
-  listeners:
-  - name: https
-    hostname: monitoring.{{ platform_domain_name }}
-    port: 443
-    protocol: HTTPS
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - name: monitoring-{{ platform_domain_name | replace(".", "-") }}
-        kind: Secret
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: kube-api
+  httpUpgrade:
+    - type: "spdy/3.1"
+    - type: "websocket"
+  # without this, you might want to better disable HTTP/2 when running kubectl exec
+  # GODEBUG=http2client=0 kubectl exec
+  useClientProtocol: true

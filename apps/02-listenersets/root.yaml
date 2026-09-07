@@ -15,7 +15,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
-  name: processing
+  name: root
   namespace: processing
   annotations:
     cert-manager.io/cluster-issuer: "{{ cluster_issuer }}"
