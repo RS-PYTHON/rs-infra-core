@@ -90,7 +90,7 @@ keycloak:
     secret: keycloak-database-password
   replicaCount: 1
   proxy:
-    mode: edge
+    headers: xforwarded
   logLevel: info
   realm:
     name: rspy
