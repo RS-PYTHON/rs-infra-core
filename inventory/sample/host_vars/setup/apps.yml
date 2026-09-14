@@ -28,6 +28,7 @@ oauth2_proxy_cookieSecret: "{{ lookup('password', '/dev/null length=32 chars=asc
 neuvector_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 rsserver_cookieSecret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters') }}"
 prefect_api_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+prefect_ui_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 oauth2_proxy_provider_ca_files: ""
 
 apikeymanager:
@@ -113,7 +114,8 @@ prefect3server:
     name: prefect-copernicus
     namespace: processing
     subDomain: processing
-    allowedRoles: "role:RS-JUPYTER-USER"
+    allowedRoles:
+      - RS-JUPYTER-USER
     database:
       host: postgresql-cluster-rw.database.svc.cluster.local
       # Database name must be only composed of lowercase alphanumerics characters
