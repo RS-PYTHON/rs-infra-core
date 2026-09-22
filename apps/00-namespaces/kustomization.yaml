@@ -18,7 +18,6 @@ resources:
 - ns-envoy-gateway.yaml
 - ns-iam.yaml
 - ns-infra.yaml
-- ns-ingress-nginx.yaml
 - ns-logging.yaml
 - ns-monitoring.yaml
 - ns-networking.yaml
