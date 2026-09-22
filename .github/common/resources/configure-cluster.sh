@@ -18,14 +18,14 @@ set -euo pipefail
 # --- Usage ---
 # ./configure-cluster.sh "<labels>" "<subdomains>"
 # Example :
-# ./configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=" "iam kube oauth2-proxy"
+# ./configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=" "iam kube"
 
 LABELS_INPUT="${1:-}"
 SUBDOMAINS_INPUT="${2:-}"
 
 if [[ -z "$LABELS_INPUT" || -z "$SUBDOMAINS_INPUT" ]]; then
   echo "❌ Usage: $0 \"<labels>\" \"<subdomains>\""
-  echo "Example: $0 \"node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=\" \"iam kube oauth2-proxy\""
+  echo "Example: $0 \"node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=\" \"iam kube\""
   exit 1
 fi
 

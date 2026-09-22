@@ -58,7 +58,7 @@ EXAMPLES
         $(basename "$0") \\
             + .github/common/resources/configure-cluster.sh \\
                 "node-role.kubernetes.io/infra=" \\
-                "iam kube oauth2-proxy admin.iam"
+                "iam kube admin.iam"
 EOF
 }
 

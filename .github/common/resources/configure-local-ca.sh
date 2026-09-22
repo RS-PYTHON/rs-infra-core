@@ -25,7 +25,6 @@ fi
 RESOURCES_DIR=".github/common/resources/test"
 APPS="${APPS_DIR:-apps}"
 APP_CLUSTER_ISSUER="$APPS/02-cluster-issuer"
-APP_OAUTH2_PROXY="$APPS/oauth2-proxy"
 
 INIT_CA=false
 if [[ ! -f "${APP_CLUSTER_ISSUER}/local-ca-issuer.yaml" ]]; then
@@ -96,24 +95,5 @@ for arg in "$@"; do
   sd="${arg%%:*}"
   add_if_missing "- certificate-${sd}.yaml"
 done
-
-# --- Trust local CA in oauth2-proxy if not already done
-if ${INIT_CA}; then
-  echo "Adding local CA trust to oauth2-proxy..."
-  sed 's!<ns>!iam!g' \
-    "${RESOURCES_DIR}/local-ca-configmap.yaml" \
-    > "${APP_OAUTH2_PROXY}/local-ca-configmap.yaml"
-  echo -e "resources:\n- local-ca-configmap.yaml\n" | tee -a "${APP_OAUTH2_PROXY}/kustomization.yaml" > /dev/null
-  cat <<'EOF' | tee -a "${APP_OAUTH2_PROXY}/values.yaml" > /dev/null
-extraVolumes:
-  - name: local-ca
-    configMap:
-      name: local-ca-configmap
-extraVolumeMounts:
-  - name: local-ca
-    mountPath: /etc/ssl/certs/local-ca
-    readOnly: true
-EOF
-fi
 
 echo "✅ Done!"
