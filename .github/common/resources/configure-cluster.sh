@@ -25,7 +25,7 @@ SUBDOMAINS_INPUT="${2:-}"
 
 if [[ -z "$LABELS_INPUT" || -z "$SUBDOMAINS_INPUT" ]]; then
   echo "❌ Usage: $0 \"<labels>\" \"<subdomains>\""
-  echo "Example: $0 \"node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=\" \"iam kube\""
+  echo "Example: $0 \"node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=\" \"iam kube monitoring processing\""
   exit 1
 fi
 
