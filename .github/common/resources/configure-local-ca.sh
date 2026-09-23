@@ -77,6 +77,9 @@ for arg in "$@"; do
   CERT_FILES="${CERT_FILES}\\n- certificate-${sd}.yaml"
 done
 
+# --- Copy root certificate
+cp "$RESOURCES_DIR/certificate-root.yaml" "$APP_CLUSTER_ISSUER/certificate-root.yaml"
+
 # --- Update kustomization.yaml
 echo "Updating kustomization.yaml..."
 
@@ -95,5 +98,8 @@ for arg in "$@"; do
   sd="${arg%%:*}"
   add_if_missing "- certificate-${sd}.yaml"
 done
+
+# --- Add root certificate to kustomization.yaml
+add_if_missing "- certificate-root.yaml"
 
 echo "✅ Done!"
