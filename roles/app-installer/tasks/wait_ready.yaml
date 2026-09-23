@@ -103,6 +103,68 @@
           type: Established
       when: item.kind == 'CustomResourceDefinition'
 
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
+        name: "{{ item.metadata.name }}"
+      register: resource_info
+      until:
+        - resource_info.resources | length > 0
+        - resource_info.resources[0].status.conditions
+            | selectattr('type', 'equalto', 'Accepted')
+            | selectattr('status', 'equalto', 'True')
+            | list | length > 0
+        - resource_info.resources[0].status.conditions
+            | selectattr('type', 'equalto', 'Programmed')
+            | selectattr('status', 'equalto', 'True')
+            | list | length > 0
+      retries: 60
+      delay: 5
+      when:
+        - item.kind in ['Gateway', 'ListenerSet']
+
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
+        name: "{{ item.metadata.name }}"
+      register: resource_info
+      until:
+        - resource_info.resources | length > 0
+        - resource_info.resources[0].status.parents | length > 0
+        - resource_info.resources[0].status.parents[0].conditions
+            | selectattr('type', 'equalto', 'Accepted')
+            | selectattr('status', 'equalto', 'True')
+            | list | length > 0
+        - resource_info.resources[0].status.parents[0].conditions
+            | selectattr('type', 'equalto', 'ResolvedRefs')
+            | selectattr('status', 'equalto', 'True')
+            | list | length > 0
+      retries: 60
+      delay: 5
+      when:
+        - item.kind == 'HTTPRoute'
+
+    - name: Wait using condition for "{{ item.kind }}"
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.apiVersion }}"
+        kind: "{{ item.kind }}"
+        namespace: "{{ item.metadata.namespace | default('default', true) }}"
+        name: "{{ item.metadata.name }}"
+      register: resource_info
+      until:
+        - resource_info.resources | length > 0
+        - resource_info.resources[0].status is defined
+        - resource_info.resources[0].status.stage == 'complete'
+        - resource_info.resources[0].status.stageStatus == 'success'
+      retries: 60
+      delay: 5
+      when:
+        - item.kind == 'Grafana'
+
   when:
     - not ansible_check_mode
   delegate_to: bastion

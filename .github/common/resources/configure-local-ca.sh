@@ -25,7 +25,6 @@ fi
 RESOURCES_DIR=".github/common/resources/test"
 APPS="${APPS_DIR:-apps}"
 APP_CLUSTER_ISSUER="$APPS/02-cluster-issuer"
-APP_OAUTH2_PROXY="$APPS/oauth2-proxy"
 
 INIT_CA=false
 if [[ ! -f "${APP_CLUSTER_ISSUER}/local-ca-issuer.yaml" ]]; then
@@ -78,6 +77,9 @@ for arg in "$@"; do
   CERT_FILES="${CERT_FILES}\\n- certificate-${sd}.yaml"
 done
 
+# --- Copy root certificate
+cp "$RESOURCES_DIR/certificate-root.yaml" "$APP_CLUSTER_ISSUER/certificate-root.yaml"
+
 # --- Update kustomization.yaml
 echo "Updating kustomization.yaml..."
 
@@ -97,23 +99,7 @@ for arg in "$@"; do
   add_if_missing "- certificate-${sd}.yaml"
 done
 
-# --- Trust local CA in oauth2-proxy if not already done
-if ${INIT_CA}; then
-  echo "Adding local CA trust to oauth2-proxy..."
-  sed 's!<ns>!iam!g' \
-    "${RESOURCES_DIR}/local-ca-configmap.yaml" \
-    > "${APP_OAUTH2_PROXY}/local-ca-configmap.yaml"
-  echo -e "resources:\n- local-ca-configmap.yaml\n" | tee -a "${APP_OAUTH2_PROXY}/kustomization.yaml" > /dev/null
-  cat <<'EOF' | tee -a "${APP_OAUTH2_PROXY}/values.yaml" > /dev/null
-extraVolumes:
-  - name: local-ca
-    configMap:
-      name: local-ca-configmap
-extraVolumeMounts:
-  - name: local-ca
-    mountPath: /etc/ssl/certs/local-ca
-    readOnly: true
-EOF
-fi
+# --- Add root certificate to kustomization.yaml
+add_if_missing "- certificate-root.yaml"
 
 echo "✅ Done!"

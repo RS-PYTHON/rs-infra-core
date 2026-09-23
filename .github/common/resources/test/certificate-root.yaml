@@ -12,19 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-namespace: iam
-
-helmCharts:
-- name: oauth2-proxy
-  namespace: iam
-  releaseName: '{{ app_name }}'
-  repo: https://oauth2-proxy.github.io/manifests
-  valuesFile: values.yaml
-  version: 10.7.0
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rspy-example-com
+  namespace: processing
+  labels:
+    wait-for-deployment: Ready
+spec:
+  secretName: rspy-example-com
+  issuerRef:
+    name: local-ca-issuer
+    kind: ClusterIssuer
+  commonName: rspy.example.com
+  dnsNames:
+    - rspy.example.com
+  duration: 242h  # To avoid ingress-nginx warning
+  renewBefore: 12h

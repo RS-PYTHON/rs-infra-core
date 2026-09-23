@@ -207,7 +207,7 @@
         }}
       loop_control:
         label: "{{ item.kind }}/{{ item.metadata.name }}"
-      when: item.kind in ['CustomResourceDefinition', 'Job', 'Pod', 'Deployment', 'StatefulSet', 'DaemonSet', 'Certificate', 'Cluster', 'ClusterIssuer', 'ScheduledBackup', 'Keycloak', 'KeycloakRealmImport']
+      when: item.kind in ['CustomResourceDefinition', 'Job', 'Pod', 'Deployment', 'StatefulSet', 'DaemonSet', 'Certificate', 'Cluster', 'ClusterIssuer', 'ScheduledBackup', 'Keycloak', 'KeycloakRealmImport', 'Gateway', 'ListenerSet', 'HTTPRoute', 'Grafana']
 
   rescue:
     - name: "{{ package_name }} - {{ app_name }} | Show resources"

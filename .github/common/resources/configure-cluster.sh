@@ -18,14 +18,14 @@ set -euo pipefail
 # --- Usage ---
 # ./configure-cluster.sh "<labels>" "<subdomains>"
 # Example :
-# ./configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=" "iam kube oauth2-proxy"
+# ./configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=" "iam kube"
 
 LABELS_INPUT="${1:-}"
 SUBDOMAINS_INPUT="${2:-}"
 
 if [[ -z "$LABELS_INPUT" || -z "$SUBDOMAINS_INPUT" ]]; then
   echo "❌ Usage: $0 \"<labels>\" \"<subdomains>\""
-  echo "Example: $0 \"node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=\" \"iam kube oauth2-proxy\""
+  echo "Example: $0 \"node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env=\" \"iam kube monitoring processing\""
   exit 1
 fi
 
@@ -52,6 +52,7 @@ echo "🧩 Updating /etc/hosts..."
 for sd in "${SUBDOMAINS[@]}" ; do
   echo "$FIXED_IP $sd.$DOMAIN" | sudo tee -a /etc/hosts
 done
+echo "$FIXED_IP $DOMAIN" | sudo tee -a /etc/hosts
 
 # --- Validate /etc/hosts resolution on the runner
 echo "🔍 Verifying host DNS resolution..."
@@ -77,6 +78,8 @@ HOSTS_BLOCK=""
 for sd in "${SUBDOMAINS[@]}"; do
     HOSTS_BLOCK+="           $FIXED_IP ${sd}.${DOMAIN}\n"
 done
+HOSTS_BLOCK+="           $FIXED_IP ${DOMAIN}\n"
+
 # --- Inject hosts into coredns config map
 awk -v block="$HOSTS_BLOCK" '/192\.168\.49\.1/{printf "%s", block; ok=1} {print} END{exit ok?0:1}' \
   coredns-configmap.yaml > coredns-configmap.yaml.patched.yaml || {

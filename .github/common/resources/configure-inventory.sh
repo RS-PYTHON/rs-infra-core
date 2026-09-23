@@ -24,7 +24,7 @@ sed -i \
     -e 's!https://s3.gra.io.cloud.ovh.net!http://seaweedfs-s3.seaweedfs.svc.cluster.local:9000!'\
     -e 's!letsencrypt-prod!local-ca-issuer!g'\
     inventory/mycluster/host_vars/setup/main.yaml
-# --- Configure minikube storage class provisioner, ingress-nginx LoadBalancer to retrieve fixed IP address from metalLB, oauth2-proxy to trust local-ca
+# --- Configure minikube storage class provisioner, ingress-nginx LoadBalancer to retrieve fixed IP address from metalLB
 sed -i \
     -e 's!cinder.csi.openstack.org!k8s.io/minikube-hostpath!g'\
     -e 's!instances: 3!instances: 1!g'\
