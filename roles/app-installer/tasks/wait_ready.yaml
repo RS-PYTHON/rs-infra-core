@@ -120,7 +120,7 @@
             | selectattr('type', 'equalto', 'Programmed')
             | selectattr('status', 'equalto', 'True')
             | list | length > 0
-      retries: 60
+      retries: 10
       delay: 5
       when:
         - item.kind in ['Gateway', 'ListenerSet']
@@ -143,7 +143,7 @@
             | selectattr('type', 'equalto', 'ResolvedRefs')
             | selectattr('status', 'equalto', 'True')
             | list | length > 0
-      retries: 60
+      retries: 10
       delay: 5
       when:
         - item.kind == 'HTTPRoute'
@@ -159,7 +159,7 @@
         - resource_info.resources | length > 0
         - resource_info.resources[0].get('status', {}).get('stage') == 'complete'
         - resource_info.resources[0].get('status', {}).get('stageStatus') == 'success'
-      retries: 60
+      retries: 10
       delay: 5
       when:
         - item.kind == 'Grafana'
