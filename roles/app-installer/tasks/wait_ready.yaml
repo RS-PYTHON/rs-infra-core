@@ -112,11 +112,11 @@
       register: resource_info
       until:
         - resource_info.resources | length > 0
-        - resource_info.resources[0].status.conditions
+        - resource_info.resources[0].get('status', {}).get('conditions', [])
             | selectattr('type', 'equalto', 'Accepted')
             | selectattr('status', 'equalto', 'True')
             | list | length > 0
-        - resource_info.resources[0].status.conditions
+        - resource_info.resources[0].get('status', {}).get('conditions', [])
             | selectattr('type', 'equalto', 'Programmed')
             | selectattr('status', 'equalto', 'True')
             | list | length > 0
@@ -134,12 +134,12 @@
       register: resource_info
       until:
         - resource_info.resources | length > 0
-        - resource_info.resources[0].status.parents | length > 0
-        - resource_info.resources[0].status.parents[0].conditions
+        - resource_info.resources[0].get('status', {}).get('parents', []) | length > 0
+        - resource_info.resources[0].get('status', {}).get('parents', [{}])[0].get('conditions', [])
             | selectattr('type', 'equalto', 'Accepted')
             | selectattr('status', 'equalto', 'True')
             | list | length > 0
-        - resource_info.resources[0].status.parents[0].conditions
+        - resource_info.resources[0].get('status', {}).get('parents', [{}])[0].get('conditions', [])
             | selectattr('type', 'equalto', 'ResolvedRefs')
             | selectattr('status', 'equalto', 'True')
             | list | length > 0
@@ -157,9 +157,8 @@
       register: resource_info
       until:
         - resource_info.resources | length > 0
-        - resource_info.resources[0].status is defined
-        - resource_info.resources[0].status.stage == 'complete'
-        - resource_info.resources[0].status.stageStatus == 'success'
+        - resource_info.resources[0].get('status', {}).get('stage') == 'complete'
+        - resource_info.resources[0].get('status', {}).get('stageStatus') == 'success'
       retries: 60
       delay: 5
       when:
