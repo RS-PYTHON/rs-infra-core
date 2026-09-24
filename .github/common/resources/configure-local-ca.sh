@@ -67,14 +67,18 @@ CERT_FILES=""
 for arg in "$@"; do
   sd="${arg%%:*}"
   ns="${arg##*:}"
+  sdn="${sd//./-}"
 
   echo "Processing subdomain: $sd (namespace: $ns)"
+
   sed \
     -e "s!<sd>!$sd!g" \
+    -e "s!<sdn>!$sdn!g" \
     -e "s!<ns>!$ns!g" \
     "$RESOURCES_DIR/certificate.yaml" \
     > "$APP_CLUSTER_ISSUER/certificate-$sd.yaml"
-  CERT_FILES="${CERT_FILES}\\n- certificate-${sd}.yaml"
+
+  CERT_FILES="${CERT_FILES}\n- certificate-${sd}.yaml"
 done
 
 # --- Copy root certificate
