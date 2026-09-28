@@ -16,7 +16,6 @@ resources:
 - keycloak.yaml
 - kube-api.yaml
 - root.yaml
-- monitoring.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:

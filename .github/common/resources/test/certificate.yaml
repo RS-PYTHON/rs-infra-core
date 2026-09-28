@@ -15,12 +15,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: <sd>-rspy-example-com
+  name: <sdn>-rspy-example-com
   namespace: <ns>
   labels:
     wait-for-deployment: Ready
 spec:
-  secretName: <sd>-rspy-example-com
+  secretName: <sdn>-rspy-example-com
   issuerRef:
     name: local-ca-issuer
     kind: ClusterIssuer
