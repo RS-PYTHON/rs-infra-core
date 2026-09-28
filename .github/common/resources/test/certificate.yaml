@@ -20,7 +20,7 @@ metadata:
   labels:
     wait-for-deployment: Ready
 spec:
-  secretName: <sd>-rspy-example-com
+  secretName: <sdn>-rspy-example-com
   issuerRef:
     name: local-ca-issuer
     kind: ClusterIssuer
