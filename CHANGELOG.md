@@ -13,6 +13,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a14] - 2026-09-29
+
+### Added
+
+- [PR#355](https://github.com/RS-PYTHON/rs-infra-core/pull/355) : feat: add prefect ui realm client for gateway api
+- [PR#357](https://github.com/RS-PYTHON/rs-infra-core/pull/357) : Feat/add gitlab runner ansible vars
+- [PR#352](https://github.com/RS-PYTHON/rs-infra-core/pull/352) : Update to seaweedfs 4.46
+
+### Fixed
+
+- [PR#353](https://github.com/RS-PYTHON/rs-infra-core/pull/353) : Fix: envoy gateway api
+- [PR#354](https://github.com/RS-PYTHON/rs-infra-core/pull/354) : fix: keycloak proxy headers for envoy
+- [PR#356](https://github.com/RS-PYTHON/rs-infra-core/pull/356) : fix: remove monitoring listenerset from core
+
+
 ## [1.0a13] - 2026-08-28
 
 ### Added
