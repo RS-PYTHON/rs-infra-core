@@ -557,6 +557,10 @@ jupyterhub:
         # -- Trace request bodies and response contents with OpenTelemetry ?
         trace_body: false
 
+gitlab_runner_cpm:
+  token: password
+  url: https://gitlab.example.com
+
 # You might need to create a docker registry secret
 # to retrieve private container image from the
 # GitHub Container Registry : ghcr.io
