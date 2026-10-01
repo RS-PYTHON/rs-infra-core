@@ -1,0 +1,51 @@
+# Manual-use template only. Do not add to apps or GitOps reconciliation.
+# Replace every REPLACE_* value in a local copy before creating the pod.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: REPLACE_SESSION_NAME
+  namespace: REPLACE_MAINTENANCE_NAMESPACE
+  labels:
+    app.kubernetes.io/name: node-maintenance
+  annotations:
+    maintenance.rs-python/incident: REPLACE_INCIDENT_REFERENCE
+spec:
+  nodeName: REPLACE_NODE_NAME
+  hostPID: true
+  hostIPC: true
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  restartPolicy: Never
+  activeDeadlineSeconds: 3600
+  terminationGracePeriodSeconds: 10
+  # Include tainted workers, cordoned nodes and control-plane nodes where allowed.
+  tolerations:
+    - operator: Exists
+  containers:
+    - name: maintenance
+      # Approved image containing sh, sleep, chroot, nsenter and tar; pin by digest.
+      image: REPLACE_APPROVED_IMAGE_AT_SHA256_DIGEST
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "exec sleep 3600"]
+      securityContext:
+        privileged: true
+        runAsUser: 0
+        runAsGroup: 0
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+      volumeMounts:
+        - name: host-root
+          mountPath: /host
+          readOnly: false
+  volumes:
+    - name: host-root
+      hostPath:
+        path: /
+        type: Directory
