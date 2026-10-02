@@ -30,6 +30,7 @@ jobs:
         caller-repository: ${{ github.repository }}
         caller-ref: ${{ github.ref }}
         caller-ref_name: ${{ github.ref_name }}
+        sonar-exclusions: tests,tests/**,**/tests/**,docs/**
     secrets:
       SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

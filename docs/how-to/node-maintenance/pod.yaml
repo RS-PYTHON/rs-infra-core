@@ -51,9 +51,11 @@ spec:
         requests:
           cpu: 10m
           memory: 32Mi
+          ephemeral-storage: 32Mi
         limits:
           cpu: 500m
           memory: 256Mi
+          ephemeral-storage: 512Mi
       volumeMounts:
         - name: host-root
           mountPath: /host
