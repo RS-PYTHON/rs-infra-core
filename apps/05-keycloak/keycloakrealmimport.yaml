@@ -1105,6 +1105,7 @@ spec:
           oauth2.device.authorization.grant.enabled: "false"
           backchannel.logout.revoke.offline.tokens: "false"
           use.refresh.tokens: "true"
+          realm_client: "false"
           oidc.ciba.grant.enabled: "false"
           backchannel.logout.session.required: "true"
           client_credentials.use_refresh_token: "false"
@@ -1117,12 +1118,24 @@ spec:
         authenticationFlowBindingOverrides: {}
         fullScopeAllowed: true
         nodeReRegistrationTimeout: -1
+        protocolMappers:
+          - name: osam-audience
+            protocol: openid-connect
+            protocolMapper: oidc-audience-mapper
+            consentRequired: false
+            config:
+              included.client.audience: osam
+              id.token.claim: "false"
+              lightweight.claim: "false"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
         defaultClientScopes:
           - web-origins
           - acr
           - profile
           - roles
           - good-service
+          - basic
           - email
         optionalClientScopes:
           - address
