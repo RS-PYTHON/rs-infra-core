@@ -4,6 +4,9 @@ This repository provides kubernetes infrastructure to support rs-server processi
 ## Getting started
 Documentation is available in the [docs' folder](./docs/installation.md).
 
+For operator access to workers using node-shell and nerdctl, see
+[Node maintenance without SSH](docs/how-to/Node%20maintenance%20without%20SSH.md).
+
 ## Licensing
 The code in this project is licensed under Apache License 2.0.
 
