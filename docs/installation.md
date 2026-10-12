@@ -136,7 +136,7 @@ ansible-playbook apps.yaml \
 - `-e native_wait_timeout=360` for `Pod`, `Deployment`, `StatefulSet` and `DaemonSet`
 
 !!! warning "Note: DNS configuration"
-    At this point, you should configure your domain name to point to the Kubernetes `ingress-nginx-controller` service (Type LoadBalancer) external's IP (`kubectl -n ingress-nginx get svc ingress-nginx-controller`).
+    At this point, you should configure your domain name to point to the Kubernetes `envoy-gateway` service (Type LoadBalancer) external's IP (`kubectl -n envoy-gateway get svc -l app.kubernetes.io/component=proxy`).
 
 (Optional) : Deploy the rs-infra-monitoring, rs-workflow-env or rs-server-deployment :
 

@@ -18,18 +18,6 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - quay.io/jetstack/cert-manager-cainjector:v1.21.2
       - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.21.2/LICENSE)
 
-- NGINX Ingress Controller
-  - Helm chart
-    - Version: v4.14.3
-    - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.3/LICENSE)
-    - Source: <https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.14.3/charts/ingress-nginx>
-    - Copyright: Copyright The ingress-nginx Authors. Authors and Contributors [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.3/OWNERS) and [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.3/OWNERS_ALIASES)
-  - Container image(s)
-    - registry.k8s.io/ingress-nginx/controller:v1.14.3
-      - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.14.3/LICENSE)
-    - docker.io/library/nginx:1.27.1-alpine
-      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.27.0/LICENSE)
-
 - Grafana Operator
   - Custom Resource Definitions
     - Version: 5.24.0
