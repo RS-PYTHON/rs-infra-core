@@ -35,7 +35,7 @@ Add the file `~/rs-infra-core/apps/00-networkpolicies-processing/networkpolicy-i
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-ingress-nginx-prefect
+  name: allow-ingress-envoy-prefect
 spec:
   podSelector:
     matchLabels:
@@ -46,7 +46,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: ingress-nginx
+          kubernetes.io/metadata.name: envoy-gateway
     ports:
     - protocol: TCP
       port: 4200
@@ -231,7 +231,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: ingress-nginx
+          kubernetes.io/metadata.name: envoy-gateway
     ports:
     - protocol: TCP
       port: 8089
@@ -247,7 +247,7 @@ Add the file `~/rs-infra-core/apps/00-networkpolicies-playground/networkpolicy-i
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-ingress-nginx-prefect
+  name: allow-ingress-envoy-prefect
 spec:
   podSelector:
     matchLabels:
@@ -258,7 +258,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: ingress-nginx
+          kubernetes.io/metadata.name: envoy-gateway
     ports:
     - protocol: TCP
       port: 4200
@@ -266,7 +266,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-ingress-nginx-jupyter
+  name: allow-ingress-envoy-jupyter
 spec:
   podSelector:
     matchLabels:
@@ -278,7 +278,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: ingress-nginx
+          kubernetes.io/metadata.name: envoy-gateway
     ports:
     - protocol: TCP
       port: 80
@@ -286,7 +286,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-ingress-nginx-dask
+  name: allow-ingress-envoy-dask
 spec:
   podSelector:
     matchLabels:
@@ -297,13 +297,13 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: ingress-nginx
+          kubernetes.io/metadata.name: envoy-gateway
     ports:
     - protocol: TCP
       port: 8000
 ```
 
-It is the policy to allow traffic from the nginx ingress-controller to the prefect and jupyter services.
+It is the policy to allow traffic from the envoy proxy to the prefect and jupyter services.
 
 ### networkpolicy-intra.yaml
 
@@ -642,7 +642,7 @@ Note: the namming convention is `<cluster-name>-<user-group>-<id>`. Another vali
 Replace `jupyterhub.ops` by `jupyterhub.playground` in the following files :
 
 - `~/rs-workflow-env/apps/dask-gateway-playground/values.yaml`
-- `~/rs-workflow-env/apps/dask-gateway-playground/ingress.yaml`
+- `~/rs-workflow-env/apps/dask-gateway-playground/httproute.yaml`
 
 For e.g. with sed :
 
