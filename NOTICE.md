@@ -18,18 +18,6 @@ Below are all the FOSS (Free and open-source software) used and their respective
     - quay.io/jetstack/cert-manager-cainjector:v1.21.2
       - License: [Apache License 2.0](https://github.com/cert-manager/cert-manager/blob/v1.21.2/LICENSE)
 
-- NGINX Ingress Controller
-  - Helm chart
-    - Version: v4.14.3
-    - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.3/LICENSE)
-    - Source: <https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.14.3/charts/ingress-nginx>
-    - Copyright: Copyright The ingress-nginx Authors. Authors and Contributors [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.3/OWNERS) and [here](https://github.com/kubernetes/ingress-nginx/blob/helm-chart-4.14.3/OWNERS_ALIASES)
-  - Container image(s)
-    - registry.k8s.io/ingress-nginx/controller:v1.14.3
-      - License: [Apache License 2.0](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.14.3/LICENSE)
-    - docker.io/library/nginx:1.27.1-alpine
-      - License: [BSD 2-Clause "Simplified" License](https://github.com/nginxinc/docker-nginx/blob/1.27.0/LICENSE)
-
 - Grafana Operator
   - Custom Resource Definitions
     - Version: 5.24.0
@@ -62,16 +50,6 @@ Below are all the FOSS (Free and open-source software) used and their respective
       - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/26.5.7/LICENSE.txt)
     - quay.io/keycloak/keycloak-operator:26.5.7
       - License: [Apache License 2.0](https://github.com/keycloak/keycloak/blob/26.5.7/LICENSE.txt)
-
-- Oauth2-proxy
-  - Helm chart
-    - Version: 10.7.0
-    - Licence: [Apache License 2.0](https://github.com/oauth2-proxy/manifests/blob/oauth2-proxy-10.7.0/LICENSE)
-    - Source: <https://github.com/oauth2-proxy/manifests/tree/oauth2-proxy-10.7.0>
-    - Copyright: Copyright The oauth2-proxy Development Team. [Authors and Contributors](https://github.com/oauth2-proxy/manifests/graphs/contributors)
-  - Container image(s)
-    - quay.io/oauth2-proxy/oauth2-proxy:v7.15.3
-      - License: [MIT License](https://github.com/oauth2-proxy/oauth2-proxy/blob/v7.15.3/LICENSE)
 
 - kube-prometheus-stack
   - Custom Resource Definitions
