@@ -1,0 +1,73 @@
+' Copyright 2023-2026 Airbus, CS Group
+'
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+'
+'     http://www.apache.org/licenses/LICENSE-2.0
+'
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
+
+
+@startuml infrastructure
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam nodesep 30
+skinparam ranksep 40
+skinparam node {
+  BackgroundColor #F5F9FA
+  BorderColor #00796B
+}
+skinparam component {
+  BackgroundColor #E0F2F1
+  BorderColor #00796B
+}
+skinparam database {
+  BackgroundColor #FFF8E1
+  BorderColor #F57F17
+}
+skinparam frame {
+  BorderColor #5E35B1
+}
+skinparam rectangle {
+  BorderColor #546E7A
+}
+
+actor "Users" as users
+actor "Administrator" as admin
+cloud "Internet" as internet
+
+rectangle "Cloud provider project (OpenStack)" as project {
+  node "Load balancer\n(service of type LoadBalancer)" as lb
+  rectangle "Private network and subnet" as net {
+    node "Bastion VM\n(Ansible, Terraform, kubectl, Helm)" as bastion
+    frame "Managed Kubernetes cluster" as k8s {
+      component "Kubernetes API\n(restricted to the bastion)" as api
+      node "Node pools\ninfra, rs_server, rs_env, access_csc,\nprefect_flow, dask_scheduler,\ndask_worker_on_demand, big_dask_worker_on_demand" as pools
+      component "Envoy Gateway" as gateway
+    }
+  }
+  node "Router\n(outgoing traffic)" as router
+  database "S3 object storage\n(Terraform state, logs, traces,\ndatabase and Velero backups, products)" as s3
+  database "Shared file systems\n(NFS, ReadWriteMany volumes)" as nfs
+  node "Private registry\n(Harbor proxy cache, optional)" as registry
+}
+
+users --> internet : HTTPS
+admin --> internet : SSH (allowed IPs only)
+internet --> lb : HTTPS
+lb --> gateway
+internet --> bastion : SSH
+bastion --> api : kubectl, Helm
+api -- pools
+gateway -- pools
+pools --> router
+router --> internet : CADIP, AUXIP, PRIP stations,\ncontainer registries...
+pools --> s3
+pools --> nfs
+pools ..> registry : pull images
+@enduml

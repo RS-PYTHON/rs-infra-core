@@ -290,7 +290,7 @@ Below are all the FOSS (Free and open-source software) used and their respective
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright [yyyy] \[name of copyright owner]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -1314,7 +1314,7 @@ Public License instead of this License.
 
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) [year] \[fullname]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1338,7 +1338,7 @@ SOFTWARE.
 
 BSD 2-Clause License
 
-Copyright (c) [year], [fullname]
+Copyright (c) [year], \[fullname]
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
