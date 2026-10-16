@@ -1,4 +1,4 @@
-# Credentials management in RS
+# Credentials management
 
 ## The generate_inventory.yaml playbook and inventory files
 
@@ -6,7 +6,7 @@ All the credentials necessary to the deployment of the different applications ca
 
 Setup your variables by:
 
-- using separate files for variables corresponding to different applications, like in the sample inventory and its `{{ inventory_dir }}/host_vars/setup/apps` subfolder
+- using separate files for the different kinds of variables, like in the sample inventory (`main.yaml`, `apps.yml`...)
 - creating new files (for example `{{ inventory_dir }}/host_vars/setup/production_env1.yaml`) with your variables
 - editing the variables given as sample in the sample inventory
 
@@ -21,9 +21,8 @@ This workflow prevents the app-installer from changing the credentials of the ap
 Like in the example values, you can choose to generate some credentials using this ansible function:
 
 ```yaml
-# {{ inventory_dir }}/host_vars/setup/apps/openldap.yaml
-openldap:
-  admin_user_password: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
+# {{ inventory_dir }}/host_vars/setup/apps.yml
+grafana_oidc_client_secret: "{{ lookup('password', '/dev/null length=60 chars=ascii_letters') }}"
 ```
 
 ## Manually set credentials
@@ -31,16 +30,15 @@ openldap:
 Otherwise, you can freely set passwords by hand:
 
 ```yaml
-# {{ inventory_dir }}/host_vars/setup/apps/graylog.yaml
-graylog:
-  oidc_client_secret: "m4nuAl_s3cret_example"
+# {{ inventory_dir }}/host_vars/setup/apps.yml
+grafana_oidc_client_secret: "m4nuAl_s3cret_example"
 ```
 
 > Note: Of course, credentials that give access to external services such as S3 storage or private registries cannot be generated and have to be set by hand, they are written in UPPER_CASE in the sample inventory.
 
 ## Reuse credentials
 
-Like in the example values, you can reuse credentials already set up in the inventory files. This functionality is used in the sample inventory for the S3 keys and endpoints that are often the same accross applications:
+Like in the example values, you can reuse credentials already set up in the inventory files. This functionality is used in the sample inventory for the S3 keys and endpoints that are often the same across applications:
 
 ```yaml
 # {{ inventory_dir }}/host_vars/setup/main.yaml

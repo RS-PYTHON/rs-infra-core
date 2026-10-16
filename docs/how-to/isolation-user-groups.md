@@ -1,6 +1,7 @@
-# Isolation for companies
+# Isolation between user groups
 
-To be able to isolate between companies, we will create a namespace per company and leverage natives features from Kubernetes such as `NetworkPolicy` (<https://kubernetes.io/docs/concepts/services-networking/network-policies/>), `LimitRange` (<https://kubernetes.io/docs/concepts/policy/limit-range/>) and and `ResourceQuota` (<https://kubernetes.io/docs/concepts/policy/resource-quotas/>).
+To isolate the user groups (e.g. the companies of a consortium) deployed on the same cluster, create a namespace per
+group and leverage natives features from Kubernetes such as `NetworkPolicy` (<https://kubernetes.io/docs/concepts/services-networking/network-policies/>), `LimitRange` (<https://kubernetes.io/docs/concepts/policy/limit-range/>) and `ResourceQuota` (<https://kubernetes.io/docs/concepts/policy/resource-quotas/>).
 
 ## Create the Network Policies for the processing namespace
 
@@ -94,9 +95,9 @@ resources:
 
 *Note:* For the **networkpolicies** app, we **MUST** set `includeSelectors` to `false` in the file `kustomization.yaml` because Kustomize wrongly adds it to the pod selector in addition to the metadata part. The ruling then becomes invalid and the ingress/egress is never allowed for anything.
 
-## Create a namespace for the company
+## Create a namespace for the user group
 
-Add the new namespace for the company in `~/rs-infra-core/apps/00-namespaces`. For e.g. if the new namespace is `playground-ns` :
+Add the new namespace for the user group in `~/rs-infra-core/apps/00-namespaces`. For e.g. if the new namespace is `playground-ns` :
 
 ```YAML
 apiVersion: v1
@@ -109,7 +110,7 @@ Do not forget to update the file `kustomization.yaml` to include the new file.
 
 ## Create the private registry secret for the playground namespace
 
-Add the new namespace for the company in `~/rs-infra-core/apps/00-secret-private-registry/secrets.yaml`. For e.g. if the new namespace is `playground-ns` :
+Add the new namespace for the user group in `~/rs-infra-core/apps/00-secret-private-registry/secrets.yaml`. For e.g. if the new namespace is `playground-ns` :
 
 ```YAML
 ---
@@ -613,7 +614,7 @@ To verify your Kubernetes cluster is able to create a `ReadWriteMany` volume, ch
 kubectl get storageclasses csi-manila-nfs
 ```
 
-If it's not the case, please follow the procedure to manually enable this feature : [Enable ReadWriteMany Volume](./Enable%20ReadWriteMany%20Volume.md).
+If it's not the case, please follow the procedure to manually enable this feature : [Enable ReadWriteMany Volume](readwritemany-volume.md).
 
 ### Update the values
 
@@ -666,7 +667,7 @@ sed 's#namespace: dask-gateway#namespace: playground#g' -i ~/rs-workflow-env/app
 
 ##### values.yaml
 
-We need to disable to ability to change the namespace for the user, so the dask clusters will spawn in the same namespace as the dask gateway. That way, the dask clusters will only spawn in the company's namespace.
+We need to disable to ability to change the namespace for the user, so the dask clusters will spawn in the same namespace as the dask gateway. That way, the dask clusters will only spawn in the user group's namespace.
 
 From the original yaml manifest, we did the following changes :
 
@@ -881,7 +882,7 @@ To verify your Kubernetes cluster is able to create a `ReadWriteMany` volume, ch
 kubectl get storageclasses csi-manila-nfs
 ```
 
-If it's not the case, please follow the procedure to manually enable this feature : [Enable ReadWriteMany Volume](./Enable%20ReadWriteMany%20Volume.md).
+If it's not the case, please follow the procedure to manually enable this feature : [Enable ReadWriteMany Volume](readwritemany-volume.md).
 
 ### Update the values
 
@@ -934,7 +935,7 @@ sed 's#namespace: dask-gateway#namespace: playground#g' -i ~/rs-workflow-env/app
 
 ##### values.yaml
 
-We need to disable to ability to change the namespace for the user, so the dask clusters will spawn in the same namespace as the dask gateway. That way, the dask clusters will only spawn in the company's namespace.
+We need to disable to ability to change the namespace for the user, so the dask clusters will spawn in the same namespace as the dask gateway. That way, the dask clusters will only spawn in the user group's namespace.
 
 From the original yaml manifest, we did the following changes :
 

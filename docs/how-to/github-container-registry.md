@@ -18,7 +18,7 @@ Into the following block :
 # You might need to create a docker registry secret
 # to retrieve private container image from the
 # GitHub Container Registry : ghcr.io
-# Refer to the doc in /docs/how-to/GitHub Container Registry.md
+# Refer to the doc in /docs/how-to/github-container-registry.md
 github:
   registrySecret:
     name: ghcr-k8s
