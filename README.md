@@ -49,6 +49,9 @@ See the [contribution guidelines](https://github.com/RS-PYTHON/rs-documentation/
 Report bugs in the [issue tracker](https://github.com/RS-PYTHON/rs-infra-core/issues). In case of sensitive bugs like
 security vulnerabilities, please contact <ops_coprs@airbus.com> directly instead of using the issue tracker.
 
+For operator access to workers using `kubectl-node-shell`, see
+[Node maintenance without SSH](docs/how-to/Node%20maintenance%20without%20SSH.md).
+
 ## Licensing
 
 The code in this project is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
