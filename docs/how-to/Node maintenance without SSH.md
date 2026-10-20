@@ -60,7 +60,6 @@ Kubernetes nodes run `containerd` under the `k8s.io` namespace and include the `
 
 ```bash
 ctr -n k8s.io containers ls
-ctr -n k8s.io tasks ls
 ctr -n k8s.io images ls
 ```
 
@@ -79,12 +78,10 @@ kill -KILL <pid>
 # Network (/etc/netplan)
 cp /etc/netplan/50-cloud-init.yaml /root/50-cloud-init.yaml.bak
 vi /etc/netplan/50-cloud-init.yaml
-netplan generate
 
 # Mounts (/etc/fstab)
 cp /etc/fstab /root/fstab.bak
 vi /etc/fstab
-findmnt --verify
 
 # File permissions / ownership
 chmod 640 /path/to/file
