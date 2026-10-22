@@ -13,6 +13,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a15] - 2026-10-22
+
+### Added
+
+- [RSPY-1069](https://github.com/RS-PYTHON/rs-infra-core/pull/361) : RSPY-1069: Update Python version to 3.13.16
+- [PR#360](https://github.com/RS-PYTHON/rs-infra-core/pull/360) : Update to cert-manager 1.21.2
+- [PR#362](https://github.com/RS-PYTHON/rs-infra-core/pull/362) : Update to seaweedfs 4.48
+- [PR#363](https://github.com/RS-PYTHON/rs-infra-core/pull/363) : feat: add protocol mapper for osam audiance
+- [RSPY-954](https://github.com/RS-PYTHON/rs-infra-core/pull/365) : RSPY-954: Update the infrastructure documentation
+
+### Fixed
+
+- [PR#364](https://github.com/RS-PYTHON/rs-infra-core/pull/364) : feat: remove deprecated nginx ingress
+
+### Security
+
+- [RSPY-1229](https://github.com/RS-PYTHON/rs-infra-core/pull/366) : RSPY-1229: Download and cache the Trivy databases once per day
+
 ## [1.0a14] - 2026-09-29
 
 ### Added

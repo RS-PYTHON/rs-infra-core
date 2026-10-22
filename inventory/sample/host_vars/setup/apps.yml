@@ -572,6 +572,10 @@ github:
     username: YOUR_GITHUB_USERNAME
     password: YOUR_GITHUB_TOKEN
 
+gitlab_runner_cpm:
+  token: glrt-xxxxxxxx
+  url: https://example.com
+
 # To use the vault the first time you have
 # to manually create an empty secret named
 # generated_inventory_vars in the vault UI
