@@ -297,9 +297,10 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_big_dask_worker_on_demand" 
   template {
     metadata {
       annotations = {}
-      labels = {
-        "node-role.kubernetes.io/big_dask_worker_on_demand" = ""
-      }
+    labels = {
+      "node-role.kubernetes.io/big_dask_worker_on_demand" = ""
+      "topology.cinder.csi.openstack.org/zone"            = "nova"
+    }
       finalizers = []
     }
     spec {
