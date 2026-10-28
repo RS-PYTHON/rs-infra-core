@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import sys
 import json
 import re
@@ -145,7 +146,21 @@ def inject_smtp_variables(realm_map):
     realm_map["smtpServer"] = dict(sorted(smtp_server.items()))
     return realm_map
 
+def safe_path(path, base_dir=None):
+    """
+    Resolve the given path and ensure it stays within base_dir (current directory by default),
+    to prevent path traversal through command-line arguments.
+    """
+    base = os.path.realpath(base_dir or os.getcwd())
+    resolved = os.path.realpath(os.path.join(base, path))
+    if not resolved.startswith(base + os.sep):
+        raise ValueError(f"Path '{path}' is outside of the allowed directory '{base}'")
+    return resolved
+
 def main(inpath, outpath):
+    inpath = safe_path(inpath)
+    outpath = safe_path(outpath)
+
     with open(inpath, "r", encoding="utf-8") as f:
         data = json.load(f)
 
