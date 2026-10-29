@@ -24,3 +24,12 @@ rules:
     verbs:
       - list
       - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nodepool-editor
+rules:
+  - apiGroups: ["kube.cloud.ovh.com"]
+    resources: ["nodepools"]
+    verbs: ["get", "list", "watch", "update", "patch"]
