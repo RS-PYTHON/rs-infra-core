@@ -17,11 +17,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
-- [RSPY-1069](https://github.com/RS-PYTHON/rs-infra-core/pull/361) : RSPY-1069: Update Python version to 3.13.16
+- [RSPY-1069](https://github.com/RS-PYTHON/rs-infra-core/pull/361) : Update Python version to 3.13.16
 - [PR#360](https://github.com/RS-PYTHON/rs-infra-core/pull/360) : Update to cert-manager 1.21.2
 - [PR#362](https://github.com/RS-PYTHON/rs-infra-core/pull/362) : Update to seaweedfs 4.48
 - [PR#363](https://github.com/RS-PYTHON/rs-infra-core/pull/363) : feat: add protocol mapper for osam audiance
-- [RSPY-954](https://github.com/RS-PYTHON/rs-infra-core/pull/365) : RSPY-954: Update the infrastructure documentation
+- [RSPY-954](https://github.com/RS-PYTHON/rs-infra-core/pull/365) : Update the infrastructure documentation
 
 ### Fixed
 
@@ -29,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Security
 
-- [RSPY-1229](https://github.com/RS-PYTHON/rs-infra-core/pull/366) : RSPY-1229: Download and cache the Trivy databases once per day
+- [RSPY-1229](https://github.com/RS-PYTHON/rs-infra-core/pull/366) : Download and cache the Trivy databases once per day
 
 ## [1.0a14] - 2026-09-29
 
