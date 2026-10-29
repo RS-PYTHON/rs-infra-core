@@ -31,6 +31,6 @@ global:
     envoyProxy:
       # we need to put twice te repository because of this bug
       # https://github.com/envoyproxy/gateway/issues/8323
-      image: envoyproxy/envoyproxy/envoy:distroless-v1.38.3
+      image: envoyproxy/envoyproxy/envoy:distroless-v1.38-latest
       pullSecrets:
         - name: harbor-pull-secret
