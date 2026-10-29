@@ -22,13 +22,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PR#362](https://github.com/RS-PYTHON/rs-infra-core/pull/362) : Update to seaweedfs 4.48
 - [PR#363](https://github.com/RS-PYTHON/rs-infra-core/pull/363) : feat: add protocol mapper for osam audiance
 - [RSPY-954](https://github.com/RS-PYTHON/rs-infra-core/pull/365) : Update the infrastructure documentation
+- [PR#370](https://github.com/RS-PYTHON/rs-infra-core/pull/370) : feat: add nodepool editor capabilities to the operator group
+- [PR#359](https://github.com/RS-PYTHON/rs-infra-core/pull/359) : docs: node maintenance without SSH operational procedure and template
+
+### Changed
+
+- [PR#369](https://github.com/RS-PYTHON/rs-infra-core/pull/369) : Update to cert-manager 1.21.3
 
 ### Fixed
 
 - [PR#364](https://github.com/RS-PYTHON/rs-infra-core/pull/364) : feat: remove deprecated nginx ingress
+- [PR#372](https://github.com/RS-PYTHON/rs-infra-core/pull/372) : fix: disable Sonar coverage check (no tests in this repository)
 
 ### Security
 
+- [PR#371](https://github.com/RS-PYTHON/rs-infra-core/pull/371) : fix: patch envoy critical CVE
+- [PR#368](https://github.com/RS-PYTHON/rs-infra-core/pull/368) : fix: prevent path traversal in convert-export-realm.py (Sonar S8707)
 - [RSPY-1229](https://github.com/RS-PYTHON/rs-infra-core/pull/366) : Download and cache the Trivy databases once per day
 
 ## [1.0a14] - 2026-09-29
