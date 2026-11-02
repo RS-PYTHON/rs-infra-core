@@ -263,6 +263,7 @@ resource "ovh_cloud_project_kube_nodepool" "nodepool_dask_worker_on_demand" {
       annotations = {}
       labels = {
         "node-role.kubernetes.io/dask_worker_on_demand" = ""
+        "topology.cinder.csi.openstack.org/zone"        = "nova"
       }
       finalizers = []
     }
