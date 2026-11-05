@@ -556,6 +556,13 @@ jupyterhub:
         trace_headers: false
         # -- Trace request bodies and response contents with OpenTelemetry ?
         trace_body: false
+  # Dedicated tokens for the jupyterhub-cpm and dask-gateway-cpm apps (namespace cpm)
+  cpm:
+    services:
+      daskgateway:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      metrics:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
 
 gitlab_runner_cpm:
   token: password
