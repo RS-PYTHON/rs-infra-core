@@ -137,9 +137,10 @@
       check_mode: false
       retries: 5
       delay: 15
+      # Retry only on transient errors (HTTP 500 to 504 as standalone numbers, timeouts), fail at once on other errors
       until: >
         (result.rc == 0) or
-        (result.stderr is search('500|502|503|Service Unavailable|timeout|timed out|deadline exceeded|Client.Timeout'))
+        (result.stderr is not search('(^|[^0-9])50[0-4]([^0-9]|$)|Service Unavailable|timeout|timed out|deadline exceeded', ignorecase=True))
 
     - name: "{{ package_name }} - {{ app_name }} | reset facts"
       set_fact:
