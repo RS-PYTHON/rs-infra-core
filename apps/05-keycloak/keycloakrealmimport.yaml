@@ -1253,8 +1253,10 @@ spec:
         redirectUris:
           - ""
           - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter/*
+          - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter-cpm/*
         webOrigins:
           - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter
+          - https://{{ jupyterhub.ops.subDomain }}.{{ platform_domain_name }}/jupyter-cpm
         notBefore: 0
         bearerOnly: false
         consentRequired: false
