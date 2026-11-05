@@ -78,6 +78,12 @@ variable "nodepool_big_dask_worker_on_demand_desired_nodes" {
   default     = 0
 }
 
+variable "nodepool_cpm_ci_desired_nodes" {
+  description = "Number of desired nodes on nodepool cpm ci"
+  type        = number
+  default     = 0
+}
+
 variable "nodepool_infra_autoscale" {
   description = "Enable autoscaling of nodepool infra"
   type        = bool
@@ -126,6 +132,12 @@ variable "nodepool_big_dask_worker_on_demand_autoscale" {
   default     = true
 }
 
+variable "nodepool_cpm_ci_autoscale" {
+  description = "Enable autoscaling of nodepool cpm ci"
+  type        = bool
+  default     = true
+}
+
 variable "nodepool_prefect_flow_min_nodes" {
   description = "Number of minimal nodes on nodepool prefect flow"
   type        = number
@@ -152,6 +164,12 @@ variable "nodepool_dask_worker_on_demand_max_nodes" {
 
 variable "nodepool_big_dask_worker_on_demand_max_nodes" {
   description = "Number of max nodes on nodepool big dask worker on demand"
+  type        = number
+  default     = 2
+}
+
+variable "nodepool_cpm_ci_max_nodes" {
+  description = "Number of max nodes on nodepool cpm ci"
   type        = number
   default     = 2
 }

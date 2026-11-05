@@ -97,3 +97,6 @@ nodeplugin:
     - key: role
       value: big_dask_worker_on_demand
       effect: NoSchedule
+    - key: role
+      value: cpm_ci
+      effect: NoSchedule

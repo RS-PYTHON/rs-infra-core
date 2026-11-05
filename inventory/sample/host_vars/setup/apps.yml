@@ -89,7 +89,7 @@ keycloak:
     username: keycloak
     password: "{{ lookup('password', '/dev/null length=30 chars=ascii_letters') }}"
     secret: keycloak-database-password
-  replicaCount: 1
+  replicaCount: 2
   proxy:
     headers: xforwarded
   logLevel: info
