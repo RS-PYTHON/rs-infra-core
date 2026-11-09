@@ -17,18 +17,21 @@ set -euo pipefail
 
 PYTHON_VERSION=3.13.18
 
-# Install miniforge
-mkdir -p ~/miniforge3
-wget -q "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" -O ~/miniforge3/miniforge.sh
-bash ~/miniforge3/miniforge.sh -b -u -p ~/miniforge3
-rm -f ~/miniforge3/miniforge.sh
+# Install miniforge. Don't rely on the Miniconda that used to be installed on the GitHub runners: it's not there anymore.
+CONDA_DIR=~/miniforge3
+mkdir -p $CONDA_DIR
+curl -fsSL --proto "=https" "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" -o $CONDA_DIR/miniforge.sh
+bash $CONDA_DIR/miniforge.sh -b -u -p $CONDA_DIR
+rm -f $CONDA_DIR/miniforge.sh
 
-# Init conda
-~/miniforge3/bin/conda init bash
-conda update -n base -c defaults conda
+# Init conda and add it to the PATH of this script and, in the GitHub workflows, of the next steps
+$CONDA_DIR/bin/conda init bash
+export PATH="$CONDA_DIR/bin:$PATH"
+if [[ -n "${GITHUB_PATH:-}" ]]; then
+  echo "$CONDA_DIR/bin" >> "$GITHUB_PATH"
+fi
 
 # Create conda env with python
-# conda update -n base -c defaults conda
 conda create -y -n rspy python=$PYTHON_VERSION
 
 # Install Ansible, Terraform, Openstackclient
