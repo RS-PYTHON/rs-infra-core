@@ -561,12 +561,28 @@ jupyterhub:
     services:
       daskgateway:
         apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      # Keep the legacy CPM staging service separate from processing's token.
+      daskstaging:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
+      # Register this token as the CPM Hub's gitlab-ci service, then configure
+      # the same value as a masked JUPYTERHUB_API_TOKEN variable in GitLab.
+      gitlabci:
+        apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
       metrics:
         apitoken: "{{ lookup('password', '/dev/null', length=64, chars=['ascii_letters']) }}"
 
 gitlab_runner_cpm:
   token: password
   url: https://gitlab.example.com
+  # Both runner limits use this value. Two 20Gi build requests fit per b3-64
+  # node; full concurrency uses both nodes of the CPM CI pool.
+  concurrent: 4
+  cpu_request: "2"
+  cpu_limit: "4"
+  memory: 20Gi
+  # Stop after the first failure/teardown error, hide captured credential
+  # dictionaries, and dump thread stacks if a test runs for two minutes.
+  pytest_addopts: "--maxfail=1 --tb=short --show-capture=no -o faulthandler_timeout=120"
 
 # You might need to create a docker registry secret
 # to retrieve private container image from the
