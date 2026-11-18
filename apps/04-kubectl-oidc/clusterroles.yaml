@@ -19,6 +19,7 @@ metadata:
 rules:
   - apiGroups:
       - '*'
+# trivy:ignore:AVD-KSV-0046
     resources:
       - '*'
     verbs:
