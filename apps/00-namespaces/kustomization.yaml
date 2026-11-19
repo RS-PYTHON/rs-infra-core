@@ -13,7 +13,6 @@
 # limitations under the License.
 
 resources:
-- ns-cpm.yaml
 - ns-dask-gateway.yaml
 - ns-database.yaml
 - ns-envoy-gateway.yaml
