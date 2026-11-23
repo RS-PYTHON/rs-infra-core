@@ -13,6 +13,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a16] - 2026-11-22
+
+### Added
+
+- [RSPY-1268](https://github.com/RS-PYTHON/rs-infra-core/pull/376) : Use the installed miniforge in the CI deployment tests
+- [PR#375](https://github.com/RS-PYTHON/rs-infra-core/pull/375) : fix: retry the deployment of an app on HTTP 504 and other transient errors
+- [PR#373⁠](https://github.com/RS-PYTHON/rs-infra-core/pull/373⁠) : Update Python version to 3.13.18
+
 ## [1.0a15] - 2026-10-22
 
 ### Added
