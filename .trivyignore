@@ -1,0 +1,2 @@
+# ClusterRole 'readonly' in apps/04-kubectl-oidc/clusterroles.yaml intentionally lists/watches '*' resources
+AVD-KSV-0046
